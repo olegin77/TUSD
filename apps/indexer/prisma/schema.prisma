@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Pool configuration
+model Pool {
+  id                Int      @id @default(autoincrement())
+  apy_base_bp       Int      // APY в базисных пунктах, напр. 1800 = 18%
+  lock_months       Int      // 12..36
+  min_deposit_usd   BigInt   // Минимальный депозит в USDT (в микро-единицах)
+  total_liquidity   BigInt   @default(0) // Общая ликвидность
+  total_wexels      BigInt   @default(0) // Общее количество векселей
+  boost_target_bp   Int      @default(3000) // 3000 = 30% от Principal
+  boost_max_bp      Int      @default(500) // 500 = +5% APY максимум
+  is_active         Boolean  @default(true)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  // Relations
+  wexels            Wexel[]
+  deposits          Deposit[]
+
+  @@map("pools")
+}
+
+// Wexel (NFT-вексель)
+model Wexel {
+  id                    BigInt   @id @default(autoincrement())
+  owner_solana          String?  // Solana адрес владельца
+  owner_tron            String?  // Tron адрес владельца
+  pool_id               Int
+  principal_usd         BigInt   // Основная сумма в USDT (в микро-единицах)
+  apy_base_bp           Int      // Базовый APY в базисных пунктах
+  apy_boost_bp          Int      @default(0) // Буст APY в базисных пунктах
+  start_ts              DateTime // Время начала
+  end_ts                DateTime // Время окончания
+  is_collateralized     Boolean  @default(false) // В залоге ли
+  total_claimed_usd     BigInt   @default(0) // Общая сумма выплат
+  nft_mint_address      String?  // Адрес NFT mint (Solana)
+  nft_token_address     String?  // Адрес NFT токена (Tron)
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  // Relations
+  pool                  Pool     @relation(fields: [pool_id], references: [id])
+  collateral_position   CollateralPosition?
+  listings              Listing[]
+  claims                Claim[]
+  boosts                Boost[]
+
+  @@map("wexels")
+}
+
+// Залоговая позиция
+model CollateralPosition {
+  wexel_id    BigInt   @id // ID векселя
+  loan_usd    BigInt   // Сумма займа в USDT (в микро-единицах)
+  start_ts    DateTime // Время начала залога
+  repaid      Boolean  @default(false) // Погашен ли займ
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // Relations
+  wexel       Wexel    @relation(fields: [wexel_id], references: [id], onDelete: Cascade)
+
+  @@map("collateral")
+}
+
+// Листинги на маркетплейсе
+model Listing {
+  id              BigInt    @id @default(autoincrement())
+  wexel_id        BigInt
+  ask_price_usd   BigInt    // Цена продажи в USDT (в микро-единицах)
+  auction         Boolean   @default(false) // Аукцион или фиксированная цена
+  min_bid_usd     BigInt?   // Минимальная ставка для аукциона
+  expiry_ts       DateTime? // Время истечения листинга
+  status          String    @default("active") // active, sold, cancelled
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  wexel           Wexel     @relation(fields: [wexel_id], references: [id], onDelete: Cascade)
+
+  @@map("listings")
+}
+
+// Выплаты наград
+model Claim {
+  id          BigInt   @id @default(autoincrement())
+  wexel_id    BigInt
+  amount_usd  BigInt   // Сумма выплаты в USDT (в микро-единицах)
+  claim_type  String   // daily, final, partial
+  tx_hash     String?  // Хэш транзакции
+  created_at  DateTime @default(now())
+
+  // Relations
+  wexel       Wexel    @relation(fields: [wexel_id], references: [id], onDelete: Cascade)
+
+  @@map("claims")
+}
+
+// Буст-монеты
+model Boost {
+  id              BigInt   @id @default(autoincrement())
+  wexel_id        BigInt
+  token_mint      String   // Адрес токена буста
+  amount          BigInt   // Количество токенов
+  value_usd       BigInt   // Стоимость в USD на момент добавления
+  apy_boost_bp    Int      // Добавленный APY в базисных пунктах
+  price_usd       BigInt   // Цена токена в USD на момент добавления
+  created_at      DateTime @default(now())
+
+  // Relations
+  wexel           Wexel    @relation(fields: [wexel_id], references: [id], onDelete: Cascade)
+
+  @@map("boosts")
+}
+
+// Депозиты
+model Deposit {
+  id              BigInt   @id @default(autoincrement())
+  pool_id         Int
+  user_address    String   // Адрес пользователя (Solana или Tron)
+  amount_usd      BigInt   // Сумма депозита в USDT (в микро-единицах)
+  wexel_id        BigInt?  // ID созданного векселя
+  tx_hash         String?  // Хэш транзакции
+  status          String   @default("pending") // pending, confirmed, failed
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  pool            Pool     @relation(fields: [pool_id], references: [id])
+
+  @@map("deposits")
+}
+
+// Пользователи
+model User {
+  id              BigInt   @id @default(autoincrement())
+  solana_address  String?  @unique // Solana адрес
+  tron_address    String?  @unique // Tron адрес
+  email           String?  @unique // Email для уведомлений
+  telegram_id     String?  @unique // Telegram ID
+  is_kyc_verified Boolean  @default(false) // KYC статус
+  is_active       Boolean  @default(true) // Активен ли пользователь
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Цены токенов (кеш оракулов)
+model TokenPrice {
+  id          BigInt   @id @default(autoincrement())
+  token_mint  String   @unique // Адрес токена
+  price_usd   BigInt   // Цена в USD (в микро-единицах)
+  source      String   // Источник цены (pyth, chainlink, dex, cex)
+  updated_at  DateTime @updatedAt
+
+  @@map("token_prices")
+}
+
+// События блокчейна (для индексации)
+model BlockchainEvent {
+  id          BigInt   @id @default(autoincrement())
+  chain       String   // solana, tron
+  tx_hash     String   // Хэш транзакции
+  event_type  String   // deposit, boost, claim, collateralize, etc.
+  data        Json     // Данные события
+  processed   Boolean  @default(false) // Обработано ли событие
+  created_at  DateTime @default(now())
+
+  @@map("blockchain_events")
+}
