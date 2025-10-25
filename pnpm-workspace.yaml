@@ -1,0 +1,1 @@
+packages: ["apps/*", "packages/*", "infra/*", "contracts/solana", "contracts/tron"]
