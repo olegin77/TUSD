@@ -59,12 +59,28 @@ pub mod solana_contracts {
     pub fn deposit(_ctx: Context<Deposit>, pool_id: u8, principal_usd: u64) -> Result<()> {
         // TODO: Implement deposit logic
         msg!("Deposit: pool_id={}, principal_usd={}", pool_id, principal_usd);
+        
+        // Emit event for deposit
+        emit!(WexelCreated {
+            id: 0, // TODO: Get actual wexel ID
+            owner: _ctx.accounts.user.key(),
+            principal_usd,
+        });
+        
         Ok(())
     }
 
     pub fn apply_boost(_ctx: Context<ApplyBoost>, wexel_id: u64, token_mint: Pubkey, amount: u64) -> Result<()> {
         // TODO: Implement boost logic
         msg!("Apply boost: wexel_id={}, token_mint={}, amount={}", wexel_id, token_mint, amount);
+        
+        // Emit event for boost application
+        emit!(BoostApplied {
+            wexel_id,
+            apy_boost_bp: 0, // TODO: Calculate actual boost APY
+            value_usd: 0,    // TODO: Calculate actual USD value
+        });
+        
         Ok(())
     }
 
@@ -77,30 +93,65 @@ pub mod solana_contracts {
     pub fn accrue(_ctx: Context<Accrue>, wexel_id: u64) -> Result<()> {
         // TODO: Implement accrue logic
         msg!("Accrue: wexel_id={}", wexel_id);
+        
+        // Emit event for reward accrual
+        emit!(Accrued {
+            wexel_id,
+            reward_usd: 0, // TODO: Calculate actual reward amount
+        });
+        
         Ok(())
     }
 
     pub fn claim(_ctx: Context<Claim>, wexel_id: u64) -> Result<()> {
         // TODO: Implement claim logic
         msg!("Claim: wexel_id={}", wexel_id);
+        
+        // Emit event for claim
+        emit!(Claimed {
+            wexel_id,
+            to: _ctx.accounts.user.key(),
+            amount_usd: 0, // TODO: Calculate actual claim amount
+        });
+        
         Ok(())
     }
 
     pub fn collateralize(_ctx: Context<Collateralize>, wexel_id: u64) -> Result<()> {
         // TODO: Implement collateralize logic
         msg!("Collateralize: wexel_id={}", wexel_id);
+        
+        // Emit event for collateralization
+        emit!(Collateralized {
+            wexel_id,
+            loan_usd: 0, // TODO: Calculate actual loan amount (60% of principal)
+        });
+        
         Ok(())
     }
 
     pub fn repay_loan(_ctx: Context<RepayLoan>, wexel_id: u64, amount: u64) -> Result<()> {
         // TODO: Implement repay loan logic
         msg!("Repay loan: wexel_id={}, amount={}", wexel_id, amount);
+        
+        // Emit event for loan repayment
+        emit!(LoanRepaid {
+            wexel_id,
+        });
+        
         Ok(())
     }
 
     pub fn redeem(_ctx: Context<Redeem>, wexel_id: u64) -> Result<()> {
         // TODO: Implement redeem logic
         msg!("Redeem: wexel_id={}", wexel_id);
+        
+        // Emit event for redemption
+        emit!(Redeemed {
+            wexel_id,
+            principal_usd: 0, // TODO: Get actual principal amount
+        });
+        
         Ok(())
     }
 }
@@ -190,13 +241,24 @@ pub struct Redeemed {
 pub struct Initialize {}
 
 #[derive(Accounts)]
-pub struct Deposit {
-    // TODO: Add required accounts
+pub struct Deposit<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(mut)]
+    pub pool: Account<'info, Pool>,
+    #[account(mut)]
+    pub wexel: Account<'info, Wexel>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
-pub struct ApplyBoost {
-    // TODO: Add required accounts
+pub struct ApplyBoost<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(mut)]
+    pub wexel: Account<'info, Wexel>,
+    pub token_mint: Account<'info, anchor_spl::token::Mint>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
@@ -210,8 +272,12 @@ pub struct Accrue {
 }
 
 #[derive(Accounts)]
-pub struct Claim {
-    // TODO: Add required accounts
+pub struct Claim<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(mut)]
+    pub wexel: Account<'info, Wexel>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './database/prisma.service';
@@ -9,18 +10,19 @@ import { PoolsModule } from './modules/pools/pools.module';
 import { WexelsModule } from './modules/wexels/wexels.module';
 import { UsersModule } from './modules/users/users.module';
 import { OraclesModule } from './modules/oracles/oracles.module';
+import { SentryModule } from './common/sentry/sentry.module';
+import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { SentryInterceptor } from './common/sentry/sentry.interceptor';
+import { throttleConfig } from './common/config/throttle.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000, // 1 minute
-        limit: 100, // 100 requests per minute
-      },
-    ]),
+    ThrottlerModule.forRoot(throttleConfig),
+    SentryModule,
     AuthModule,
     PoolsModule,
     WexelsModule,
@@ -28,6 +30,21 @@ import { OraclesModule } from './modules/oracles/oracles.module';
     OraclesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: CustomThrottlerGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SentryInterceptor,
+    },
+  ],
 })
 export class AppModule {}
