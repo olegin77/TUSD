@@ -1,8 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { initSentry } from './common/sentry/sentry.config';
 
 async function bootstrap() {
+  // Initialize Sentry first
+  initSentry();
+
   const app = await NestFactory.create(AppModule);
 
   // Enable validation

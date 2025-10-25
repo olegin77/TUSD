@@ -2,7 +2,10 @@
   "license": "ISC",
   "scripts": {
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
+    "test": "anchor test",
+    "test:coverage": "cargo llvm-cov --html --output-dir coverage --target-dir target",
+    "test:coverage:check": "cargo llvm-cov --html --output-dir coverage --target-dir target --fail-under 90"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1"
