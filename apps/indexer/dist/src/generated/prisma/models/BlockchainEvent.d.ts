@@ -1,5 +1,5 @@
-import type * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from '../internal/prismaNamespace.js';
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace.js";
 export type BlockchainEventModel = runtime.Types.Result.DefaultSelection<Prisma.$BlockchainEventPayload>;
 export type AggregateBlockchainEvent = {
     _count: BlockchainEventCountAggregateOutputType | null;
@@ -115,19 +115,19 @@ export type BlockchainEventGroupByOutputType = {
     _max: BlockchainEventMaxAggregateOutputType | null;
 };
 type GetBlockchainEventGroupByPayload<T extends BlockchainEventGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<BlockchainEventGroupByOutputType, T['by']> & {
-    [P in keyof T & keyof BlockchainEventGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], BlockchainEventGroupByOutputType[P]> : Prisma.GetScalarType<T[P], BlockchainEventGroupByOutputType[P]>;
+    [P in ((keyof T) & (keyof BlockchainEventGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], BlockchainEventGroupByOutputType[P]> : Prisma.GetScalarType<T[P], BlockchainEventGroupByOutputType[P]>;
 }>>;
 export type BlockchainEventWhereInput = {
     AND?: Prisma.BlockchainEventWhereInput | Prisma.BlockchainEventWhereInput[];
     OR?: Prisma.BlockchainEventWhereInput[];
     NOT?: Prisma.BlockchainEventWhereInput | Prisma.BlockchainEventWhereInput[];
-    id?: Prisma.BigIntFilter<'BlockchainEvent'> | bigint | number;
-    chain?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    tx_hash?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    event_type?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    data?: Prisma.JsonFilter<'BlockchainEvent'>;
-    processed?: Prisma.BoolFilter<'BlockchainEvent'> | boolean;
-    created_at?: Prisma.DateTimeFilter<'BlockchainEvent'> | Date | string;
+    id?: Prisma.BigIntFilter<"BlockchainEvent"> | bigint | number;
+    chain?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    tx_hash?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    event_type?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    data?: Prisma.JsonFilter<"BlockchainEvent">;
+    processed?: Prisma.BoolFilter<"BlockchainEvent"> | boolean;
+    created_at?: Prisma.DateTimeFilter<"BlockchainEvent"> | Date | string;
 };
 export type BlockchainEventOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -143,13 +143,13 @@ export type BlockchainEventWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.BlockchainEventWhereInput | Prisma.BlockchainEventWhereInput[];
     OR?: Prisma.BlockchainEventWhereInput[];
     NOT?: Prisma.BlockchainEventWhereInput | Prisma.BlockchainEventWhereInput[];
-    chain?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    tx_hash?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    event_type?: Prisma.StringFilter<'BlockchainEvent'> | string;
-    data?: Prisma.JsonFilter<'BlockchainEvent'>;
-    processed?: Prisma.BoolFilter<'BlockchainEvent'> | boolean;
-    created_at?: Prisma.DateTimeFilter<'BlockchainEvent'> | Date | string;
-}, 'id'>;
+    chain?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    tx_hash?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    event_type?: Prisma.StringFilter<"BlockchainEvent"> | string;
+    data?: Prisma.JsonFilter<"BlockchainEvent">;
+    processed?: Prisma.BoolFilter<"BlockchainEvent"> | boolean;
+    created_at?: Prisma.DateTimeFilter<"BlockchainEvent"> | Date | string;
+}, "id">;
 export type BlockchainEventOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     chain?: Prisma.SortOrder;
@@ -168,13 +168,13 @@ export type BlockchainEventScalarWhereWithAggregatesInput = {
     AND?: Prisma.BlockchainEventScalarWhereWithAggregatesInput | Prisma.BlockchainEventScalarWhereWithAggregatesInput[];
     OR?: Prisma.BlockchainEventScalarWhereWithAggregatesInput[];
     NOT?: Prisma.BlockchainEventScalarWhereWithAggregatesInput | Prisma.BlockchainEventScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<'BlockchainEvent'> | bigint | number;
-    chain?: Prisma.StringWithAggregatesFilter<'BlockchainEvent'> | string;
-    tx_hash?: Prisma.StringWithAggregatesFilter<'BlockchainEvent'> | string;
-    event_type?: Prisma.StringWithAggregatesFilter<'BlockchainEvent'> | string;
-    data?: Prisma.JsonWithAggregatesFilter<'BlockchainEvent'>;
-    processed?: Prisma.BoolWithAggregatesFilter<'BlockchainEvent'> | boolean;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<'BlockchainEvent'> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<"BlockchainEvent"> | bigint | number;
+    chain?: Prisma.StringWithAggregatesFilter<"BlockchainEvent"> | string;
+    tx_hash?: Prisma.StringWithAggregatesFilter<"BlockchainEvent"> | string;
+    event_type?: Prisma.StringWithAggregatesFilter<"BlockchainEvent"> | string;
+    data?: Prisma.JsonWithAggregatesFilter<"BlockchainEvent">;
+    processed?: Prisma.BoolWithAggregatesFilter<"BlockchainEvent"> | boolean;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<"BlockchainEvent"> | Date | string;
 };
 export type BlockchainEventCreateInput = {
     id?: bigint | number;
@@ -278,7 +278,7 @@ export type BlockchainEventSelect<ExtArgs extends runtime.Types.Extensions.Inter
     data?: boolean;
     processed?: boolean;
     created_at?: boolean;
-}, ExtArgs['result']['blockchainEvent']>;
+}, ExtArgs["result"]["blockchainEvent"]>;
 export type BlockchainEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     chain?: boolean;
@@ -287,7 +287,7 @@ export type BlockchainEventSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
     data?: boolean;
     processed?: boolean;
     created_at?: boolean;
-}, ExtArgs['result']['blockchainEvent']>;
+}, ExtArgs["result"]["blockchainEvent"]>;
 export type BlockchainEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     chain?: boolean;
@@ -296,7 +296,7 @@ export type BlockchainEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
     data?: boolean;
     processed?: boolean;
     created_at?: boolean;
-}, ExtArgs['result']['blockchainEvent']>;
+}, ExtArgs["result"]["blockchainEvent"]>;
 export type BlockchainEventSelectScalar = {
     id?: boolean;
     chain?: boolean;
@@ -306,9 +306,9 @@ export type BlockchainEventSelectScalar = {
     processed?: boolean;
     created_at?: boolean;
 };
-export type BlockchainEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'chain' | 'tx_hash' | 'event_type' | 'data' | 'processed' | 'created_at', ExtArgs['result']['blockchainEvent']>;
+export type BlockchainEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "chain" | "tx_hash" | "event_type" | "data" | "processed" | "created_at", ExtArgs["result"]["blockchainEvent"]>;
 export type $BlockchainEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: 'BlockchainEvent';
+    name: "BlockchainEvent";
     objects: {};
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: bigint;
@@ -318,7 +318,7 @@ export type $BlockchainEventPayload<ExtArgs extends runtime.Types.Extensions.Int
         data: runtime.JsonValue;
         processed: boolean;
         created_at: Date;
-    }, ExtArgs['result']['blockchainEvent']>;
+    }, ExtArgs["result"]["blockchainEvent"]>;
     composites: {};
 };
 export type BlockchainEventGetPayload<S extends boolean | null | undefined | BlockchainEventDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload, S>;
@@ -332,20 +332,20 @@ export interface BlockchainEventDelegate<ExtArgs extends runtime.Types.Extension
             name: 'BlockchainEvent';
         };
     };
-    findUnique<T extends BlockchainEventFindUniqueArgs>(args: Prisma.SelectSubset<T, BlockchainEventFindUniqueArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends BlockchainEventFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, BlockchainEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends BlockchainEventFindFirstArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindFirstArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends BlockchainEventFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends BlockchainEventFindManyArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
-    create<T extends BlockchainEventCreateArgs>(args: Prisma.SelectSubset<T, BlockchainEventCreateArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends BlockchainEventFindUniqueArgs>(args: Prisma.SelectSubset<T, BlockchainEventFindUniqueArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends BlockchainEventFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, BlockchainEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends BlockchainEventFindFirstArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindFirstArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends BlockchainEventFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends BlockchainEventFindManyArgs>(args?: Prisma.SelectSubset<T, BlockchainEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends BlockchainEventCreateArgs>(args: Prisma.SelectSubset<T, BlockchainEventCreateArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends BlockchainEventCreateManyArgs>(args?: Prisma.SelectSubset<T, BlockchainEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends BlockchainEventCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BlockchainEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
-    delete<T extends BlockchainEventDeleteArgs>(args: Prisma.SelectSubset<T, BlockchainEventDeleteArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends BlockchainEventUpdateArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpdateArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends BlockchainEventCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BlockchainEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends BlockchainEventDeleteArgs>(args: Prisma.SelectSubset<T, BlockchainEventDeleteArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends BlockchainEventUpdateArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpdateArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends BlockchainEventDeleteManyArgs>(args?: Prisma.SelectSubset<T, BlockchainEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends BlockchainEventUpdateManyArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends BlockchainEventUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
-    upsert<T extends BlockchainEventUpsertArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpsertArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends BlockchainEventUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends BlockchainEventUpsertArgs>(args: Prisma.SelectSubset<T, BlockchainEventUpsertArgs<ExtArgs>>): Prisma.Prisma__BlockchainEventClient<runtime.Types.Result.GetResult<Prisma.$BlockchainEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends BlockchainEventCountArgs>(args?: Prisma.Subset<T, BlockchainEventCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], BlockchainEventCountAggregateOutputType> : number>;
     aggregate<T extends BlockchainEventAggregateArgs>(args: Prisma.Subset<T, BlockchainEventAggregateArgs>): Prisma.PrismaPromise<GetBlockchainEventAggregateType<T>>;
     groupBy<T extends BlockchainEventGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -369,19 +369,19 @@ export interface BlockchainEventDelegate<ExtArgs extends runtime.Types.Extension
     readonly fields: BlockchainEventFieldRefs;
 }
 export interface Prisma__BlockchainEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    readonly [Symbol.toStringTag]: "PrismaPromise";
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface BlockchainEventFieldRefs {
-    readonly id: Prisma.FieldRef<'BlockchainEvent', 'BigInt'>;
-    readonly chain: Prisma.FieldRef<'BlockchainEvent', 'String'>;
-    readonly tx_hash: Prisma.FieldRef<'BlockchainEvent', 'String'>;
-    readonly event_type: Prisma.FieldRef<'BlockchainEvent', 'String'>;
-    readonly data: Prisma.FieldRef<'BlockchainEvent', 'Json'>;
-    readonly processed: Prisma.FieldRef<'BlockchainEvent', 'Boolean'>;
-    readonly created_at: Prisma.FieldRef<'BlockchainEvent', 'DateTime'>;
+    readonly id: Prisma.FieldRef<"BlockchainEvent", 'BigInt'>;
+    readonly chain: Prisma.FieldRef<"BlockchainEvent", 'String'>;
+    readonly tx_hash: Prisma.FieldRef<"BlockchainEvent", 'String'>;
+    readonly event_type: Prisma.FieldRef<"BlockchainEvent", 'String'>;
+    readonly data: Prisma.FieldRef<"BlockchainEvent", 'Json'>;
+    readonly processed: Prisma.FieldRef<"BlockchainEvent", 'Boolean'>;
+    readonly created_at: Prisma.FieldRef<"BlockchainEvent", 'DateTime'>;
 }
 export type BlockchainEventFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.BlockchainEventSelect<ExtArgs> | null;

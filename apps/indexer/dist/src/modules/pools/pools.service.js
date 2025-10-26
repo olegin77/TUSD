@@ -24,7 +24,7 @@ let PoolsService = class PoolsService {
     }
     async findOne(id) {
         const pool = await this.prisma.pool.findUnique({
-            where: { id },
+            where: { id: parseInt(id) },
         });
         if (!pool) {
             throw new common_1.NotFoundException(`Pool with ID ${id} not found`);
@@ -46,7 +46,7 @@ let PoolsService = class PoolsService {
     async update(id, updatePoolDto) {
         const pool = await this.findOne(id);
         return this.prisma.pool.update({
-            where: { id },
+            where: { id: parseInt(id) },
             data: {
                 ...(updatePoolDto.apy_base_bp !== undefined && {
                     apy_base_bp: updatePoolDto.apy_base_bp,
@@ -72,7 +72,7 @@ let PoolsService = class PoolsService {
     async remove(id) {
         await this.findOne(id);
         return this.prisma.pool.delete({
-            where: { id },
+            where: { id: parseInt(id) },
         });
     }
 };

@@ -1,5 +1,5 @@
-import type * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from '../internal/prismaNamespace.js';
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace.js";
 export type ListingModel = runtime.Types.Result.DefaultSelection<Prisma.$ListingPayload>;
 export type AggregateListing = {
     _count: ListingCountAggregateOutputType | null;
@@ -145,21 +145,21 @@ export type ListingGroupByOutputType = {
     _max: ListingMaxAggregateOutputType | null;
 };
 type GetListingGroupByPayload<T extends ListingGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ListingGroupByOutputType, T['by']> & {
-    [P in keyof T & keyof ListingGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ListingGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ListingGroupByOutputType[P]>;
+    [P in ((keyof T) & (keyof ListingGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ListingGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ListingGroupByOutputType[P]>;
 }>>;
 export type ListingWhereInput = {
     AND?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[];
     OR?: Prisma.ListingWhereInput[];
     NOT?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[];
-    id?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    ask_price_usd?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    auction?: Prisma.BoolFilter<'Listing'> | boolean;
-    min_bid_usd?: Prisma.BigIntNullableFilter<'Listing'> | bigint | number | null;
-    expiry_ts?: Prisma.DateTimeNullableFilter<'Listing'> | Date | string | null;
-    status?: Prisma.StringFilter<'Listing'> | string;
-    created_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
+    id?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    ask_price_usd?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    auction?: Prisma.BoolFilter<"Listing"> | boolean;
+    min_bid_usd?: Prisma.BigIntNullableFilter<"Listing"> | bigint | number | null;
+    expiry_ts?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null;
+    status?: Prisma.StringFilter<"Listing"> | string;
+    created_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
 };
 export type ListingOrderByWithRelationInput = {
@@ -179,16 +179,16 @@ export type ListingWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[];
     OR?: Prisma.ListingWhereInput[];
     NOT?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[];
-    wexel_id?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    ask_price_usd?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    auction?: Prisma.BoolFilter<'Listing'> | boolean;
-    min_bid_usd?: Prisma.BigIntNullableFilter<'Listing'> | bigint | number | null;
-    expiry_ts?: Prisma.DateTimeNullableFilter<'Listing'> | Date | string | null;
-    status?: Prisma.StringFilter<'Listing'> | string;
-    created_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
+    wexel_id?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    ask_price_usd?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    auction?: Prisma.BoolFilter<"Listing"> | boolean;
+    min_bid_usd?: Prisma.BigIntNullableFilter<"Listing"> | bigint | number | null;
+    expiry_ts?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null;
+    status?: Prisma.StringFilter<"Listing"> | string;
+    created_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
-}, 'id'>;
+}, "id">;
 export type ListingOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     wexel_id?: Prisma.SortOrder;
@@ -209,15 +209,15 @@ export type ListingScalarWhereWithAggregatesInput = {
     AND?: Prisma.ListingScalarWhereWithAggregatesInput | Prisma.ListingScalarWhereWithAggregatesInput[];
     OR?: Prisma.ListingScalarWhereWithAggregatesInput[];
     NOT?: Prisma.ListingScalarWhereWithAggregatesInput | Prisma.ListingScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<'Listing'> | bigint | number;
-    wexel_id?: Prisma.BigIntWithAggregatesFilter<'Listing'> | bigint | number;
-    ask_price_usd?: Prisma.BigIntWithAggregatesFilter<'Listing'> | bigint | number;
-    auction?: Prisma.BoolWithAggregatesFilter<'Listing'> | boolean;
-    min_bid_usd?: Prisma.BigIntNullableWithAggregatesFilter<'Listing'> | bigint | number | null;
-    expiry_ts?: Prisma.DateTimeNullableWithAggregatesFilter<'Listing'> | Date | string | null;
-    status?: Prisma.StringWithAggregatesFilter<'Listing'> | string;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<'Listing'> | Date | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<'Listing'> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<"Listing"> | bigint | number;
+    wexel_id?: Prisma.BigIntWithAggregatesFilter<"Listing"> | bigint | number;
+    ask_price_usd?: Prisma.BigIntWithAggregatesFilter<"Listing"> | bigint | number;
+    auction?: Prisma.BoolWithAggregatesFilter<"Listing"> | boolean;
+    min_bid_usd?: Prisma.BigIntNullableWithAggregatesFilter<"Listing"> | bigint | number | null;
+    expiry_ts?: Prisma.DateTimeNullableWithAggregatesFilter<"Listing"> | Date | string | null;
+    status?: Prisma.StringWithAggregatesFilter<"Listing"> | string;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<"Listing"> | Date | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<"Listing"> | Date | string;
 };
 export type ListingCreateInput = {
     id?: bigint | number;
@@ -444,15 +444,15 @@ export type ListingScalarWhereInput = {
     AND?: Prisma.ListingScalarWhereInput | Prisma.ListingScalarWhereInput[];
     OR?: Prisma.ListingScalarWhereInput[];
     NOT?: Prisma.ListingScalarWhereInput | Prisma.ListingScalarWhereInput[];
-    id?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    ask_price_usd?: Prisma.BigIntFilter<'Listing'> | bigint | number;
-    auction?: Prisma.BoolFilter<'Listing'> | boolean;
-    min_bid_usd?: Prisma.BigIntNullableFilter<'Listing'> | bigint | number | null;
-    expiry_ts?: Prisma.DateTimeNullableFilter<'Listing'> | Date | string | null;
-    status?: Prisma.StringFilter<'Listing'> | string;
-    created_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<'Listing'> | Date | string;
+    id?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    ask_price_usd?: Prisma.BigIntFilter<"Listing"> | bigint | number;
+    auction?: Prisma.BoolFilter<"Listing"> | boolean;
+    min_bid_usd?: Prisma.BigIntNullableFilter<"Listing"> | bigint | number | null;
+    expiry_ts?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null;
+    status?: Prisma.StringFilter<"Listing"> | string;
+    created_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<"Listing"> | Date | string;
 };
 export type ListingCreateManyWexelInput = {
     id?: bigint | number;
@@ -505,7 +505,7 @@ export type ListingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs['result']['listing']>;
+}, ExtArgs["result"]["listing"]>;
 export type ListingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -517,7 +517,7 @@ export type ListingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs['result']['listing']>;
+}, ExtArgs["result"]["listing"]>;
 export type ListingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -529,7 +529,7 @@ export type ListingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs['result']['listing']>;
+}, ExtArgs["result"]["listing"]>;
 export type ListingSelectScalar = {
     id?: boolean;
     wexel_id?: boolean;
@@ -541,7 +541,7 @@ export type ListingSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type ListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'wexel_id' | 'ask_price_usd' | 'auction' | 'min_bid_usd' | 'expiry_ts' | 'status' | 'created_at' | 'updated_at', ExtArgs['result']['listing']>;
+export type ListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "wexel_id" | "ask_price_usd" | "auction" | "min_bid_usd" | "expiry_ts" | "status" | "created_at" | "updated_at", ExtArgs["result"]["listing"]>;
 export type ListingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
@@ -552,7 +552,7 @@ export type ListingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
 export type $ListingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: 'Listing';
+    name: "Listing";
     objects: {
         wexel: Prisma.$WexelPayload<ExtArgs>;
     };
@@ -566,7 +566,7 @@ export type $ListingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
         status: string;
         created_at: Date;
         updated_at: Date;
-    }, ExtArgs['result']['listing']>;
+    }, ExtArgs["result"]["listing"]>;
     composites: {};
 };
 export type ListingGetPayload<S extends boolean | null | undefined | ListingDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ListingPayload, S>;
@@ -580,20 +580,20 @@ export interface ListingDelegate<ExtArgs extends runtime.Types.Extensions.Intern
             name: 'Listing';
         };
     };
-    findUnique<T extends ListingFindUniqueArgs>(args: Prisma.SelectSubset<T, ListingFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends ListingFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ListingFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends ListingFindFirstArgs>(args?: Prisma.SelectSubset<T, ListingFindFirstArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends ListingFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ListingFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends ListingFindManyArgs>(args?: Prisma.SelectSubset<T, ListingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
-    create<T extends ListingCreateArgs>(args: Prisma.SelectSubset<T, ListingCreateArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends ListingFindUniqueArgs>(args: Prisma.SelectSubset<T, ListingFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends ListingFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ListingFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends ListingFindFirstArgs>(args?: Prisma.SelectSubset<T, ListingFindFirstArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends ListingFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ListingFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends ListingFindManyArgs>(args?: Prisma.SelectSubset<T, ListingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends ListingCreateArgs>(args: Prisma.SelectSubset<T, ListingCreateArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends ListingCreateManyArgs>(args?: Prisma.SelectSubset<T, ListingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends ListingCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ListingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
-    delete<T extends ListingDeleteArgs>(args: Prisma.SelectSubset<T, ListingDeleteArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends ListingUpdateArgs>(args: Prisma.SelectSubset<T, ListingUpdateArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends ListingCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ListingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends ListingDeleteArgs>(args: Prisma.SelectSubset<T, ListingDeleteArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends ListingUpdateArgs>(args: Prisma.SelectSubset<T, ListingUpdateArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends ListingDeleteManyArgs>(args?: Prisma.SelectSubset<T, ListingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends ListingUpdateManyArgs>(args: Prisma.SelectSubset<T, ListingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends ListingUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ListingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
-    upsert<T extends ListingUpsertArgs>(args: Prisma.SelectSubset<T, ListingUpsertArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends ListingUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ListingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends ListingUpsertArgs>(args: Prisma.SelectSubset<T, ListingUpsertArgs<ExtArgs>>): Prisma.Prisma__ListingClient<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends ListingCountArgs>(args?: Prisma.Subset<T, ListingCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], ListingCountAggregateOutputType> : number>;
     aggregate<T extends ListingAggregateArgs>(args: Prisma.Subset<T, ListingAggregateArgs>): Prisma.PrismaPromise<GetListingAggregateType<T>>;
     groupBy<T extends ListingGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -617,22 +617,22 @@ export interface ListingDelegate<ExtArgs extends runtime.Types.Extensions.Intern
     readonly fields: ListingFieldRefs;
 }
 export interface Prisma__ListingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface ListingFieldRefs {
-    readonly id: Prisma.FieldRef<'Listing', 'BigInt'>;
-    readonly wexel_id: Prisma.FieldRef<'Listing', 'BigInt'>;
-    readonly ask_price_usd: Prisma.FieldRef<'Listing', 'BigInt'>;
-    readonly auction: Prisma.FieldRef<'Listing', 'Boolean'>;
-    readonly min_bid_usd: Prisma.FieldRef<'Listing', 'BigInt'>;
-    readonly expiry_ts: Prisma.FieldRef<'Listing', 'DateTime'>;
-    readonly status: Prisma.FieldRef<'Listing', 'String'>;
-    readonly created_at: Prisma.FieldRef<'Listing', 'DateTime'>;
-    readonly updated_at: Prisma.FieldRef<'Listing', 'DateTime'>;
+    readonly id: Prisma.FieldRef<"Listing", 'BigInt'>;
+    readonly wexel_id: Prisma.FieldRef<"Listing", 'BigInt'>;
+    readonly ask_price_usd: Prisma.FieldRef<"Listing", 'BigInt'>;
+    readonly auction: Prisma.FieldRef<"Listing", 'Boolean'>;
+    readonly min_bid_usd: Prisma.FieldRef<"Listing", 'BigInt'>;
+    readonly expiry_ts: Prisma.FieldRef<"Listing", 'DateTime'>;
+    readonly status: Prisma.FieldRef<"Listing", 'String'>;
+    readonly created_at: Prisma.FieldRef<"Listing", 'DateTime'>;
+    readonly updated_at: Prisma.FieldRef<"Listing", 'DateTime'>;
 }
 export type ListingFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.ListingSelect<ExtArgs> | null;

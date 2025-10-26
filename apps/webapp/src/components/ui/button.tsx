@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, type HTMLMotionProps } from "framer-motion";
+// import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -57,23 +57,64 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     disabled,
     ...props 
   }, ref) => {
-    const Comp = asChild ? Slot : animate ? motion.button : "button";
     const isDisabled = disabled || loading;
     
-    const motionProps = animate ? {
-      whileHover: isDisabled ? {} : { scale: 1.02 },
-      whileTap: isDisabled ? {} : { scale: 0.98 },
-      transition: { type: "spring", stiffness: 400, damping: 17 }
-    } : {};
+    if (asChild) {
+      return (
+        <Slot 
+          className={cn(buttonVariants({ variant, size, className }))} 
+          ref={ref} 
+          aria-disabled={isDisabled}
+          aria-busy={loading}
+          {...props} 
+        >
+          {loading ? (
+            <>
+              <span className="sr-only">{loadingText}</span>
+              <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+              {children}
+            </>
+          ) : (
+            children
+          )}
+        </Slot>
+      );
+    }
+
+    // Animation temporarily disabled due to type conflicts
+    // if (animate) {
+    //   return (
+    //     <motion.button
+    //       className={cn(buttonVariants({ variant, size, className }))} 
+    //       ref={ref} 
+    //       disabled={isDisabled}
+    //       aria-disabled={isDisabled}
+    //       aria-busy={loading}
+    //       whileHover={isDisabled ? {} : { scale: 1.02 }}
+    //       whileTap={isDisabled ? {} : { scale: 0.98 }}
+    //       transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    //       {...props} 
+    //     >
+    //       {loading ? (
+    //         <>
+    //           <span className="sr-only">{loadingText}</span>
+    //           <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+    //           {children}
+    //         </>
+    //       ) : (
+    //         children
+    //       )}
+    //     </motion.button>
+    //   );
+    // }
 
     return (
-      <Comp 
+      <button
         className={cn(buttonVariants({ variant, size, className }))} 
         ref={ref} 
         disabled={isDisabled}
         aria-disabled={isDisabled}
         aria-busy={loading}
-        {...motionProps}
         {...props} 
       >
         {loading ? (
@@ -85,7 +126,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           children
         )}
-      </Comp>
+      </button>
     );
   }
 );

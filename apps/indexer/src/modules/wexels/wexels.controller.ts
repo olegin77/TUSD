@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  ParseUUIDPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { WexelsService } from './wexels.service';
 import { CreateWexelDto } from './dto/create-wexel.dto';
@@ -27,8 +27,8 @@ export class WexelsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.wexelsService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.wexelsService.findOne(id.toString());
   }
 
   @Post('apply-boost')
@@ -38,14 +38,14 @@ export class WexelsController {
 
   @Patch(':id')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateWexelDto: Partial<CreateWexelDto>,
   ) {
-    return this.wexelsService.update(id, updateWexelDto);
+    return this.wexelsService.update(id.toString(), updateWexelDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.wexelsService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.wexelsService.remove(id.toString());
   }
 }

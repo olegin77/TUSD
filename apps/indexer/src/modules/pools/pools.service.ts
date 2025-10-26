@@ -15,7 +15,7 @@ export class PoolsService {
 
   async findOne(id: string) {
     const pool = await this.prisma.pool.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     if (!pool) {
@@ -42,7 +42,7 @@ export class PoolsService {
     const pool = await this.findOne(id);
 
     return this.prisma.pool.update({
-      where: { id },
+      where: { id: parseInt(id) },
       data: {
         ...(updatePoolDto.apy_base_bp !== undefined && {
           apy_base_bp: updatePoolDto.apy_base_bp,
@@ -69,7 +69,7 @@ export class PoolsService {
   async remove(id: string) {
     await this.findOne(id);
     return this.prisma.pool.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
   }
 }
