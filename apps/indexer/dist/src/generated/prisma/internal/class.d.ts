@@ -1,5 +1,5 @@
-import * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from './prismaNamespace.js';
+import * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "./prismaNamespace.js";
 export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never;
 export interface PrismaClientConstructor {
     new <Options extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions, LogOpts extends LogOptions<Options> = LogOptions<Options>, OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends {
@@ -25,7 +25,7 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
         timeout?: number;
         isolationLevel?: Prisma.TransactionIsolationLevel;
     }): runtime.Types.Utils.JsPromise<R>;
-    $extends: runtime.Types.Extensions.ExtendsHook<'extends', Prisma.TypeMapCb<OmitOpts>, ExtArgs, runtime.Types.Utils.Call<Prisma.TypeMapCb<OmitOpts>, {
+    $extends: runtime.Types.Extensions.ExtendsHook<"extends", Prisma.TypeMapCb<OmitOpts>, ExtArgs, runtime.Types.Utils.Call<Prisma.TypeMapCb<OmitOpts>, {
         extArgs: ExtArgs;
     }>>;
     get pool(): Prisma.PoolDelegate<ExtArgs, {

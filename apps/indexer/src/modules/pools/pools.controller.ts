@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  ParseUUIDPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PoolsService } from './pools.service';
 import { CreatePoolDto } from './dto/create-pool.dto';
@@ -27,20 +27,20 @@ export class PoolsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.poolsService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.poolsService.findOne(id.toString());
   }
 
   @Patch(':id')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updatePoolDto: UpdatePoolDto,
   ) {
-    return this.poolsService.update(id, updatePoolDto);
+    return this.poolsService.update(id.toString(), updatePoolDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.poolsService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.poolsService.remove(id.toString());
   }
 }

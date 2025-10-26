@@ -29,16 +29,16 @@ let WexelsController = class WexelsController {
         return this.wexelsService.findAll();
     }
     findOne(id) {
-        return this.wexelsService.findOne(id);
+        return this.wexelsService.findOne(id.toString());
     }
     applyBoost(applyBoostDto) {
         return this.wexelsService.applyBoost(applyBoostDto);
     }
     update(id, updateWexelDto) {
-        return this.wexelsService.update(id, updateWexelDto);
+        return this.wexelsService.update(id.toString(), updateWexelDto);
     }
     remove(id) {
-        return this.wexelsService.remove(id);
+        return this.wexelsService.remove(id.toString());
     }
 };
 exports.WexelsController = WexelsController;
@@ -57,9 +57,9 @@ __decorate([
 ], WexelsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], WexelsController.prototype, "findOne", null);
 __decorate([
@@ -71,17 +71,17 @@ __decorate([
 ], WexelsController.prototype, "applyBoost", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
 ], WexelsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], WexelsController.prototype, "remove", null);
 exports.WexelsController = WexelsController = __decorate([

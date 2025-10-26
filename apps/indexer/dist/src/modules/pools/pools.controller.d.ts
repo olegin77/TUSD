@@ -6,7 +6,7 @@ export declare class PoolsController {
     constructor(poolsService: PoolsService);
     create(createPoolDto: CreatePoolDto): Promise<any>;
     findAll(): Promise<any>;
-    findOne(id: string): Promise<any>;
-    update(id: string, updatePoolDto: UpdatePoolDto): Promise<any>;
-    remove(id: string): Promise<any>;
+    findOne(id: number): Promise<any>;
+    update(id: number, updatePoolDto: UpdatePoolDto): Promise<any>;
+    remove(id: number): Promise<any>;
 }

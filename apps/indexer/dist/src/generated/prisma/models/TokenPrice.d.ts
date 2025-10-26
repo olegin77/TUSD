@@ -1,5 +1,5 @@
-import type * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from '../internal/prismaNamespace.js';
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace.js";
 export type TokenPriceModel = runtime.Types.Result.DefaultSelection<Prisma.$TokenPricePayload>;
 export type AggregateTokenPrice = {
     _count: TokenPriceCountAggregateOutputType | null;
@@ -109,17 +109,17 @@ export type TokenPriceGroupByOutputType = {
     _max: TokenPriceMaxAggregateOutputType | null;
 };
 type GetTokenPriceGroupByPayload<T extends TokenPriceGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<TokenPriceGroupByOutputType, T['by']> & {
-    [P in keyof T & keyof TokenPriceGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], TokenPriceGroupByOutputType[P]> : Prisma.GetScalarType<T[P], TokenPriceGroupByOutputType[P]>;
+    [P in ((keyof T) & (keyof TokenPriceGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], TokenPriceGroupByOutputType[P]> : Prisma.GetScalarType<T[P], TokenPriceGroupByOutputType[P]>;
 }>>;
 export type TokenPriceWhereInput = {
     AND?: Prisma.TokenPriceWhereInput | Prisma.TokenPriceWhereInput[];
     OR?: Prisma.TokenPriceWhereInput[];
     NOT?: Prisma.TokenPriceWhereInput | Prisma.TokenPriceWhereInput[];
-    id?: Prisma.BigIntFilter<'TokenPrice'> | bigint | number;
-    token_mint?: Prisma.StringFilter<'TokenPrice'> | string;
-    price_usd?: Prisma.BigIntFilter<'TokenPrice'> | bigint | number;
-    source?: Prisma.StringFilter<'TokenPrice'> | string;
-    updated_at?: Prisma.DateTimeFilter<'TokenPrice'> | Date | string;
+    id?: Prisma.BigIntFilter<"TokenPrice"> | bigint | number;
+    token_mint?: Prisma.StringFilter<"TokenPrice"> | string;
+    price_usd?: Prisma.BigIntFilter<"TokenPrice"> | bigint | number;
+    source?: Prisma.StringFilter<"TokenPrice"> | string;
+    updated_at?: Prisma.DateTimeFilter<"TokenPrice"> | Date | string;
 };
 export type TokenPriceOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -134,10 +134,10 @@ export type TokenPriceWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.TokenPriceWhereInput | Prisma.TokenPriceWhereInput[];
     OR?: Prisma.TokenPriceWhereInput[];
     NOT?: Prisma.TokenPriceWhereInput | Prisma.TokenPriceWhereInput[];
-    price_usd?: Prisma.BigIntFilter<'TokenPrice'> | bigint | number;
-    source?: Prisma.StringFilter<'TokenPrice'> | string;
-    updated_at?: Prisma.DateTimeFilter<'TokenPrice'> | Date | string;
-}, 'id' | 'token_mint'>;
+    price_usd?: Prisma.BigIntFilter<"TokenPrice"> | bigint | number;
+    source?: Prisma.StringFilter<"TokenPrice"> | string;
+    updated_at?: Prisma.DateTimeFilter<"TokenPrice"> | Date | string;
+}, "id" | "token_mint">;
 export type TokenPriceOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     token_mint?: Prisma.SortOrder;
@@ -154,11 +154,11 @@ export type TokenPriceScalarWhereWithAggregatesInput = {
     AND?: Prisma.TokenPriceScalarWhereWithAggregatesInput | Prisma.TokenPriceScalarWhereWithAggregatesInput[];
     OR?: Prisma.TokenPriceScalarWhereWithAggregatesInput[];
     NOT?: Prisma.TokenPriceScalarWhereWithAggregatesInput | Prisma.TokenPriceScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<'TokenPrice'> | bigint | number;
-    token_mint?: Prisma.StringWithAggregatesFilter<'TokenPrice'> | string;
-    price_usd?: Prisma.BigIntWithAggregatesFilter<'TokenPrice'> | bigint | number;
-    source?: Prisma.StringWithAggregatesFilter<'TokenPrice'> | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<'TokenPrice'> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<"TokenPrice"> | bigint | number;
+    token_mint?: Prisma.StringWithAggregatesFilter<"TokenPrice"> | string;
+    price_usd?: Prisma.BigIntWithAggregatesFilter<"TokenPrice"> | bigint | number;
+    source?: Prisma.StringWithAggregatesFilter<"TokenPrice"> | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<"TokenPrice"> | Date | string;
 };
 export type TokenPriceCreateInput = {
     id?: bigint | number;
@@ -244,21 +244,21 @@ export type TokenPriceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
     price_usd?: boolean;
     source?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['tokenPrice']>;
+}, ExtArgs["result"]["tokenPrice"]>;
 export type TokenPriceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     token_mint?: boolean;
     price_usd?: boolean;
     source?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['tokenPrice']>;
+}, ExtArgs["result"]["tokenPrice"]>;
 export type TokenPriceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     token_mint?: boolean;
     price_usd?: boolean;
     source?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['tokenPrice']>;
+}, ExtArgs["result"]["tokenPrice"]>;
 export type TokenPriceSelectScalar = {
     id?: boolean;
     token_mint?: boolean;
@@ -266,9 +266,9 @@ export type TokenPriceSelectScalar = {
     source?: boolean;
     updated_at?: boolean;
 };
-export type TokenPriceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'token_mint' | 'price_usd' | 'source' | 'updated_at', ExtArgs['result']['tokenPrice']>;
+export type TokenPriceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "token_mint" | "price_usd" | "source" | "updated_at", ExtArgs["result"]["tokenPrice"]>;
 export type $TokenPricePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: 'TokenPrice';
+    name: "TokenPrice";
     objects: {};
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: bigint;
@@ -276,7 +276,7 @@ export type $TokenPricePayload<ExtArgs extends runtime.Types.Extensions.Internal
         price_usd: bigint;
         source: string;
         updated_at: Date;
-    }, ExtArgs['result']['tokenPrice']>;
+    }, ExtArgs["result"]["tokenPrice"]>;
     composites: {};
 };
 export type TokenPriceGetPayload<S extends boolean | null | undefined | TokenPriceDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$TokenPricePayload, S>;
@@ -290,20 +290,20 @@ export interface TokenPriceDelegate<ExtArgs extends runtime.Types.Extensions.Int
             name: 'TokenPrice';
         };
     };
-    findUnique<T extends TokenPriceFindUniqueArgs>(args: Prisma.SelectSubset<T, TokenPriceFindUniqueArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends TokenPriceFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, TokenPriceFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends TokenPriceFindFirstArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindFirstArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends TokenPriceFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends TokenPriceFindManyArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
-    create<T extends TokenPriceCreateArgs>(args: Prisma.SelectSubset<T, TokenPriceCreateArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends TokenPriceFindUniqueArgs>(args: Prisma.SelectSubset<T, TokenPriceFindUniqueArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends TokenPriceFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, TokenPriceFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends TokenPriceFindFirstArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindFirstArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends TokenPriceFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends TokenPriceFindManyArgs>(args?: Prisma.SelectSubset<T, TokenPriceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends TokenPriceCreateArgs>(args: Prisma.SelectSubset<T, TokenPriceCreateArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends TokenPriceCreateManyArgs>(args?: Prisma.SelectSubset<T, TokenPriceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends TokenPriceCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, TokenPriceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
-    delete<T extends TokenPriceDeleteArgs>(args: Prisma.SelectSubset<T, TokenPriceDeleteArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends TokenPriceUpdateArgs>(args: Prisma.SelectSubset<T, TokenPriceUpdateArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends TokenPriceCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, TokenPriceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends TokenPriceDeleteArgs>(args: Prisma.SelectSubset<T, TokenPriceDeleteArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends TokenPriceUpdateArgs>(args: Prisma.SelectSubset<T, TokenPriceUpdateArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends TokenPriceDeleteManyArgs>(args?: Prisma.SelectSubset<T, TokenPriceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends TokenPriceUpdateManyArgs>(args: Prisma.SelectSubset<T, TokenPriceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends TokenPriceUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, TokenPriceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
-    upsert<T extends TokenPriceUpsertArgs>(args: Prisma.SelectSubset<T, TokenPriceUpsertArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends TokenPriceUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, TokenPriceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends TokenPriceUpsertArgs>(args: Prisma.SelectSubset<T, TokenPriceUpsertArgs<ExtArgs>>): Prisma.Prisma__TokenPriceClient<runtime.Types.Result.GetResult<Prisma.$TokenPricePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends TokenPriceCountArgs>(args?: Prisma.Subset<T, TokenPriceCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], TokenPriceCountAggregateOutputType> : number>;
     aggregate<T extends TokenPriceAggregateArgs>(args: Prisma.Subset<T, TokenPriceAggregateArgs>): Prisma.PrismaPromise<GetTokenPriceAggregateType<T>>;
     groupBy<T extends TokenPriceGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -327,17 +327,17 @@ export interface TokenPriceDelegate<ExtArgs extends runtime.Types.Extensions.Int
     readonly fields: TokenPriceFieldRefs;
 }
 export interface Prisma__TokenPriceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    readonly [Symbol.toStringTag]: "PrismaPromise";
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface TokenPriceFieldRefs {
-    readonly id: Prisma.FieldRef<'TokenPrice', 'BigInt'>;
-    readonly token_mint: Prisma.FieldRef<'TokenPrice', 'String'>;
-    readonly price_usd: Prisma.FieldRef<'TokenPrice', 'BigInt'>;
-    readonly source: Prisma.FieldRef<'TokenPrice', 'String'>;
-    readonly updated_at: Prisma.FieldRef<'TokenPrice', 'DateTime'>;
+    readonly id: Prisma.FieldRef<"TokenPrice", 'BigInt'>;
+    readonly token_mint: Prisma.FieldRef<"TokenPrice", 'String'>;
+    readonly price_usd: Prisma.FieldRef<"TokenPrice", 'BigInt'>;
+    readonly source: Prisma.FieldRef<"TokenPrice", 'String'>;
+    readonly updated_at: Prisma.FieldRef<"TokenPrice", 'DateTime'>;
 }
 export type TokenPriceFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.TokenPriceSelect<ExtArgs> | null;

@@ -1,20 +1,20 @@
 "use client";
 
+import React from "react";
+import ReactDOM from "react-dom";
 import { useEffect } from "react";
-import { useAxe } from "@axe-core/react";
+import useAxe from "@axe-core/react";
 
 interface A11yProviderProps {
   children: React.ReactNode;
 }
 
 export function A11yProvider({ children }: A11yProviderProps) {
-  const axe = useAxe();
-
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      axe();
+      useAxe(React, ReactDOM, 1000);
     }
-  }, [axe]);
+  }, []);
 
   return <>{children}</>;
 }
@@ -39,6 +39,8 @@ export function SrOnly({ children }: { children: React.ReactNode }) {
 // Focus trap for modals
 export function FocusTrap({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const focusableElements = document.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );

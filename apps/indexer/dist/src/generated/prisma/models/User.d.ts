@@ -1,5 +1,5 @@
-import type * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from '../internal/prismaNamespace.js';
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace.js";
 export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayload>;
 export type AggregateUser = {
     _count: UserCountAggregateOutputType | null;
@@ -133,21 +133,21 @@ export type UserGroupByOutputType = {
     _max: UserMaxAggregateOutputType | null;
 };
 type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
-    [P in keyof T & keyof UserGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]> : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>;
+    [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]> : Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>;
 }>>;
 export type UserWhereInput = {
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
-    id?: Prisma.BigIntFilter<'User'> | bigint | number;
-    solana_address?: Prisma.StringNullableFilter<'User'> | string | null;
-    tron_address?: Prisma.StringNullableFilter<'User'> | string | null;
-    email?: Prisma.StringNullableFilter<'User'> | string | null;
-    telegram_id?: Prisma.StringNullableFilter<'User'> | string | null;
-    is_kyc_verified?: Prisma.BoolFilter<'User'> | boolean;
-    is_active?: Prisma.BoolFilter<'User'> | boolean;
-    created_at?: Prisma.DateTimeFilter<'User'> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<'User'> | Date | string;
+    id?: Prisma.BigIntFilter<"User"> | bigint | number;
+    solana_address?: Prisma.StringNullableFilter<"User"> | string | null;
+    tron_address?: Prisma.StringNullableFilter<"User"> | string | null;
+    email?: Prisma.StringNullableFilter<"User"> | string | null;
+    telegram_id?: Prisma.StringNullableFilter<"User"> | string | null;
+    is_kyc_verified?: Prisma.BoolFilter<"User"> | boolean;
+    is_active?: Prisma.BoolFilter<"User"> | boolean;
+    created_at?: Prisma.DateTimeFilter<"User"> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<"User"> | Date | string;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -169,11 +169,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
-    is_kyc_verified?: Prisma.BoolFilter<'User'> | boolean;
-    is_active?: Prisma.BoolFilter<'User'> | boolean;
-    created_at?: Prisma.DateTimeFilter<'User'> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<'User'> | Date | string;
-}, 'id' | 'solana_address' | 'tron_address' | 'email' | 'telegram_id'>;
+    is_kyc_verified?: Prisma.BoolFilter<"User"> | boolean;
+    is_active?: Prisma.BoolFilter<"User"> | boolean;
+    created_at?: Prisma.DateTimeFilter<"User"> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<"User"> | Date | string;
+}, "id" | "solana_address" | "tron_address" | "email" | "telegram_id">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     solana_address?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -194,15 +194,15 @@ export type UserScalarWhereWithAggregatesInput = {
     AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[];
     OR?: Prisma.UserScalarWhereWithAggregatesInput[];
     NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<'User'> | bigint | number;
-    solana_address?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
-    tron_address?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
-    email?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
-    telegram_id?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
-    is_kyc_verified?: Prisma.BoolWithAggregatesFilter<'User'> | boolean;
-    is_active?: Prisma.BoolWithAggregatesFilter<'User'> | boolean;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<'User'> | Date | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<'User'> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number;
+    solana_address?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    tron_address?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    telegram_id?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    is_kyc_verified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
+    is_active?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
 };
 export type UserCreateInput = {
     id?: bigint | number;
@@ -330,7 +330,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     is_active?: boolean;
     created_at?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['user']>;
+}, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     solana_address?: boolean;
@@ -341,7 +341,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     is_active?: boolean;
     created_at?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['user']>;
+}, ExtArgs["result"]["user"]>;
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     solana_address?: boolean;
@@ -352,7 +352,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     is_active?: boolean;
     created_at?: boolean;
     updated_at?: boolean;
-}, ExtArgs['result']['user']>;
+}, ExtArgs["result"]["user"]>;
 export type UserSelectScalar = {
     id?: boolean;
     solana_address?: boolean;
@@ -364,9 +364,9 @@ export type UserSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'solana_address' | 'tron_address' | 'email' | 'telegram_id' | 'is_kyc_verified' | 'is_active' | 'created_at' | 'updated_at', ExtArgs['result']['user']>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "solana_address" | "tron_address" | "email" | "telegram_id" | "is_kyc_verified" | "is_active" | "created_at" | "updated_at", ExtArgs["result"]["user"]>;
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: 'User';
+    name: "User";
     objects: {};
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: bigint;
@@ -378,7 +378,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         is_active: boolean;
         created_at: Date;
         updated_at: Date;
-    }, ExtArgs['result']['user']>;
+    }, ExtArgs["result"]["user"]>;
     composites: {};
 };
 export type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$UserPayload, S>;
@@ -392,20 +392,20 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
             name: 'User';
         };
     };
-    findUnique<T extends UserFindUniqueArgs>(args: Prisma.SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends UserFindFirstArgs>(args?: Prisma.SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends UserFindManyArgs>(args?: Prisma.SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
-    create<T extends UserCreateArgs>(args: Prisma.SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends UserFindUniqueArgs>(args: Prisma.SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends UserFindFirstArgs>(args?: Prisma.SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends UserFindManyArgs>(args?: Prisma.SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends UserCreateArgs>(args: Prisma.SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends UserCreateManyArgs>(args?: Prisma.SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
-    delete<T extends UserDeleteArgs>(args: Prisma.SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends UserUpdateArgs>(args: Prisma.SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends UserDeleteArgs>(args: Prisma.SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends UserUpdateArgs>(args: Prisma.SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends UserDeleteManyArgs>(args?: Prisma.SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends UserUpdateManyArgs>(args: Prisma.SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
-    upsert<T extends UserUpsertArgs>(args: Prisma.SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends UserUpsertArgs>(args: Prisma.SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends UserCountArgs>(args?: Prisma.Subset<T, UserCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], UserCountAggregateOutputType> : number>;
     aggregate<T extends UserAggregateArgs>(args: Prisma.Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>;
     groupBy<T extends UserGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -429,21 +429,21 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
     readonly fields: UserFieldRefs;
 }
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    readonly [Symbol.toStringTag]: "PrismaPromise";
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface UserFieldRefs {
-    readonly id: Prisma.FieldRef<'User', 'BigInt'>;
-    readonly solana_address: Prisma.FieldRef<'User', 'String'>;
-    readonly tron_address: Prisma.FieldRef<'User', 'String'>;
-    readonly email: Prisma.FieldRef<'User', 'String'>;
-    readonly telegram_id: Prisma.FieldRef<'User', 'String'>;
-    readonly is_kyc_verified: Prisma.FieldRef<'User', 'Boolean'>;
-    readonly is_active: Prisma.FieldRef<'User', 'Boolean'>;
-    readonly created_at: Prisma.FieldRef<'User', 'DateTime'>;
-    readonly updated_at: Prisma.FieldRef<'User', 'DateTime'>;
+    readonly id: Prisma.FieldRef<"User", 'BigInt'>;
+    readonly solana_address: Prisma.FieldRef<"User", 'String'>;
+    readonly tron_address: Prisma.FieldRef<"User", 'String'>;
+    readonly email: Prisma.FieldRef<"User", 'String'>;
+    readonly telegram_id: Prisma.FieldRef<"User", 'String'>;
+    readonly is_kyc_verified: Prisma.FieldRef<"User", 'Boolean'>;
+    readonly is_active: Prisma.FieldRef<"User", 'Boolean'>;
+    readonly created_at: Prisma.FieldRef<"User", 'DateTime'>;
+    readonly updated_at: Prisma.FieldRef<"User", 'DateTime'>;
 }
 export type UserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.UserSelect<ExtArgs> | null;

@@ -29,7 +29,7 @@ let WexelsService = class WexelsService {
     }
     async findOne(id) {
         const wexel = await this.prisma.wexel.findUnique({
-            where: { id },
+            where: { id: BigInt(id) },
         });
         if (!wexel) {
             throw new common_1.NotFoundException(`Wexel with ID ${id} not found`);
@@ -40,7 +40,7 @@ let WexelsService = class WexelsService {
         const wexel = await this.findOne(applyBoostDto.wexel_id.toString());
         return this.prisma.boost.create({
             data: {
-                wexel_id: applyBoostDto.wexel_id.toString(),
+                wexel_id: applyBoostDto.wexel_id,
                 token_mint: applyBoostDto.token_mint,
                 amount: applyBoostDto.amount,
             },
@@ -49,14 +49,14 @@ let WexelsService = class WexelsService {
     async update(id, updateWexelDto) {
         await this.findOne(id);
         return this.prisma.wexel.update({
-            where: { id },
+            where: { id: BigInt(id) },
             data: updateWexelDto,
         });
     }
     async remove(id) {
         await this.findOne(id);
         return this.prisma.wexel.delete({
-            where: { id },
+            where: { id: BigInt(id) },
         });
     }
 };

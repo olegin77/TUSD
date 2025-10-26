@@ -6,8 +6,8 @@ export declare class WexelsController {
     constructor(wexelsService: WexelsService);
     create(createWexelDto: CreateWexelDto): Promise<any>;
     findAll(): Promise<any>;
-    findOne(id: string): Promise<any>;
+    findOne(id: number): Promise<any>;
     applyBoost(applyBoostDto: ApplyBoostDto): Promise<any>;
-    update(id: string, updateWexelDto: Partial<CreateWexelDto>): Promise<any>;
-    remove(id: string): Promise<any>;
+    update(id: number, updateWexelDto: Partial<CreateWexelDto>): Promise<any>;
+    remove(id: number): Promise<any>;
 }

@@ -1,6 +1,6 @@
-import * as runtime from '@prisma/client/runtime/library';
-import type * as Prisma from '../models.js';
-import { type PrismaClient } from './class.js';
+import * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../models.js";
+import { type PrismaClient } from "./class.js";
 export type * from '../models.js';
 export type DMMF = typeof runtime.DMMF;
 export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>;
@@ -46,9 +46,9 @@ export type InputJsonObject = runtime.InputJsonObject;
 export type InputJsonArray = runtime.InputJsonArray;
 export type InputJsonValue = runtime.InputJsonValue;
 export declare const NullTypes: {
-    DbNull: new (secret: never) => typeof runtime.objectEnumValues.instances.DbNull;
-    JsonNull: new (secret: never) => typeof runtime.objectEnumValues.instances.JsonNull;
-    AnyNull: new (secret: never) => typeof runtime.objectEnumValues.instances.AnyNull;
+    DbNull: (new (secret: never) => typeof runtime.objectEnumValues.instances.DbNull);
+    JsonNull: (new (secret: never) => typeof runtime.objectEnumValues.instances.JsonNull);
+    AnyNull: (new (secret: never) => typeof runtime.objectEnumValues.instances.AnyNull);
 };
 export declare const DbNull: {
     "__#private@#private": any;
@@ -135,9 +135,9 @@ type _Record<K extends keyof any, T> = {
 type NoExpand<T> = T extends unknown ? T : never;
 export type AtLeast<O extends object, K extends string> = NoExpand<O extends unknown ? (K extends keyof O ? {
     [P in K]: O[P];
-} & O : O) | ({
+} & O : O) | {
     [P in keyof O as P extends K ? P : never]-?: O[P];
-} & O) : never>;
+} & O : never>;
 type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
 export type Strict<U extends object> = ComputeRaw<_Strict<U>>;
 export type Merge<U extends object> = ComputeRaw<_Merge<Strict<U>>>;
@@ -198,7 +198,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         omit: GlobalOmitOptions;
     };
     meta: {
-        modelProps: 'pool' | 'wexel' | 'collateralPosition' | 'listing' | 'claim' | 'boost' | 'deposit' | 'user' | 'tokenPrice' | 'blockchainEvent';
+        modelProps: "pool" | "wexel" | "collateralPosition" | "listing" | "claim" | "boost" | "deposit" | "user" | "tokenPrice" | "blockchainEvent";
         txIsolationLevel: TransactionIsolationLevel;
     };
     model: {
