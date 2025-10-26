@@ -1,0 +1,182 @@
+name: Merge Notifications
+
+on:
+  pull_request:
+    types: [opened, closed, merged]
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  notify-pr-opened:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Notify PR opened
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          
+          echo "New PR opened: #$PR_NUMBER by $PR_AUTHOR"
+          
+          # Создаем issue для отслеживания
+          gh issue create \
+            --title "📋 PR #$PR_NUMBER: $PR_TITLE" \
+            --body "**Автор:** @$PR_AUTHOR
+          **Ссылка:** $PR_URL
+          **Статус:** Открыт
+          **Дата создания:** $(date)
+          
+          ---
+          
+          Этот issue будет автоматически обновляться при изменении статуса PR."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-pr-merged:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Notify PR merged
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          MERGE_COMMIT="${{ github.event.pull_request.merge_commit_sha }}"
+          
+          echo "PR merged: #$PR_NUMBER by $PR_AUTHOR"
+          
+          # Обновляем соответствующий issue
+          ISSUE_NUMBER=$(gh issue list --search "PR #$PR_NUMBER" --json number -q '.[0].number' || echo "")
+          
+          if [ -n "$ISSUE_NUMBER" ]; then
+            gh issue comment $ISSUE_NUMBER --body "✅ **PR успешно смержен в main**
+            
+            **Merge commit:** $MERGE_COMMIT
+            **Дата мерджа:** $(date)
+            **Статус:** Завершен
+            
+            ---
+            
+            🎉 Изменения теперь доступны в main ветке!"
+            
+            # Закрываем issue
+            gh issue close $ISSUE_NUMBER --comment "PR успешно смержен, задача завершена."
+          fi
+          
+          # Отправляем уведомление в Slack (если настроен webhook)
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            curl -X POST -H 'Content-type: application/json' \
+              --data "{
+                \"text\": \"🎉 PR #$PR_NUMBER успешно смержен в main!\",
+                \"blocks\": [
+                  {
+                    \"type\": \"section\",
+                    \"text\": {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"*PR #$PR_NUMBER: $PR_TITLE*\\nАвтор: $PR_AUTHOR\\n<${PR_URL}|Открыть PR>\"
+                    }
+                  }
+                ]
+              }" \
+              ${{ secrets.SLACK_WEBHOOK_URL }}
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-main-updated:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Notify main branch updated
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          COMMIT_AUTHOR="${{ github.event.head_commit.author.name }}"
+          COMMIT_URL="${{ github.event.head_commit.url }}"
+          
+          echo "Main branch updated with commit: $COMMIT_SHA"
+          
+          # Создаем краткий отчет об обновлении
+          REPORT="## 📈 Обновление main ветки
+          
+          **Commit:** [$COMMIT_SHA]($COMMIT_URL)
+          **Автор:** $COMMIT_AUTHOR
+          **Сообщение:** $COMMIT_MESSAGE
+          **Время:** $(date)
+          
+          ---
+          
+          Main ветка была успешно обновлена. Все автоматические проверки прошли успешно."
+          
+          # Создаем issue для отслеживания обновлений (опционально)
+          if [ "${{ github.event.head_commit.message }}" != *"🤖 Auto-resolve merge conflicts"* ]; then
+            gh issue create \
+              --title "📈 Main branch updated: $COMMIT_MESSAGE" \
+              --body "$REPORT" \
+              --label "main-update"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  weekly-summary:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Generate weekly summary
+        run: |
+          # Получаем статистику за последнюю неделю
+          WEEK_AGO=$(date -d '1 week ago' --iso-8601)
+          TODAY=$(date --iso-8601)
+          
+          # Количество мерджей
+          MERGED_PR_COUNT=$(gh pr list --state merged --base main --search "merged:$WEEK_AGO..$TODAY" --json number | jq length)
+          
+          # Количество открытых PR
+          OPEN_PR_COUNT=$(gh pr list --state open --base main --json number | jq length)
+          
+          # Количество конфликтов
+          CONFLICT_ISSUES=$(gh issue list --search "label:conflict" --json number | jq length)
+          
+          # Создаем еженедельный отчет
+          SUMMARY="## 📊 Еженедельный отчет по мерджам
+          
+          **Период:** $WEEK_AGO - $TODAY
+          
+          ### Статистика:
+          - ✅ **Смержено PR:** $MERGED_PR_COUNT
+          - 🔄 **Открыто PR:** $OPEN_PR_COUNT
+          - ⚠️ **Конфликтов:** $CONFLICT_ISSUES
+          
+          ### Топ авторы за неделю:"
+          
+          # Получаем топ авторов
+          TOP_AUTHORS=$(gh pr list --state merged --base main --search "merged:$WEEK_AGO..$TODAY" --json author --jq '.[].author.login' | sort | uniq -c | sort -nr | head -5)
+          
+          if [ -n "$TOP_AUTHORS" ]; then
+            echo "$TOP_AUTHORS" | while read count author; do
+              SUMMARY="$SUMMARY\n- @$author: $count PR"
+            done
+          fi
+          
+          SUMMARY="$SUMMARY
+          
+          ---
+          
+          🤖 Автоматически сгенерированный отчет"
+          
+          # Создаем issue с отчетом
+          gh issue create \
+            --title "📊 Еженедельный отчет $(date +%Y-%m-%d)" \
+            --body "$SUMMARY" \
+            --label "weekly-report"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
