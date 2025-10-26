@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../database/prisma.service';
-import * as bcrypt from 'bcryptjs';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,46 +11,100 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(solanaAddress: string, signature: string): Promise<any> {
-    // TODO: Implement signature verification for Solana/Tron
-    // For now, just return a mock user
-    const user = await this.prisma.user.findUnique({
-      where: { solana_address: solanaAddress },
+  async register(registerDto: RegisterDto) {
+    const user = await this.prisma.user.create({
+      data: {
+        solana_address: registerDto.solana_address,
+        tron_address: registerDto.tron_address,
+        email: registerDto.email,
+        password: registerDto.password,
+        telegram_id: registerDto.telegram_id,
+        is_kyc_verified: registerDto.is_kyc_verified || false,
+      },
     });
 
-    if (!user) {
-      // Create user if doesn't exist
-      return await this.prisma.user.create({
-        data: {
-          solana_address: solanaAddress,
-        },
-      });
-    }
-
-    return user;
-  }
-
-  async login(user: any) {
     const payload = {
       sub: user.id,
       solanaAddress: user.solana_address,
       tronAddress: user.tron_address,
     };
+
+    const token = this.jwtService.sign(payload);
+
     return {
-      access_token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         solanaAddress: user.solana_address,
         tronAddress: user.tron_address,
         email: user.email,
         isKycVerified: user.is_kyc_verified,
+        isActive: user.is_active,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at,
       },
+      token,
+    };
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { solana_address: loginDto.solana_address },
+          { tron_address: loginDto.tron_address },
+          { email: loginDto.email },
+        ],
+      },
+    });
+
+    if (!user || user.password !== loginDto.password) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = {
+      sub: user.id,
+      solanaAddress: user.solana_address,
+      tronAddress: user.tron_address,
+    };
+
+    const token = this.jwtService.sign(payload);
+
+    return {
+      user: {
+        id: user.id,
+        solanaAddress: user.solana_address,
+        tronAddress: user.tron_address,
+        email: user.email,
+        isKycVerified: user.is_kyc_verified,
+        isActive: user.is_active,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at,
+      },
+      token,
     };
   }
 
   async verifyToken(token: string) {
     try {
-      return this.jwtService.verify(token);
+      const payload = this.jwtService.verify(token);
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.sub },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      return {
+        id: user.id,
+        solanaAddress: user.solana_address,
+        tronAddress: user.tron_address,
+        email: user.email,
+        isKycVerified: user.is_kyc_verified,
+        isActive: user.is_active,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at,
+      };
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }

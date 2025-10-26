@@ -12,98 +12,78 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WexelsController = exports.RepayLoanDto = exports.CollateralizeDto = exports.ClaimRewardsDto = void 0;
+exports.WexelsController = void 0;
 const common_1 = require("@nestjs/common");
 const wexels_service_1 = require("./wexels.service");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
-class ClaimRewardsDto {
-    amount;
-    txHash;
-}
-exports.ClaimRewardsDto = ClaimRewardsDto;
-class CollateralizeDto {
-    wexelId;
-}
-exports.CollateralizeDto = CollateralizeDto;
-class RepayLoanDto {
-    wexelId;
-    amount;
-}
-exports.RepayLoanDto = RepayLoanDto;
+const create_wexel_dto_1 = require("./dto/create-wexel.dto");
+const apply_boost_dto_1 = require("./dto/apply-boost.dto");
 let WexelsController = class WexelsController {
     wexelsService;
     constructor(wexelsService) {
         this.wexelsService = wexelsService;
     }
-    findByOwner(req) {
-        const address = req.user.solanaAddress || req.user.tronAddress;
-        return this.wexelsService.findByOwner(address);
+    create(createWexelDto) {
+        return this.wexelsService.create(createWexelDto);
+    }
+    findAll() {
+        return this.wexelsService.findAll();
     }
     findOne(id) {
-        return this.wexelsService.findOne(BigInt(id));
+        return this.wexelsService.findOne(id);
     }
-    calculateRewards(id) {
-        return this.wexelsService.calculateRewards(BigInt(id));
+    applyBoost(applyBoostDto) {
+        return this.wexelsService.applyBoost(applyBoostDto);
     }
-    claimRewards(id, claimRewardsDto) {
-        return this.wexelsService.claimRewards(BigInt(id), BigInt(claimRewardsDto.amount), claimRewardsDto.txHash);
+    update(id, updateWexelDto) {
+        return this.wexelsService.update(id, updateWexelDto);
     }
-    collateralize(collateralizeDto) {
-        return this.wexelsService.collateralize(BigInt(collateralizeDto.wexelId));
-    }
-    repayLoan(repayLoanDto) {
-        return this.wexelsService.repayLoan(BigInt(repayLoanDto.wexelId), BigInt(repayLoanDto.amount));
+    remove(id) {
+        return this.wexelsService.remove(id);
     }
 };
 exports.WexelsController = WexelsController;
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)('my'),
-    __param(0, (0, common_1.Request)()),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_wexel_dto_1.CreateWexelDto]),
     __metadata("design:returntype", void 0)
-], WexelsController.prototype, "findByOwner", null);
+], WexelsController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], WexelsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], WexelsController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)(':id/rewards'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Post)('apply-boost'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [apply_boost_dto_1.ApplyBoostDto]),
+    __metadata("design:returntype", void 0)
+], WexelsController.prototype, "applyBoost", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WexelsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], WexelsController.prototype, "calculateRewards", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)(':id/claim'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, ClaimRewardsDto]),
-    __metadata("design:returntype", void 0)
-], WexelsController.prototype, "claimRewards", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)('collateralize'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CollateralizeDto]),
-    __metadata("design:returntype", void 0)
-], WexelsController.prototype, "collateralize", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)('repay-loan'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [RepayLoanDto]),
-    __metadata("design:returntype", void 0)
-], WexelsController.prototype, "repayLoan", null);
+], WexelsController.prototype, "remove", null);
 exports.WexelsController = WexelsController = __decorate([
     (0, common_1.Controller)('wexels'),
     __metadata("design:paramtypes", [wexels_service_1.WexelsService])

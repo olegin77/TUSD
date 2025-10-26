@@ -1,45 +1,50 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { OraclesService } from './oracles.service';
-
-export class UpdatePriceDto {
-  tokenMint: string;
-  priceUsd: string; // BigInt as string
-  source: string;
-}
-
-export class CalculateBoostDto {
-  tokenMint: string;
-  amount: string; // BigInt as string
-}
+import { PriceQueryDto } from './dto/price-query.dto';
 
 @Controller('oracles')
 export class OraclesController {
   constructor(private readonly oraclesService: OraclesService) {}
 
+  @Get('price/:tokenMint')
+  async getPrice(
+    @Param('tokenMint') tokenMint: string,
+    @Query('source') source?: string,
+  ) {
+    return this.oraclesService.getPrice(tokenMint, source);
+  }
+
+  @Post('price')
+  async updatePrice(
+    @Body() body: { tokenMint: string; priceUsd: number; source: string },
+  ) {
+    return this.oraclesService.updatePrice(
+      body.tokenMint,
+      body.priceUsd,
+      body.source,
+    );
+  }
+
   @Get('prices')
-  getAllPrices() {
+  async getAllPrices() {
     return this.oraclesService.getAllPrices();
   }
 
-  @Get('prices/:tokenMint')
-  getPrice(@Param('tokenMint') tokenMint: string) {
-    return this.oraclesService.getPrice(tokenMint);
-  }
-
-  @Post('prices')
-  updatePrice(@Body() updatePriceDto: UpdatePriceDto) {
-    return this.oraclesService.updatePrice(
-      updatePriceDto.tokenMint,
-      BigInt(updatePriceDto.priceUsd),
-      updatePriceDto.source,
-    );
-  }
-
-  @Post('calculate-boost')
-  calculateBoost(@Body() calculateBoostDto: CalculateBoostDto) {
-    return this.oraclesService.calculateBoostValue(
-      calculateBoostDto.tokenMint,
-      BigInt(calculateBoostDto.amount),
-    );
+  @Post('calculate-boost-apy')
+  async calculateBoostApy(
+    @Body()
+    body: {
+      baseApy: number;
+      boostAmount: number;
+      targetAmount: number;
+    },
+  ) {
+    return {
+      boostApy: await this.oraclesService.calculateBoostApy(
+        body.baseApy,
+        body.boostAmount,
+        body.targetAmount,
+      ),
+    };
   }
 }

@@ -59,10 +59,10 @@ export class SentryInterceptor implements NestInterceptor {
     );
   }
 
-  private sanitizeBody(body: any): any {
-    if (!body) return body;
+  private sanitizeBody(body: unknown): unknown {
+    if (!body || typeof body !== 'object') return body;
 
-    const sanitized = { ...body };
+    const sanitized = { ...(body as Record<string, unknown>) };
 
     // Remove sensitive fields
     const sensitiveFields = [

@@ -18,17 +18,17 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
     authService;
     constructor(authService) {
         super({
-            usernameField: 'solanaAddress',
-            passwordField: 'signature',
+            usernameField: 'email',
+            passwordField: 'password',
         });
         this.authService = authService;
     }
-    async validate(solanaAddress, signature) {
-        const user = await this.authService.validateUser(solanaAddress, signature);
+    async validate(email, password) {
+        const user = await this.authService.login({ email, password });
         if (!user) {
             throw new common_1.UnauthorizedException();
         }
-        return user;
+        return user.user;
     }
 };
 exports.LocalStrategy = LocalStrategy;

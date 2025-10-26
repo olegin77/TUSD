@@ -1,5 +1,5 @@
-import type * as runtime from "@prisma/client/runtime/library";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/library';
+import type * as Prisma from '../internal/prismaNamespace.js';
 export type WexelModel = runtime.Types.Result.DefaultSelection<Prisma.$WexelPayload>;
 export type AggregateWexel = {
     _count: WexelCountAggregateOutputType | null;
@@ -195,27 +195,27 @@ export type WexelGroupByOutputType = {
     _max: WexelMaxAggregateOutputType | null;
 };
 type GetWexelGroupByPayload<T extends WexelGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<WexelGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof WexelGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], WexelGroupByOutputType[P]> : Prisma.GetScalarType<T[P], WexelGroupByOutputType[P]>;
+    [P in keyof T & keyof WexelGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], WexelGroupByOutputType[P]> : Prisma.GetScalarType<T[P], WexelGroupByOutputType[P]>;
 }>>;
 export type WexelWhereInput = {
     AND?: Prisma.WexelWhereInput | Prisma.WexelWhereInput[];
     OR?: Prisma.WexelWhereInput[];
     NOT?: Prisma.WexelWhereInput | Prisma.WexelWhereInput[];
-    id?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    owner_solana?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    owner_tron?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    pool_id?: Prisma.IntFilter<"Wexel"> | number;
-    principal_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    apy_base_bp?: Prisma.IntFilter<"Wexel"> | number;
-    apy_boost_bp?: Prisma.IntFilter<"Wexel"> | number;
-    start_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    end_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    is_collateralized?: Prisma.BoolFilter<"Wexel"> | boolean;
-    total_claimed_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    nft_mint_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    nft_token_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
+    id?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    owner_solana?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    owner_tron?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    pool_id?: Prisma.IntFilter<'Wexel'> | number;
+    principal_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    apy_base_bp?: Prisma.IntFilter<'Wexel'> | number;
+    apy_boost_bp?: Prisma.IntFilter<'Wexel'> | number;
+    start_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    end_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    is_collateralized?: Prisma.BoolFilter<'Wexel'> | boolean;
+    total_claimed_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    nft_mint_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    nft_token_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
     pool?: Prisma.XOR<Prisma.PoolScalarRelationFilter, Prisma.PoolWhereInput>;
     collateral_position?: Prisma.XOR<Prisma.CollateralPositionNullableScalarRelationFilter, Prisma.CollateralPositionWhereInput> | null;
     listings?: Prisma.ListingListRelationFilter;
@@ -249,26 +249,26 @@ export type WexelWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.WexelWhereInput | Prisma.WexelWhereInput[];
     OR?: Prisma.WexelWhereInput[];
     NOT?: Prisma.WexelWhereInput | Prisma.WexelWhereInput[];
-    owner_solana?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    owner_tron?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    pool_id?: Prisma.IntFilter<"Wexel"> | number;
-    principal_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    apy_base_bp?: Prisma.IntFilter<"Wexel"> | number;
-    apy_boost_bp?: Prisma.IntFilter<"Wexel"> | number;
-    start_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    end_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    is_collateralized?: Prisma.BoolFilter<"Wexel"> | boolean;
-    total_claimed_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    nft_mint_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    nft_token_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
+    owner_solana?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    owner_tron?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    pool_id?: Prisma.IntFilter<'Wexel'> | number;
+    principal_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    apy_base_bp?: Prisma.IntFilter<'Wexel'> | number;
+    apy_boost_bp?: Prisma.IntFilter<'Wexel'> | number;
+    start_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    end_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    is_collateralized?: Prisma.BoolFilter<'Wexel'> | boolean;
+    total_claimed_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    nft_mint_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    nft_token_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
     pool?: Prisma.XOR<Prisma.PoolScalarRelationFilter, Prisma.PoolWhereInput>;
     collateral_position?: Prisma.XOR<Prisma.CollateralPositionNullableScalarRelationFilter, Prisma.CollateralPositionWhereInput> | null;
     listings?: Prisma.ListingListRelationFilter;
     claims?: Prisma.ClaimListRelationFilter;
     boosts?: Prisma.BoostListRelationFilter;
-}, "id">;
+}, 'id'>;
 export type WexelOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     owner_solana?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -295,21 +295,21 @@ export type WexelScalarWhereWithAggregatesInput = {
     AND?: Prisma.WexelScalarWhereWithAggregatesInput | Prisma.WexelScalarWhereWithAggregatesInput[];
     OR?: Prisma.WexelScalarWhereWithAggregatesInput[];
     NOT?: Prisma.WexelScalarWhereWithAggregatesInput | Prisma.WexelScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<"Wexel"> | bigint | number;
-    owner_solana?: Prisma.StringNullableWithAggregatesFilter<"Wexel"> | string | null;
-    owner_tron?: Prisma.StringNullableWithAggregatesFilter<"Wexel"> | string | null;
-    pool_id?: Prisma.IntWithAggregatesFilter<"Wexel"> | number;
-    principal_usd?: Prisma.BigIntWithAggregatesFilter<"Wexel"> | bigint | number;
-    apy_base_bp?: Prisma.IntWithAggregatesFilter<"Wexel"> | number;
-    apy_boost_bp?: Prisma.IntWithAggregatesFilter<"Wexel"> | number;
-    start_ts?: Prisma.DateTimeWithAggregatesFilter<"Wexel"> | Date | string;
-    end_ts?: Prisma.DateTimeWithAggregatesFilter<"Wexel"> | Date | string;
-    is_collateralized?: Prisma.BoolWithAggregatesFilter<"Wexel"> | boolean;
-    total_claimed_usd?: Prisma.BigIntWithAggregatesFilter<"Wexel"> | bigint | number;
-    nft_mint_address?: Prisma.StringNullableWithAggregatesFilter<"Wexel"> | string | null;
-    nft_token_address?: Prisma.StringNullableWithAggregatesFilter<"Wexel"> | string | null;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<"Wexel"> | Date | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<"Wexel"> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<'Wexel'> | bigint | number;
+    owner_solana?: Prisma.StringNullableWithAggregatesFilter<'Wexel'> | string | null;
+    owner_tron?: Prisma.StringNullableWithAggregatesFilter<'Wexel'> | string | null;
+    pool_id?: Prisma.IntWithAggregatesFilter<'Wexel'> | number;
+    principal_usd?: Prisma.BigIntWithAggregatesFilter<'Wexel'> | bigint | number;
+    apy_base_bp?: Prisma.IntWithAggregatesFilter<'Wexel'> | number;
+    apy_boost_bp?: Prisma.IntWithAggregatesFilter<'Wexel'> | number;
+    start_ts?: Prisma.DateTimeWithAggregatesFilter<'Wexel'> | Date | string;
+    end_ts?: Prisma.DateTimeWithAggregatesFilter<'Wexel'> | Date | string;
+    is_collateralized?: Prisma.BoolWithAggregatesFilter<'Wexel'> | boolean;
+    total_claimed_usd?: Prisma.BigIntWithAggregatesFilter<'Wexel'> | bigint | number;
+    nft_mint_address?: Prisma.StringNullableWithAggregatesFilter<'Wexel'> | string | null;
+    nft_token_address?: Prisma.StringNullableWithAggregatesFilter<'Wexel'> | string | null;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<'Wexel'> | Date | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<'Wexel'> | Date | string;
 };
 export type WexelCreateInput = {
     id?: bigint | number;
@@ -678,21 +678,21 @@ export type WexelScalarWhereInput = {
     AND?: Prisma.WexelScalarWhereInput | Prisma.WexelScalarWhereInput[];
     OR?: Prisma.WexelScalarWhereInput[];
     NOT?: Prisma.WexelScalarWhereInput | Prisma.WexelScalarWhereInput[];
-    id?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    owner_solana?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    owner_tron?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    pool_id?: Prisma.IntFilter<"Wexel"> | number;
-    principal_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    apy_base_bp?: Prisma.IntFilter<"Wexel"> | number;
-    apy_boost_bp?: Prisma.IntFilter<"Wexel"> | number;
-    start_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    end_ts?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    is_collateralized?: Prisma.BoolFilter<"Wexel"> | boolean;
-    total_claimed_usd?: Prisma.BigIntFilter<"Wexel"> | bigint | number;
-    nft_mint_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    nft_token_address?: Prisma.StringNullableFilter<"Wexel"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Wexel"> | Date | string;
+    id?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    owner_solana?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    owner_tron?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    pool_id?: Prisma.IntFilter<'Wexel'> | number;
+    principal_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    apy_base_bp?: Prisma.IntFilter<'Wexel'> | number;
+    apy_boost_bp?: Prisma.IntFilter<'Wexel'> | number;
+    start_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    end_ts?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    is_collateralized?: Prisma.BoolFilter<'Wexel'> | boolean;
+    total_claimed_usd?: Prisma.BigIntFilter<'Wexel'> | bigint | number;
+    nft_mint_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    nft_token_address?: Prisma.StringNullableFilter<'Wexel'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Wexel'> | Date | string;
 };
 export type WexelCreateWithoutCollateral_positionInput = {
     id?: bigint | number;
@@ -1182,7 +1182,7 @@ export type WexelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     claims?: boolean | Prisma.Wexel$claimsArgs<ExtArgs>;
     boosts?: boolean | Prisma.Wexel$boostsArgs<ExtArgs>;
     _count?: boolean | Prisma.WexelCountOutputTypeDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["wexel"]>;
+}, ExtArgs['result']['wexel']>;
 export type WexelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     owner_solana?: boolean;
@@ -1200,7 +1200,7 @@ export type WexelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     created_at?: boolean;
     updated_at?: boolean;
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["wexel"]>;
+}, ExtArgs['result']['wexel']>;
 export type WexelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     owner_solana?: boolean;
@@ -1218,7 +1218,7 @@ export type WexelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     created_at?: boolean;
     updated_at?: boolean;
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["wexel"]>;
+}, ExtArgs['result']['wexel']>;
 export type WexelSelectScalar = {
     id?: boolean;
     owner_solana?: boolean;
@@ -1236,7 +1236,7 @@ export type WexelSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type WexelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "owner_solana" | "owner_tron" | "pool_id" | "principal_usd" | "apy_base_bp" | "apy_boost_bp" | "start_ts" | "end_ts" | "is_collateralized" | "total_claimed_usd" | "nft_mint_address" | "nft_token_address" | "created_at" | "updated_at", ExtArgs["result"]["wexel"]>;
+export type WexelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'owner_solana' | 'owner_tron' | 'pool_id' | 'principal_usd' | 'apy_base_bp' | 'apy_boost_bp' | 'start_ts' | 'end_ts' | 'is_collateralized' | 'total_claimed_usd' | 'nft_mint_address' | 'nft_token_address' | 'created_at' | 'updated_at', ExtArgs['result']['wexel']>;
 export type WexelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
     collateral_position?: boolean | Prisma.Wexel$collateral_positionArgs<ExtArgs>;
@@ -1252,7 +1252,7 @@ export type WexelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
 };
 export type $WexelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: "Wexel";
+    name: 'Wexel';
     objects: {
         pool: Prisma.$PoolPayload<ExtArgs>;
         collateral_position: Prisma.$CollateralPositionPayload<ExtArgs> | null;
@@ -1276,7 +1276,7 @@ export type $WexelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
         nft_token_address: string | null;
         created_at: Date;
         updated_at: Date;
-    }, ExtArgs["result"]["wexel"]>;
+    }, ExtArgs['result']['wexel']>;
     composites: {};
 };
 export type WexelGetPayload<S extends boolean | null | undefined | WexelDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$WexelPayload, S>;
@@ -1290,20 +1290,20 @@ export interface WexelDelegate<ExtArgs extends runtime.Types.Extensions.Internal
             name: 'Wexel';
         };
     };
-    findUnique<T extends WexelFindUniqueArgs>(args: Prisma.SelectSubset<T, WexelFindUniqueArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends WexelFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, WexelFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends WexelFindFirstArgs>(args?: Prisma.SelectSubset<T, WexelFindFirstArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends WexelFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, WexelFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends WexelFindManyArgs>(args?: Prisma.SelectSubset<T, WexelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-    create<T extends WexelCreateArgs>(args: Prisma.SelectSubset<T, WexelCreateArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends WexelFindUniqueArgs>(args: Prisma.SelectSubset<T, WexelFindUniqueArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends WexelFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, WexelFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends WexelFindFirstArgs>(args?: Prisma.SelectSubset<T, WexelFindFirstArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends WexelFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, WexelFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends WexelFindManyArgs>(args?: Prisma.SelectSubset<T, WexelFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+    create<T extends WexelCreateArgs>(args: Prisma.SelectSubset<T, WexelCreateArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends WexelCreateManyArgs>(args?: Prisma.SelectSubset<T, WexelCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends WexelCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, WexelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-    delete<T extends WexelDeleteArgs>(args: Prisma.SelectSubset<T, WexelDeleteArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends WexelUpdateArgs>(args: Prisma.SelectSubset<T, WexelUpdateArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends WexelCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, WexelCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
+    delete<T extends WexelDeleteArgs>(args: Prisma.SelectSubset<T, WexelDeleteArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends WexelUpdateArgs>(args: Prisma.SelectSubset<T, WexelUpdateArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends WexelDeleteManyArgs>(args?: Prisma.SelectSubset<T, WexelDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends WexelUpdateManyArgs>(args: Prisma.SelectSubset<T, WexelUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends WexelUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, WexelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-    upsert<T extends WexelUpsertArgs>(args: Prisma.SelectSubset<T, WexelUpsertArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends WexelUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, WexelUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
+    upsert<T extends WexelUpsertArgs>(args: Prisma.SelectSubset<T, WexelUpsertArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends WexelCountArgs>(args?: Prisma.Subset<T, WexelCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], WexelCountAggregateOutputType> : number>;
     aggregate<T extends WexelAggregateArgs>(args: Prisma.Subset<T, WexelAggregateArgs>): Prisma.PrismaPromise<GetWexelAggregateType<T>>;
     groupBy<T extends WexelGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -1327,32 +1327,32 @@ export interface WexelDelegate<ExtArgs extends runtime.Types.Extensions.Internal
     readonly fields: WexelFieldRefs;
 }
 export interface Prisma__WexelClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise";
-    pool<T extends Prisma.PoolDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PoolDefaultArgs<ExtArgs>>): Prisma.Prisma__PoolClient<runtime.Types.Result.GetResult<Prisma.$PoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-    collateral_position<T extends Prisma.Wexel$collateral_positionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$collateral_positionArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    listings<T extends Prisma.Wexel$listingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$listingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-    claims<T extends Prisma.Wexel$claimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$claimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-    boosts<T extends Prisma.Wexel$boostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$boostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    pool<T extends Prisma.PoolDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PoolDefaultArgs<ExtArgs>>): Prisma.Prisma__PoolClient<runtime.Types.Result.GetResult<Prisma.$PoolPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    collateral_position<T extends Prisma.Wexel$collateral_positionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$collateral_positionArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    listings<T extends Prisma.Wexel$listingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$listingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
+    claims<T extends Prisma.Wexel$claimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$claimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
+    boosts<T extends Prisma.Wexel$boostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Wexel$boostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface WexelFieldRefs {
-    readonly id: Prisma.FieldRef<"Wexel", 'BigInt'>;
-    readonly owner_solana: Prisma.FieldRef<"Wexel", 'String'>;
-    readonly owner_tron: Prisma.FieldRef<"Wexel", 'String'>;
-    readonly pool_id: Prisma.FieldRef<"Wexel", 'Int'>;
-    readonly principal_usd: Prisma.FieldRef<"Wexel", 'BigInt'>;
-    readonly apy_base_bp: Prisma.FieldRef<"Wexel", 'Int'>;
-    readonly apy_boost_bp: Prisma.FieldRef<"Wexel", 'Int'>;
-    readonly start_ts: Prisma.FieldRef<"Wexel", 'DateTime'>;
-    readonly end_ts: Prisma.FieldRef<"Wexel", 'DateTime'>;
-    readonly is_collateralized: Prisma.FieldRef<"Wexel", 'Boolean'>;
-    readonly total_claimed_usd: Prisma.FieldRef<"Wexel", 'BigInt'>;
-    readonly nft_mint_address: Prisma.FieldRef<"Wexel", 'String'>;
-    readonly nft_token_address: Prisma.FieldRef<"Wexel", 'String'>;
-    readonly created_at: Prisma.FieldRef<"Wexel", 'DateTime'>;
-    readonly updated_at: Prisma.FieldRef<"Wexel", 'DateTime'>;
+    readonly id: Prisma.FieldRef<'Wexel', 'BigInt'>;
+    readonly owner_solana: Prisma.FieldRef<'Wexel', 'String'>;
+    readonly owner_tron: Prisma.FieldRef<'Wexel', 'String'>;
+    readonly pool_id: Prisma.FieldRef<'Wexel', 'Int'>;
+    readonly principal_usd: Prisma.FieldRef<'Wexel', 'BigInt'>;
+    readonly apy_base_bp: Prisma.FieldRef<'Wexel', 'Int'>;
+    readonly apy_boost_bp: Prisma.FieldRef<'Wexel', 'Int'>;
+    readonly start_ts: Prisma.FieldRef<'Wexel', 'DateTime'>;
+    readonly end_ts: Prisma.FieldRef<'Wexel', 'DateTime'>;
+    readonly is_collateralized: Prisma.FieldRef<'Wexel', 'Boolean'>;
+    readonly total_claimed_usd: Prisma.FieldRef<'Wexel', 'BigInt'>;
+    readonly nft_mint_address: Prisma.FieldRef<'Wexel', 'String'>;
+    readonly nft_token_address: Prisma.FieldRef<'Wexel', 'String'>;
+    readonly created_at: Prisma.FieldRef<'Wexel', 'DateTime'>;
+    readonly updated_at: Prisma.FieldRef<'Wexel', 'DateTime'>;
 }
 export type WexelFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.WexelSelect<ExtArgs> | null;

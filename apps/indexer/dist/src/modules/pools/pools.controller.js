@@ -12,56 +12,40 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PoolsController = exports.UpdatePoolDto = exports.CreatePoolDto = void 0;
+exports.PoolsController = void 0;
 const common_1 = require("@nestjs/common");
 const pools_service_1 = require("./pools.service");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
-class CreatePoolDto {
-    apy_base_bp;
-    lock_months;
-    min_deposit_usd;
-    boost_target_bp;
-    boost_max_bp;
-}
-exports.CreatePoolDto = CreatePoolDto;
-class UpdatePoolDto {
-    apy_base_bp;
-    lock_months;
-    min_deposit_usd;
-    boost_target_bp;
-    boost_max_bp;
-    is_active;
-}
-exports.UpdatePoolDto = UpdatePoolDto;
+const create_pool_dto_1 = require("./dto/create-pool.dto");
+const update_pool_dto_1 = require("./dto/update-pool.dto");
 let PoolsController = class PoolsController {
     poolsService;
     constructor(poolsService) {
         this.poolsService = poolsService;
     }
+    create(createPoolDto) {
+        return this.poolsService.create(createPoolDto);
+    }
     findAll() {
         return this.poolsService.findAll();
-    }
-    getStats() {
-        return this.poolsService.getStats();
     }
     findOne(id) {
         return this.poolsService.findOne(id);
     }
-    create(createPoolDto) {
-        return this.poolsService.create({
-            ...createPoolDto,
-            min_deposit_usd: BigInt(createPoolDto.min_deposit_usd),
-        });
-    }
     update(id, updatePoolDto) {
-        const data = { ...updatePoolDto };
-        if (updatePoolDto.min_deposit_usd) {
-            data.min_deposit_usd = BigInt(updatePoolDto.min_deposit_usd);
-        }
-        return this.poolsService.update(id, data);
+        return this.poolsService.update(id, updatePoolDto);
+    }
+    remove(id) {
+        return this.poolsService.remove(id);
     }
 };
 exports.PoolsController = PoolsController;
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_pool_dto_1.CreatePoolDto]),
+    __metadata("design:returntype", void 0)
+], PoolsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -69,35 +53,27 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PoolsController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)('stats'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PoolsController.prototype, "getStats", null);
-__decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PoolsController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreatePoolDto]),
-    __metadata("design:returntype", void 0)
-], PoolsController.prototype, "create", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, UpdatePoolDto]),
+    __metadata("design:paramtypes", [String, update_pool_dto_1.UpdatePoolDto]),
     __metadata("design:returntype", void 0)
 ], PoolsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PoolsController.prototype, "remove", null);
 exports.PoolsController = PoolsController = __decorate([
     (0, common_1.Controller)('pools'),
     __metadata("design:paramtypes", [pools_service_1.PoolsService])

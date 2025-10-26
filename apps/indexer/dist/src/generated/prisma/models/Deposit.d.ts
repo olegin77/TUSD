@@ -1,5 +1,5 @@
-import type * as runtime from "@prisma/client/runtime/library";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/library';
+import type * as Prisma from '../internal/prismaNamespace.js';
 export type DepositModel = runtime.Types.Result.DefaultSelection<Prisma.$DepositPayload>;
 export type AggregateDeposit = {
     _count: DepositCountAggregateOutputType | null;
@@ -145,21 +145,21 @@ export type DepositGroupByOutputType = {
     _max: DepositMaxAggregateOutputType | null;
 };
 type GetDepositGroupByPayload<T extends DepositGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<DepositGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof DepositGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], DepositGroupByOutputType[P]> : Prisma.GetScalarType<T[P], DepositGroupByOutputType[P]>;
+    [P in keyof T & keyof DepositGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], DepositGroupByOutputType[P]> : Prisma.GetScalarType<T[P], DepositGroupByOutputType[P]>;
 }>>;
 export type DepositWhereInput = {
     AND?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[];
     OR?: Prisma.DepositWhereInput[];
     NOT?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[];
-    id?: Prisma.BigIntFilter<"Deposit"> | bigint | number;
-    pool_id?: Prisma.IntFilter<"Deposit"> | number;
-    user_address?: Prisma.StringFilter<"Deposit"> | string;
-    amount_usd?: Prisma.BigIntFilter<"Deposit"> | bigint | number;
-    wexel_id?: Prisma.BigIntNullableFilter<"Deposit"> | bigint | number | null;
-    tx_hash?: Prisma.StringNullableFilter<"Deposit"> | string | null;
-    status?: Prisma.StringFilter<"Deposit"> | string;
-    created_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
+    id?: Prisma.BigIntFilter<'Deposit'> | bigint | number;
+    pool_id?: Prisma.IntFilter<'Deposit'> | number;
+    user_address?: Prisma.StringFilter<'Deposit'> | string;
+    amount_usd?: Prisma.BigIntFilter<'Deposit'> | bigint | number;
+    wexel_id?: Prisma.BigIntNullableFilter<'Deposit'> | bigint | number | null;
+    tx_hash?: Prisma.StringNullableFilter<'Deposit'> | string | null;
+    status?: Prisma.StringFilter<'Deposit'> | string;
+    created_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
     pool?: Prisma.XOR<Prisma.PoolScalarRelationFilter, Prisma.PoolWhereInput>;
 };
 export type DepositOrderByWithRelationInput = {
@@ -179,16 +179,16 @@ export type DepositWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[];
     OR?: Prisma.DepositWhereInput[];
     NOT?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[];
-    pool_id?: Prisma.IntFilter<"Deposit"> | number;
-    user_address?: Prisma.StringFilter<"Deposit"> | string;
-    amount_usd?: Prisma.BigIntFilter<"Deposit"> | bigint | number;
-    wexel_id?: Prisma.BigIntNullableFilter<"Deposit"> | bigint | number | null;
-    tx_hash?: Prisma.StringNullableFilter<"Deposit"> | string | null;
-    status?: Prisma.StringFilter<"Deposit"> | string;
-    created_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
+    pool_id?: Prisma.IntFilter<'Deposit'> | number;
+    user_address?: Prisma.StringFilter<'Deposit'> | string;
+    amount_usd?: Prisma.BigIntFilter<'Deposit'> | bigint | number;
+    wexel_id?: Prisma.BigIntNullableFilter<'Deposit'> | bigint | number | null;
+    tx_hash?: Prisma.StringNullableFilter<'Deposit'> | string | null;
+    status?: Prisma.StringFilter<'Deposit'> | string;
+    created_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
     pool?: Prisma.XOR<Prisma.PoolScalarRelationFilter, Prisma.PoolWhereInput>;
-}, "id">;
+}, 'id'>;
 export type DepositOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     pool_id?: Prisma.SortOrder;
@@ -209,15 +209,15 @@ export type DepositScalarWhereWithAggregatesInput = {
     AND?: Prisma.DepositScalarWhereWithAggregatesInput | Prisma.DepositScalarWhereWithAggregatesInput[];
     OR?: Prisma.DepositScalarWhereWithAggregatesInput[];
     NOT?: Prisma.DepositScalarWhereWithAggregatesInput | Prisma.DepositScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<"Deposit"> | bigint | number;
-    pool_id?: Prisma.IntWithAggregatesFilter<"Deposit"> | number;
-    user_address?: Prisma.StringWithAggregatesFilter<"Deposit"> | string;
-    amount_usd?: Prisma.BigIntWithAggregatesFilter<"Deposit"> | bigint | number;
-    wexel_id?: Prisma.BigIntNullableWithAggregatesFilter<"Deposit"> | bigint | number | null;
-    tx_hash?: Prisma.StringNullableWithAggregatesFilter<"Deposit"> | string | null;
-    status?: Prisma.StringWithAggregatesFilter<"Deposit"> | string;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<"Deposit"> | Date | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<"Deposit"> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<'Deposit'> | bigint | number;
+    pool_id?: Prisma.IntWithAggregatesFilter<'Deposit'> | number;
+    user_address?: Prisma.StringWithAggregatesFilter<'Deposit'> | string;
+    amount_usd?: Prisma.BigIntWithAggregatesFilter<'Deposit'> | bigint | number;
+    wexel_id?: Prisma.BigIntNullableWithAggregatesFilter<'Deposit'> | bigint | number | null;
+    tx_hash?: Prisma.StringNullableWithAggregatesFilter<'Deposit'> | string | null;
+    status?: Prisma.StringWithAggregatesFilter<'Deposit'> | string;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<'Deposit'> | Date | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<'Deposit'> | Date | string;
 };
 export type DepositCreateInput = {
     id?: bigint | number;
@@ -431,15 +431,15 @@ export type DepositScalarWhereInput = {
     AND?: Prisma.DepositScalarWhereInput | Prisma.DepositScalarWhereInput[];
     OR?: Prisma.DepositScalarWhereInput[];
     NOT?: Prisma.DepositScalarWhereInput | Prisma.DepositScalarWhereInput[];
-    id?: Prisma.BigIntFilter<"Deposit"> | bigint | number;
-    pool_id?: Prisma.IntFilter<"Deposit"> | number;
-    user_address?: Prisma.StringFilter<"Deposit"> | string;
-    amount_usd?: Prisma.BigIntFilter<"Deposit"> | bigint | number;
-    wexel_id?: Prisma.BigIntNullableFilter<"Deposit"> | bigint | number | null;
-    tx_hash?: Prisma.StringNullableFilter<"Deposit"> | string | null;
-    status?: Prisma.StringFilter<"Deposit"> | string;
-    created_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"Deposit"> | Date | string;
+    id?: Prisma.BigIntFilter<'Deposit'> | bigint | number;
+    pool_id?: Prisma.IntFilter<'Deposit'> | number;
+    user_address?: Prisma.StringFilter<'Deposit'> | string;
+    amount_usd?: Prisma.BigIntFilter<'Deposit'> | bigint | number;
+    wexel_id?: Prisma.BigIntNullableFilter<'Deposit'> | bigint | number | null;
+    tx_hash?: Prisma.StringNullableFilter<'Deposit'> | string | null;
+    status?: Prisma.StringFilter<'Deposit'> | string;
+    created_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'Deposit'> | Date | string;
 };
 export type DepositCreateManyPoolInput = {
     id?: bigint | number;
@@ -492,7 +492,7 @@ export type DepositSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     created_at?: boolean;
     updated_at?: boolean;
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["deposit"]>;
+}, ExtArgs['result']['deposit']>;
 export type DepositSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     pool_id?: boolean;
@@ -504,7 +504,7 @@ export type DepositSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
     created_at?: boolean;
     updated_at?: boolean;
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["deposit"]>;
+}, ExtArgs['result']['deposit']>;
 export type DepositSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     pool_id?: boolean;
@@ -516,7 +516,7 @@ export type DepositSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
     created_at?: boolean;
     updated_at?: boolean;
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["deposit"]>;
+}, ExtArgs['result']['deposit']>;
 export type DepositSelectScalar = {
     id?: boolean;
     pool_id?: boolean;
@@ -528,7 +528,7 @@ export type DepositSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type DepositOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pool_id" | "user_address" | "amount_usd" | "wexel_id" | "tx_hash" | "status" | "created_at" | "updated_at", ExtArgs["result"]["deposit"]>;
+export type DepositOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'pool_id' | 'user_address' | 'amount_usd' | 'wexel_id' | 'tx_hash' | 'status' | 'created_at' | 'updated_at', ExtArgs['result']['deposit']>;
 export type DepositInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
 };
@@ -539,7 +539,7 @@ export type DepositIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
     pool?: boolean | Prisma.PoolDefaultArgs<ExtArgs>;
 };
 export type $DepositPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: "Deposit";
+    name: 'Deposit';
     objects: {
         pool: Prisma.$PoolPayload<ExtArgs>;
     };
@@ -553,7 +553,7 @@ export type $DepositPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
         status: string;
         created_at: Date;
         updated_at: Date;
-    }, ExtArgs["result"]["deposit"]>;
+    }, ExtArgs['result']['deposit']>;
     composites: {};
 };
 export type DepositGetPayload<S extends boolean | null | undefined | DepositDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$DepositPayload, S>;
@@ -567,20 +567,20 @@ export interface DepositDelegate<ExtArgs extends runtime.Types.Extensions.Intern
             name: 'Deposit';
         };
     };
-    findUnique<T extends DepositFindUniqueArgs>(args: Prisma.SelectSubset<T, DepositFindUniqueArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends DepositFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, DepositFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends DepositFindFirstArgs>(args?: Prisma.SelectSubset<T, DepositFindFirstArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends DepositFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, DepositFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends DepositFindManyArgs>(args?: Prisma.SelectSubset<T, DepositFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-    create<T extends DepositCreateArgs>(args: Prisma.SelectSubset<T, DepositCreateArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends DepositFindUniqueArgs>(args: Prisma.SelectSubset<T, DepositFindUniqueArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends DepositFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, DepositFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends DepositFindFirstArgs>(args?: Prisma.SelectSubset<T, DepositFindFirstArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends DepositFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, DepositFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends DepositFindManyArgs>(args?: Prisma.SelectSubset<T, DepositFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+    create<T extends DepositCreateArgs>(args: Prisma.SelectSubset<T, DepositCreateArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends DepositCreateManyArgs>(args?: Prisma.SelectSubset<T, DepositCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends DepositCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, DepositCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-    delete<T extends DepositDeleteArgs>(args: Prisma.SelectSubset<T, DepositDeleteArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends DepositUpdateArgs>(args: Prisma.SelectSubset<T, DepositUpdateArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends DepositCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, DepositCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
+    delete<T extends DepositDeleteArgs>(args: Prisma.SelectSubset<T, DepositDeleteArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends DepositUpdateArgs>(args: Prisma.SelectSubset<T, DepositUpdateArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends DepositDeleteManyArgs>(args?: Prisma.SelectSubset<T, DepositDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends DepositUpdateManyArgs>(args: Prisma.SelectSubset<T, DepositUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends DepositUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, DepositUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-    upsert<T extends DepositUpsertArgs>(args: Prisma.SelectSubset<T, DepositUpsertArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends DepositUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, DepositUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
+    upsert<T extends DepositUpsertArgs>(args: Prisma.SelectSubset<T, DepositUpsertArgs<ExtArgs>>): Prisma.Prisma__DepositClient<runtime.Types.Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends DepositCountArgs>(args?: Prisma.Subset<T, DepositCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], DepositCountAggregateOutputType> : number>;
     aggregate<T extends DepositAggregateArgs>(args: Prisma.Subset<T, DepositAggregateArgs>): Prisma.PrismaPromise<GetDepositAggregateType<T>>;
     groupBy<T extends DepositGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -604,22 +604,22 @@ export interface DepositDelegate<ExtArgs extends runtime.Types.Extensions.Intern
     readonly fields: DepositFieldRefs;
 }
 export interface Prisma__DepositClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise";
-    pool<T extends Prisma.PoolDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PoolDefaultArgs<ExtArgs>>): Prisma.Prisma__PoolClient<runtime.Types.Result.GetResult<Prisma.$PoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    pool<T extends Prisma.PoolDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PoolDefaultArgs<ExtArgs>>): Prisma.Prisma__PoolClient<runtime.Types.Result.GetResult<Prisma.$PoolPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface DepositFieldRefs {
-    readonly id: Prisma.FieldRef<"Deposit", 'BigInt'>;
-    readonly pool_id: Prisma.FieldRef<"Deposit", 'Int'>;
-    readonly user_address: Prisma.FieldRef<"Deposit", 'String'>;
-    readonly amount_usd: Prisma.FieldRef<"Deposit", 'BigInt'>;
-    readonly wexel_id: Prisma.FieldRef<"Deposit", 'BigInt'>;
-    readonly tx_hash: Prisma.FieldRef<"Deposit", 'String'>;
-    readonly status: Prisma.FieldRef<"Deposit", 'String'>;
-    readonly created_at: Prisma.FieldRef<"Deposit", 'DateTime'>;
-    readonly updated_at: Prisma.FieldRef<"Deposit", 'DateTime'>;
+    readonly id: Prisma.FieldRef<'Deposit', 'BigInt'>;
+    readonly pool_id: Prisma.FieldRef<'Deposit', 'Int'>;
+    readonly user_address: Prisma.FieldRef<'Deposit', 'String'>;
+    readonly amount_usd: Prisma.FieldRef<'Deposit', 'BigInt'>;
+    readonly wexel_id: Prisma.FieldRef<'Deposit', 'BigInt'>;
+    readonly tx_hash: Prisma.FieldRef<'Deposit', 'String'>;
+    readonly status: Prisma.FieldRef<'Deposit', 'String'>;
+    readonly created_at: Prisma.FieldRef<'Deposit', 'DateTime'>;
+    readonly updated_at: Prisma.FieldRef<'Deposit', 'DateTime'>;
 }
 export type DepositFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.DepositSelect<ExtArgs> | null;

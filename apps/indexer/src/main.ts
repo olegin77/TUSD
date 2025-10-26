@@ -28,4 +28,4 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Indexer running on port ${port}`);
 }
-bootstrap();
+void bootstrap();

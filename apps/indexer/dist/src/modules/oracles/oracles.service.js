@@ -17,12 +17,16 @@ let OraclesService = class OraclesService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async getPrice(tokenMint) {
-        const price = await this.prisma.tokenPrice.findUnique({
-            where: { token_mint: tokenMint },
+    async getPrice(tokenMint, source) {
+        const price = await this.prisma.tokenPrice.findFirst({
+            where: {
+                token_mint: tokenMint,
+                ...(source && { source }),
+            },
+            orderBy: { updated_at: 'desc' },
         });
         if (!price) {
-            throw new Error(`Price not found for token: ${tokenMint}`);
+            throw new common_1.NotFoundException(`Price for token ${tokenMint} not found`);
         }
         return {
             tokenMint: price.token_mint,
@@ -33,16 +37,20 @@ let OraclesService = class OraclesService {
     }
     async updatePrice(tokenMint, priceUsd, source) {
         return this.prisma.tokenPrice.upsert({
-            where: { token_mint: tokenMint },
+            where: {
+                token_mint_source: {
+                    token_mint: tokenMint,
+                    source,
+                },
+            },
             update: {
                 price_usd: priceUsd,
-                source: source,
                 updated_at: new Date(),
             },
             create: {
                 token_mint: tokenMint,
                 price_usd: priceUsd,
-                source: source,
+                source,
             },
         });
     }
@@ -51,18 +59,13 @@ let OraclesService = class OraclesService {
             orderBy: { updated_at: 'desc' },
         });
     }
-    async calculateBoostValue(tokenMint, amount) {
-        const price = await this.getPrice(tokenMint);
-        return (amount * price.priceUsd) / BigInt(1000000);
-    }
-    async calculateBoostApy(principalUsd, boostValueUsd) {
-        const boostTarget = (principalUsd * BigInt(3000)) / BigInt(10000);
-        const boostRatio = (boostValueUsd * BigInt(10000)) / boostTarget;
-        const maxBoostBp = BigInt(500);
-        if (boostRatio > BigInt(10000)) {
-            return Number(maxBoostBp);
-        }
-        return Number((boostRatio * maxBoostBp) / BigInt(10000));
+    async calculateBoostApy(baseApy, boostAmount, targetAmount) {
+        if (targetAmount === 0)
+            return baseApy;
+        const boostRatio = Math.min(boostAmount / targetAmount, 1);
+        const maxBoost = 0.1;
+        const boostApy = baseApy * (1 + boostRatio * maxBoost);
+        return Math.round(boostApy * 100) / 100;
     }
 };
 exports.OraclesService = OraclesService;

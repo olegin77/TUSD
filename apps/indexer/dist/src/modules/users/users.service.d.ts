@@ -1,25 +1,11 @@
 import { PrismaService } from '../../database/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
 export declare class UsersService {
     private prisma;
     constructor(prisma: PrismaService);
-    findByAddress(address: string): Promise<any>;
-    findOne(id: bigint): Promise<any>;
-    create(data: {
-        solana_address?: string;
-        tron_address?: string;
-        email?: string;
-        telegram_id?: string;
-    }): Promise<any>;
-    update(id: bigint, data: {
-        email?: string;
-        telegram_id?: string;
-        is_kyc_verified?: boolean;
-        is_active?: boolean;
-    }): Promise<any>;
-    linkWallet(id: bigint, walletType: 'solana' | 'tron', address: string): Promise<any>;
-    getStats(id: bigint): Promise<{
-        totalWexels: any;
-        totalDeposits: any;
-        totalClaims: any;
-    }>;
+    create(createUserDto: CreateUserDto): Promise<any>;
+    findAll(): Promise<any>;
+    findOne(id: string): Promise<any>;
+    update(id: string, updateUserDto: Partial<CreateUserDto>): Promise<any>;
+    remove(id: string): Promise<any>;
 }

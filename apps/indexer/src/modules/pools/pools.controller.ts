@@ -5,67 +5,42 @@ import {
   Body,
   Patch,
   Param,
-  ParseIntPipe,
-  UseGuards,
+  Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { PoolsService } from './pools.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-
-export class CreatePoolDto {
-  apy_base_bp: number;
-  lock_months: number;
-  min_deposit_usd: string; // BigInt as string
-  boost_target_bp?: number;
-  boost_max_bp?: number;
-}
-
-export class UpdatePoolDto {
-  apy_base_bp?: number;
-  lock_months?: number;
-  min_deposit_usd?: string; // BigInt as string
-  boost_target_bp?: number;
-  boost_max_bp?: number;
-  is_active?: boolean;
-}
+import { CreatePoolDto } from './dto/create-pool.dto';
+import { UpdatePoolDto } from './dto/update-pool.dto';
 
 @Controller('pools')
 export class PoolsController {
   constructor(private readonly poolsService: PoolsService) {}
+
+  @Post()
+  create(@Body() createPoolDto: CreatePoolDto) {
+    return this.poolsService.create(createPoolDto);
+  }
 
   @Get()
   findAll() {
     return this.poolsService.findAll();
   }
 
-  @Get('stats')
-  getStats() {
-    return this.poolsService.getStats();
-  }
-
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.poolsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  create(@Body() createPoolDto: CreatePoolDto) {
-    return this.poolsService.create({
-      ...createPoolDto,
-      min_deposit_usd: BigInt(createPoolDto.min_deposit_usd),
-    });
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePoolDto: UpdatePoolDto,
   ) {
-    const data: any = { ...updatePoolDto };
-    if (updatePoolDto.min_deposit_usd) {
-      data.min_deposit_usd = BigInt(updatePoolDto.min_deposit_usd);
-    }
-    return this.poolsService.update(id, data);
+    return this.poolsService.update(id, updatePoolDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.poolsService.remove(id);
   }
 }

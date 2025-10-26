@@ -1,92 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findByAddress(address: string) {
-    return this.prisma.user.findFirst({
-      where: {
-        OR: [{ solana_address: address }, { tron_address: address }],
-      },
-    });
-  }
-
-  async findOne(id: bigint) {
-    return this.prisma.user.findUnique({
-      where: { id },
-    });
-  }
-
-  async create(data: {
-    solana_address?: string;
-    tron_address?: string;
-    email?: string;
-    telegram_id?: string;
-  }) {
+  async create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
-      data,
+      data: createUserDto,
     });
   }
 
-  async update(
-    id: bigint,
-    data: {
-      email?: string;
-      telegram_id?: string;
-      is_kyc_verified?: boolean;
-      is_active?: boolean;
-    },
-  ) {
+  async findAll() {
+    return this.prisma.user.findMany({
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return user;
+  }
+
+  async update(id: string, updateUserDto: Partial<CreateUserDto>) {
+    await this.findOne(id);
+
     return this.prisma.user.update({
       where: { id },
-      data,
+      data: updateUserDto,
     });
   }
 
-  async linkWallet(id: bigint, walletType: 'solana' | 'tron', address: string) {
-    const updateData =
-      walletType === 'solana'
-        ? { solana_address: address }
-        : { tron_address: address };
+  async remove(id: string) {
+    await this.findOne(id);
 
-    return this.prisma.user.update({
+    return this.prisma.user.delete({
       where: { id },
-      data: updateData,
     });
-  }
-
-  async getStats(id: bigint) {
-    const [wexels, totalDeposits, totalClaims] = await Promise.all([
-      this.prisma.wexel.count({
-        where: {
-          OR: [{ owner_solana: { not: null } }, { owner_tron: { not: null } }],
-        },
-      }),
-      this.prisma.wexel.aggregate({
-        where: {
-          OR: [{ owner_solana: { not: null } }, { owner_tron: { not: null } }],
-        },
-        _sum: { principal_usd: true },
-      }),
-      this.prisma.claim.aggregate({
-        where: {
-          wexel: {
-            OR: [
-              { owner_solana: { not: null } },
-              { owner_tron: { not: null } },
-            ],
-          },
-        },
-        _sum: { amount_usd: true },
-      }),
-    ]);
-
-    return {
-      totalWexels: wexels,
-      totalDeposits: totalDeposits._sum.principal_usd || BigInt(0),
-      totalClaims: totalClaims._sum.amount_usd || BigInt(0),
-    };
   }
 }

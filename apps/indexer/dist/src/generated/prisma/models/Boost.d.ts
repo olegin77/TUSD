@@ -1,5 +1,5 @@
-import type * as runtime from "@prisma/client/runtime/library";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/library';
+import type * as Prisma from '../internal/prismaNamespace.js';
 export type BoostModel = runtime.Types.Result.DefaultSelection<Prisma.$BoostPayload>;
 export type AggregateBoost = {
     _count: BoostCountAggregateOutputType | null;
@@ -146,20 +146,20 @@ export type BoostGroupByOutputType = {
     _max: BoostMaxAggregateOutputType | null;
 };
 type GetBoostGroupByPayload<T extends BoostGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<BoostGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof BoostGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], BoostGroupByOutputType[P]> : Prisma.GetScalarType<T[P], BoostGroupByOutputType[P]>;
+    [P in keyof T & keyof BoostGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], BoostGroupByOutputType[P]> : Prisma.GetScalarType<T[P], BoostGroupByOutputType[P]>;
 }>>;
 export type BoostWhereInput = {
     AND?: Prisma.BoostWhereInput | Prisma.BoostWhereInput[];
     OR?: Prisma.BoostWhereInput[];
     NOT?: Prisma.BoostWhereInput | Prisma.BoostWhereInput[];
-    id?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    token_mint?: Prisma.StringFilter<"Boost"> | string;
-    amount?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    value_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    apy_boost_bp?: Prisma.IntFilter<"Boost"> | number;
-    price_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    created_at?: Prisma.DateTimeFilter<"Boost"> | Date | string;
+    id?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    token_mint?: Prisma.StringFilter<'Boost'> | string;
+    amount?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    value_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    apy_boost_bp?: Prisma.IntFilter<'Boost'> | number;
+    price_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    created_at?: Prisma.DateTimeFilter<'Boost'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
 };
 export type BoostOrderByWithRelationInput = {
@@ -178,15 +178,15 @@ export type BoostWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.BoostWhereInput | Prisma.BoostWhereInput[];
     OR?: Prisma.BoostWhereInput[];
     NOT?: Prisma.BoostWhereInput | Prisma.BoostWhereInput[];
-    wexel_id?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    token_mint?: Prisma.StringFilter<"Boost"> | string;
-    amount?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    value_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    apy_boost_bp?: Prisma.IntFilter<"Boost"> | number;
-    price_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    created_at?: Prisma.DateTimeFilter<"Boost"> | Date | string;
+    wexel_id?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    token_mint?: Prisma.StringFilter<'Boost'> | string;
+    amount?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    value_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    apy_boost_bp?: Prisma.IntFilter<'Boost'> | number;
+    price_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    created_at?: Prisma.DateTimeFilter<'Boost'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
-}, "id">;
+}, 'id'>;
 export type BoostOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     wexel_id?: Prisma.SortOrder;
@@ -206,14 +206,14 @@ export type BoostScalarWhereWithAggregatesInput = {
     AND?: Prisma.BoostScalarWhereWithAggregatesInput | Prisma.BoostScalarWhereWithAggregatesInput[];
     OR?: Prisma.BoostScalarWhereWithAggregatesInput[];
     NOT?: Prisma.BoostScalarWhereWithAggregatesInput | Prisma.BoostScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<"Boost"> | bigint | number;
-    wexel_id?: Prisma.BigIntWithAggregatesFilter<"Boost"> | bigint | number;
-    token_mint?: Prisma.StringWithAggregatesFilter<"Boost"> | string;
-    amount?: Prisma.BigIntWithAggregatesFilter<"Boost"> | bigint | number;
-    value_usd?: Prisma.BigIntWithAggregatesFilter<"Boost"> | bigint | number;
-    apy_boost_bp?: Prisma.IntWithAggregatesFilter<"Boost"> | number;
-    price_usd?: Prisma.BigIntWithAggregatesFilter<"Boost"> | bigint | number;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<"Boost"> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<'Boost'> | bigint | number;
+    wexel_id?: Prisma.BigIntWithAggregatesFilter<'Boost'> | bigint | number;
+    token_mint?: Prisma.StringWithAggregatesFilter<'Boost'> | string;
+    amount?: Prisma.BigIntWithAggregatesFilter<'Boost'> | bigint | number;
+    value_usd?: Prisma.BigIntWithAggregatesFilter<'Boost'> | bigint | number;
+    apy_boost_bp?: Prisma.IntWithAggregatesFilter<'Boost'> | number;
+    price_usd?: Prisma.BigIntWithAggregatesFilter<'Boost'> | bigint | number;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<'Boost'> | Date | string;
 };
 export type BoostCreateInput = {
     id?: bigint | number;
@@ -419,14 +419,14 @@ export type BoostScalarWhereInput = {
     AND?: Prisma.BoostScalarWhereInput | Prisma.BoostScalarWhereInput[];
     OR?: Prisma.BoostScalarWhereInput[];
     NOT?: Prisma.BoostScalarWhereInput | Prisma.BoostScalarWhereInput[];
-    id?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    token_mint?: Prisma.StringFilter<"Boost"> | string;
-    amount?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    value_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    apy_boost_bp?: Prisma.IntFilter<"Boost"> | number;
-    price_usd?: Prisma.BigIntFilter<"Boost"> | bigint | number;
-    created_at?: Prisma.DateTimeFilter<"Boost"> | Date | string;
+    id?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    token_mint?: Prisma.StringFilter<'Boost'> | string;
+    amount?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    value_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    apy_boost_bp?: Prisma.IntFilter<'Boost'> | number;
+    price_usd?: Prisma.BigIntFilter<'Boost'> | bigint | number;
+    created_at?: Prisma.DateTimeFilter<'Boost'> | Date | string;
 };
 export type BoostCreateManyWexelInput = {
     id?: bigint | number;
@@ -474,7 +474,7 @@ export type BoostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     price_usd?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["boost"]>;
+}, ExtArgs['result']['boost']>;
 export type BoostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -485,7 +485,7 @@ export type BoostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     price_usd?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["boost"]>;
+}, ExtArgs['result']['boost']>;
 export type BoostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -496,7 +496,7 @@ export type BoostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     price_usd?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["boost"]>;
+}, ExtArgs['result']['boost']>;
 export type BoostSelectScalar = {
     id?: boolean;
     wexel_id?: boolean;
@@ -507,7 +507,7 @@ export type BoostSelectScalar = {
     price_usd?: boolean;
     created_at?: boolean;
 };
-export type BoostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "wexel_id" | "token_mint" | "amount" | "value_usd" | "apy_boost_bp" | "price_usd" | "created_at", ExtArgs["result"]["boost"]>;
+export type BoostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'wexel_id' | 'token_mint' | 'amount' | 'value_usd' | 'apy_boost_bp' | 'price_usd' | 'created_at', ExtArgs['result']['boost']>;
 export type BoostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
@@ -518,7 +518,7 @@ export type BoostIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
 export type $BoostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: "Boost";
+    name: 'Boost';
     objects: {
         wexel: Prisma.$WexelPayload<ExtArgs>;
     };
@@ -531,7 +531,7 @@ export type $BoostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
         apy_boost_bp: number;
         price_usd: bigint;
         created_at: Date;
-    }, ExtArgs["result"]["boost"]>;
+    }, ExtArgs['result']['boost']>;
     composites: {};
 };
 export type BoostGetPayload<S extends boolean | null | undefined | BoostDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$BoostPayload, S>;
@@ -545,20 +545,20 @@ export interface BoostDelegate<ExtArgs extends runtime.Types.Extensions.Internal
             name: 'Boost';
         };
     };
-    findUnique<T extends BoostFindUniqueArgs>(args: Prisma.SelectSubset<T, BoostFindUniqueArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends BoostFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, BoostFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends BoostFindFirstArgs>(args?: Prisma.SelectSubset<T, BoostFindFirstArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends BoostFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, BoostFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends BoostFindManyArgs>(args?: Prisma.SelectSubset<T, BoostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-    create<T extends BoostCreateArgs>(args: Prisma.SelectSubset<T, BoostCreateArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends BoostFindUniqueArgs>(args: Prisma.SelectSubset<T, BoostFindUniqueArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends BoostFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, BoostFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends BoostFindFirstArgs>(args?: Prisma.SelectSubset<T, BoostFindFirstArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends BoostFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, BoostFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends BoostFindManyArgs>(args?: Prisma.SelectSubset<T, BoostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+    create<T extends BoostCreateArgs>(args: Prisma.SelectSubset<T, BoostCreateArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends BoostCreateManyArgs>(args?: Prisma.SelectSubset<T, BoostCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends BoostCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BoostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-    delete<T extends BoostDeleteArgs>(args: Prisma.SelectSubset<T, BoostDeleteArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends BoostUpdateArgs>(args: Prisma.SelectSubset<T, BoostUpdateArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends BoostCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BoostCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
+    delete<T extends BoostDeleteArgs>(args: Prisma.SelectSubset<T, BoostDeleteArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends BoostUpdateArgs>(args: Prisma.SelectSubset<T, BoostUpdateArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends BoostDeleteManyArgs>(args?: Prisma.SelectSubset<T, BoostDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends BoostUpdateManyArgs>(args: Prisma.SelectSubset<T, BoostUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends BoostUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BoostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-    upsert<T extends BoostUpsertArgs>(args: Prisma.SelectSubset<T, BoostUpsertArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends BoostUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BoostUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
+    upsert<T extends BoostUpsertArgs>(args: Prisma.SelectSubset<T, BoostUpsertArgs<ExtArgs>>): Prisma.Prisma__BoostClient<runtime.Types.Result.GetResult<Prisma.$BoostPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends BoostCountArgs>(args?: Prisma.Subset<T, BoostCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], BoostCountAggregateOutputType> : number>;
     aggregate<T extends BoostAggregateArgs>(args: Prisma.Subset<T, BoostAggregateArgs>): Prisma.PrismaPromise<GetBoostAggregateType<T>>;
     groupBy<T extends BoostGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -582,21 +582,21 @@ export interface BoostDelegate<ExtArgs extends runtime.Types.Extensions.Internal
     readonly fields: BoostFieldRefs;
 }
 export interface Prisma__BoostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise";
-    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface BoostFieldRefs {
-    readonly id: Prisma.FieldRef<"Boost", 'BigInt'>;
-    readonly wexel_id: Prisma.FieldRef<"Boost", 'BigInt'>;
-    readonly token_mint: Prisma.FieldRef<"Boost", 'String'>;
-    readonly amount: Prisma.FieldRef<"Boost", 'BigInt'>;
-    readonly value_usd: Prisma.FieldRef<"Boost", 'BigInt'>;
-    readonly apy_boost_bp: Prisma.FieldRef<"Boost", 'Int'>;
-    readonly price_usd: Prisma.FieldRef<"Boost", 'BigInt'>;
-    readonly created_at: Prisma.FieldRef<"Boost", 'DateTime'>;
+    readonly id: Prisma.FieldRef<'Boost', 'BigInt'>;
+    readonly wexel_id: Prisma.FieldRef<'Boost', 'BigInt'>;
+    readonly token_mint: Prisma.FieldRef<'Boost', 'String'>;
+    readonly amount: Prisma.FieldRef<'Boost', 'BigInt'>;
+    readonly value_usd: Prisma.FieldRef<'Boost', 'BigInt'>;
+    readonly apy_boost_bp: Prisma.FieldRef<'Boost', 'Int'>;
+    readonly price_usd: Prisma.FieldRef<'Boost', 'BigInt'>;
+    readonly created_at: Prisma.FieldRef<'Boost', 'DateTime'>;
 }
 export type BoostFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.BoostSelect<ExtArgs> | null;

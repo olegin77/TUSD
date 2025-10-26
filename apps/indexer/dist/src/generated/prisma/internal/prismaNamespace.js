@@ -48,8 +48,8 @@ exports.Sql = runtime.Sql;
 exports.Decimal = runtime.Decimal;
 exports.getExtensionContext = runtime.Extensions.getExtensionContext;
 exports.prismaVersion = {
-    client: "6.18.0",
-    engine: "34b5a692b7bd79939a9a2c3ef97d816e749cda2f"
+    client: '6.18.0',
+    engine: '34b5a692b7bd79939a9a2c3ef97d816e749cda2f',
 };
 exports.NullTypes = {
     DbNull: runtime.objectEnumValues.classes.DbNull,
@@ -69,13 +69,13 @@ exports.ModelName = {
     Deposit: 'Deposit',
     User: 'User',
     TokenPrice: 'TokenPrice',
-    BlockchainEvent: 'BlockchainEvent'
+    BlockchainEvent: 'BlockchainEvent',
 };
 exports.TransactionIsolationLevel = runtime.makeStrictEnum({
     ReadUncommitted: 'ReadUncommitted',
     ReadCommitted: 'ReadCommitted',
     RepeatableRead: 'RepeatableRead',
-    Serializable: 'Serializable'
+    Serializable: 'Serializable',
 });
 exports.PoolScalarFieldEnum = {
     id: 'id',
@@ -88,7 +88,7 @@ exports.PoolScalarFieldEnum = {
     boost_max_bp: 'boost_max_bp',
     is_active: 'is_active',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.WexelScalarFieldEnum = {
     id: 'id',
@@ -105,7 +105,7 @@ exports.WexelScalarFieldEnum = {
     nft_mint_address: 'nft_mint_address',
     nft_token_address: 'nft_token_address',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.CollateralPositionScalarFieldEnum = {
     wexel_id: 'wexel_id',
@@ -113,7 +113,7 @@ exports.CollateralPositionScalarFieldEnum = {
     start_ts: 'start_ts',
     repaid: 'repaid',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.ListingScalarFieldEnum = {
     id: 'id',
@@ -124,7 +124,7 @@ exports.ListingScalarFieldEnum = {
     expiry_ts: 'expiry_ts',
     status: 'status',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.ClaimScalarFieldEnum = {
     id: 'id',
@@ -132,7 +132,7 @@ exports.ClaimScalarFieldEnum = {
     amount_usd: 'amount_usd',
     claim_type: 'claim_type',
     tx_hash: 'tx_hash',
-    created_at: 'created_at'
+    created_at: 'created_at',
 };
 exports.BoostScalarFieldEnum = {
     id: 'id',
@@ -142,7 +142,7 @@ exports.BoostScalarFieldEnum = {
     value_usd: 'value_usd',
     apy_boost_bp: 'apy_boost_bp',
     price_usd: 'price_usd',
-    created_at: 'created_at'
+    created_at: 'created_at',
 };
 exports.DepositScalarFieldEnum = {
     id: 'id',
@@ -153,7 +153,7 @@ exports.DepositScalarFieldEnum = {
     tx_hash: 'tx_hash',
     status: 'status',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.UserScalarFieldEnum = {
     id: 'id',
@@ -164,14 +164,14 @@ exports.UserScalarFieldEnum = {
     is_kyc_verified: 'is_kyc_verified',
     is_active: 'is_active',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.TokenPriceScalarFieldEnum = {
     id: 'id',
     token_mint: 'token_mint',
     price_usd: 'price_usd',
     source: 'source',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
 };
 exports.BlockchainEventScalarFieldEnum = {
     id: 'id',
@@ -180,27 +180,28 @@ exports.BlockchainEventScalarFieldEnum = {
     event_type: 'event_type',
     data: 'data',
     processed: 'processed',
-    created_at: 'created_at'
+    created_at: 'created_at',
 };
 exports.SortOrder = {
     asc: 'asc',
-    desc: 'desc'
+    desc: 'desc',
 };
 exports.JsonNullValueInput = {
-    JsonNull: exports.JsonNull
+    JsonNull: exports.JsonNull,
 };
 exports.QueryMode = {
     default: 'default',
-    insensitive: 'insensitive'
+    insensitive: 'insensitive',
 };
 exports.NullsOrder = {
     first: 'first',
-    last: 'last'
+    last: 'last',
 };
 exports.JsonNullValueFilter = {
     DbNull: exports.DbNull,
     JsonNull: exports.JsonNull,
-    AnyNull: exports.AnyNull
+    AnyNull: exports.AnyNull,
 };
-exports.defineExtension = runtime.Extensions.defineExtension;
+exports.defineExtension = runtime.Extensions
+    .defineExtension;
 //# sourceMappingURL=prismaNamespace.js.map

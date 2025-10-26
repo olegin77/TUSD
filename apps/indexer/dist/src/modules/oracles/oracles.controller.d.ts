@@ -1,23 +1,24 @@
 import { OraclesService } from './oracles.service';
-export declare class UpdatePriceDto {
-    tokenMint: string;
-    priceUsd: string;
-    source: string;
-}
-export declare class CalculateBoostDto {
-    tokenMint: string;
-    amount: string;
-}
 export declare class OraclesController {
     private readonly oraclesService;
     constructor(oraclesService: OraclesService);
-    getAllPrices(): Promise<any>;
-    getPrice(tokenMint: string): Promise<{
+    getPrice(tokenMint: string, source?: string): Promise<{
         tokenMint: any;
         priceUsd: any;
         source: any;
         updatedAt: any;
     }>;
-    updatePrice(updatePriceDto: UpdatePriceDto): Promise<any>;
-    calculateBoost(calculateBoostDto: CalculateBoostDto): Promise<bigint>;
+    updatePrice(body: {
+        tokenMint: string;
+        priceUsd: number;
+        source: string;
+    }): Promise<any>;
+    getAllPrices(): Promise<any>;
+    calculateBoostApy(body: {
+        baseApy: number;
+        boostAmount: number;
+        targetAmount: number;
+    }): Promise<{
+        boostApy: number;
+    }>;
 }

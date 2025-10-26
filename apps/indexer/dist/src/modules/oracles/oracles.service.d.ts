@@ -2,14 +2,13 @@ import { PrismaService } from '../../database/prisma.service';
 export declare class OraclesService {
     private prisma;
     constructor(prisma: PrismaService);
-    getPrice(tokenMint: string): Promise<{
+    getPrice(tokenMint: string, source?: string): Promise<{
         tokenMint: any;
         priceUsd: any;
         source: any;
         updatedAt: any;
     }>;
-    updatePrice(tokenMint: string, priceUsd: bigint, source: string): Promise<any>;
+    updatePrice(tokenMint: string, priceUsd: number, source: string): Promise<any>;
     getAllPrices(): Promise<any>;
-    calculateBoostValue(tokenMint: string, amount: bigint): Promise<bigint>;
-    calculateBoostApy(principalUsd: bigint, boostValueUsd: bigint): Promise<number>;
+    calculateBoostApy(baseApy: number, boostAmount: number, targetAmount: number): Promise<number>;
 }

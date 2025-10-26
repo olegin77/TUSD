@@ -1,23 +1,11 @@
 import { UsersService } from './users.service';
-export declare class UpdateUserDto {
-    email?: string;
-    telegram_id?: string;
-    is_kyc_verified?: boolean;
-    is_active?: boolean;
-}
-export declare class LinkWalletDto {
-    walletType: 'solana' | 'tron';
-    address: string;
-}
+import { CreateUserDto } from './dto/create-user.dto';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
-    getProfile(req: any): Promise<any>;
-    getStats(req: any): Promise<{
-        totalWexels: any;
-        totalDeposits: any;
-        totalClaims: any;
-    }>;
-    updateProfile(req: any, updateUserDto: UpdateUserDto): Promise<any>;
-    linkWallet(req: any, linkWalletDto: LinkWalletDto): Promise<any>;
+    create(createUserDto: CreateUserDto): Promise<any>;
+    findAll(): Promise<any>;
+    findOne(id: string): Promise<any>;
+    update(id: string, updateUserDto: Partial<CreateUserDto>): Promise<any>;
+    remove(id: string): Promise<any>;
 }

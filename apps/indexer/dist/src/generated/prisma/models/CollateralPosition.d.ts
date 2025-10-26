@@ -1,5 +1,5 @@
-import type * as runtime from "@prisma/client/runtime/library";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/library';
+import type * as Prisma from '../internal/prismaNamespace.js';
 export type CollateralPositionModel = runtime.Types.Result.DefaultSelection<Prisma.$CollateralPositionPayload>;
 export type AggregateCollateralPosition = {
     _count: CollateralPositionCountAggregateOutputType | null;
@@ -116,18 +116,18 @@ export type CollateralPositionGroupByOutputType = {
     _max: CollateralPositionMaxAggregateOutputType | null;
 };
 type GetCollateralPositionGroupByPayload<T extends CollateralPositionGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<CollateralPositionGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof CollateralPositionGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CollateralPositionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CollateralPositionGroupByOutputType[P]>;
+    [P in keyof T & keyof CollateralPositionGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], CollateralPositionGroupByOutputType[P]> : Prisma.GetScalarType<T[P], CollateralPositionGroupByOutputType[P]>;
 }>>;
 export type CollateralPositionWhereInput = {
     AND?: Prisma.CollateralPositionWhereInput | Prisma.CollateralPositionWhereInput[];
     OR?: Prisma.CollateralPositionWhereInput[];
     NOT?: Prisma.CollateralPositionWhereInput | Prisma.CollateralPositionWhereInput[];
-    wexel_id?: Prisma.BigIntFilter<"CollateralPosition"> | bigint | number;
-    loan_usd?: Prisma.BigIntFilter<"CollateralPosition"> | bigint | number;
-    start_ts?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
-    repaid?: Prisma.BoolFilter<"CollateralPosition"> | boolean;
-    created_at?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
+    wexel_id?: Prisma.BigIntFilter<'CollateralPosition'> | bigint | number;
+    loan_usd?: Prisma.BigIntFilter<'CollateralPosition'> | bigint | number;
+    start_ts?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
+    repaid?: Prisma.BoolFilter<'CollateralPosition'> | boolean;
+    created_at?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
 };
 export type CollateralPositionOrderByWithRelationInput = {
@@ -144,13 +144,13 @@ export type CollateralPositionWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.CollateralPositionWhereInput | Prisma.CollateralPositionWhereInput[];
     OR?: Prisma.CollateralPositionWhereInput[];
     NOT?: Prisma.CollateralPositionWhereInput | Prisma.CollateralPositionWhereInput[];
-    loan_usd?: Prisma.BigIntFilter<"CollateralPosition"> | bigint | number;
-    start_ts?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
-    repaid?: Prisma.BoolFilter<"CollateralPosition"> | boolean;
-    created_at?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
-    updated_at?: Prisma.DateTimeFilter<"CollateralPosition"> | Date | string;
+    loan_usd?: Prisma.BigIntFilter<'CollateralPosition'> | bigint | number;
+    start_ts?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
+    repaid?: Prisma.BoolFilter<'CollateralPosition'> | boolean;
+    created_at?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
+    updated_at?: Prisma.DateTimeFilter<'CollateralPosition'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
-}, "wexel_id">;
+}, 'wexel_id'>;
 export type CollateralPositionOrderByWithAggregationInput = {
     wexel_id?: Prisma.SortOrder;
     loan_usd?: Prisma.SortOrder;
@@ -168,12 +168,12 @@ export type CollateralPositionScalarWhereWithAggregatesInput = {
     AND?: Prisma.CollateralPositionScalarWhereWithAggregatesInput | Prisma.CollateralPositionScalarWhereWithAggregatesInput[];
     OR?: Prisma.CollateralPositionScalarWhereWithAggregatesInput[];
     NOT?: Prisma.CollateralPositionScalarWhereWithAggregatesInput | Prisma.CollateralPositionScalarWhereWithAggregatesInput[];
-    wexel_id?: Prisma.BigIntWithAggregatesFilter<"CollateralPosition"> | bigint | number;
-    loan_usd?: Prisma.BigIntWithAggregatesFilter<"CollateralPosition"> | bigint | number;
-    start_ts?: Prisma.DateTimeWithAggregatesFilter<"CollateralPosition"> | Date | string;
-    repaid?: Prisma.BoolWithAggregatesFilter<"CollateralPosition"> | boolean;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<"CollateralPosition"> | Date | string;
-    updated_at?: Prisma.DateTimeWithAggregatesFilter<"CollateralPosition"> | Date | string;
+    wexel_id?: Prisma.BigIntWithAggregatesFilter<'CollateralPosition'> | bigint | number;
+    loan_usd?: Prisma.BigIntWithAggregatesFilter<'CollateralPosition'> | bigint | number;
+    start_ts?: Prisma.DateTimeWithAggregatesFilter<'CollateralPosition'> | Date | string;
+    repaid?: Prisma.BoolWithAggregatesFilter<'CollateralPosition'> | boolean;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<'CollateralPosition'> | Date | string;
+    updated_at?: Prisma.DateTimeWithAggregatesFilter<'CollateralPosition'> | Date | string;
 };
 export type CollateralPositionCreateInput = {
     loan_usd: bigint | number;
@@ -343,7 +343,7 @@ export type CollateralPositionSelect<ExtArgs extends runtime.Types.Extensions.In
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["collateralPosition"]>;
+}, ExtArgs['result']['collateralPosition']>;
 export type CollateralPositionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     wexel_id?: boolean;
     loan_usd?: boolean;
@@ -352,7 +352,7 @@ export type CollateralPositionSelectCreateManyAndReturn<ExtArgs extends runtime.
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["collateralPosition"]>;
+}, ExtArgs['result']['collateralPosition']>;
 export type CollateralPositionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     wexel_id?: boolean;
     loan_usd?: boolean;
@@ -361,7 +361,7 @@ export type CollateralPositionSelectUpdateManyAndReturn<ExtArgs extends runtime.
     created_at?: boolean;
     updated_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["collateralPosition"]>;
+}, ExtArgs['result']['collateralPosition']>;
 export type CollateralPositionSelectScalar = {
     wexel_id?: boolean;
     loan_usd?: boolean;
@@ -370,7 +370,7 @@ export type CollateralPositionSelectScalar = {
     created_at?: boolean;
     updated_at?: boolean;
 };
-export type CollateralPositionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"wexel_id" | "loan_usd" | "start_ts" | "repaid" | "created_at" | "updated_at", ExtArgs["result"]["collateralPosition"]>;
+export type CollateralPositionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'wexel_id' | 'loan_usd' | 'start_ts' | 'repaid' | 'created_at' | 'updated_at', ExtArgs['result']['collateralPosition']>;
 export type CollateralPositionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
@@ -381,7 +381,7 @@ export type CollateralPositionIncludeUpdateManyAndReturn<ExtArgs extends runtime
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
 export type $CollateralPositionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: "CollateralPosition";
+    name: 'CollateralPosition';
     objects: {
         wexel: Prisma.$WexelPayload<ExtArgs>;
     };
@@ -392,7 +392,7 @@ export type $CollateralPositionPayload<ExtArgs extends runtime.Types.Extensions.
         repaid: boolean;
         created_at: Date;
         updated_at: Date;
-    }, ExtArgs["result"]["collateralPosition"]>;
+    }, ExtArgs['result']['collateralPosition']>;
     composites: {};
 };
 export type CollateralPositionGetPayload<S extends boolean | null | undefined | CollateralPositionDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload, S>;
@@ -406,20 +406,20 @@ export interface CollateralPositionDelegate<ExtArgs extends runtime.Types.Extens
             name: 'CollateralPosition';
         };
     };
-    findUnique<T extends CollateralPositionFindUniqueArgs>(args: Prisma.SelectSubset<T, CollateralPositionFindUniqueArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends CollateralPositionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, CollateralPositionFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends CollateralPositionFindFirstArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindFirstArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends CollateralPositionFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends CollateralPositionFindManyArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-    create<T extends CollateralPositionCreateArgs>(args: Prisma.SelectSubset<T, CollateralPositionCreateArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends CollateralPositionFindUniqueArgs>(args: Prisma.SelectSubset<T, CollateralPositionFindUniqueArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends CollateralPositionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, CollateralPositionFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends CollateralPositionFindFirstArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindFirstArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends CollateralPositionFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends CollateralPositionFindManyArgs>(args?: Prisma.SelectSubset<T, CollateralPositionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+    create<T extends CollateralPositionCreateArgs>(args: Prisma.SelectSubset<T, CollateralPositionCreateArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends CollateralPositionCreateManyArgs>(args?: Prisma.SelectSubset<T, CollateralPositionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends CollateralPositionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CollateralPositionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-    delete<T extends CollateralPositionDeleteArgs>(args: Prisma.SelectSubset<T, CollateralPositionDeleteArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends CollateralPositionUpdateArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpdateArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends CollateralPositionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CollateralPositionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
+    delete<T extends CollateralPositionDeleteArgs>(args: Prisma.SelectSubset<T, CollateralPositionDeleteArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends CollateralPositionUpdateArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpdateArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends CollateralPositionDeleteManyArgs>(args?: Prisma.SelectSubset<T, CollateralPositionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends CollateralPositionUpdateManyArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends CollateralPositionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-    upsert<T extends CollateralPositionUpsertArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpsertArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends CollateralPositionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
+    upsert<T extends CollateralPositionUpsertArgs>(args: Prisma.SelectSubset<T, CollateralPositionUpsertArgs<ExtArgs>>): Prisma.Prisma__CollateralPositionClient<runtime.Types.Result.GetResult<Prisma.$CollateralPositionPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends CollateralPositionCountArgs>(args?: Prisma.Subset<T, CollateralPositionCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], CollateralPositionCountAggregateOutputType> : number>;
     aggregate<T extends CollateralPositionAggregateArgs>(args: Prisma.Subset<T, CollateralPositionAggregateArgs>): Prisma.PrismaPromise<GetCollateralPositionAggregateType<T>>;
     groupBy<T extends CollateralPositionGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -443,19 +443,19 @@ export interface CollateralPositionDelegate<ExtArgs extends runtime.Types.Extens
     readonly fields: CollateralPositionFieldRefs;
 }
 export interface Prisma__CollateralPositionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise";
-    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface CollateralPositionFieldRefs {
-    readonly wexel_id: Prisma.FieldRef<"CollateralPosition", 'BigInt'>;
-    readonly loan_usd: Prisma.FieldRef<"CollateralPosition", 'BigInt'>;
-    readonly start_ts: Prisma.FieldRef<"CollateralPosition", 'DateTime'>;
-    readonly repaid: Prisma.FieldRef<"CollateralPosition", 'Boolean'>;
-    readonly created_at: Prisma.FieldRef<"CollateralPosition", 'DateTime'>;
-    readonly updated_at: Prisma.FieldRef<"CollateralPosition", 'DateTime'>;
+    readonly wexel_id: Prisma.FieldRef<'CollateralPosition', 'BigInt'>;
+    readonly loan_usd: Prisma.FieldRef<'CollateralPosition', 'BigInt'>;
+    readonly start_ts: Prisma.FieldRef<'CollateralPosition', 'DateTime'>;
+    readonly repaid: Prisma.FieldRef<'CollateralPosition', 'Boolean'>;
+    readonly created_at: Prisma.FieldRef<'CollateralPosition', 'DateTime'>;
+    readonly updated_at: Prisma.FieldRef<'CollateralPosition', 'DateTime'>;
 }
 export type CollateralPositionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.CollateralPositionSelect<ExtArgs> | null;

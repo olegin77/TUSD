@@ -12,66 +12,58 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OraclesController = exports.CalculateBoostDto = exports.UpdatePriceDto = void 0;
+exports.OraclesController = void 0;
 const common_1 = require("@nestjs/common");
 const oracles_service_1 = require("./oracles.service");
-class UpdatePriceDto {
-    tokenMint;
-    priceUsd;
-    source;
-}
-exports.UpdatePriceDto = UpdatePriceDto;
-class CalculateBoostDto {
-    tokenMint;
-    amount;
-}
-exports.CalculateBoostDto = CalculateBoostDto;
 let OraclesController = class OraclesController {
     oraclesService;
     constructor(oraclesService) {
         this.oraclesService = oraclesService;
     }
-    getAllPrices() {
+    async getPrice(tokenMint, source) {
+        return this.oraclesService.getPrice(tokenMint, source);
+    }
+    async updatePrice(body) {
+        return this.oraclesService.updatePrice(body.tokenMint, body.priceUsd, body.source);
+    }
+    async getAllPrices() {
         return this.oraclesService.getAllPrices();
     }
-    getPrice(tokenMint) {
-        return this.oraclesService.getPrice(tokenMint);
-    }
-    updatePrice(updatePriceDto) {
-        return this.oraclesService.updatePrice(updatePriceDto.tokenMint, BigInt(updatePriceDto.priceUsd), updatePriceDto.source);
-    }
-    calculateBoost(calculateBoostDto) {
-        return this.oraclesService.calculateBoostValue(calculateBoostDto.tokenMint, BigInt(calculateBoostDto.amount));
+    async calculateBoostApy(body) {
+        return {
+            boostApy: await this.oraclesService.calculateBoostApy(body.baseApy, body.boostAmount, body.targetAmount),
+        };
     }
 };
 exports.OraclesController = OraclesController;
 __decorate([
+    (0, common_1.Get)('price/:tokenMint'),
+    __param(0, (0, common_1.Param)('tokenMint')),
+    __param(1, (0, common_1.Query)('source')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], OraclesController.prototype, "getPrice", null);
+__decorate([
+    (0, common_1.Post)('price'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], OraclesController.prototype, "updatePrice", null);
+__decorate([
     (0, common_1.Get)('prices'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OraclesController.prototype, "getAllPrices", null);
 __decorate([
-    (0, common_1.Get)('prices/:tokenMint'),
-    __param(0, (0, common_1.Param)('tokenMint')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], OraclesController.prototype, "getPrice", null);
-__decorate([
-    (0, common_1.Post)('prices'),
+    (0, common_1.Post)('calculate-boost-apy'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UpdatePriceDto]),
-    __metadata("design:returntype", void 0)
-], OraclesController.prototype, "updatePrice", null);
-__decorate([
-    (0, common_1.Post)('calculate-boost'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CalculateBoostDto]),
-    __metadata("design:returntype", void 0)
-], OraclesController.prototype, "calculateBoost", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], OraclesController.prototype, "calculateBoostApy", null);
 exports.OraclesController = OraclesController = __decorate([
     (0, common_1.Controller)('oracles'),
     __metadata("design:paramtypes", [oracles_service_1.OraclesService])

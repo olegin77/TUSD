@@ -12,75 +12,67 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = exports.LinkWalletDto = exports.UpdateUserDto = void 0;
+exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
-class UpdateUserDto {
-    email;
-    telegram_id;
-    is_kyc_verified;
-    is_active;
-}
-exports.UpdateUserDto = UpdateUserDto;
-class LinkWalletDto {
-    walletType;
-    address;
-}
-exports.LinkWalletDto = LinkWalletDto;
+const create_user_dto_1 = require("./dto/create-user.dto");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getProfile(req) {
-        return this.usersService.findOne(BigInt(req.user.id));
+    create(createUserDto) {
+        return this.usersService.create(createUserDto);
     }
-    getStats(req) {
-        return this.usersService.getStats(BigInt(req.user.id));
+    findAll() {
+        return this.usersService.findAll();
     }
-    updateProfile(req, updateUserDto) {
-        return this.usersService.update(BigInt(req.user.id), updateUserDto);
+    findOne(id) {
+        return this.usersService.findOne(id);
     }
-    linkWallet(req, linkWalletDto) {
-        return this.usersService.linkWallet(BigInt(req.user.id), linkWalletDto.walletType, linkWalletDto.address);
+    update(id, updateUserDto) {
+        return this.usersService.update(id, updateUserDto);
+    }
+    remove(id) {
+        return this.usersService.remove(id);
     }
 };
 exports.UsersController = UsersController;
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)('profile'),
-    __param(0, (0, common_1.Request)()),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "getProfile", null);
+], UsersController.prototype, "create", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)('stats'),
-    __param(0, (0, common_1.Request)()),
+    (0, common_1.Get)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "getStats", null);
+], UsersController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Patch)('profile'),
-    __param(0, (0, common_1.Request)()),
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, UpdateUserDto]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "updateProfile", null);
+], UsersController.prototype, "update", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)('link-wallet'),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Body)()),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, LinkWalletDto]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "linkWallet", null);
+], UsersController.prototype, "remove", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

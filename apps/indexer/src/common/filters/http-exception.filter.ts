@@ -8,15 +8,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Sentry } from '../sentry/sentry.config';
+import { ErrorResponse } from '../types/api.types';
 
-export interface ApiErrorResponse {
-  statusCode: number;
-  message: string | string[];
-  error: string;
-  timestamp: string;
-  path: string;
-  requestId?: string;
-}
+export interface ApiErrorResponse extends ErrorResponse {}
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -37,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error,
       timestamp: new Date().toISOString(),
       path: request.url,
-      requestId: request.headers['x-request-id'] as string,
+      requestId: (request.headers['x-request-id'] as string) || undefined,
     };
 
     // Log error
@@ -80,7 +74,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         return response;
       }
       if (typeof response === 'object' && response !== null) {
-        return (response as any).message || exception.message;
+        return (
+          ((response as Record<string, unknown>).message as string) ||
+          exception.message
+        );
       }
     }
     return 'Internal server error';
@@ -113,10 +110,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
   }
 
-  private sanitizeBody(body: any): any {
-    if (!body) return body;
+  private sanitizeBody(body: unknown): unknown {
+    if (!body || typeof body !== 'object') return body;
 
-    const sanitized = { ...body };
+    const sanitized = { ...(body as Record<string, unknown>) };
     const sensitiveFields = [
       'password',
       'token',

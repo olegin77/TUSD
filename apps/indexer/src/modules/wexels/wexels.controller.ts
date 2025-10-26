@@ -3,75 +3,49 @@ import {
   Get,
   Post,
   Body,
+  Patch,
   Param,
-  ParseIntPipe,
-  UseGuards,
-  Request,
+  Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { WexelsService } from './wexels.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-
-export class ClaimRewardsDto {
-  amount: string; // BigInt as string
-  txHash?: string;
-}
-
-export class CollateralizeDto {
-  wexelId: string; // BigInt as string
-}
-
-export class RepayLoanDto {
-  wexelId: string; // BigInt as string
-  amount: string; // BigInt as string
-}
+import { CreateWexelDto } from './dto/create-wexel.dto';
+import { ApplyBoostDto } from './dto/apply-boost.dto';
 
 @Controller('wexels')
 export class WexelsController {
   constructor(private readonly wexelsService: WexelsService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('my')
-  findByOwner(@Request() req) {
-    const address = req.user.solanaAddress || req.user.tronAddress;
-    return this.wexelsService.findByOwner(address);
+  @Post()
+  create(@Body() createWexelDto: CreateWexelDto) {
+    return this.wexelsService.create(createWexelDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.wexelsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wexelsService.findOne(BigInt(id));
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.wexelsService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':id/rewards')
-  calculateRewards(@Param('id') id: string) {
-    return this.wexelsService.calculateRewards(BigInt(id));
+  @Post('apply-boost')
+  applyBoost(@Body() applyBoostDto: ApplyBoostDto) {
+    return this.wexelsService.applyBoost(applyBoostDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post(':id/claim')
-  claimRewards(
-    @Param('id') id: string,
-    @Body() claimRewardsDto: ClaimRewardsDto,
+  @Patch(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateWexelDto: Partial<CreateWexelDto>,
   ) {
-    return this.wexelsService.claimRewards(
-      BigInt(id),
-      BigInt(claimRewardsDto.amount),
-      claimRewardsDto.txHash,
-    );
+    return this.wexelsService.update(id, updateWexelDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('collateralize')
-  collateralize(@Body() collateralizeDto: CollateralizeDto) {
-    return this.wexelsService.collateralize(BigInt(collateralizeDto.wexelId));
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('repay-loan')
-  repayLoan(@Body() repayLoanDto: RepayLoanDto) {
-    return this.wexelsService.repayLoan(
-      BigInt(repayLoanDto.wexelId),
-      BigInt(repayLoanDto.amount),
-    );
+  @Delete(':id')
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.wexelsService.remove(id);
   }
 }

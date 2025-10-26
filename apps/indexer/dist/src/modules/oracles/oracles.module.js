@@ -10,14 +10,13 @@ exports.OraclesModule = void 0;
 const common_1 = require("@nestjs/common");
 const oracles_service_1 = require("./oracles.service");
 const oracles_controller_1 = require("./oracles.controller");
-const prisma_service_1 = require("../../database/prisma.service");
 let OraclesModule = class OraclesModule {
 };
 exports.OraclesModule = OraclesModule;
 exports.OraclesModule = OraclesModule = __decorate([
     (0, common_1.Module)({
-        providers: [oracles_service_1.OraclesService, prisma_service_1.PrismaService],
         controllers: [oracles_controller_1.OraclesController],
+        providers: [oracles_service_1.OraclesService],
         exports: [oracles_service_1.OraclesService],
     })
 ], OraclesModule);

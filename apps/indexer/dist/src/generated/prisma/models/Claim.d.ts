@@ -1,5 +1,5 @@
-import type * as runtime from "@prisma/client/runtime/library";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/library';
+import type * as Prisma from '../internal/prismaNamespace.js';
 export type ClaimModel = runtime.Types.Result.DefaultSelection<Prisma.$ClaimPayload>;
 export type AggregateClaim = {
     _count: ClaimCountAggregateOutputType | null;
@@ -120,18 +120,18 @@ export type ClaimGroupByOutputType = {
     _max: ClaimMaxAggregateOutputType | null;
 };
 type GetClaimGroupByPayload<T extends ClaimGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ClaimGroupByOutputType, T['by']> & {
-    [P in ((keyof T) & (keyof ClaimGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ClaimGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ClaimGroupByOutputType[P]>;
+    [P in keyof T & keyof ClaimGroupByOutputType]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ClaimGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ClaimGroupByOutputType[P]>;
 }>>;
 export type ClaimWhereInput = {
     AND?: Prisma.ClaimWhereInput | Prisma.ClaimWhereInput[];
     OR?: Prisma.ClaimWhereInput[];
     NOT?: Prisma.ClaimWhereInput | Prisma.ClaimWhereInput[];
-    id?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    amount_usd?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    claim_type?: Prisma.StringFilter<"Claim"> | string;
-    tx_hash?: Prisma.StringNullableFilter<"Claim"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Claim"> | Date | string;
+    id?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    amount_usd?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    claim_type?: Prisma.StringFilter<'Claim'> | string;
+    tx_hash?: Prisma.StringNullableFilter<'Claim'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Claim'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
 };
 export type ClaimOrderByWithRelationInput = {
@@ -148,13 +148,13 @@ export type ClaimWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.ClaimWhereInput | Prisma.ClaimWhereInput[];
     OR?: Prisma.ClaimWhereInput[];
     NOT?: Prisma.ClaimWhereInput | Prisma.ClaimWhereInput[];
-    wexel_id?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    amount_usd?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    claim_type?: Prisma.StringFilter<"Claim"> | string;
-    tx_hash?: Prisma.StringNullableFilter<"Claim"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Claim"> | Date | string;
+    wexel_id?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    amount_usd?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    claim_type?: Prisma.StringFilter<'Claim'> | string;
+    tx_hash?: Prisma.StringNullableFilter<'Claim'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Claim'> | Date | string;
     wexel?: Prisma.XOR<Prisma.WexelScalarRelationFilter, Prisma.WexelWhereInput>;
-}, "id">;
+}, 'id'>;
 export type ClaimOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     wexel_id?: Prisma.SortOrder;
@@ -172,12 +172,12 @@ export type ClaimScalarWhereWithAggregatesInput = {
     AND?: Prisma.ClaimScalarWhereWithAggregatesInput | Prisma.ClaimScalarWhereWithAggregatesInput[];
     OR?: Prisma.ClaimScalarWhereWithAggregatesInput[];
     NOT?: Prisma.ClaimScalarWhereWithAggregatesInput | Prisma.ClaimScalarWhereWithAggregatesInput[];
-    id?: Prisma.BigIntWithAggregatesFilter<"Claim"> | bigint | number;
-    wexel_id?: Prisma.BigIntWithAggregatesFilter<"Claim"> | bigint | number;
-    amount_usd?: Prisma.BigIntWithAggregatesFilter<"Claim"> | bigint | number;
-    claim_type?: Prisma.StringWithAggregatesFilter<"Claim"> | string;
-    tx_hash?: Prisma.StringNullableWithAggregatesFilter<"Claim"> | string | null;
-    created_at?: Prisma.DateTimeWithAggregatesFilter<"Claim"> | Date | string;
+    id?: Prisma.BigIntWithAggregatesFilter<'Claim'> | bigint | number;
+    wexel_id?: Prisma.BigIntWithAggregatesFilter<'Claim'> | bigint | number;
+    amount_usd?: Prisma.BigIntWithAggregatesFilter<'Claim'> | bigint | number;
+    claim_type?: Prisma.StringWithAggregatesFilter<'Claim'> | string;
+    tx_hash?: Prisma.StringNullableWithAggregatesFilter<'Claim'> | string | null;
+    created_at?: Prisma.DateTimeWithAggregatesFilter<'Claim'> | Date | string;
 };
 export type ClaimCreateInput = {
     id?: bigint | number;
@@ -353,12 +353,12 @@ export type ClaimScalarWhereInput = {
     AND?: Prisma.ClaimScalarWhereInput | Prisma.ClaimScalarWhereInput[];
     OR?: Prisma.ClaimScalarWhereInput[];
     NOT?: Prisma.ClaimScalarWhereInput | Prisma.ClaimScalarWhereInput[];
-    id?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    wexel_id?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    amount_usd?: Prisma.BigIntFilter<"Claim"> | bigint | number;
-    claim_type?: Prisma.StringFilter<"Claim"> | string;
-    tx_hash?: Prisma.StringNullableFilter<"Claim"> | string | null;
-    created_at?: Prisma.DateTimeFilter<"Claim"> | Date | string;
+    id?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    wexel_id?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    amount_usd?: Prisma.BigIntFilter<'Claim'> | bigint | number;
+    claim_type?: Prisma.StringFilter<'Claim'> | string;
+    tx_hash?: Prisma.StringNullableFilter<'Claim'> | string | null;
+    created_at?: Prisma.DateTimeFilter<'Claim'> | Date | string;
 };
 export type ClaimCreateManyWexelInput = {
     id?: bigint | number;
@@ -396,7 +396,7 @@ export type ClaimSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     tx_hash?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["claim"]>;
+}, ExtArgs['result']['claim']>;
 export type ClaimSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -405,7 +405,7 @@ export type ClaimSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     tx_hash?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["claim"]>;
+}, ExtArgs['result']['claim']>;
 export type ClaimSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     wexel_id?: boolean;
@@ -414,7 +414,7 @@ export type ClaimSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
     tx_hash?: boolean;
     created_at?: boolean;
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
-}, ExtArgs["result"]["claim"]>;
+}, ExtArgs['result']['claim']>;
 export type ClaimSelectScalar = {
     id?: boolean;
     wexel_id?: boolean;
@@ -423,7 +423,7 @@ export type ClaimSelectScalar = {
     tx_hash?: boolean;
     created_at?: boolean;
 };
-export type ClaimOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "wexel_id" | "amount_usd" | "claim_type" | "tx_hash" | "created_at", ExtArgs["result"]["claim"]>;
+export type ClaimOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<'id' | 'wexel_id' | 'amount_usd' | 'claim_type' | 'tx_hash' | 'created_at', ExtArgs['result']['claim']>;
 export type ClaimInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
@@ -434,7 +434,7 @@ export type ClaimIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
     wexel?: boolean | Prisma.WexelDefaultArgs<ExtArgs>;
 };
 export type $ClaimPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-    name: "Claim";
+    name: 'Claim';
     objects: {
         wexel: Prisma.$WexelPayload<ExtArgs>;
     };
@@ -445,7 +445,7 @@ export type $ClaimPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
         claim_type: string;
         tx_hash: string | null;
         created_at: Date;
-    }, ExtArgs["result"]["claim"]>;
+    }, ExtArgs['result']['claim']>;
     composites: {};
 };
 export type ClaimGetPayload<S extends boolean | null | undefined | ClaimDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ClaimPayload, S>;
@@ -459,20 +459,20 @@ export interface ClaimDelegate<ExtArgs extends runtime.Types.Extensions.Internal
             name: 'Claim';
         };
     };
-    findUnique<T extends ClaimFindUniqueArgs>(args: Prisma.SelectSubset<T, ClaimFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findUniqueOrThrow<T extends ClaimFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ClaimFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findFirst<T extends ClaimFindFirstArgs>(args?: Prisma.SelectSubset<T, ClaimFindFirstArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-    findFirstOrThrow<T extends ClaimFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ClaimFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    findMany<T extends ClaimFindManyArgs>(args?: Prisma.SelectSubset<T, ClaimFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-    create<T extends ClaimCreateArgs>(args: Prisma.SelectSubset<T, ClaimCreateArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findUnique<T extends ClaimFindUniqueArgs>(args: Prisma.SelectSubset<T, ClaimFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends ClaimFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ClaimFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends ClaimFindFirstArgs>(args?: Prisma.SelectSubset<T, ClaimFindFirstArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends ClaimFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ClaimFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends ClaimFindManyArgs>(args?: Prisma.SelectSubset<T, ClaimFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+    create<T extends ClaimCreateArgs>(args: Prisma.SelectSubset<T, ClaimCreateArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'create', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     createMany<T extends ClaimCreateManyArgs>(args?: Prisma.SelectSubset<T, ClaimCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    createManyAndReturn<T extends ClaimCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ClaimCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-    delete<T extends ClaimDeleteArgs>(args: Prisma.SelectSubset<T, ClaimDeleteArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-    update<T extends ClaimUpdateArgs>(args: Prisma.SelectSubset<T, ClaimUpdateArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createManyAndReturn<T extends ClaimCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ClaimCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>>;
+    delete<T extends ClaimDeleteArgs>(args: Prisma.SelectSubset<T, ClaimDeleteArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends ClaimUpdateArgs>(args: Prisma.SelectSubset<T, ClaimUpdateArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'update', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     deleteMany<T extends ClaimDeleteManyArgs>(args?: Prisma.SelectSubset<T, ClaimDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
     updateMany<T extends ClaimUpdateManyArgs>(args: Prisma.SelectSubset<T, ClaimUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
-    updateManyAndReturn<T extends ClaimUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ClaimUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-    upsert<T extends ClaimUpsertArgs>(args: Prisma.SelectSubset<T, ClaimUpsertArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    updateManyAndReturn<T extends ClaimUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ClaimUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>>;
+    upsert<T extends ClaimUpsertArgs>(args: Prisma.SelectSubset<T, ClaimUpsertArgs<ExtArgs>>): Prisma.Prisma__ClaimClient<runtime.Types.Result.GetResult<Prisma.$ClaimPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
     count<T extends ClaimCountArgs>(args?: Prisma.Subset<T, ClaimCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], ClaimCountAggregateOutputType> : number>;
     aggregate<T extends ClaimAggregateArgs>(args: Prisma.Subset<T, ClaimAggregateArgs>): Prisma.PrismaPromise<GetClaimAggregateType<T>>;
     groupBy<T extends ClaimGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
@@ -496,19 +496,19 @@ export interface ClaimDelegate<ExtArgs extends runtime.Types.Extensions.Internal
     readonly fields: ClaimFieldRefs;
 }
 export interface Prisma__ClaimClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise";
-    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    wexel<T extends Prisma.WexelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WexelDefaultArgs<ExtArgs>>): Prisma.Prisma__WexelClient<runtime.Types.Result.GetResult<Prisma.$WexelPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
     then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
     finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
 }
 export interface ClaimFieldRefs {
-    readonly id: Prisma.FieldRef<"Claim", 'BigInt'>;
-    readonly wexel_id: Prisma.FieldRef<"Claim", 'BigInt'>;
-    readonly amount_usd: Prisma.FieldRef<"Claim", 'BigInt'>;
-    readonly claim_type: Prisma.FieldRef<"Claim", 'String'>;
-    readonly tx_hash: Prisma.FieldRef<"Claim", 'String'>;
-    readonly created_at: Prisma.FieldRef<"Claim", 'DateTime'>;
+    readonly id: Prisma.FieldRef<'Claim', 'BigInt'>;
+    readonly wexel_id: Prisma.FieldRef<'Claim', 'BigInt'>;
+    readonly amount_usd: Prisma.FieldRef<'Claim', 'BigInt'>;
+    readonly claim_type: Prisma.FieldRef<'Claim', 'String'>;
+    readonly tx_hash: Prisma.FieldRef<'Claim', 'String'>;
+    readonly created_at: Prisma.FieldRef<'Claim', 'DateTime'>;
 }
 export type ClaimFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     select?: Prisma.ClaimSelect<ExtArgs> | null;

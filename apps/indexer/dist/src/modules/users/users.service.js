@@ -17,77 +17,37 @@ let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findByAddress(address) {
-        return this.prisma.user.findFirst({
-            where: {
-                OR: [
-                    { solana_address: address },
-                    { tron_address: address },
-                ],
-            },
+    async create(createUserDto) {
+        return this.prisma.user.create({
+            data: createUserDto,
+        });
+    }
+    async findAll() {
+        return this.prisma.user.findMany({
+            orderBy: { created_at: 'desc' },
         });
     }
     async findOne(id) {
-        return this.prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: { id },
         });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
     }
-    async create(data) {
-        return this.prisma.user.create({
-            data,
-        });
-    }
-    async update(id, data) {
+    async update(id, updateUserDto) {
+        await this.findOne(id);
         return this.prisma.user.update({
             where: { id },
-            data,
+            data: updateUserDto,
         });
     }
-    async linkWallet(id, walletType, address) {
-        const updateData = walletType === 'solana'
-            ? { solana_address: address }
-            : { tron_address: address };
-        return this.prisma.user.update({
+    async remove(id) {
+        await this.findOne(id);
+        return this.prisma.user.delete({
             where: { id },
-            data: updateData,
         });
-    }
-    async getStats(id) {
-        const [wexels, totalDeposits, totalClaims] = await Promise.all([
-            this.prisma.wexel.count({
-                where: {
-                    OR: [
-                        { owner_solana: { not: null } },
-                        { owner_tron: { not: null } },
-                    ],
-                },
-            }),
-            this.prisma.wexel.aggregate({
-                where: {
-                    OR: [
-                        { owner_solana: { not: null } },
-                        { owner_tron: { not: null } },
-                    ],
-                },
-                _sum: { principal_usd: true },
-            }),
-            this.prisma.claim.aggregate({
-                where: {
-                    wexel: {
-                        OR: [
-                            { owner_solana: { not: null } },
-                            { owner_tron: { not: null } },
-                        ],
-                    },
-                },
-                _sum: { amount_usd: true },
-            }),
-        ]);
-        return {
-            totalWexels: wexels,
-            totalDeposits: totalDeposits._sum.principal_usd || BigInt(0),
-            totalClaims: totalClaims._sum.amount_usd || BigInt(0),
-        };
     }
 };
 exports.UsersService = UsersService;

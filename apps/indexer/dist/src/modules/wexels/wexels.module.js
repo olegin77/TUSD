@@ -10,14 +10,13 @@ exports.WexelsModule = void 0;
 const common_1 = require("@nestjs/common");
 const wexels_service_1 = require("./wexels.service");
 const wexels_controller_1 = require("./wexels.controller");
-const prisma_service_1 = require("../../database/prisma.service");
 let WexelsModule = class WexelsModule {
 };
 exports.WexelsModule = WexelsModule;
 exports.WexelsModule = WexelsModule = __decorate([
     (0, common_1.Module)({
-        providers: [wexels_service_1.WexelsService, prisma_service_1.PrismaService],
         controllers: [wexels_controller_1.WexelsController],
+        providers: [wexels_service_1.WexelsService],
         exports: [wexels_service_1.WexelsService],
     })
 ], WexelsModule);
