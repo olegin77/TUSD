@@ -87,6 +87,12 @@ pub mod solana_contracts {
     pub fn mint_wexel_finalize(_ctx: Context<MintFinalize>, wexel_id: u64) -> Result<()> {
         // TODO: Implement finalize logic
         msg!("Mint wexel finalize: wexel_id={}", wexel_id);
+        
+        // Emit event for wexel finalization
+        emit!(WexelFinalized {
+            wexel_id,
+        });
+        
         Ok(())
     }
 
@@ -234,6 +240,11 @@ pub struct LoanRepaid {
 pub struct Redeemed {
     pub wexel_id: u64,
     pub principal_usd: u64,
+}
+
+#[event]
+pub struct WexelFinalized {
+    pub wexel_id: u64,
 }
 
 // Context structures
