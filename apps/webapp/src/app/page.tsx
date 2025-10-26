@@ -4,16 +4,22 @@ import { Stats } from "@/components/sections/stats";
 import { Pools } from "@/components/sections/pools";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { CTA } from "@/components/sections/cta";
+import { PageTransition } from "@/components/ui/page-transition";
+import { AnimatedList } from "@/components/ui/animated-list";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
-      <Hero />
-      <Stats />
-      <Features />
-      <HowItWorks />
-      <Pools />
-      <CTA />
-    </main>
+    <PageTransition>
+      <div className="min-h-screen">
+        <AnimatedList>
+          <Hero />
+          <Stats />
+          <Features />
+          <HowItWorks />
+          <Pools />
+          <CTA />
+        </AnimatedList>
+      </div>
+    </PageTransition>
   );
 }
