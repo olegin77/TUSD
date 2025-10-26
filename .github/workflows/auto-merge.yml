@@ -1,0 +1,177 @@
+name: Auto Merge to Main
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  check-pr-requirements:
+    runs-on: ubuntu-latest
+    outputs:
+      should-merge: ${{ steps.check.outputs.should-merge }}
+      pr-number: ${{ steps.check.outputs.pr-number }}
+    steps:
+      - name: Check PR requirements
+        id: check
+        run: |
+          # Проверяем, что PR не в draft состоянии
+          if [ "${{ github.event.pull_request.draft }}" = "true" ]; then
+            echo "should-merge=false" >> $GITHUB_OUTPUT
+            echo "PR is in draft state, skipping auto-merge"
+            exit 0
+          fi
+          
+          # Проверяем, что PR не конфликтует с main
+          echo "should-merge=true" >> $GITHUB_OUTPUT
+          echo "pr-number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          echo "PR meets requirements for auto-merge"
+
+  check-conflicts:
+    runs-on: ubuntu-latest
+    needs: check-pr-requirements
+    if: needs.check-pr-requirements.outputs.should-merge == 'true'
+    outputs:
+      has-conflicts: ${{ steps.check-conflicts.outputs.has-conflicts }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for merge conflicts
+        id: check-conflicts
+        run: |
+          # Получаем информацию о PR
+          PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
+          
+          # Проверяем, есть ли конфликты
+          git fetch origin main
+          git fetch origin pull/$PR_NUMBER/head:pr-branch
+          
+          # Пытаемся создать временный merge
+          if git merge-tree $(git merge-base origin/main pr-branch) origin/main pr-branch > /tmp/merge-result; then
+            echo "has-conflicts=false" >> $GITHUB_OUTPUT
+            echo "No merge conflicts detected"
+          else
+            echo "has-conflicts=true" >> $GITHUB_OUTPUT
+            echo "Merge conflicts detected"
+          fi
+
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: [check-pr-requirements, check-conflicts]
+    if: needs.check-pr-requirements.outputs.should-merge == 'true' && needs.check-conflicts.outputs.has-conflicts == 'false'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run linting
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build project
+        run: pnpm build
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    needs: [check-pr-requirements, check-conflicts, run-tests]
+    if: |
+      needs.check-pr-requirements.outputs.should-merge == 'true' && 
+      needs.check-conflicts.outputs.has-conflicts == 'false' &&
+      needs.run-tests.result == 'success'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge PR
+        run: |
+          PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
+          
+          # Получаем информацию о PR
+          PR_INFO=$(gh pr view $PR_NUMBER --json title,body,headRefName,baseRefName,author)
+          PR_TITLE=$(echo $PR_INFO | jq -r '.title')
+          PR_BODY=$(echo $PR_INFO | jq -r '.body')
+          HEAD_REF=$(echo $PR_INFO | jq -r '.headRefName')
+          BASE_REF=$(echo $PR_INFO | jq -r '.baseRefName')
+          AUTHOR=$(echo $PR_INFO | jq -r '.author.login')
+          
+          echo "Merging PR #$PR_NUMBER: $PR_TITLE"
+          echo "From: $HEAD_REF to: $BASE_REF"
+          echo "Author: $AUTHOR"
+          
+          # Выполняем merge с fast-forward если возможно
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          
+          # Переключаемся на main и обновляем
+          git checkout main
+          git pull origin main
+          
+          # Пытаемся fast-forward merge
+          if git merge --ff-only origin/$HEAD_REF; then
+            echo "Fast-forward merge successful"
+            git push origin main
+          else
+            # Если fast-forward невозможен, используем merge commit
+            echo "Fast-forward not possible, using merge commit"
+            git merge --no-ff origin/$HEAD_REF -m "Merge PR #$PR_NUMBER: $PR_TITLE
+
+          $PR_BODY
+
+          Co-authored-by: $AUTHOR <$AUTHOR@users.noreply.github.com>"
+            git push origin main
+          fi
+          
+          # Закрываем PR
+          gh pr close $PR_NUMBER --comment "✅ PR автоматически смержен в main ветку после успешного прохождения всех проверок."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-on-failure:
+    runs-on: ubuntu-latest
+    needs: [check-pr-requirements, check-conflicts, run-tests, auto-merge]
+    if: failure() && needs.check-pr-requirements.outputs.should-merge == 'true'
+    steps:
+      - name: Notify on failure
+        run: |
+          PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
+          echo "❌ Автоматический мердж PR #$PR_NUMBER не удался"
+          
+          # Комментируем в PR о проблеме
+          gh pr comment $PR_NUMBER --body "❌ Автоматический мердж не удался. Пожалуйста, проверьте:
+          
+          - Конфликты с main веткой
+          - Результаты тестов и линтинга
+          - Статус CI/CD проверок
+          
+          После исправления проблем, автоматический мердж будет повторен."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,197 @@
+name: Merge Protection
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  protect-main:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify merge integrity
+        run: |
+          echo "Verifying merge integrity for main branch"
+          
+          # Проверяем, что последний коммит - это merge commit
+          LAST_COMMIT=$(git log -1 --pretty=format:"%H %s")
+          echo "Last commit: $LAST_COMMIT"
+          
+          # Проверяем, что main ветка не была перезаписана
+          if git log --oneline -10 | grep -q "Merge"; then
+            echo "✅ Merge commit detected, main branch integrity maintained"
+          else
+            echo "⚠️ No merge commit detected in recent history"
+          fi
+          
+          # Проверяем, что нет force push
+          if git reflog show main | head -5 | grep -q "forced-update"; then
+            echo "❌ Force push detected in main branch history"
+            exit 1
+          else
+            echo "✅ No force push detected"
+          fi
+
+  enforce-pr-requirements:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enforce PR requirements
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_BODY="${{ github.event.pull_request.body }}"
+          PR_DRAFT="${{ github.event.pull_request.draft }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          
+          echo "Enforcing requirements for PR #$PR_NUMBER"
+          echo "Author: $PR_AUTHOR"
+          echo "Title: $PR_TITLE"
+          echo "Draft: $PR_DRAFT"
+          
+          # Проверка 1: PR не должен быть в draft состоянии
+          if [ "$PR_DRAFT" = "true" ]; then
+            echo "❌ Draft PRs cannot be merged"
+            gh pr comment $PR_NUMBER --body "❌ **Draft PRs не могут быть смержены**
+            
+            Пожалуйста, переведите PR из draft состояния в ready for review."
+            exit 1
+          fi
+          
+          # Проверка 2: Проверка названия PR
+          if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)(\(.+\))?: .+ ]]; then
+            echo "❌ Invalid PR title format"
+            gh pr comment $PR_NUMBER --body "❌ **Некорректный формат названия PR**
+            
+            Название должно соответствовать [Conventional Commits](https://www.conventionalcommits.org/) формату:
+            \`\`\`
+            type(scope): description
+            \`\`\`
+            
+            Примеры:
+            - \`feat: add user authentication\`
+            - \`fix(auth): resolve login issue\`
+            - \`docs: update API documentation\`"
+            exit 1
+          fi
+          
+          # Проверка 3: Проверка описания PR
+          if [ -z "$PR_BODY" ] || [ "$PR_BODY" = "null" ] || [ ${#PR_BODY} -lt 50 ]; then
+            echo "❌ PR description is too short or missing"
+            gh pr comment $PR_NUMBER --body "❌ **Недостаточное описание PR**
+            
+            Пожалуйста, добавьте подробное описание изменений:
+            - Что было изменено
+            - Почему это изменение необходимо
+            - Как это влияет на существующую функциональность
+            - Ссылки на связанные issues (если есть)"
+            exit 1
+          fi
+          
+          # Проверка 4: Проверка размера PR
+          CHANGES=$(git diff --numstat origin/main...HEAD | awk '{sum += $1 + $2} END {print sum+0}')
+          echo "PR contains $CHANGES changes"
+          
+          if [ "$CHANGES" -gt 1000 ]; then
+            echo "⚠️ PR is very large"
+            gh pr comment $PR_NUMBER --body "⚠️ **PR содержит много изменений ($CHANGES)**
+            
+            Рекомендуется разбить большие изменения на несколько меньших PR для:
+            - Упрощения ревью
+            - Снижения риска ошибок
+            - Ускорения процесса мерджа
+            
+            Рассмотрите возможность разделения на несколько PR."
+          fi
+          
+          echo "✅ All PR requirements met"
+
+  check-approvals:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Check PR approvals
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          
+          # Получаем информацию о ревьюерах
+          REVIEWS=$(gh pr view $PR_NUMBER --json reviews)
+          APPROVALS=$(echo $REVIEWS | jq -r '.reviews[] | select(.state == "APPROVED") | .author.login' | sort -u | wc -l)
+          CHANGES_REQUESTED=$(echo $REVIEWS | jq -r '.reviews[] | select(.state == "CHANGES_REQUESTED") | .author.login' | sort -u | wc -l)
+          
+          echo "Approvals: $APPROVALS"
+          echo "Changes requested: $CHANGES_REQUESTED"
+          
+          # Требуем минимум 1 одобрение для мерджа в main
+          if [ "$APPROVALS" -lt 1 ]; then
+            echo "❌ PR requires at least 1 approval"
+            gh pr comment $PR_NUMBER --body "❌ **PR требует одобрения**
+            
+            Для мерджа в main ветку требуется минимум 1 одобрение от ревьюера.
+            
+            Текущее количество одобрений: $APPROVALS"
+            exit 1
+          fi
+          
+          if [ "$CHANGES_REQUESTED" -gt 0 ]; then
+            echo "❌ PR has requested changes"
+            gh pr comment $PR_NUMBER --body "❌ **Есть запрошенные изменения**
+            
+            Ревьюеры запросили изменения. Пожалуйста, исправьте замечания перед мерджем.
+            
+            Количество запрошенных изменений: $CHANGES_REQUESTED"
+            exit 1
+          fi
+          
+          echo "✅ PR has required approvals"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  prevent-direct-push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Check for direct push
+        run: |
+          # Проверяем, что push был сделан через PR, а не напрямую
+          LAST_COMMIT=$(git log -1 --pretty=format:"%H %s")
+          echo "Last commit: $LAST_COMMIT"
+          
+          # Если коммит не содержит "Merge pull request", это может быть прямой push
+          if [[ ! "$LAST_COMMIT" =~ "Merge pull request" ]] && [[ ! "$LAST_COMMIT" =~ "🤖 Auto-resolve merge conflicts" ]]; then
+            echo "⚠️ Possible direct push to main detected"
+            
+            # Отправляем уведомление
+            gh issue create \
+              --title "⚠️ Direct push to main detected" \
+              --body "Обнаружен возможный прямой push в main ветку:
+              
+              **Commit:** $LAST_COMMIT
+              **Author:** ${{ github.actor }}
+              **Time:** $(date)
+              
+              Пожалуйста, убедитесь, что все изменения проходят через PR процесс."
+            exit 0
+          else
+            echo "✅ Push appears to be through proper PR process"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
