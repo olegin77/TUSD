@@ -4,16 +4,16 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  TrendingUp, 
-  Shield, 
+import {
+  TrendingUp,
+  Shield,
   Zap,
   DollarSign,
   Users,
   BarChart3,
   ArrowRight,
   Star,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -25,27 +25,27 @@ export default function HomePage() {
       title: "Высокая доходность",
       description: "До 30% годовых с возможностью буста до 5%",
       icon: TrendingUp,
-      color: "text-green-600"
+      color: "text-green-600",
     },
     {
       title: "Безопасность",
       description: "Аудит кода, мультиподпись, временные блокировки",
       icon: Shield,
-      color: "text-blue-600"
+      color: "text-blue-600",
     },
     {
       title: "NFT векселя",
       description: "Торгуемые NFT-токены с уникальными характеристиками",
       icon: Zap,
-      color: "text-purple-600"
-    }
+      color: "text-purple-600",
+    },
   ];
 
   const stats = [
     { label: "Общий объем заблокированных средств", value: "$2.5M", change: "+15%" },
     { label: "Активных пользователей", value: "1,247", change: "+8%" },
     { label: "Создано векселей", value: "3,891", change: "+12%" },
-    { label: "Средняя доходность", value: "24.5%", change: "+2%" }
+    { label: "Средняя доходность", value: "24.5%", change: "+2%" },
   ];
 
   const pools = [
@@ -56,7 +56,7 @@ export default function HomePage() {
       duration: 365,
       minDeposit: 1000,
       maxDeposit: 50000,
-      features: ["Базовый APY", "NFT вексель"]
+      features: ["Базовый APY", "NFT вексель"],
     },
     {
       id: 2,
@@ -65,7 +65,7 @@ export default function HomePage() {
       duration: 730,
       minDeposit: 5000,
       maxDeposit: 100000,
-      features: ["Базовый APY", "NFT вексель", "Возможность буста"]
+      features: ["Базовый APY", "NFT вексель", "Возможность буста"],
     },
     {
       id: 3,
@@ -74,16 +74,16 @@ export default function HomePage() {
       duration: 1095,
       minDeposit: 10000,
       maxDeposit: 200000,
-      features: ["Базовый APY", "NFT вексель", "Максимальный буст", "Приоритетная поддержка"]
-    }
+      features: ["Базовый APY", "NFT вексель", "Максимальный буст", "Приоритетная поддержка"],
+    },
   ];
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -97,8 +97,8 @@ export default function HomePage() {
               Децентрализованные векселя нового поколения
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Инвестируйте в стабильные активы с высокой доходностью. 
-              Получайте NFT-векселя, торгуйте ими на маркетплейсе и используйте как залог.
+              Инвестируйте в стабильные активы с высокой доходностью. Получайте NFT-векселя,
+              торгуйте ими на маркетплейсе и используйте как залог.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/pools">
@@ -141,9 +141,7 @@ export default function HomePage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Почему выбирают Wexel?
-            </h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Почему выбирают Wexel?</h2>
             <p className="text-xl text-gray-600">
               Инновационная платформа для безопасных и прибыльных инвестиций
             </p>
@@ -151,10 +149,10 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className={`cursor-pointer transition-all ${
-                  activeFeature === index ? 'ring-2 ring-blue-500 shadow-lg' : 'hover:shadow-md'
+                  activeFeature === index ? "ring-2 ring-blue-500 shadow-lg" : "hover:shadow-md"
                 }`}
                 onClick={() => setActiveFeature(index)}
               >
@@ -173,12 +171,8 @@ export default function HomePage() {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Инвестиционные пулы
-            </h2>
-            <p className="text-xl text-gray-600">
-              Выберите подходящий пул для ваших инвестиций
-            </p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Инвестиционные пулы</h2>
+            <p className="text-xl text-gray-600">Выберите подходящий пул для ваших инвестиций</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -194,15 +188,11 @@ export default function HomePage() {
                 )}
                 <CardHeader>
                   <CardTitle className="text-2xl">{pool.name}</CardTitle>
-                  <CardDescription>
-                    Доходность до {pool.apy}% годовых
-                  </CardDescription>
+                  <CardDescription>Доходность до {pool.apy}% годовых</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-green-600 mb-2">
-                      {pool.apy}%
-                    </p>
+                    <p className="text-4xl font-bold text-green-600 mb-2">{pool.apy}%</p>
                     <p className="text-sm text-gray-500">APY</p>
                   </div>
 
@@ -248,9 +238,7 @@ export default function HomePage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Как это работает?
-            </h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Как это работает?</h2>
             <p className="text-xl text-gray-600">
               Простой процесс инвестирования в несколько шагов
             </p>
@@ -294,9 +282,7 @@ export default function HomePage() {
       <section className="py-20 bg-blue-600">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">
-              Готовы начать инвестировать?
-            </h2>
+            <h2 className="text-4xl font-bold mb-4">Готовы начать инвестировать?</h2>
             <p className="text-xl mb-8 opacity-90">
               Присоединяйтесь к тысячам инвесторов, которые уже получают стабильный доход
             </p>
@@ -308,7 +294,11 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/dashboard">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-blue-600">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-blue-600"
+                >
                   <BarChart3 className="h-5 w-5 mr-2" />
                   Открыть дашборд
                 </Button>
@@ -331,25 +321,61 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold mb-4">Продукт</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/pools" className="hover:text-white">Пулы</Link></li>
-                <li><Link href="/marketplace" className="hover:text-white">Маркетплейс</Link></li>
-                <li><Link href="/dashboard" className="hover:text-white">Дашборд</Link></li>
+                <li>
+                  <Link href="/pools" className="hover:text-white">
+                    Пулы
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/marketplace" className="hover:text-white">
+                    Маркетплейс
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard" className="hover:text-white">
+                    Дашборд
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Поддержка</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Документация</a></li>
-                <li><a href="#" className="hover:text-white">FAQ</a></li>
-                <li><a href="#" className="hover:text-white">Контакты</a></li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Документация
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Контакты
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Сообщество</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Telegram</a></li>
-                <li><a href="#" className="hover:text-white">Twitter</a></li>
-                <li><a href="#" className="hover:text-white">Discord</a></li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Telegram
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Twitter
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Discord
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

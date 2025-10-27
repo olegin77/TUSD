@@ -37,12 +37,7 @@ const itemVariants: Variants = {
 
 export function AnimatedList({ children, className, staggerDelay = 0.1 }: AnimatedListProps) {
   return (
-    <motion.div
-      variants={listVariants}
-      initial="hidden"
-      animate="visible"
-      className={className}
-    >
+    <motion.div variants={listVariants} initial="hidden" animate="visible" className={className}>
       {Array.isArray(children) ? (
         children.map((child, index) => (
           <motion.div key={index} variants={itemVariants}>
@@ -71,11 +66,7 @@ export function AnimatedCounter({ value, duration = 2, className }: AnimatedCoun
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration }}
-      >
+      <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration }}>
         {value.toLocaleString()}
       </motion.span>
     </motion.span>

@@ -25,18 +25,18 @@ jobs:
       - name: Verify merge integrity
         run: |
           echo "Verifying merge integrity for main branch"
-          
+
           # Проверяем, что последний коммит - это merge commit
           LAST_COMMIT=$(git log -1 --pretty=format:"%H %s")
           echo "Last commit: $LAST_COMMIT"
-          
+
           # Проверяем, что main ветка не была перезаписана
           if git log --oneline -10 | grep -q "Merge"; then
             echo "✅ Merge commit detected, main branch integrity maintained"
           else
             echo "⚠️ No merge commit detected in recent history"
           fi
-          
+
           # Проверяем, что нет force push
           if git reflog show main | head -5 | grep -q "forced-update"; then
             echo "❌ Force push detected in main branch history"
@@ -61,12 +61,12 @@ jobs:
           PR_BODY="${{ github.event.pull_request.body }}"
           PR_DRAFT="${{ github.event.pull_request.draft }}"
           PR_AUTHOR="${{ github.event.pull_request.user.login }}"
-          
+
           echo "Enforcing requirements for PR #$PR_NUMBER"
           echo "Author: $PR_AUTHOR"
           echo "Title: $PR_TITLE"
           echo "Draft: $PR_DRAFT"
-          
+
           # Проверка 1: PR не должен быть в draft состоянии
           if [ "$PR_DRAFT" = "true" ]; then
             echo "❌ Draft PRs cannot be merged"
@@ -75,7 +75,7 @@ jobs:
             Пожалуйста, переведите PR из draft состояния в ready for review."
             exit 1
           fi
-          
+
           # Проверка 2: Проверка названия PR
           if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)(\(.+\))?: .+ ]]; then
             echo "❌ Invalid PR title format"
@@ -92,7 +92,7 @@ jobs:
             - \`docs: update API documentation\`"
             exit 1
           fi
-          
+
           # Проверка 3: Проверка описания PR
           if [ -z "$PR_BODY" ] || [ "$PR_BODY" = "null" ] || [ ${#PR_BODY} -lt 50 ]; then
             echo "❌ PR description is too short or missing"
@@ -105,11 +105,11 @@ jobs:
             - Ссылки на связанные issues (если есть)"
             exit 1
           fi
-          
+
           # Проверка 4: Проверка размера PR
           CHANGES=$(git diff --numstat origin/main...HEAD | awk '{sum += $1 + $2} END {print sum+0}')
           echo "PR contains $CHANGES changes"
-          
+
           if [ "$CHANGES" -gt 1000 ]; then
             echo "⚠️ PR is very large"
             gh pr comment $PR_NUMBER --body "⚠️ **PR содержит много изменений ($CHANGES)**
@@ -121,7 +121,7 @@ jobs:
             
             Рассмотрите возможность разделения на несколько PR."
           fi
-          
+
           echo "✅ All PR requirements met"
 
   check-approvals:
@@ -131,15 +131,15 @@ jobs:
       - name: Check PR approvals
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          
+
           # Получаем информацию о ревьюерах
           REVIEWS=$(gh pr view $PR_NUMBER --json reviews)
           APPROVALS=$(echo $REVIEWS | jq -r '.reviews[] | select(.state == "APPROVED") | .author.login' | sort -u | wc -l)
           CHANGES_REQUESTED=$(echo $REVIEWS | jq -r '.reviews[] | select(.state == "CHANGES_REQUESTED") | .author.login' | sort -u | wc -l)
-          
+
           echo "Approvals: $APPROVALS"
           echo "Changes requested: $CHANGES_REQUESTED"
-          
+
           # Требуем минимум 1 одобрение для мерджа в main
           if [ "$APPROVALS" -lt 1 ]; then
             echo "❌ PR requires at least 1 approval"
@@ -150,7 +150,7 @@ jobs:
             Текущее количество одобрений: $APPROVALS"
             exit 1
           fi
-          
+
           if [ "$CHANGES_REQUESTED" -gt 0 ]; then
             echo "❌ PR has requested changes"
             gh pr comment $PR_NUMBER --body "❌ **Есть запрошенные изменения**
@@ -160,7 +160,7 @@ jobs:
             Количество запрошенных изменений: $CHANGES_REQUESTED"
             exit 1
           fi
-          
+
           echo "✅ PR has required approvals"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
           # Проверяем, что push был сделан через PR, а не напрямую
           LAST_COMMIT=$(git log -1 --pretty=format:"%H %s")
           echo "Last commit: $LAST_COMMIT"
-          
+
           # Если коммит не содержит "Merge pull request", это может быть прямой push
           if [[ ! "$LAST_COMMIT" =~ "Merge pull request" ]] && [[ ! "$LAST_COMMIT" =~ "🤖 Auto-resolve merge conflicts" ]]; then
             echo "⚠️ Possible direct push to main detected"

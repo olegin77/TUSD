@@ -5,16 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Menu, 
-  X, 
-  Home, 
-  TrendingUp, 
-  ShoppingCart, 
-  BarChart3,
-  Wallet,
-  User
-} from "lucide-react";
+import { Menu, X, Home, TrendingUp, ShoppingCart, BarChart3, Wallet, User } from "lucide-react";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,11 +72,7 @@ export function Navigation() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
@@ -113,7 +100,7 @@ export function Navigation() {
                   </Link>
                 );
               })}
-              
+
               <div className="pt-4 space-y-2">
                 <Button variant="outline" className="w-full">
                   <Wallet className="h-4 w-4 mr-2" />

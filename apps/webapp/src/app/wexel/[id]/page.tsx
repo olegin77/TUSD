@@ -5,23 +5,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import {
   ArrowLeft,
-  TrendingUp, 
-  Clock, 
-  Shield, 
+  TrendingUp,
+  Clock,
+  Shield,
   DollarSign,
   Calendar,
   Zap,
   Copy,
   ExternalLink,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 
 export default function WexelDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [wexelId, setWexelId] = useState<string>("");
-  
+
   useEffect(() => {
     params.then((p) => setWexelId(p.id));
   }, [params]);
@@ -37,7 +37,7 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
       duration: 730,
       apy: 24,
       minDeposit: 1000,
-      maxDeposit: 100000
+      maxDeposit: 100000,
     },
     principal: 15000,
     apyBase: 24,
@@ -50,23 +50,23 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
     totalRewards: 4500,
     status: "active",
     nftMint: "0xabcd...efgh",
-    createdAt: "2024-01-15T10:30:00Z"
+    createdAt: "2024-01-15T10:30:00Z",
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("ru-RU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -93,12 +93,10 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
             <ArrowLeft className="h-4 w-4 mr-2" />
             Назад к маркетплейсу
           </Button>
-          
+
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Вексель #{wexel.id}
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Вексель #{wexel.id}</h1>
               <p className="text-gray-600">
                 Создан {formatDate(wexel.createdAt)} • Владелец: {wexel.owner}
               </p>
@@ -107,9 +105,7 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
               <Badge variant={wexel.isCollateralized ? "secondary" : "default"}>
                 {wexel.isCollateralized ? "В залоге" : "Свободен"}
               </Badge>
-              <Badge variant="outline">
-                {wexel.status}
-              </Badge>
+              <Badge variant="outline">{wexel.status}</Badge>
             </div>
           </div>
         </div>
@@ -208,7 +204,11 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
                         <p className="font-mono text-sm">{wexel.nftMint}</p>
                       </div>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(wexel.nftMint)}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => copyToClipboard(wexel.nftMint)}
+                        >
                           <Copy className="h-4 w-4" />
                         </Button>
                         <Button variant="outline" size="sm">
@@ -376,9 +376,7 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Премия:</span>
-                    <span className="font-semibold text-green-600">
-                      +{formatCurrency(1500)}
-                    </span>
+                    <span className="font-semibold text-green-600">+{formatCurrency(1500)}</span>
                   </div>
                   <hr />
                   <div className="flex justify-between">
@@ -397,8 +395,8 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
                   <div>
                     <p className="font-medium text-orange-800">Предупреждение о рисках</p>
                     <p className="text-sm text-orange-700 mt-1">
-                      Инвестиции в DeFi связаны с рисками. Убедитесь, что вы понимаете 
-                      все риски перед покупкой.
+                      Инвестиции в DeFi связаны с рисками. Убедитесь, что вы понимаете все риски
+                      перед покупкой.
                     </p>
                   </div>
                 </div>

@@ -33,9 +33,7 @@ describe("Comprehensive Solana Contracts Tests", () => {
 
   describe("Pool Management", () => {
     it("Should initialize program", async () => {
-      const tx = await program.methods
-        .initialize()
-        .rpc();
+      const tx = await program.methods.initialize().rpc();
 
       console.log("Initialize transaction signature:", tx);
       expect(tx).to.be.a("string");
@@ -50,7 +48,7 @@ describe("Comprehensive Solana Contracts Tests", () => {
       // Create pool account
       const poolSpace = 48; // Pool::LEN
       const poolRent = await provider.connection.getMinimumBalanceForRentExemption(poolSpace);
-      
+
       const createPoolTx = new anchor.web3.Transaction().add(
         anchor.web3.SystemProgram.createAccount({
           fromPubkey: user.publicKey,
@@ -171,7 +169,7 @@ describe("Comprehensive Solana Contracts Tests", () => {
       // Create rewards vault
       const vaultSpace = 16; // RewardsVault::LEN
       const vaultRent = await provider.connection.getMinimumBalanceForRentExemption(vaultSpace);
-      
+
       const createVaultTx = new anchor.web3.Transaction().add(
         anchor.web3.SystemProgram.createAccount({
           fromPubkey: user.publicKey,

@@ -5,16 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Wallet, 
-  TrendingUp, 
-  DollarSign, 
-  Clock, 
-  Shield, 
-  BarChart3,
-  Plus,
-  Eye
-} from "lucide-react";
+import { Wallet, TrendingUp, DollarSign, Clock, Shield, BarChart3, Plus, Eye } from "lucide-react";
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -25,7 +16,7 @@ export default function DashboardPage() {
     totalRewards: 2500,
     pendingRewards: 150,
     activeWexels: 3,
-    totalValue: 52500
+    totalValue: 52500,
   };
 
   const wexels = [
@@ -37,7 +28,7 @@ export default function DashboardPage() {
       principal: 20000,
       rewards: 1200,
       status: "active",
-      daysLeft: 180
+      daysLeft: 180,
     },
     {
       id: 2,
@@ -47,7 +38,7 @@ export default function DashboardPage() {
       principal: 15000,
       rewards: 800,
       status: "collateralized",
-      daysLeft: 300
+      daysLeft: 300,
     },
     {
       id: 3,
@@ -57,16 +48,16 @@ export default function DashboardPage() {
       principal: 15000,
       rewards: 500,
       status: "active",
-      daysLeft: 450
-    }
+      daysLeft: 450,
+    },
   ];
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -87,10 +78,10 @@ export default function DashboardPage() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(portfolioData.totalDeposits)}</div>
-              <p className="text-xs text-muted-foreground">
-                +12% с прошлого месяца
-              </p>
+              <div className="text-2xl font-bold">
+                {formatCurrency(portfolioData.totalDeposits)}
+              </div>
+              <p className="text-xs text-muted-foreground">+12% с прошлого месяца</p>
             </CardContent>
           </Card>
 
@@ -101,9 +92,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{formatCurrency(portfolioData.totalRewards)}</div>
-              <p className="text-xs text-muted-foreground">
-                +8% с прошлого месяца
-              </p>
+              <p className="text-xs text-muted-foreground">+8% с прошлого месяца</p>
             </CardContent>
           </Card>
 
@@ -113,10 +102,10 @@ export default function DashboardPage() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(portfolioData.pendingRewards)}</div>
-              <p className="text-xs text-muted-foreground">
-                Доступно для вывода
-              </p>
+              <div className="text-2xl font-bold">
+                {formatCurrency(portfolioData.pendingRewards)}
+              </div>
+              <p className="text-xs text-muted-foreground">Доступно для вывода</p>
             </CardContent>
           </Card>
 
@@ -127,9 +116,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{portfolioData.activeWexels}</div>
-              <p className="text-xs text-muted-foreground">
-                В портфеле
-              </p>
+              <p className="text-xs text-muted-foreground">В портфеле</p>
             </CardContent>
           </Card>
         </div>
@@ -147,9 +134,7 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Быстрые действия</CardTitle>
-                <CardDescription>
-                  Управляйте своими инвестициями
-                </CardDescription>
+                <CardDescription>Управляйте своими инвестициями</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -157,11 +142,17 @@ export default function DashboardPage() {
                     <Plus className="h-6 w-6" />
                     <span>Новый депозит</span>
                   </Button>
-                  <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
+                  <Button
+                    variant="outline"
+                    className="h-20 flex flex-col items-center justify-center space-y-2"
+                  >
                     <Shield className="h-6 w-6" />
                     <span>Заложить вексель</span>
                   </Button>
-                  <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2">
+                  <Button
+                    variant="outline"
+                    className="h-20 flex flex-col items-center justify-center space-y-2"
+                  >
                     <BarChart3 className="h-6 w-6" />
                     <span>Маркетплейс</span>
                   </Button>
@@ -205,9 +196,7 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Мои векселя</CardTitle>
-                <CardDescription>
-                  Управляйте своими инвестициями
-                </CardDescription>
+                <CardDescription>Управляйте своими инвестициями</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -218,11 +207,11 @@ export default function DashboardPage() {
                           <h3 className="font-semibold">Вексель #{wexel.id}</h3>
                           <p className="text-sm text-gray-500">Пул: {wexel.pool}</p>
                         </div>
-                        <Badge variant={wexel.status === 'active' ? 'default' : 'secondary'}>
-                          {wexel.status === 'active' ? 'Активен' : 'В залоге'}
+                        <Badge variant={wexel.status === "active" ? "default" : "secondary"}>
+                          {wexel.status === "active" ? "Активен" : "В залоге"}
                         </Badge>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div>
                           <p className="text-sm text-gray-500">Основная сумма</p>
@@ -230,7 +219,9 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">APY</p>
-                          <p className="font-semibold">{wexel.apy}% + {wexel.boost}%</p>
+                          <p className="font-semibold">
+                            {wexel.apy}% + {wexel.boost}%
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">Заработано</p>
@@ -247,15 +238,13 @@ export default function DashboardPage() {
                           <Eye className="h-4 w-4 mr-2" />
                           Подробнее
                         </Button>
-                        {wexel.status === 'active' && (
+                        {wexel.status === "active" && (
                           <Button size="sm" variant="outline">
                             <Shield className="h-4 w-4 mr-2" />
                             Заложить
                           </Button>
                         )}
-                        <Button size="sm">
-                          Получить награды
-                        </Button>
+                        <Button size="sm">Получить награды</Button>
                       </div>
                     </div>
                   ))}
@@ -268,9 +257,7 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Аналитика портфеля</CardTitle>
-                <CardDescription>
-                  Графики и статистика ваших инвестиций
-                </CardDescription>
+                <CardDescription>Графики и статистика ваших инвестиций</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">

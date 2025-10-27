@@ -6,7 +6,7 @@ on:
     branches: [main]
   schedule:
     # Запускаем каждые 30 минут для проверки конфликтов
-    - cron: '*/30 * * * *'
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -51,18 +51,18 @@ jobs:
             HEAD_REF=$(echo $PR_LIST | jq -r '.[0].headRefName')
             BASE_REF=$(echo $PR_LIST | jq -r '.[0].baseRefName')
           fi
-          
+
           echo "Checking PR #$PR_NUMBER for conflicts"
           echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          
+
           # Обновляем main ветку
           git fetch origin main
           git checkout main
           git pull origin main
-          
+
           # Получаем feature ветку
           git fetch origin $HEAD_REF
-          
+
           # Проверяем конфликты
           if git merge-tree $(git merge-base origin/main origin/$HEAD_REF) origin/main origin/$HEAD_REF > /tmp/merge-result 2>&1; then
             echo "No conflicts detected"
@@ -97,28 +97,28 @@ jobs:
         run: |
           PR_NUMBER="${{ needs.detect-conflicts.outputs.pr-number }}"
           CONFLICT_FILES="${{ needs.detect-conflicts.outputs.conflict-files }}"
-          
+
           echo "Attempting to resolve conflicts for PR #$PR_NUMBER"
           echo "Conflict files: $CONFLICT_FILES"
-          
+
           # Получаем информацию о PR
           PR_INFO=$(gh pr view $PR_NUMBER --json title,headRefName,baseRefName,author)
           HEAD_REF=$(echo $PR_INFO | jq -r '.headRefName')
           BASE_REF=$(echo $PR_INFO | jq -r '.baseRefName')
           AUTHOR=$(echo $PR_INFO | jq -r '.author.login')
-          
+
           # Создаем временную ветку для разрешения конфликтов
           RESOLUTION_BRANCH="conflict-resolution-$PR_NUMBER-$(date +%s)"
           git checkout -b $RESOLUTION_BRANCH
-          
+
           # Обновляем main
           git fetch origin main
           git merge origin/main
-          
+
           # Пытаемся автоматически разрешить конфликты
           RESOLUTION_SUCCESS="true"
           RESOLUTION_MESSAGE=""
-          
+
           # Стратегия 1: Используем стратегию "ours" для файлов конфигурации
           CONFIG_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -E '\.(json|yml|yaml|toml|lock)$' || true)
           if [ -n "$CONFIG_FILES" ]; then
@@ -131,7 +131,7 @@ jobs:
               fi
             done
           fi
-          
+
           # Стратегия 2: Используем стратегию "theirs" для сгенерированных файлов
           GENERATED_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -E '(dist/|build/|generated/)' || true)
           if [ -n "$GENERATED_FILES" ]; then
@@ -144,7 +144,7 @@ jobs:
               fi
             done
           fi
-          
+
           # Стратегия 3: Для остальных файлов пытаемся автоматическое разрешение
           OTHER_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -v -E '\.(json|yml|yaml|toml|lock)$' | grep -v -E '(dist/|build/|generated/)' || true)
           if [ -n "$OTHER_FILES" ]; then
@@ -164,7 +164,7 @@ jobs:
               fi
             done
           fi
-          
+
           # Проверяем, остались ли неразрешенные конфликты
           if git diff --check > /dev/null 2>&1; then
             echo "All conflicts resolved successfully"
@@ -190,7 +190,7 @@ jobs:
             RESOLUTION_SUCCESS="false"
             RESOLUTION_MESSAGE="$RESOLUTION_MESSAGE\n❌ Остались неразрешенные конфликты"
           fi
-          
+
           echo "success=$RESOLUTION_SUCCESS" >> $GITHUB_OUTPUT
           echo "message=$RESOLUTION_MESSAGE" >> $GITHUB_OUTPUT
 
@@ -205,7 +205,7 @@ jobs:
           HAS_CONFLICTS="${{ needs.detect-conflicts.outputs.has-conflicts }}"
           RESOLUTION_SUCCESS="${{ needs.attempt-auto-resolution.outputs.resolution-success }}"
           RESOLUTION_MESSAGE="${{ needs.attempt-auto-resolution.outputs.resolution-message }}"
-          
+
           if [ "$HAS_CONFLICTS" = "true" ]; then
             if [ "$RESOLUTION_SUCCESS" = "true" ]; then
               COMMENT_BODY="## 🔧 Автоматическое разрешение конфликтов

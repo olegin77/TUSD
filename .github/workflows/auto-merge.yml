@@ -27,7 +27,7 @@ jobs:
             echo "PR is in draft state, skipping auto-merge"
             exit 0
           fi
-          
+
           # Проверяем, что PR не конфликтует с main
           echo "should-merge=true" >> $GITHUB_OUTPUT
           echo "pr-number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
@@ -51,11 +51,11 @@ jobs:
         run: |
           # Получаем информацию о PR
           PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
-          
+
           # Проверяем, есть ли конфликты
           git fetch origin main
           git fetch origin pull/$PR_NUMBER/head:pr-branch
-          
+
           # Пытаемся создать временный merge
           if git merge-tree $(git merge-base origin/main pr-branch) origin/main pr-branch > /tmp/merge-result; then
             echo "has-conflicts=false" >> $GITHUB_OUTPUT
@@ -114,7 +114,7 @@ jobs:
       - name: Auto-merge PR
         run: |
           PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
-          
+
           # Получаем информацию о PR
           PR_INFO=$(gh pr view $PR_NUMBER --json title,body,headRefName,baseRefName,author)
           PR_TITLE=$(echo $PR_INFO | jq -r '.title')
@@ -122,19 +122,19 @@ jobs:
           HEAD_REF=$(echo $PR_INFO | jq -r '.headRefName')
           BASE_REF=$(echo $PR_INFO | jq -r '.baseRefName')
           AUTHOR=$(echo $PR_INFO | jq -r '.author.login')
-          
+
           echo "Merging PR #$PR_NUMBER: $PR_TITLE"
           echo "From: $HEAD_REF to: $BASE_REF"
           echo "Author: $AUTHOR"
-          
+
           # Выполняем merge с fast-forward если возможно
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          
+
           # Переключаемся на main и обновляем
           git checkout main
           git pull origin main
-          
+
           # Пытаемся fast-forward merge
           if git merge --ff-only origin/$HEAD_REF; then
             echo "Fast-forward merge successful"
@@ -149,7 +149,7 @@ jobs:
           Co-authored-by: $AUTHOR <$AUTHOR@users.noreply.github.com>"
             git push origin main
           fi
-          
+
           # Закрываем PR
           gh pr close $PR_NUMBER --comment "✅ PR автоматически смержен в main ветку после успешного прохождения всех проверок."
         env:
@@ -164,14 +164,14 @@ jobs:
         run: |
           PR_NUMBER="${{ needs.check-pr-requirements.outputs.pr-number }}"
           echo "❌ Автоматический мердж PR #$PR_NUMBER не удался"
-          
+
           # Комментируем в PR о проблеме
           gh pr comment $PR_NUMBER --body "❌ Автоматический мердж не удался. Пожалуйста, проверьте:
-          
+
           - Конфликты с main веткой
           - Результаты тестов и линтинга
           - Статус CI/CD проверок
-          
+
           После исправления проблем, автоматический мердж будет повторен."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

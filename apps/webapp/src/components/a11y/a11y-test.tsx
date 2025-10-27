@@ -8,14 +8,14 @@ export function A11yTest() {
 
   const runA11yTest = async () => {
     if (typeof window === "undefined") return;
-    
+
     setIsRunning(true);
     setResults([]);
 
     try {
       const axe = (await import("@axe-core/react")).default;
       const { run } = await import("axe-core");
-      
+
       const violations = await run(document);
       setResults(violations.violations);
     } catch (error) {
@@ -39,20 +39,16 @@ export function A11yTest() {
       >
         {isRunning ? "Running..." : "Run Test"}
       </button>
-      
+
       {results.length > 0 && (
         <div className="mt-4">
-          <h4 className="font-medium text-red-600">
-            {results.length} violation(s) found
-          </h4>
+          <h4 className="font-medium text-red-600">{results.length} violation(s) found</h4>
           <div className="max-h-40 overflow-y-auto">
             {results.map((violation, index) => (
               <div key={index} className="text-sm mt-2 p-2 bg-red-50 rounded">
                 <div className="font-medium">{violation.id}</div>
                 <div className="text-gray-600">{violation.description}</div>
-                <div className="text-xs text-gray-500">
-                  Impact: {violation.impact}
-                </div>
+                <div className="text-xs text-gray-500">Impact: {violation.impact}</div>
               </div>
             ))}
           </div>

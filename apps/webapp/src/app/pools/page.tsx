@@ -7,14 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { 
-  Clock, 
-  TrendingUp, 
-  Shield, 
-  Info,
-  Calculator,
-  Zap
-} from "lucide-react";
+import { Clock, TrendingUp, Shield, Info, Calculator, Zap } from "lucide-react";
 
 export default function PoolsPage() {
   const [selectedPool, setSelectedPool] = useState<number | null>(null);
@@ -30,7 +23,7 @@ export default function PoolsPage() {
       minDeposit: 100,
       maxDeposit: 100000,
       description: "Краткосрочные инвестиции с умеренной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Низкий риск"]
+      features: ["Ежедневные выплаты", "Возможность залога", "Низкий риск"],
     },
     {
       id: 2,
@@ -40,7 +33,7 @@ export default function PoolsPage() {
       minDeposit: 500,
       maxDeposit: 500000,
       description: "Среднесрочные инвестиции с повышенной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Средний риск"]
+      features: ["Ежедневные выплаты", "Возможность залога", "Средний риск"],
     },
     {
       id: 3,
@@ -50,16 +43,16 @@ export default function PoolsPage() {
       minDeposit: 1000,
       maxDeposit: 1000000,
       description: "Долгосрочные инвестиции с максимальной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Высокий риск"]
-    }
+      features: ["Ежедневные выплаты", "Возможность залога", "Высокий риск"],
+    },
   ];
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -80,10 +73,12 @@ export default function PoolsPage() {
     return (amount * apy) / 100 / 365;
   };
 
-  const selectedPoolData = selectedPool ? pools.find(p => p.id === selectedPool) : null;
+  const selectedPoolData = selectedPool ? pools.find((p) => p.id === selectedPool) : null;
   const boostTarget = calculateBoostTarget(depositAmount);
   const boostValue = calculateBoostValue(depositAmount, boostPercentage);
-  const effectiveAPY = selectedPoolData ? calculateAPY(selectedPoolData.apy, boostValue, depositAmount) : 0;
+  const effectiveAPY = selectedPoolData
+    ? calculateAPY(selectedPoolData.apy, boostValue, depositAmount)
+    : 0;
   const dailyReward = calculateDailyReward(depositAmount, effectiveAPY);
 
   return (
@@ -99,12 +94,12 @@ export default function PoolsPage() {
           {/* Pools List */}
           <div className="lg:col-span-2 space-y-6">
             <h2 className="text-xl font-semibold">Доступные пулы</h2>
-            
+
             {pools.map((pool) => (
-              <Card 
-                key={pool.id} 
+              <Card
+                key={pool.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                  selectedPool === pool.id ? 'ring-2 ring-blue-500' : ''
+                  selectedPool === pool.id ? "ring-2 ring-blue-500" : ""
                 }`}
                 onClick={() => setSelectedPool(pool.id)}
               >
@@ -130,7 +125,7 @@ export default function PoolsPage() {
                       <p className="font-semibold">{formatCurrency(pool.maxDeposit)}</p>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Особенности:</p>
                     <ul className="space-y-1">
@@ -150,7 +145,7 @@ export default function PoolsPage() {
           {/* Investment Calculator */}
           <div className="space-y-6">
             <h2 className="text-xl font-semibold">Калькулятор инвестиций</h2>
-            
+
             {selectedPoolData ? (
               <Card>
                 <CardHeader>
@@ -172,7 +167,8 @@ export default function PoolsPage() {
                       max={selectedPoolData.maxDeposit}
                     />
                     <p className="text-xs text-gray-500">
-                      От {formatCurrency(selectedPoolData.minDeposit)} до {formatCurrency(selectedPoolData.maxDeposit)}
+                      От {formatCurrency(selectedPoolData.minDeposit)} до{" "}
+                      {formatCurrency(selectedPoolData.maxDeposit)}
                     </p>
                   </div>
 
@@ -182,7 +178,7 @@ export default function PoolsPage() {
                       <Zap className="h-4 w-4 text-yellow-500" />
                       <Label>Буст-монета (опционально)</Label>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label>Процент от целевого буста: {boostPercentage}%</Label>
                       <Slider
@@ -211,7 +207,7 @@ export default function PoolsPage() {
                   {/* Results */}
                   <div className="space-y-4 p-4 bg-blue-50 rounded-lg">
                     <h3 className="font-semibold">Расчет доходности</h3>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Базовый APY:</span>
@@ -219,7 +215,9 @@ export default function PoolsPage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm">Буст APY:</span>
-                        <span className="font-semibold">+{(effectiveAPY - selectedPoolData.apy).toFixed(1)}%</span>
+                        <span className="font-semibold">
+                          +{(effectiveAPY - selectedPoolData.apy).toFixed(1)}%
+                        </span>
                       </div>
                       <div className="flex justify-between text-lg font-bold">
                         <span>Эффективный APY:</span>

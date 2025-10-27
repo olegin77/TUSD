@@ -5,18 +5,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Search, 
-  Filter, 
-  TrendingUp, 
-  Clock, 
-  Shield, 
+import {
+  Search,
+  Filter,
+  TrendingUp,
+  Clock,
+  Shield,
   Eye,
   DollarSign,
   Calendar,
-  Zap
+  Zap,
 } from "lucide-react";
 
 export default function MarketplacePage() {
@@ -39,7 +45,7 @@ export default function MarketplacePage() {
       daysLeft: 300,
       status: "active",
       isCollateralized: false,
-      createdAt: "2024-01-15"
+      createdAt: "2024-01-15",
     },
     {
       id: 2,
@@ -53,7 +59,7 @@ export default function MarketplacePage() {
       daysLeft: 450,
       status: "active",
       isCollateralized: false,
-      createdAt: "2024-01-20"
+      createdAt: "2024-01-20",
     },
     {
       id: 3,
@@ -67,8 +73,8 @@ export default function MarketplacePage() {
       daysLeft: 180,
       status: "active",
       isCollateralized: true,
-      createdAt: "2024-01-25"
-    }
+      createdAt: "2024-01-25",
+    },
   ];
 
   const myListings = [
@@ -83,26 +89,27 @@ export default function MarketplacePage() {
       daysLeft: 350,
       status: "active",
       views: 15,
-      createdAt: "2024-01-28"
-    }
+      createdAt: "2024-01-28",
+    },
   ];
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("ru-RU", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ru-RU');
+    return new Date(dateString).toLocaleDateString("ru-RU");
   };
 
-  const filteredListings = listings.filter(listing => {
-    const matchesSearch = listing.wexelId.toString().includes(searchTerm) || 
-                         listing.seller.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredListings = listings.filter((listing) => {
+    const matchesSearch =
+      listing.wexelId.toString().includes(searchTerm) ||
+      listing.seller.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || listing.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -152,7 +159,7 @@ export default function MarketplacePage() {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Select value={sortBy} onValueChange={setSortBy}>
                       <SelectTrigger className="w-40">
@@ -191,11 +198,9 @@ export default function MarketplacePage() {
                         {listing.isCollateralized ? "В залоге" : "Свободен"}
                       </Badge>
                     </div>
-                    <CardDescription>
-                      Продавец: {listing.seller}
-                    </CardDescription>
+                    <CardDescription>Продавец: {listing.seller}</CardDescription>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-4">
                     {/* Pool Info */}
                     <div className="flex items-center justify-between">
@@ -271,9 +276,7 @@ export default function MarketplacePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Создать объявление</CardTitle>
-                <CardDescription>
-                  Выставьте свой вексель на продажу
-                </CardDescription>
+                <CardDescription>Выставьте свой вексель на продажу</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -289,13 +292,13 @@ export default function MarketplacePage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium">Цена продажи (USDT)</label>
                     <Input type="number" placeholder="Введите цену" />
                   </div>
                 </div>
-                
+
                 <div className="mt-4">
                   <Button>Создать объявление</Button>
                 </div>
@@ -305,7 +308,7 @@ export default function MarketplacePage() {
             {/* My Listings */}
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Мои объявления</h2>
-              
+
               {myListings.map((listing) => (
                 <Card key={listing.id}>
                   <CardContent className="p-6">
@@ -320,7 +323,9 @@ export default function MarketplacePage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
                         <p className="text-sm text-gray-500">APY</p>
-                        <p className="font-semibold">{listing.apy}% + {listing.boost}%</p>
+                        <p className="font-semibold">
+                          {listing.apy}% + {listing.boost}%
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Основная сумма</p>
