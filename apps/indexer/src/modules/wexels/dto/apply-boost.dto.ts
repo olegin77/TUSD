@@ -1,4 +1,4 @@
-import { IsString, IsPositive, IsInt, Min, Max } from 'class-validator';
+import { IsString, IsPositive, IsInt, Min, Max, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class ApplyBoostDto {
@@ -12,4 +12,19 @@ export class ApplyBoostDto {
   @Type(() => BigInt)
   @IsPositive()
   amount: bigint;
+
+  @IsNumber()
+  priceUsd: number;
+
+  @IsNumber()
+  valueUsd: number;
+
+  @IsInt()
+  @Min(0)
+  @Max(500)
+  apyBoostBp: number;
+
+  @IsOptional()
+  @IsString()
+  txHash?: string;
 }
