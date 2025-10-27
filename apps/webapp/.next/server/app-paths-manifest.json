@@ -1,1 +1,8 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/pools/page": "app/pools/page.js",
+  "/page": "app/page.js",
+  "/marketplace/page": "app/marketplace/page.js",
+  "/wexel/[id]/page": "app/wexel/[id]/page.js"
+}

@@ -1,8 +1,5 @@
 -- CreateEnum
-CREATE TYPE "public"."ListingStatus" AS ENUM ('active', 'sold', 'cancelled');
-
--- CreateEnum
-CREATE TYPE "public"."ClaimType" AS ENUM ('daily', 'final', 'partial');
+CREATE TYPE "PoolStatus" AS ENUM ('active', 'inactive', 'paused');
 
 -- CreateTable
 CREATE TABLE "pools" (
@@ -77,7 +74,7 @@ CREATE TABLE "listings" (
     "auction" BOOLEAN NOT NULL DEFAULT false,
     "min_bid_usd" BIGINT,
     "expiry_ts" TIMESTAMP(3),
-    "status" "ListingStatus" NOT NULL DEFAULT 'active',
+    "status" TEXT NOT NULL DEFAULT 'active',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -89,7 +86,7 @@ CREATE TABLE "claims" (
     "id" BIGSERIAL NOT NULL,
     "wexel_id" BIGINT NOT NULL,
     "amount_usd" BIGINT NOT NULL,
-    "claim_type" "ClaimType" NOT NULL,
+    "claim_type" TEXT NOT NULL,
     "tx_hash" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

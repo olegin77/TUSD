@@ -4,8 +4,10 @@
     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
     "test": "anchor test",
+    "test:unit": "anchor test --skip-local-validator",
     "test:coverage": "cargo llvm-cov --html --output-dir coverage --target-dir target",
-    "test:coverage:check": "cargo llvm-cov --html --output-dir coverage --target-dir target --fail-under 90"
+    "test:coverage:check": "cargo llvm-cov --html --output-dir coverage --target-dir target --fail-under 90",
+    "test:all": "npm run test:unit && npm run test:coverage:check"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1"
@@ -18,6 +20,7 @@
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.0.0",
     "typescript": "^5.7.3",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "cargo-llvm-cov": "^0.2.0"
   }
 }
