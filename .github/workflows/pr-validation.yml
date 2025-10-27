@@ -32,58 +32,58 @@ jobs:
           PR_DRAFT="${{ github.event.pull_request.draft }}"
           HEAD_REF="${{ github.event.pull_request.head.ref }}"
           BASE_REF="${{ github.event.pull_request.base.ref }}"
-          
+
           echo "Validating PR #$PR_NUMBER: $PR_TITLE"
           echo "From: $HEAD_REF to: $BASE_REF"
           echo "Draft: $PR_DRAFT"
-          
+
           VALIDATION_MESSAGE=""
           IS_VALID="true"
-          
+
           # Проверка 1: PR не должен быть в draft состоянии для мерджа
           if [ "$PR_DRAFT" = "true" ]; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n⚠️ PR находится в draft состоянии"
             IS_VALID="false"
           fi
-          
+
           # Проверка 2: Проверка названия PR
           if [[ ! "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)(\(.+\))?: .+ ]]; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n❌ Название PR должно соответствовать Conventional Commits формату: type(scope): description"
             IS_VALID="false"
           fi
-          
+
           # Проверка 3: Проверка описания PR
           if [ -z "$PR_BODY" ] || [ "$PR_BODY" = "null" ]; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n❌ PR должен содержать описание изменений"
             IS_VALID="false"
           fi
-          
+
           # Проверка 4: Проверка размера PR (не более 400 изменений)
           CHANGES=$(git diff --numstat origin/$BASE_REF...HEAD | awk '{sum += $1 + $2} END {print sum}')
           if [ "$CHANGES" -gt 400 ]; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n⚠️ PR содержит $CHANGES изменений (рекомендуется не более 400)"
           fi
-          
+
           # Проверка 5: Проверка на конфликты
           git fetch origin $BASE_REF
           if ! git merge-tree $(git merge-base origin/$BASE_REF HEAD) origin/$BASE_REF HEAD > /dev/null 2>&1; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n❌ Обнаружены конфликты с $BASE_REF веткой"
             IS_VALID="false"
           fi
-          
+
           # Проверка 6: Проверка, что PR не мерджит main в feature ветку
           if [ "$BASE_REF" != "main" ] && [ "$HEAD_REF" = "main" ]; then
             VALIDATION_MESSAGE="$VALIDATION_MESSAGE\n❌ Нельзя мерджить main ветку в feature ветку"
             IS_VALID="false"
           fi
-          
+
           if [ "$IS_VALID" = "true" ]; then
             VALIDATION_MESSAGE="✅ PR прошел все проверки и готов к мерджу"
           fi
-          
+
           echo "is-valid=$IS_VALID" >> $GITHUB_OUTPUT
           echo "message=$VALIDATION_MESSAGE" >> $GITHUB_OUTPUT
-          
+
           echo "Validation result: $IS_VALID"
           echo "Message: $VALIDATION_MESSAGE"
 
@@ -133,20 +133,20 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
           VALIDATION_MESSAGE="${{ needs.validate-pr.outputs.validation-message }}"
           CHECKS_STATUS="${{ needs.run-checks.result }}"
-          
+
           COMMENT_BODY="## 🔍 Результаты проверки PR
-          
+
           $VALIDATION_MESSAGE
-          
+
           ### Статус проверок:
           - **Валидация PR**: ${{ needs.validate-pr.result }}
           - **Тесты и сборка**: $CHECKS_STATUS
-          
+
           ---
-          
+
           $([ "$CHECKS_STATUS" = "success" ] && echo "✅ Все проверки пройдены успешно!" || echo "❌ Некоторые проверки не прошли. Пожалуйста, исправьте ошибки.")
           "
-          
+
           gh pr comment $PR_NUMBER --body "$COMMENT_BODY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -159,7 +159,7 @@ jobs:
       - name: Update PR status
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          
+
           if [ "${{ needs.validate-pr.outputs.is-valid }}" = "true" ] && [ "${{ needs.run-checks.result }}" = "success" ]; then
             # Добавляем лейбл "ready-to-merge"
             gh pr edit $PR_NUMBER --add-label "ready-to-merge"

@@ -22,7 +22,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
-            {required && <span className="text-red-500 ml-1" aria-label="required">*</span>}
+            {required && (
+              <span className="text-red-500 ml-1" aria-label="required">
+                *
+              </span>
+            )}
           </label>
         )}
         <input
@@ -35,10 +39,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           ref={ref}
           aria-invalid={error ? "true" : "false"}
-          aria-describedby={cn(
-            error ? errorId : undefined,
-            helperText ? helperId : undefined
-          )}
+          aria-describedby={cn(error ? errorId : undefined, helperText ? helperId : undefined)}
           required={required}
           {...props}
         />

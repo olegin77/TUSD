@@ -33,12 +33,12 @@ const iconVariants: Variants = {
   },
 };
 
-export function AnimatedIcon({ 
-  icon: Icon, 
-  size = 24, 
-  className, 
+export function AnimatedIcon({
+  icon: Icon,
+  size = 24,
+  className,
   animate = true,
-  hover = true 
+  hover = true,
 }: AnimatedIconProps) {
   if (!animate) {
     return <Icon size={size} className={className} />;
@@ -74,7 +74,13 @@ export function AnimatedSpinner({ className }: { className?: string }) {
 }
 
 // Pulse animation for loading states
-export function PulseAnimation({ children, className }: { children: React.ReactNode; className?: string }) {
+export function PulseAnimation({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <motion.div
       className={className}

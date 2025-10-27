@@ -1,19 +1,8 @@
-[llvm-cov]
-# Enable line coverage
-line = true
-# Enable branch coverage
-branch = true
-# Enable function coverage
-function = true
-# Enable region coverage
-region = true
-# Minimum coverage percentage to pass
-fail-under = 90
-# Generate HTML report
-html = true
-# Generate JSON report
-json = true
-# Generate LCOV report
-lcov = true
-# Output directory for reports
-output-dir = "coverage"
+[build]
+rustflags = ["-C", "instrument-coverage"]
+
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "instrument-coverage"]
+
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "instrument-coverage"]

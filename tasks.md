@@ -479,6 +479,17 @@ JSON
     git add src/
     ```
 
+- [x] T-0032.1 | Реализовать основные страницы фронтенда (дашборд, пулы, маркетплейс)
+  - depends: [T-0032, T-0033]
+  - apply:
+    ```bash
+    set -euo pipefail
+    cd apps/webapp
+    # Создать страницы: dashboard, pools, marketplace, wexel detail
+    # Создать главную страницу и навигацию
+    git add src/app/dashboard/ src/app/pools/ src/app/marketplace/ src/app/wexel/ src/app/page.tsx src/app/layout.tsx src/components/navigation.tsx
+    ```
+
 - [x] T-0033 | Реализовать UI Kit компоненты (все состояния, адаптивность) на основе Figma
   - depends: [T-0008, T-0030]
   - apply:

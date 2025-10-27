@@ -45,28 +45,31 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    asChild = false, 
-    animate = true, 
-    loading = false,
-    loadingText = "Loading...",
-    children,
-    disabled,
-    ...props 
-  }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      animate = true,
+      loading = false,
+      loadingText = "Loading...",
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const isDisabled = disabled || loading;
-    
+
     if (asChild) {
       return (
-        <Slot 
-          className={cn(buttonVariants({ variant, size, className }))} 
-          ref={ref} 
+        <Slot
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
           aria-disabled={isDisabled}
           aria-busy={loading}
-          {...props} 
+          {...props}
         >
           {loading ? (
             <>
@@ -85,15 +88,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // if (animate) {
     //   return (
     //     <motion.button
-    //       className={cn(buttonVariants({ variant, size, className }))} 
-    //       ref={ref} 
+    //       className={cn(buttonVariants({ variant, size, className }))}
+    //       ref={ref}
     //       disabled={isDisabled}
     //       aria-disabled={isDisabled}
     //       aria-busy={loading}
     //       whileHover={isDisabled ? {} : { scale: 1.02 }}
     //       whileTap={isDisabled ? {} : { scale: 0.98 }}
     //       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-    //       {...props} 
+    //       {...props}
     //     >
     //       {loading ? (
     //         <>
@@ -110,12 +113,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button
-        className={cn(buttonVariants({ variant, size, className }))} 
-        ref={ref} 
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
         disabled={isDisabled}
         aria-disabled={isDisabled}
         aria-busy={loading}
-        {...props} 
+        {...props}
       >
         {loading ? (
           <>
