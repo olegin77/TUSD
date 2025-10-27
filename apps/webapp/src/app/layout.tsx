@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
+import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
+import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +17,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <Navigation />
-        {children}
+        <MultiWalletProvider>
+          <Providers>
+            <Navigation />
+            {children}
+          </Providers>
+        </MultiWalletProvider>
       </body>
     </html>
   );

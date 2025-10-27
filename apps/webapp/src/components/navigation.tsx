@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Home, TrendingUp, ShoppingCart, BarChart3, Wallet, User } from "lucide-react";
+import { WalletStatus } from "@/components/wallet/WalletStatus";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,8 @@ export function Navigation() {
     { name: "Главная", href: "/", icon: Home },
     { name: "Пулы", href: "/pools", icon: TrendingUp },
     { name: "Маркетплейс", href: "/marketplace", icon: ShoppingCart },
+    { name: "Буст", href: "/boost", icon: TrendingUp },
+    { name: "Оракулы", href: "/oracles", icon: BarChart3 },
     { name: "Дашборд", href: "/dashboard", icon: BarChart3 },
   ];
 
@@ -59,10 +62,7 @@ export function Navigation() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm">
-              <Wallet className="h-4 w-4 mr-2" />
-              Подключить кошелек
-            </Button>
+            <WalletStatus />
             <Button size="sm">
               <User className="h-4 w-4 mr-2" />
               Войти
@@ -101,10 +101,9 @@ export function Navigation() {
               })}
 
               <div className="pt-4 space-y-2">
-                <Button variant="outline" className="w-full">
-                  <Wallet className="h-4 w-4 mr-2" />
-                  Подключить кошелек
-                </Button>
+                <div className="w-full">
+                  <WalletStatus />
+                </div>
                 <Button className="w-full">
                   <User className="h-4 w-4 mr-2" />
                   Войти
