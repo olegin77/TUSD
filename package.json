@@ -27,7 +27,11 @@
     "test": "pnpm -r test",
     "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "create-pr": "./scripts/create-pr.sh",
+    "create-pr-web": "node scripts/web-pr-helper.js",
     "task:complete": "pnpm lint && pnpm build && pnpm create-pr",
-    "pr:auto": "gh pr create --title 'feat: auto-generated' --body 'Auto-generated PR' --base main"
+    "task:complete-web": "pnpm lint && pnpm build && pnpm create-pr-web",
+    "pr:auto": "gh pr create --title 'feat: auto-generated' --body 'Auto-generated PR' --base main",
+    "pr:web": "node scripts/web-pr-helper.js",
+    "pr:open": "open create-pr.html"
   }
 }
