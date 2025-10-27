@@ -1,627 +1,539 @@
 use anchor_lang::prelude::*;
 
-declare_id!("3D7d2dRwysPv1ov5BzT934W2NYS9o7gfjBP2EphgVNXX");
-
-// Constants
-pub const POOL_SEED: &[u8] = b"pool";
-pub const WEXEL_SEED: &[u8] = b"wexel";
-pub const COLLATERAL_SEED: &[u8] = b"collateral";
-
-// APY constants (in basis points)
-pub const MIN_APY_BP: u16 = 1800; // 18%
-pub const MAX_APY_BP: u16 = 3600; // 36%
-pub const BOOST_TARGET_BP: u16 = 3000; // 30% of principal
-pub const BOOST_MAX_BP: u16 = 500; // +5% APY maximum
-
-// LTV (Loan-to-Value) constant
-pub const LTV_BP: u16 = 6000; // 60%
-
-// Time constants
-pub const SECONDS_PER_DAY: i64 = 86400;
-pub const SECONDS_PER_MONTH: i64 = 30 * SECONDS_PER_DAY;
-
-// Error codes
-#[error_code]
-pub enum ErrorCode {
-    #[msg("Invalid APY: must be between 18% and 36%")]
-    InvalidApy,
-    #[msg("Invalid lock period: must be between 12 and 36 months")]
-    InvalidLockPeriod,
-    #[msg("Insufficient deposit amount")]
-    InsufficientDeposit,
-    #[msg("Wexel not found")]
-    WexelNotFound,
-    #[msg("Wexel already collateralized")]
-    AlreadyCollateralized,
-    #[msg("Wexel not collateralized")]
-    NotCollateralized,
-    #[msg("Invalid boost amount")]
-    InvalidBoostAmount,
-    #[msg("Boost target exceeded")]
-    BoostTargetExceeded,
-    #[msg("Wexel not matured")]
-    WexelNotMatured,
-    #[msg("Unauthorized")]
-    Unauthorized,
-    #[msg("Math overflow")]
-    MathOverflow,
-    #[msg("Invalid pool ID")]
-    InvalidPoolId,
-    #[msg("Wexel already finalized")]
-    AlreadyFinalized,
-    #[msg("Invalid price data")]
-    InvalidPriceData,
-    #[msg("Price deviation too high")]
-    PriceDeviationTooHigh,
-}
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 #[program]
 pub mod solana_contracts {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("USDX/Wexel Platform initialized: {:?}", ctx.program_id);
-        Ok(())
+    // Constants
+    const LTV_BP: u16 = 6000; // 60% LTV
+    const APY_BP: u16 = 1800; // 18% APY
+    const BOOST_APY_BP: u16 = 500; // 5% boost APY
+    const BOOST_TARGET_BP: u16 = 3000; // 30% of principal for max boost
+    const SECONDS_PER_DAY: u64 = 86400;
+    const SECONDS_PER_MONTH: u64 = 30 * SECONDS_PER_DAY;
+
+    // Error codes
+    #[error_code]
+    pub enum ErrorCode {
+        #[msg("Insufficient funds")]
+        InsufficientFunds,
+        #[msg("Wexel not found")]
+        WexelNotFound,
+        #[msg("Wexel not matured")]
+        WexelNotMatured,
+        #[msg("Invalid pool")]
+        InvalidPool,
+        #[msg("Invalid amount")]
+        InvalidAmount,
+        #[msg("Unauthorized")]
+        Unauthorized,
+        #[msg("Math overflow")]
+        MathOverflow,
+        #[msg("Invalid boost value")]
+        InvalidBoostValue,
+        #[msg("Wexel already collateralized")]
+        WexelAlreadyCollateralized,
+        #[msg("Wexel not collateralized")]
+        WexelNotCollateralized,
+        #[msg("Invalid loan amount")]
+        InvalidLoanAmount,
+        #[msg("Invalid repayment amount")]
+        InvalidRepaymentAmount,
+        #[msg("Wexel already finalized")]
+        WexelAlreadyFinalized,
+        #[msg("Wexel not finalized")]
+        WexelNotFinalized,
     }
 
-    pub fn deposit(ctx: Context<Deposit>, pool_id: u8, principal_usd: u64) -> Result<()> {
+    // Events
+    #[event]
+    pub struct WexelCreated {
+        pub id: u64,
+        pub owner: Pubkey,
+        pub principal_usd: u64,
+        pub apy_bp: u16,
+        pub lock_period_months: u8,
+        pub created_at: i64,
+    }
+
+    #[event]
+    pub struct BoostApplied {
+        pub wexel_id: u64,
+        pub apy_boost_bp: u16,
+        pub value_usd: u64,
+    }
+
+    #[event]
+    pub struct Accrued {
+        pub wexel_id: u64,
+        pub reward_usd: u64,
+        pub accrued_at: i64,
+    }
+
+    #[event]
+    pub struct Claimed {
+        pub wexel_id: u64,
+        pub to: Pubkey,
+        pub amount_usd: u64,
+    }
+
+    #[event]
+    pub struct Collateralized {
+        pub wexel_id: u64,
+        pub loan_usd: u64,
+        pub ltv_bp: u16,
+    }
+
+    #[event]
+    pub struct LoanRepaid {
+        pub wexel_id: u64,
+        pub repaid_amount: u64,
+    }
+
+    #[event]
+    pub struct Redeemed {
+        pub wexel_id: u64,
+        pub principal_usd: u64,
+        pub redeemed_at: i64,
+    }
+
+    #[event]
+    pub struct WexelFinalized {
+        pub wexel_id: u64,
+        pub finalized_at: i64,
+    }
+
+    // Account structures
+    #[account]
+    pub struct Pool {
+        pub id: u64,
+        pub total_deposits: u64,
+        pub total_loans: u64,
+        pub apy_bp: u16,
+        pub created_at: i64,
+    }
+
+    #[account]
+    pub struct Wexel {
+        pub id: u64,
+        pub owner: Pubkey,
+        pub principal_usd: u64,
+        pub apy_bp: u16,
+        pub apy_boost_bp: u16,
+        pub lock_period_months: u8,
+        pub created_at: i64,
+        pub matured_at: i64,
+        pub is_collateralized: bool,
+        pub is_finalized: bool,
+        pub total_rewards: u64,
+        pub claimed_rewards: u64,
+    }
+
+    #[account]
+    pub struct CollateralPosition {
+        pub wexel_id: u64,
+        pub owner: Pubkey,
+        pub loan_usd: u64,
+        pub ltv_bp: u16,
+        pub created_at: i64,
+        pub is_repaid: bool,
+    }
+
+    #[account]
+    pub struct RewardsVault {
+        pub total_rewards: u64,
+        pub distributed_rewards: u64,
+    }
+
+    // Instructions
+    pub fn deposit(ctx: Context<Deposit>, pool_id: u64, principal_usd: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
         let wexel = &mut ctx.accounts.wexel;
-        let user = &ctx.accounts.user;
+        let clock = Clock::get()?;
 
-        // Validate pool ID
-        require!(pool.id == pool_id, ErrorCode::InvalidPoolId);
-        
-        // Validate minimum deposit
-        require!(principal_usd >= pool.min_deposit_usd, ErrorCode::InsufficientDeposit);
-        
-        // Validate APY range
-        require!(pool.apy_bp >= MIN_APY_BP && pool.apy_bp <= MAX_APY_BP, ErrorCode::InvalidApy);
-        
-        // Validate lock period
-        require!(pool.lock_months >= 12 && pool.lock_months <= 36, ErrorCode::InvalidLockPeriod);
+        // Validate input
+        require!(principal_usd > 0, ErrorCode::InvalidAmount);
 
-        // Generate wexel ID (in production, use proper ID generation)
-        let wexel_id = pool.total_wexels + 1;
-        
-        // Create new Wexel
-        let new_wexel = Wexel::new(
-            wexel_id,
-            user.key(),
-            pool_id,
-            principal_usd,
-            pool.apy_bp,
-            pool.lock_months,
-        );
-        wexel.set_inner(new_wexel);
+        // Initialize pool if first deposit
+        if pool.id == 0 {
+            pool.id = pool_id;
+            pool.apy_bp = APY_BP;
+            pool.created_at = clock.unix_timestamp;
+        }
 
-        // Update pool statistics
-        pool.total_liquidity = pool.total_liquidity
+        // Initialize wexel
+        wexel.id = pool_id;
+        wexel.owner = ctx.accounts.user.key();
+        wexel.principal_usd = principal_usd;
+        wexel.apy_bp = APY_BP;
+        wexel.apy_boost_bp = 0;
+        wexel.lock_period_months = 12; // Default 12 months
+        wexel.created_at = clock.unix_timestamp;
+        wexel.matured_at = clock.unix_timestamp + (12 * SECONDS_PER_MONTH) as i64;
+        wexel.is_collateralized = false;
+        wexel.is_finalized = false;
+        wexel.total_rewards = 0;
+        wexel.claimed_rewards = 0;
+
+        // Update pool
+        pool.total_deposits = pool.total_deposits
             .checked_add(principal_usd)
             .ok_or(ErrorCode::MathOverflow)?;
-        pool.total_wexels = pool.total_wexels
-            .checked_add(1)
-            .ok_or(ErrorCode::MathOverflow)?;
 
-        msg!("Deposit successful: wexel_id={}, principal_usd={}", wexel_id, principal_usd);
-        
-        // Emit event for deposit
+        // Emit event
         emit!(WexelCreated {
-            id: wexel_id,
-            owner: user.key(),
-            principal_usd,
+            id: wexel.id,
+            owner: wexel.owner,
+            principal_usd: wexel.principal_usd,
+            apy_bp: wexel.apy_bp,
+            lock_period_months: wexel.lock_period_months,
+            created_at: wexel.created_at,
         });
-        
+
         Ok(())
     }
 
-    pub fn apply_boost(ctx: Context<ApplyBoost>, wexel_id: u64, _token_mint: Pubkey, amount: u64) -> Result<()> {
+    pub fn apply_boost(ctx: Context<ApplyBoost>, wexel_id: u64, amount: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
-        let user = &ctx.accounts.user;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate input
+        require!(amount > 0, ErrorCode::InvalidAmount);
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Validate amount is positive
-        require!(amount > 0, ErrorCode::InvalidBoostAmount);
 
-        // Calculate boost target (30% of principal)
+        // Calculate boost APY
         let boost_target = (wexel.principal_usd * BOOST_TARGET_BP as u64) / 10000;
-        
-        // Calculate current boost value (simplified - in production, get from oracle)
-        // For now, assume 1:1 ratio for demonstration
-        let token_value_usd = amount; // TODO: Get actual price from oracle
-        
-        // Calculate total boost value including existing boost
-        let current_boost_value = (wexel.principal_usd * wexel.apy_boost_bp as u64) / 10000;
-        let total_boost_value = current_boost_value
-            .checked_add(token_value_usd)
-            .ok_or(ErrorCode::MathOverflow)?;
-        
-        // Check if boost target would be exceeded
-        require!(total_boost_value <= boost_target, ErrorCode::BoostTargetExceeded);
+        let boost_ratio = if boost_target > 0 {
+            amount.min(boost_target) as f64 / boost_target as f64
+        } else {
+            0.0
+        };
+        let boost_apy_bp = (boost_ratio * BOOST_APY_BP as f64) as u16;
 
-        // Calculate new boost APY (max 5%)
-        let new_boost_apy_bp = ((total_boost_value * 10000) / wexel.principal_usd)
-            .min(BOOST_MAX_BP as u64) as u16;
-        
-        // Update wexel with new boost APY
-        wexel.apy_boost_bp = new_boost_apy_bp;
+        // Update wexel
+        wexel.apy_boost_bp = boost_apy_bp;
 
-        msg!("Boost applied: wexel_id={}, new_boost_apy_bp={}, value_usd={}", 
-             wexel_id, new_boost_apy_bp, token_value_usd);
-        
-        // Emit event for boost application
+        // Emit event
         emit!(BoostApplied {
-            wexel_id,
-            apy_boost_bp: new_boost_apy_bp,
-            value_usd: token_value_usd,
+            wexel_id: wexel.id,
+            apy_boost_bp: boost_apy_bp,
+            value_usd: amount,
         });
-        
+
         Ok(())
     }
 
-    pub fn mint_wexel_finalize(ctx: Context<MintFinalize>, wexel_id: u64) -> Result<()> {
+    pub fn mint_wexel_finalize(ctx: Context<MintWexelFinalize>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
-        let user = &ctx.accounts.user;
+        let clock = Clock::get()?;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Check if already finalized (in production, add a flag for this)
-        // For now, we'll allow multiple finalizations but log it
-        msg!("Mint wexel finalize: wexel_id={}", wexel_id);
-        
-        // In production, this would:
-        // 1. Mint the actual NFT with metadata
-        // 2. Set finalization flag
-        // 3. Transfer ownership to user
-        
-        // Emit event for wexel finalization
+        require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
+        require!(clock.unix_timestamp >= wexel.matured_at, ErrorCode::WexelNotMatured);
+
+        // Finalize wexel
+        wexel.is_finalized = true;
+
+        // Emit event
         emit!(WexelFinalized {
-            wexel_id,
+            wexel_id: wexel.id,
+            finalized_at: clock.unix_timestamp,
         });
-        
+
         Ok(())
     }
 
     pub fn accrue(ctx: Context<Accrue>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
         let rewards_vault = &mut ctx.accounts.rewards_vault;
+        let clock = Clock::get()?;
 
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Check if wexel is still active (not expired)
-        let current_time = Clock::get()?.unix_timestamp;
-        require!(current_time < wexel.end_ts, ErrorCode::WexelNotMatured);
+        require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
 
-        // Calculate daily reward
-        let daily_reward = wexel.calculate_daily_reward();
-        
-        // Check if there are sufficient funds in rewards vault
-        require!(rewards_vault.balance >= daily_reward, ErrorCode::InsufficientDeposit);
+        // Calculate rewards
+        let days_elapsed = (clock.unix_timestamp - wexel.created_at) / SECONDS_PER_DAY as i64;
+        let total_apy_bp = wexel.apy_bp + wexel.apy_boost_bp;
+        let daily_reward = (wexel.principal_usd * total_apy_bp as u64) / (365 * 10000);
+        let total_rewards = daily_reward * days_elapsed as u64;
 
-        // Update wexel's total claimed amount
-        wexel.total_claimed_usd = wexel.total_claimed_usd
-            .checked_add(daily_reward)
+        // Update wexel
+        wexel.total_rewards = total_rewards;
+
+        // Update rewards vault
+        rewards_vault.total_rewards = rewards_vault.total_rewards
+            .checked_add(total_rewards)
             .ok_or(ErrorCode::MathOverflow)?;
 
-        // Transfer reward to wexel owner (in production, this would be a proper transfer)
-        // For now, we'll just update the vault balance
-        rewards_vault.balance = rewards_vault.balance
-            .checked_sub(daily_reward)
-            .ok_or(ErrorCode::MathOverflow)?;
-
-        msg!("Accrue successful: wexel_id={}, daily_reward={}", wexel_id, daily_reward);
-        
-        // Emit event for reward accrual
+        // Emit event
         emit!(Accrued {
-            wexel_id,
-            reward_usd: daily_reward,
+            wexel_id: wexel.id,
+            reward_usd: total_rewards,
+            accrued_at: clock.unix_timestamp,
         });
-        
+
         Ok(())
     }
 
     pub fn claim(ctx: Context<Claim>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
-        let user = &ctx.accounts.user;
+        let rewards_vault = &mut ctx.accounts.rewards_vault;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
+        require!(wexel.total_rewards > 0, ErrorCode::InvalidAmount);
 
-        // Calculate total available rewards
-        let current_time = Clock::get()?.unix_timestamp;
-        let days_elapsed = (current_time - wexel.start_ts) / SECONDS_PER_DAY;
-        let total_rewards = wexel.calculate_daily_reward() * days_elapsed as u64;
-        
-        // Calculate claimable amount (total rewards - already claimed)
-        let claimable_amount = total_rewards
-            .checked_sub(wexel.total_claimed_usd)
-            .unwrap_or(0);
-        
-        require!(claimable_amount > 0, ErrorCode::InsufficientDeposit);
+        // Calculate claimable amount
+        let claimable_amount = wexel.total_rewards - wexel.claimed_rewards;
+        require!(claimable_amount > 0, ErrorCode::InvalidAmount);
 
-        // Update claimed amount
-        wexel.total_claimed_usd = wexel.total_claimed_usd
+        // Update wexel
+        wexel.claimed_rewards = wexel.claimed_rewards
             .checked_add(claimable_amount)
             .ok_or(ErrorCode::MathOverflow)?;
 
-        msg!("Claim successful: wexel_id={}, amount={}", wexel_id, claimable_amount);
-        
-        // Emit event for claim
+        // Update rewards vault
+        rewards_vault.distributed_rewards = rewards_vault.distributed_rewards
+            .checked_add(claimable_amount)
+            .ok_or(ErrorCode::MathOverflow)?;
+
+        // Emit event
         emit!(Claimed {
-            wexel_id,
-            to: user.key(),
+            wexel_id: wexel.id,
+            to: ctx.accounts.user.key(),
             amount_usd: claimable_amount,
         });
-        
+
         Ok(())
     }
 
     pub fn collateralize(ctx: Context<Collateralize>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
         let collateral_position = &mut ctx.accounts.collateral_position;
-        let user = &ctx.accounts.user;
+        let clock = Clock::get()?;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Check if wexel is not already collateralized
-        require!(!wexel.is_collateralized, ErrorCode::AlreadyCollateralized);
+        require!(!wexel.is_collateralized, ErrorCode::WexelAlreadyCollateralized);
+        require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
 
-        // Calculate loan amount (60% of principal)
-        let loan_amount = wexel.calculate_loan_amount();
-        
-        // Create collateral position
-        let new_collateral = CollateralPosition::new(wexel_id, loan_amount);
-        collateral_position.set_inner(new_collateral);
-        
-        // Update wexel status
+        // Calculate loan amount
+        let loan_usd = (wexel.principal_usd * LTV_BP as u64) / 10000;
+        require!(loan_usd > 0, ErrorCode::InvalidLoanAmount);
+
+        // Initialize collateral position
+        collateral_position.wexel_id = wexel_id;
+        collateral_position.owner = ctx.accounts.user.key();
+        collateral_position.loan_usd = loan_usd;
+        collateral_position.ltv_bp = LTV_BP;
+        collateral_position.created_at = clock.unix_timestamp;
+        collateral_position.is_repaid = false;
+
+        // Update wexel
         wexel.is_collateralized = true;
 
-        msg!("Collateralize successful: wexel_id={}, loan_amount={}", wexel_id, loan_amount);
-        
-        // Emit event for collateralization
+        // Emit event
         emit!(Collateralized {
-            wexel_id,
-            loan_usd: loan_amount,
+            wexel_id: wexel.id,
+            loan_usd: loan_usd,
+            ltv_bp: LTV_BP,
         });
-        
+
         Ok(())
     }
 
-    pub fn repay_loan(ctx: Context<RepayLoan>, wexel_id: u64, amount: u64) -> Result<()> {
+    pub fn repay_loan(ctx: Context<RepayLoan>, wexel_id: u64, repay_amount: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
         let collateral_position = &mut ctx.accounts.collateral_position;
-        let user = &ctx.accounts.user;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Check if wexel is collateralized
-        require!(wexel.is_collateralized, ErrorCode::NotCollateralized);
-        
-        // Check if loan is not already repaid
-        require!(!collateral_position.repaid, ErrorCode::AlreadyCollateralized);
+        require!(wexel.is_collateralized, ErrorCode::WexelNotCollateralized);
+        require!(!collateral_position.is_repaid, ErrorCode::InvalidRepaymentAmount);
 
         // Validate repayment amount
-        require!(amount > 0, ErrorCode::InvalidBoostAmount);
-        require!(amount >= collateral_position.loan_usd, ErrorCode::InsufficientDeposit);
+        require!(repay_amount > 0, ErrorCode::InvalidAmount);
+        require!(repay_amount >= collateral_position.loan_usd, ErrorCode::InvalidRepaymentAmount);
 
-        // Mark loan as repaid
-        collateral_position.repaid = true;
-        
-        // Update wexel status (remove collateralization)
+        // Update collateral position
+        collateral_position.is_repaid = true;
+
+        // Update wexel
         wexel.is_collateralized = false;
 
-        msg!("Repay loan successful: wexel_id={}, amount={}", wexel_id, amount);
-        
-        // Emit event for loan repayment
+        // Emit event
         emit!(LoanRepaid {
-            wexel_id,
+            wexel_id: wexel.id,
+            repaid_amount: repay_amount,
         });
-        
+
         Ok(())
     }
 
     pub fn redeem(ctx: Context<Redeem>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
-        let user = &ctx.accounts.user;
+        let clock = Clock::get()?;
 
-        // Validate wexel ownership
-        require!(wexel.owner == user.key(), ErrorCode::Unauthorized);
-        
-        // Validate wexel ID matches
+        // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
-        
-        // Check if wexel has matured
-        let current_time = Clock::get()?.unix_timestamp;
-        require!(current_time >= wexel.end_ts, ErrorCode::WexelNotMatured);
+        require!(wexel.is_finalized, ErrorCode::WexelNotFinalized);
+        require!(clock.unix_timestamp >= wexel.matured_at, ErrorCode::WexelNotMatured);
 
-        // Calculate final rewards (if any remaining)
-        let days_elapsed = (wexel.end_ts - wexel.start_ts) / SECONDS_PER_DAY;
-        let total_rewards = wexel.calculate_daily_reward() * days_elapsed as u64;
-        let remaining_rewards = total_rewards
-            .checked_sub(wexel.total_claimed_usd)
-            .unwrap_or(0);
-
-        // In production, this would:
-        // 1. Transfer principal back to user
-        // 2. Transfer any remaining rewards
-        // 3. Burn or transfer the NFT
-        // 4. Clean up the wexel account
-
-        let principal_amount = wexel.principal_usd;
-
-        msg!("Redeem successful: wexel_id={}, principal={}, remaining_rewards={}", 
-             wexel_id, principal_amount, remaining_rewards);
-        
-        // Emit event for redemption
+        // Emit event
         emit!(Redeemed {
-            wexel_id,
-            principal_usd: principal_amount,
+            wexel_id: wexel.id,
+            principal_usd: wexel.principal_usd,
+            redeemed_at: clock.unix_timestamp,
         });
-        
+
         Ok(())
     }
 }
 
-// Account structures
-#[account]
-pub struct Pool {
-    pub id: u8,
-    pub apy_bp: u16,            // APY в базисных пунктах, напр. 1800 = 18%
-    pub lock_months: u8,        // 12..36
-    pub min_deposit_usd: u64,
-    pub total_liquidity: u64,
-    pub total_wexels: u64,
-    pub boost_target_bp: u16,   // 3000 = 30% от Principal
-    pub boost_max_bp: u16,      // 500 = +5% APY максимум
-}
-
-#[account]
-pub struct Wexel {
-    pub id: u64,
-    pub owner: Pubkey,
-    pub pool_id: u8,
-    pub principal_usd: u64,
-    pub apy_base_bp: u16,
-    pub apy_boost_bp: u16,
-    pub start_ts: i64,
-    pub end_ts: i64,
-    pub is_collateralized: bool,
-    pub total_claimed_usd: u64,
-}
-
-#[account]
-pub struct CollateralPosition {
-    pub wexel_id: u64,
-    pub loan_usd: u64,
-    pub start_ts: i64,
-    pub repaid: bool,
-}
-
-#[account]
-pub struct RewardsVault {
-    pub balance: u64,
-    pub total_distributed: u64,
-}
-
-// Event structures
-#[event]
-pub struct WexelCreated {
-    pub id: u64,
-    pub owner: Pubkey,
-    pub principal_usd: u64,
-}
-
-#[event]
-pub struct BoostApplied {
-    pub wexel_id: u64,
-    pub apy_boost_bp: u16,
-    pub value_usd: u64,
-}
-
-#[event]
-pub struct Accrued {
-    pub wexel_id: u64,
-    pub reward_usd: u64,
-}
-
-#[event]
-pub struct Claimed {
-    pub wexel_id: u64,
-    pub to: Pubkey,
-    pub amount_usd: u64,
-}
-
-#[event]
-pub struct Collateralized {
-    pub wexel_id: u64,
-    pub loan_usd: u64,
-}
-
-#[event]
-pub struct LoanRepaid {
-    pub wexel_id: u64,
-}
-
-#[event]
-pub struct Redeemed {
-    pub wexel_id: u64,
-    pub principal_usd: u64,
-}
-
-#[event]
-pub struct WexelFinalized {
-    pub wexel_id: u64,
-}
-
-// Context structures
+// Account contexts
 #[derive(Accounts)]
-pub struct Initialize {}
-
-#[derive(Accounts)]
+#[instruction(pool_id: u64, principal_usd: u64)]
 pub struct Deposit<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        init,
+        payer = user,
+        space = 8 + 8 + 8 + 8 + 2 + 8, // Pool::LEN
+        seeds = [b"pool", pool_id.to_le_bytes().as_ref()],
+        bump
+    )]
     pub pool: Account<'info, Pool>,
-    #[account(mut)]
+    #[account(
+        init,
+        payer = user,
+        space = 8 + 8 + 32 + 8 + 2 + 2 + 1 + 8 + 8 + 1 + 1 + 8 + 8, // Wexel::LEN
+        seeds = [b"wexel", user.key().as_ref(), pool_id.to_le_bytes().as_ref()],
+        bump
+    )]
     pub wexel: Account<'info, Wexel>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64, amount: u64)]
 pub struct ApplyBoost<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
-    pub token_mint: Account<'info, anchor_spl::token::Mint>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
-pub struct MintFinalize<'info> {
+#[instruction(wexel_id: u64)]
+pub struct MintWexelFinalize<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64)]
 pub struct Accrue<'info> {
     #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
-    #[account(mut)]
+    #[account(
+        init,
+        payer = user,
+        space = 8 + 8 + 8, // RewardsVault::LEN
+        seeds = [b"rewards_vault", wexel_id.to_le_bytes().as_ref()],
+        bump
+    )]
     pub rewards_vault: Account<'info, RewardsVault>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64)]
 pub struct Claim<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
+    #[account(
+        mut,
+        constraint = rewards_vault.key() == Pubkey::find_program_address(
+            &[b"rewards_vault", wexel_id.to_le_bytes().as_ref()],
+            &crate::ID
+        ).0
+    )]
+    pub rewards_vault: Account<'info, RewardsVault>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64)]
 pub struct Collateralize<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
-    #[account(mut)]
+    #[account(
+        init,
+        payer = user,
+        space = 8 + 8 + 32 + 8 + 2 + 8 + 1, // CollateralPosition::LEN
+        seeds = [b"collateral", wexel_id.to_le_bytes().as_ref()],
+        bump
+    )]
     pub collateral_position: Account<'info, CollateralPosition>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64, repay_amount: u64)]
 pub struct RepayLoan<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = collateral_position.wexel_id == wexel_id @ solana_contracts::ErrorCode::WexelNotFound
+    )]
     pub collateral_position: Account<'info, CollateralPosition>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
+#[instruction(wexel_id: u64)]
 pub struct Redeem<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = wexel.owner == user.key() @ solana_contracts::ErrorCode::Unauthorized
+    )]
     pub wexel: Account<'info, Wexel>,
     pub system_program: Program<'info, System>,
-}
-
-// Utility functions
-impl Pool {
-    pub const LEN: usize = 8 + 1 + 2 + 1 + 8 + 8 + 8 + 2 + 2; // 48 bytes
-
-    pub fn new(id: u8, apy_bp: u16, lock_months: u8, min_deposit_usd: u64) -> Self {
-        Self {
-            id,
-            apy_bp,
-            lock_months,
-            min_deposit_usd,
-            total_liquidity: 0,
-            total_wexels: 0,
-            boost_target_bp: BOOST_TARGET_BP,
-            boost_max_bp: BOOST_MAX_BP,
-        }
-    }
-}
-
-impl Wexel {
-    pub const LEN: usize = 8 + 8 + 32 + 1 + 8 + 2 + 2 + 8 + 8 + 1 + 8; // 88 bytes
-
-    pub fn new(
-        id: u64,
-        owner: Pubkey,
-        pool_id: u8,
-        principal_usd: u64,
-        apy_base_bp: u16,
-        lock_months: u8,
-    ) -> Self {
-        let now = Clock::get().unwrap().unix_timestamp;
-        let lock_seconds = (lock_months as i64) * SECONDS_PER_MONTH;
-        
-        Self {
-            id,
-            owner,
-            pool_id,
-            principal_usd,
-            apy_base_bp,
-            apy_boost_bp: 0,
-            start_ts: now,
-            end_ts: now + lock_seconds,
-            is_collateralized: false,
-            total_claimed_usd: 0,
-        }
-    }
-
-    pub fn calculate_daily_reward(&self) -> u64 {
-        let total_apy_bp = self.apy_base_bp + self.apy_boost_bp;
-        (self.principal_usd * total_apy_bp as u64) / (365 * 10000)
-    }
-
-    pub fn calculate_loan_amount(&self) -> u64 {
-        (self.principal_usd * LTV_BP as u64) / 10000
-    }
-}
-
-impl CollateralPosition {
-    pub const LEN: usize = 8 + 8 + 8 + 8 + 1; // 33 bytes
-
-    pub fn new(wexel_id: u64, loan_usd: u64) -> Self {
-        Self {
-            wexel_id,
-            loan_usd,
-            start_ts: Clock::get().unwrap().unix_timestamp,
-            repaid: false,
-        }
-    }
 }
