@@ -35,7 +35,7 @@ const itemVariants: Variants = {
   },
 };
 
-export function AnimatedList({ children, className, staggerDelay = 0.1 }: AnimatedListProps) {
+export function AnimatedList({ children, className }: AnimatedListProps) {
   return (
     <motion.div variants={listVariants} initial="hidden" animate="visible" className={className}>
       {Array.isArray(children) ? (

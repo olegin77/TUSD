@@ -15,14 +15,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
-  Filter,
   TrendingUp,
-  Clock,
-  Shield,
   Eye,
-  DollarSign,
-  Calendar,
-  Zap,
 } from "lucide-react";
 
 export default function MarketplacePage() {
