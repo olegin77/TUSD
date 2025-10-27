@@ -13,17 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Search,
-  Filter,
-  TrendingUp,
-  Clock,
-  Shield,
-  Eye,
-  DollarSign,
-  Calendar,
-  Zap,
-} from "lucide-react";
+import { Search, TrendingUp, Eye } from "lucide-react";
 
 export default function MarketplacePage() {
   const [searchTerm, setSearchTerm] = useState("");

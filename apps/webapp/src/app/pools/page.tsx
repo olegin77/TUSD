@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Clock, TrendingUp, Shield, Info, Calculator, Zap } from "lucide-react";
+import { Clock, Info, Calculator, Zap } from "lucide-react";
 
 export default function PoolsPage() {
   const [selectedPool, setSelectedPool] = useState<number | null>(null);

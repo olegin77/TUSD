@@ -9,7 +9,6 @@ import {
   Shield,
   Zap,
   DollarSign,
-  Users,
   BarChart3,
   ArrowRight,
   Star,

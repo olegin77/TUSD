@@ -51,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       size,
       asChild = false,
-      animate = true,
+      // animate = true,
       loading = false,
       loadingText = "Loading...",
       children,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function A11yTest() {
   const [results, setResults] = useState<any[]>([]);
@@ -13,7 +13,7 @@ export function A11yTest() {
     setResults([]);
 
     try {
-      const axe = (await import("@axe-core/react")).default;
+      // const axe = (await import("@axe-core/react")).default;
       const { run } = await import("axe-core");
 
       const violations = await run(document);
