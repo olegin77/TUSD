@@ -1,0 +1,28 @@
+{
+  "tasks": {
+    "create-pr": {
+      "command": "./scripts/create-pr.sh",
+      "args": ["${taskName}", "${description}"],
+      "description": "Create PR for completed task",
+      "autoRun": true,
+      "onComplete": "create-pr"
+    }
+  },
+  "workflows": {
+    "complete-task": {
+      "steps": [
+        {
+          "name": "validate-code",
+          "command": "pnpm lint && pnpm build",
+          "description": "Validate code quality"
+        },
+        {
+          "name": "create-pr",
+          "command": "./scripts/create-pr.sh",
+          "args": ["${taskName}", "${description}"],
+          "description": "Create PR automatically"
+        }
+      ]
+    }
+  }
+}
