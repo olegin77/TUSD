@@ -73,3 +73,28 @@ $DESCRIPTION
 
 echo "✅ PR created successfully!"
 echo "🔗 View PR: https://github.com/$(gh repo view --json owner,name -q '.owner.login + "/" + .name')/compare/$BRANCH_NAME"
+
+# Enhanced PR creation with better error handling
+echo "🔍 Checking repository status..."
+
+# Verify we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ Error: Not in a git repository"
+    exit 1
+fi
+
+# Check if GitHub CLI is available
+if ! command -v gh &> /dev/null; then
+    echo "❌ Error: GitHub CLI (gh) is not installed"
+    echo "Please install it from: https://cli.github.com/"
+    exit 1
+fi
+
+# Check if user is authenticated
+if ! gh auth status &> /dev/null; then
+    echo "❌ Error: Not authenticated with GitHub"
+    echo "Please run: gh auth login"
+    exit 1
+fi
+
+echo "✅ All checks passed!"
