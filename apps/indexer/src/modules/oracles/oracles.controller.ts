@@ -33,9 +33,9 @@ export class OraclesController {
       return {
         success: true,
         data: {
-          tokenMint: price.tokenMint,
-          priceUsd: price.priceUsd,
-          source: price.source,
+          tokenMint: mint,
+          priceUsd: price.price,
+          sources: price.sources,
           timestamp: price.timestamp,
           confidence: price.confidence,
         },

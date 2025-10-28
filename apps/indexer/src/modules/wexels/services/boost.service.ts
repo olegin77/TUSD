@@ -77,7 +77,7 @@ export class BoostService {
         };
       }
 
-      const priceUsd = priceData.priceUsd;
+      const priceUsd = priceData.price;
       const valueUsd = (Number(amount) / 1e6) * priceUsd; // Convert from micro-units
 
       // Calculate boost target (30% of principal)

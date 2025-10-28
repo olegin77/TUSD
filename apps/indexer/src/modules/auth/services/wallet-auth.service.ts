@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../database/prisma.service';
 import * as nacl from 'tweetnacl';
-import * as bs58 from 'bs58';
+import bs58 from 'bs58';
 import { WalletLoginDto, WalletType } from '../dto/wallet-login.dto';
 // M-5 fix: Import TronWeb for Tron signature verification
 import TronWeb from 'tronweb';
@@ -101,6 +101,7 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
   ): boolean {
     try {
       // Initialize TronWeb (no need for full nodes for signature verification)
+      // @ts-ignore - TronWeb constructor types are not accurate
       const tronWeb = new TronWeb({
         fullHost: 'https://api.trongrid.io', // Mainnet (can be changed to testnet)
       });

@@ -5,7 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useTron } from "@/providers/TronProvider";
 import { useMultiWallet } from "@/providers/MultiWalletProvider";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge"; // Currently unused
 import { Wallet, WalletIcon, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
