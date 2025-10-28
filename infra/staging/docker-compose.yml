@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: usdx-postgres-staging
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-usdx_staging}
+      POSTGRES_USER: ${POSTGRES_USER:-usdx_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-scram-sha-256}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - usdx-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-usdx_user} -d ${POSTGRES_DB:-usdx_staging}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: usdx-redis-staging
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - usdx-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend/Indexer API
+  indexer:
+    build:
+      context: ../../
+      dockerfile: apps/indexer/Dockerfile
+      target: production
+    container_name: usdx-indexer-staging
+    restart: unless-stopped
+    env_file:
+      - ../../.env.staging
+    environment:
+      NODE_ENV: staging
+      DATABASE_URL: postgresql://${POSTGRES_USER:-usdx_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-usdx_staging}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      API_PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - usdx-network
+    volumes:
+      - indexer_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend/Webapp
+  webapp:
+    build:
+      context: ../../
+      dockerfile: apps/webapp/Dockerfile
+      target: production
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SOLANA_NETWORK: ${NEXT_PUBLIC_SOLANA_NETWORK:-devnet}
+        NEXT_PUBLIC_TRON_NETWORK: ${NEXT_PUBLIC_TRON_NETWORK:-nile}
+    container_name: usdx-webapp-staging
+    restart: unless-stopped
+    environment:
+      NODE_ENV: staging
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - indexer
+    networks:
+      - usdx-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: usdx-nginx-staging
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - webapp
+      - indexer
+    networks:
+      - usdx-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  indexer_logs:
+    driver: local
+  nginx_logs:
+    driver: local
+
+networks:
+  usdx-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

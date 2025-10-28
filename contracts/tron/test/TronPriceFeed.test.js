@@ -7,7 +7,7 @@ contract("TronPriceFeed", (accounts) => {
 
   beforeEach(async () => {
     priceFeed = await TronPriceFeed.new({ from: owner });
-    
+
     // Grant ORACLE_ROLE
     const ORACLE_ROLE = web3.utils.keccak256("ORACLE_ROLE");
     await priceFeed.grantRole(ORACLE_ROLE, oracle, { from: owner });
@@ -16,7 +16,7 @@ contract("TronPriceFeed", (accounts) => {
   describe("Token Management", () => {
     it("should add a token", async () => {
       await priceFeed.addToken(tokenAddress, { from: owner });
-      
+
       const tokens = await priceFeed.getSupportedTokens();
       assert.equal(tokens.length, 1, "Should have 1 token");
       assert.equal(tokens[0], tokenAddress, "Token address mismatch");
@@ -24,7 +24,7 @@ contract("TronPriceFeed", (accounts) => {
 
     it("should not allow duplicate tokens", async () => {
       await priceFeed.addToken(tokenAddress, { from: owner });
-      
+
       try {
         await priceFeed.addToken(tokenAddress, { from: owner });
         assert.fail("Should have thrown");
@@ -35,7 +35,7 @@ contract("TronPriceFeed", (accounts) => {
 
     it("should not allow invalid token address", async () => {
       const zeroAddress = "0x" + "0".repeat(40);
-      
+
       try {
         await priceFeed.addToken(zeroAddress, { from: owner });
         assert.fail("Should have thrown");
@@ -55,14 +55,8 @@ contract("TronPriceFeed", (accounts) => {
     });
 
     it("should update price", async () => {
-      await priceFeed.updatePrice(
-        tokenAddress,
-        price,
-        confidence,
-        sources,
-        { from: oracle }
-      );
-      
+      await priceFeed.updatePrice(tokenAddress, price, confidence, sources, { from: oracle });
+
       const priceData = await priceFeed.getPriceData(tokenAddress);
       assert.equal(priceData.price.toNumber(), price, "Price mismatch");
       assert.equal(priceData.confidence.toNumber(), confidence, "Confidence mismatch");
@@ -71,13 +65,7 @@ contract("TronPriceFeed", (accounts) => {
 
     it("should not allow non-oracle to update price", async () => {
       try {
-        await priceFeed.updatePrice(
-          tokenAddress,
-          price,
-          confidence,
-          sources,
-          { from: user }
-        );
+        await priceFeed.updatePrice(tokenAddress, price, confidence, sources, { from: user });
         assert.fail("Should have thrown");
       } catch (error) {
         assert.include(error.message, "AccessControl");
@@ -116,25 +104,15 @@ contract("TronPriceFeed", (accounts) => {
 
     it("should reject high price deviation", async () => {
       // Set initial price
-      await priceFeed.updatePrice(
-        tokenAddress,
-        price,
-        confidence,
-        sources,
-        { from: oracle }
-      );
-      
+      await priceFeed.updatePrice(tokenAddress, price, confidence, sources, { from: oracle });
+
       // Try to update with 10% deviation (default max is 1.5%)
       const deviatedPrice = price * 1.1; // 10% higher
-      
+
       try {
-        await priceFeed.updatePrice(
-          tokenAddress,
-          deviatedPrice,
-          confidence,
-          sources,
-          { from: oracle }
-        );
+        await priceFeed.updatePrice(tokenAddress, deviatedPrice, confidence, sources, {
+          from: oracle,
+        });
         assert.fail("Should have thrown");
       } catch (error) {
         assert.include(error.message, "Price deviation too high");
@@ -151,13 +129,8 @@ contract("TronPriceFeed", (accounts) => {
     });
 
     it("should set manual price", async () => {
-      await priceFeed.setManualPrice(
-        tokenAddress,
-        price,
-        reason,
-        { from: owner }
-      );
-      
+      await priceFeed.setManualPrice(tokenAddress, price, reason, { from: owner });
+
       const priceData = await priceFeed.getPriceData(tokenAddress);
       assert.equal(priceData.price.toNumber(), price, "Price mismatch");
       assert.equal(priceData.isValid, true, "Price should be valid");
@@ -179,12 +152,7 @@ contract("TronPriceFeed", (accounts) => {
 
     it("should not allow non-admin manual price", async () => {
       try {
-        await priceFeed.setManualPrice(
-          tokenAddress,
-          price,
-          reason,
-          { from: user }
-        );
+        await priceFeed.setManualPrice(tokenAddress, price, reason, { from: user });
         assert.fail("Should have thrown");
       } catch (error) {
         assert.include(error.message, "AccessControl");
@@ -199,18 +167,12 @@ contract("TronPriceFeed", (accounts) => {
 
     beforeEach(async () => {
       await priceFeed.addToken(tokenAddress, { from: owner });
-      await priceFeed.updatePrice(
-        tokenAddress,
-        price,
-        confidence,
-        sources,
-        { from: oracle }
-      );
+      await priceFeed.updatePrice(tokenAddress, price, confidence, sources, { from: oracle });
     });
 
     it("should get price", async () => {
       const result = await priceFeed.getPrice(tokenAddress);
-      
+
       assert.equal(result.price.toNumber(), price, "Price mismatch");
       assert.equal(result.isValid, true, "Price should be valid");
     });
@@ -218,7 +180,7 @@ contract("TronPriceFeed", (accounts) => {
     it("should get multiple prices", async () => {
       const tokens = [tokenAddress];
       const result = await priceFeed.getPrices(tokens);
-      
+
       assert.equal(result[0][0].toNumber(), price, "Price mismatch");
       assert.equal(result[2][0], true, "Price should be valid");
     });
@@ -235,12 +197,12 @@ contract("TronPriceFeed", (accounts) => {
     it("should update config", async () => {
       const newDeviation = 200; // 2%
       const newThreshold = 600; // 10 minutes
-      
+
       await priceFeed.updateConfig(newDeviation, newThreshold, { from: owner });
-      
+
       const maxDeviation = await priceFeed.maxDeviationBP();
       const staleThreshold = await priceFeed.stalePriceThreshold();
-      
+
       assert.equal(maxDeviation.toNumber(), newDeviation, "Deviation mismatch");
       assert.equal(staleThreshold.toNumber(), newThreshold, "Threshold mismatch");
     });

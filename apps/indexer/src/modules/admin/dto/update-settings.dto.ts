@@ -16,7 +16,9 @@ export class UpdateSettingsDto {
   @IsOptional()
   @IsInt()
   @Min(0, { message: 'Marketplace fee must be at least 0 basis points' })
-  @Max(1000, { message: 'Marketplace fee cannot exceed 1000 basis points (10%)' })
+  @Max(1000, {
+    message: 'Marketplace fee cannot exceed 1000 basis points (10%)',
+  })
   marketplace_fee_bp?: number;
 
   @IsOptional()
@@ -52,6 +54,8 @@ export class UpdateSettingsDto {
   @IsInt()
   @IsPositive()
   @Min(1, { message: 'Timelock delay must be at least 1 second' })
-  @Max(604800, { message: 'Timelock delay cannot exceed 7 days (604800 seconds)' })
+  @Max(604800, {
+    message: 'Timelock delay cannot exceed 7 days (604800 seconds)',
+  })
   timelock_delay_seconds?: number;
 }

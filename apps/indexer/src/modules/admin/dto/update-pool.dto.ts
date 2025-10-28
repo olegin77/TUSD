@@ -37,7 +37,9 @@ export class UpdatePoolDto {
   @IsInt()
   @IsPositive()
   @Min(0, { message: 'Boost target must be at least 0 basis points' })
-  @Max(10000, { message: 'Boost target cannot exceed 10000 basis points (100%)' })
+  @Max(10000, {
+    message: 'Boost target cannot exceed 10000 basis points (100%)',
+  })
   boost_target_bp?: number;
 
   @IsOptional()

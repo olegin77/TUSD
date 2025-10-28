@@ -12,7 +12,7 @@ contract("TronDepositVault", (accounts) => {
   describe("Pool Management", () => {
     it("should create a pool", async () => {
       await vault.createPool(1, 1800, 12, 100 * 1e6, { from: owner });
-      
+
       const pool = await vault.getPool(1);
       assert.equal(pool.id, 1, "Pool ID mismatch");
       assert.equal(pool.apyBasisPoints, 1800, "APY mismatch");
@@ -22,7 +22,7 @@ contract("TronDepositVault", (accounts) => {
 
     it("should not allow duplicate pool IDs", async () => {
       await vault.createPool(1, 1800, 12, 100 * 1e6, { from: owner });
-      
+
       try {
         await vault.createPool(1, 2400, 24, 200 * 1e6, { from: owner });
         assert.fail("Should have thrown");
@@ -34,7 +34,7 @@ contract("TronDepositVault", (accounts) => {
     it("should update pool status", async () => {
       await vault.createPool(1, 1800, 12, 100 * 1e6, { from: owner });
       await vault.updatePoolStatus(1, false, { from: owner });
-      
+
       const pool = await vault.getPool(1);
       assert.equal(pool.isActive, false, "Pool should be inactive");
     });
@@ -61,10 +61,10 @@ contract("TronDepositVault", (accounts) => {
     it("should record deposit metadata", async () => {
       // Note: In actual test, would need to mock USDT approval
       // This test focuses on contract logic
-      
+
       const stats = await vault.getStats();
       const initialDeposits = stats[0].toNumber();
-      
+
       // Verify pool exists and is active
       const pool = await vault.getPool(poolId);
       assert.equal(pool.isActive, true, "Pool should be active");
@@ -72,7 +72,7 @@ contract("TronDepositVault", (accounts) => {
 
     it("should reject deposit below minimum", async () => {
       const belowMin = 50 * 1e6; // $50
-      
+
       try {
         await vault.depositUSDT(poolId, belowMin, solanaOwner, { from: user1 });
         assert.fail("Should have thrown");
@@ -83,7 +83,7 @@ contract("TronDepositVault", (accounts) => {
 
     it("should reject deposit to inactive pool", async () => {
       await vault.updatePoolStatus(poolId, false, { from: owner });
-      
+
       try {
         await vault.depositUSDT(poolId, depositAmount, solanaOwner, { from: user1 });
         assert.fail("Should have thrown");
@@ -94,7 +94,7 @@ contract("TronDepositVault", (accounts) => {
 
     it("should reject deposit with invalid Solana owner", async () => {
       const invalidOwner = "0x" + "0".repeat(64);
-      
+
       try {
         await vault.depositUSDT(poolId, depositAmount, invalidOwner, { from: user1 });
         assert.fail("Should have thrown");
@@ -108,7 +108,7 @@ contract("TronDepositVault", (accounts) => {
     it("should grant BRIDGE_ROLE", async () => {
       const BRIDGE_ROLE = web3.utils.keccak256("BRIDGE_ROLE");
       await vault.grantRole(BRIDGE_ROLE, bridge, { from: owner });
-      
+
       const hasRole = await vault.hasRole(BRIDGE_ROLE, bridge);
       assert.equal(hasRole, true, "Bridge should have BRIDGE_ROLE");
     });
@@ -116,7 +116,7 @@ contract("TronDepositVault", (accounts) => {
     it("should allow bridge to mark deposit as processed", async () => {
       const BRIDGE_ROLE = web3.utils.keccak256("BRIDGE_ROLE");
       await vault.grantRole(BRIDGE_ROLE, bridge, { from: owner });
-      
+
       // Would need actual deposit first in real test
       // This test verifies role check works
       try {
@@ -131,13 +131,13 @@ contract("TronDepositVault", (accounts) => {
   describe("Pause Functionality", () => {
     it("should pause deposits", async () => {
       await vault.pause({ from: owner });
-      
+
       const poolId = 1;
       const depositAmount = 100 * 1e6;
       const solanaOwner = "0x" + "1".repeat(64);
-      
+
       await vault.createPool(poolId, 1800, 12, 100 * 1e6, { from: owner });
-      
+
       try {
         await vault.depositUSDT(poolId, depositAmount, solanaOwner, { from: user1 });
         assert.fail("Should have thrown");
@@ -149,7 +149,7 @@ contract("TronDepositVault", (accounts) => {
     it("should unpause deposits", async () => {
       await vault.pause({ from: owner });
       await vault.unpause({ from: owner });
-      
+
       // Verify contract is unpaused (deposits would work)
       const paused = await vault.paused();
       assert.equal(paused, false, "Contract should be unpaused");
@@ -159,7 +159,7 @@ contract("TronDepositVault", (accounts) => {
   describe("Statistics", () => {
     it("should return correct stats", async () => {
       const stats = await vault.getStats();
-      
+
       assert.equal(stats[0].toNumber(), 0, "Total deposits should be 0");
       assert.equal(stats[1].toNumber(), 0, "Total amount should be 0");
       assert.equal(stats[2].toNumber(), 1, "Next ID should be 1");
@@ -168,7 +168,7 @@ contract("TronDepositVault", (accounts) => {
     it("should get all pools", async () => {
       await vault.createPool(1, 1800, 12, 100 * 1e6, { from: owner });
       await vault.createPool(2, 2400, 24, 200 * 1e6, { from: owner });
-      
+
       const poolIds = await vault.getAllPools();
       assert.equal(poolIds.length, 2, "Should have 2 pools");
       assert.equal(poolIds[0], 1, "First pool ID should be 1");
@@ -180,7 +180,7 @@ contract("TronDepositVault", (accounts) => {
     it("should update minimum deposit", async () => {
       const newMin = 200 * 1e6;
       await vault.updateMinDeposit(newMin, { from: owner });
-      
+
       const minDeposit = await vault.minDepositAmount();
       assert.equal(minDeposit.toNumber(), newMin, "Min deposit should be updated");
     });

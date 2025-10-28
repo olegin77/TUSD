@@ -3,17 +3,20 @@
 ## Созданные Файлы
 
 ### Docker
+
 - ✅ `apps/indexer/Dockerfile` - Backend (NestJS)
 - ✅ `apps/webapp/Dockerfile` - Frontend (Next.js)
 - ✅ `apps/indexer/.dockerignore`
 - ✅ `apps/webapp/.dockerignore`
 
 ### Деплой
+
 - ✅ `deploy.sh` - **Главный скрипт автоматического деплоя**
 - ✅ `.env.production.example` - Шаблон для production
 - ✅ `.env.staging.example` - Шаблон для staging
 
 ### Документация
+
 - ✅ `DEPLOYMENT_GUIDE.md` - Полное руководство (500+ строк)
 - ✅ `QUICK_DEPLOY.md` - Краткая инструкция
 - ✅ `DEPLOYMENT_AUTOMATION_REPORT.md` - Отчет о проделанной работе
@@ -194,6 +197,7 @@ pnpm prisma:migrate:deploy
 ## ✅ Готово!
 
 Теперь у вас есть:
+
 - 🐳 Production-ready Docker образы
 - 🚀 Автоматический deployment script
 - 📖 Полная документация

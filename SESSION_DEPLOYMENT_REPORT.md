@@ -119,24 +119,24 @@
 
 ### Код и Конфигурация
 
-| Файл | Строк | Тип | Назначение |
-|------|-------|-----|------------|
-| deploy.sh | 513 | Bash | Automation script |
-| apps/indexer/Dockerfile | 93 | Docker | Backend image |
-| apps/webapp/Dockerfile | 103 | Docker | Frontend image |
-| .env.production.example | 100 | Config | Production vars |
-| .env.staging.example | 80 | Config | Staging vars |
-| **ИТОГО** | **889** | - | Core files |
+| Файл                    | Строк   | Тип    | Назначение        |
+| ----------------------- | ------- | ------ | ----------------- |
+| deploy.sh               | 513     | Bash   | Automation script |
+| apps/indexer/Dockerfile | 93      | Docker | Backend image     |
+| apps/webapp/Dockerfile  | 103     | Docker | Frontend image    |
+| .env.production.example | 100     | Config | Production vars   |
+| .env.staging.example    | 80      | Config | Staging vars      |
+| **ИТОГО**               | **889** | -      | Core files        |
 
 ### Документация
 
-| Файл | Строк | Назначение |
-|------|-------|------------|
-| DEPLOYMENT_GUIDE.md | 616 | Full guide |
-| DEPLOYMENT_AUTOMATION_REPORT.md | 420 | Technical report |
-| QUICK_DEPLOY.md | 196 | Quick start |
-| DEPLOY_README.md | 180 | Overview |
-| **ИТОГО** | **1,412** | Documentation |
+| Файл                            | Строк     | Назначение       |
+| ------------------------------- | --------- | ---------------- |
+| DEPLOYMENT_GUIDE.md             | 616       | Full guide       |
+| DEPLOYMENT_AUTOMATION_REPORT.md | 420       | Technical report |
+| QUICK_DEPLOY.md                 | 196       | Quick start      |
+| DEPLOY_README.md                | 180       | Overview         |
+| **ИТОГО**                       | **1,412** | Documentation    |
 
 ### Общая Статистика
 
@@ -186,6 +186,7 @@
 **Исходная проблема**: Пользователь сообщил, что при сборке ругается на существующие Dockerfile в ветке main
 
 **Проведенное исследование**:
+
 ```bash
 git ls-tree -r main --name-only | grep -i dockerfile
 # Result: Нет совпадений
@@ -200,6 +201,7 @@ git ls-tree -r main --name-only | grep -i dockerfile
 **Исходная проблема**: Нужен скрипт для быстрого и безопасного деплоя
 
 **Решение**: Создан comprehensive deployment script (513 строк) с:
+
 - Автоматической проверкой зависимостей
 - Валидацией окружения
 - Backup и rollback механизмами
@@ -342,30 +344,30 @@ cd /workspace && ./deploy.sh --env production --tag v1.0.0
 
 ### Размеры Docker Images
 
-| Image | Размер | Оптимизация |
-|-------|--------|-------------|
-| indexer | ~250 MB | Alpine + multi-stage |
-| webapp | ~200 MB | Alpine + standalone |
-| postgres | ~380 MB | Official |
-| redis | ~40 MB | Alpine |
-| **Total** | ~870 MB | |
+| Image     | Размер  | Оптимизация          |
+| --------- | ------- | -------------------- |
+| indexer   | ~250 MB | Alpine + multi-stage |
+| webapp    | ~200 MB | Alpine + standalone  |
+| postgres  | ~380 MB | Official             |
+| redis     | ~40 MB  | Alpine               |
+| **Total** | ~870 MB |                      |
 
 ### Время Деплоя
 
-| Режим | Время |
-|-------|-------|
-| Полный (с тестами) | ~10-15 мин |
-| Быстрый (без тестов) | ~6-9 мин |
-| Hotfix | ~3-5 мин |
+| Режим                | Время      |
+| -------------------- | ---------- |
+| Полный (с тестами)   | ~10-15 мин |
+| Быстрый (без тестов) | ~6-9 мин   |
+| Hotfix               | ~3-5 мин   |
 
 ### Время Сборки
 
-| Этап | Время |
-|------|-------|
-| Build backend | ~2-3 мин |
-| Build frontend | ~3-5 мин |
-| Migrations | ~10-30 сек |
-| Health checks | ~30-60 сек |
+| Этап           | Время      |
+| -------------- | ---------- |
+| Build backend  | ~2-3 мин   |
+| Build frontend | ~3-5 мин   |
+| Migrations     | ~10-30 сек |
+| Health checks  | ~30-60 сек |
 
 ---
 
@@ -466,6 +468,7 @@ docker logs -f usdx-indexer
 ✅ **Все задачи из запроса пользователя выполнены успешно!**
 
 Создано:
+
 - 🐳 2 production-ready Dockerfile
 - 🚀 1 comprehensive deployment script (513 строк)
 - 📖 4 документа (1,400+ строк)

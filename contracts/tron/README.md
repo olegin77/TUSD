@@ -160,12 +160,14 @@ const TronPriceFeed = artifacts.require("TronPriceFeed");
 const priceFeed = await TronPriceFeed.at(PRICE_FEED_ADDRESS);
 
 // Update price (oracle role required)
-await priceFeed.updatePrice(
-  tokenAddress,
-  priceInUsd,     // 8 decimals
-  confidence,      // 0-10000
-  sources
-).send();
+await priceFeed
+  .updatePrice(
+    tokenAddress,
+    priceInUsd, // 8 decimals
+    confidence, // 0-10000
+    sources
+  )
+  .send();
 ```
 
 ### Bridge Message
@@ -176,12 +178,7 @@ const BridgeProxy = artifacts.require("BridgeProxy");
 const bridge = await BridgeProxy.at(BRIDGE_ADDRESS);
 
 // Bridge a deposit
-await bridge.bridgeDeposit(
-  depositId,
-  solanaOwner,
-  amount,
-  poolId
-).send();
+await bridge.bridgeDeposit(depositId, solanaOwner, amount, poolId).send();
 ```
 
 ## 🔐 Security
@@ -189,22 +186,26 @@ await bridge.bridgeDeposit(
 ### Roles
 
 #### TronDepositVault
+
 - `DEFAULT_ADMIN_ROLE` - Full admin control
 - `ADMIN_ROLE` - Pool management, pause
 - `BRIDGE_ROLE` - Mark deposits as processed
 
 #### TronPriceFeed
+
 - `DEFAULT_ADMIN_ROLE` - Full admin control
 - `ADMIN_ROLE` - Configuration updates
 - `ORACLE_ROLE` - Price updates
 
 #### BridgeProxy
+
 - `DEFAULT_ADMIN_ROLE` - Full admin control
 - `ADMIN_ROLE` - Configuration, pause
 - `BRIDGE_ROLE` - Create messages
 - `VALIDATOR_ROLE` - Confirm messages
 
 #### TronWexel721
+
 - `DEFAULT_ADMIN_ROLE` - Full admin control
 - `ADMIN_ROLE` - Pause functionality
 - `MINTER_ROLE` - Mint and update NFTs
@@ -318,6 +319,7 @@ These smart contracts are provided "as is" without warranty of any kind. Use at 
 ## 📞 Support
 
 For questions or issues:
+
 - Open an issue on GitHub
 - Contact the development team
 - Check the main project documentation

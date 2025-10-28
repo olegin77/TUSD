@@ -16,6 +16,7 @@ import { MarketplaceModule } from './modules/marketplace/marketplace.module';
 import { IndexerModule } from './modules/indexer/indexer.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { TronModule } from './modules/tron/tron.module';
 import { SentryModule } from './common/sentry/sentry.module';
 import { MetricsModule } from './common/monitoring/metrics.module';
 import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
@@ -51,6 +52,7 @@ import { validationSchema } from './common/config/validation.schema';
     IndexerModule,
     NotificationsModule,
     AdminModule,
+    TronModule,
   ],
   controllers: [AppController],
   providers: [
