@@ -3,9 +3,21 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../database/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { AdminLoginDto } from './dto/admin-login.dto';
 
 @Injectable()
 export class AuthService {
+  // In-memory admin users for demo (should be in database in production)
+  private readonly adminUsers = [
+    {
+      id: 'admin-1',
+      username: 'admin',
+      password: 'admin123', // In production, use bcrypt hash
+      role: 'ADMIN',
+      email: 'admin@wexel.io',
+    },
+  ];
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -108,5 +120,59 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
+  }
+
+  /**
+   * Admin login with username and password
+   */
+  async adminLogin(adminLoginDto: AdminLoginDto) {
+    const { username, password } = adminLoginDto;
+
+    // Find admin user
+    const adminUser = this.adminUsers.find((u) => u.username === username);
+    if (!adminUser) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Verify password
+    // For demo purposes, accept plain text password
+    // In production, use bcrypt.compare(password, adminUser.password)
+    if (password !== adminUser.password) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Generate JWT with admin role
+    const payload = {
+      sub: adminUser.id,
+      username: adminUser.username,
+      role: adminUser.role,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: adminUser.id,
+        username: adminUser.username,
+        role: adminUser.role,
+        email: adminUser.email,
+      },
+    };
+  }
+
+  /**
+   * Get admin profile by user ID
+   */
+  async getAdminProfile(userId: string) {
+    const adminUser = this.adminUsers.find((u) => u.id === userId);
+    if (!adminUser) {
+      throw new UnauthorizedException('Admin user not found');
+    }
+
+    return {
+      id: adminUser.id,
+      username: adminUser.username,
+      role: adminUser.role,
+      email: adminUser.email,
+    };
   }
 }
