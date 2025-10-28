@@ -5,6 +5,7 @@ Smart contracts for the USDX/Wexel platform built with Anchor on Solana.
 ## Overview
 
 This project contains the core Solana smart contracts for:
+
 - **Liquidity Pools**: Manage USDT deposits with configurable APY
 - **Wexel NFTs**: NFT-based promissory notes with rewards
 - **Boost System**: Apply boost tokens for increased APY (up to +5%)
@@ -91,6 +92,7 @@ pnpm test:coverage:check
 #### Coverage Reports
 
 After running `pnpm test:coverage`, open `coverage/index.html` in a browser to see:
+
 - Line-by-line coverage highlighting
 - Function coverage percentages
 - Branch coverage analysis
@@ -129,11 +131,13 @@ const BOOST_TARGET_BP: u16 = 3000; // 30% of principal for max boost
 ### Formulas
 
 **Daily Rewards (no collateral):**
+
 ```
 daily_reward = principal × (apy_base + apy_boost) / (365 × 10000)
 ```
 
 **Boost APY Calculation:**
+
 ```
 boost_target = principal × 0.30
 boost_ratio = min(boost_amount, boost_target) / boost_target
@@ -141,6 +145,7 @@ apy_boost = boost_ratio × 5%
 ```
 
 **Collateral Loan:**
+
 ```
 loan_amount = principal × 0.60
 ```
@@ -161,15 +166,15 @@ loan_amount = principal × 0.60
 
 ### Error Codes
 
-| Code | Description |
-|------|-------------|
-| `InsufficientFunds` | Not enough funds for operation |
-| `WexelNotFound` | Wexel account not found |
-| `WexelNotMatured` | Wexel has not reached maturity date |
-| `InvalidAmount` | Amount is zero or invalid |
-| `Unauthorized` | User not authorized for operation |
-| `MathOverflow` | Arithmetic overflow detected |
-| `WexelAlreadyCollateralized` | Wexel is already collateralized |
+| Code                         | Description                         |
+| ---------------------------- | ----------------------------------- |
+| `InsufficientFunds`          | Not enough funds for operation      |
+| `WexelNotFound`              | Wexel account not found             |
+| `WexelNotMatured`            | Wexel has not reached maturity date |
+| `InvalidAmount`              | Amount is zero or invalid           |
+| `Unauthorized`               | User not authorized for operation   |
+| `MathOverflow`               | Arithmetic overflow detected        |
+| `WexelAlreadyCollateralized` | Wexel is already collateralized     |
 
 ## Development
 

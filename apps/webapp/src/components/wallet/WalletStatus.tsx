@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useTron } from '@/providers/TronProvider';
-import { useMultiWallet } from '@/providers/MultiWalletProvider';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Wallet, WalletIcon, ChevronDown } from 'lucide-react';
+import React from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useTron } from "@/providers/TronProvider";
+import { useMultiWallet } from "@/providers/MultiWalletProvider";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Wallet, WalletIcon, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,26 +14,25 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
 export const WalletStatus: React.FC = () => {
   const { activeWallet, disconnect } = useMultiWallet();
   const solanaWallet = useWallet();
   const tronWallet = useTron();
 
-  const isConnected = 
-    (activeWallet === 'solana' && solanaWallet.connected) ||
-    (activeWallet === 'tron' && tronWallet.isConnected);
+  const isConnected =
+    (activeWallet === "solana" && solanaWallet.connected) ||
+    (activeWallet === "tron" && tronWallet.isConnected);
 
-  const address = 
-    activeWallet === 'solana' ? solanaWallet.publicKey?.toString() || null :
-    activeWallet === 'tron' ? tronWallet.address :
-    null;
+  const address =
+    activeWallet === "solana"
+      ? solanaWallet.publicKey?.toString() || null
+      : activeWallet === "tron"
+        ? tronWallet.address
+        : null;
 
-  const walletName = 
-    activeWallet === 'solana' ? 'Solana' :
-    activeWallet === 'tron' ? 'Tron' :
-    null;
+  const walletName = activeWallet === "solana" ? "Solana" : activeWallet === "tron" ? "Tron" : null;
 
   if (!isConnected || !address) {
     return (

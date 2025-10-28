@@ -69,7 +69,7 @@ export class PriceOracleService {
 
       // Get prices from all available sources
       const prices: PriceData[] = [];
-      
+
       for (const source of this.sources) {
         try {
           if (await source.isAvailable()) {
@@ -79,7 +79,9 @@ export class PriceOracleService {
             }
           }
         } catch (error) {
-          this.logger.warn(`Failed to get price from ${source.name}: ${error.message}`);
+          this.logger.warn(
+            `Failed to get price from ${source.name}: ${error.message}`,
+          );
         }
       }
 
@@ -90,7 +92,7 @@ export class PriceOracleService {
 
       // Calculate median price
       const medianPrice = this.calculateMedianPrice(prices);
-      
+
       // Validate price deviation
       if (!this.validatePriceDeviation(prices, medianPrice)) {
         this.logger.warn(`Price deviation too high for token ${tokenMint}`);
@@ -102,7 +104,9 @@ export class PriceOracleService {
 
       return medianPrice;
     } catch (error) {
-      this.logger.error(`Failed to get price for token ${tokenMint}: ${error.message}`);
+      this.logger.error(
+        `Failed to get price for token ${tokenMint}: ${error.message}`,
+      );
       return null;
     }
   }
@@ -130,7 +134,7 @@ export class PriceOracleService {
   private isPriceFresh(timestamp: number): boolean {
     const now = Date.now();
     const maxAge = 5 * 60 * 1000; // 5 minutes
-    return (now - timestamp) < maxAge;
+    return now - timestamp < maxAge;
   }
 
   private async cachePrice(priceData: PriceData): Promise<void> {
@@ -164,7 +168,8 @@ export class PriceOracleService {
 
     if (sortedPrices.length % 2 === 0) {
       // Even number of prices - average the two middle values
-      const avgPrice = (sortedPrices[mid - 1].priceUsd + sortedPrices[mid].priceUsd) / 2;
+      const avgPrice =
+        (sortedPrices[mid - 1].priceUsd + sortedPrices[mid].priceUsd) / 2;
       return {
         ...sortedPrices[mid],
         priceUsd: avgPrice,
@@ -176,11 +181,15 @@ export class PriceOracleService {
     }
   }
 
-  private validatePriceDeviation(prices: PriceData[], medianPrice: PriceData): boolean {
+  private validatePriceDeviation(
+    prices: PriceData[],
+    medianPrice: PriceData,
+  ): boolean {
     const maxDeviation = 0.15; // 15% maximum deviation
 
     for (const price of prices) {
-      const deviation = Math.abs(price.priceUsd - medianPrice.priceUsd) / medianPrice.priceUsd;
+      const deviation =
+        Math.abs(price.priceUsd - medianPrice.priceUsd) / medianPrice.priceUsd;
       if (deviation > maxDeviation) {
         return false;
       }
@@ -194,8 +203,10 @@ export class PriceOracleService {
     try {
       // This is a simplified implementation
       // In production, you would use the Pyth SDK
-      const response = await axios.get(`https://hermes.pyth.network/v2/price_feeds/latest?ids[]=${tokenMint}`);
-      
+      const response = await axios.get(
+        `https://hermes.pyth.network/v2/price_feeds/latest?ids[]=${tokenMint}`,
+      );
+
       if (response.data && response.data.length > 0) {
         const priceData = response.data[0];
         return {
@@ -214,7 +225,9 @@ export class PriceOracleService {
 
   private async isPythAvailable(): Promise<boolean> {
     try {
-      const response = await axios.get('https://hermes.pyth.network/v2/price_feeds/latest?ids[]=SOL');
+      const response = await axios.get(
+        'https://hermes.pyth.network/v2/price_feeds/latest?ids[]=SOL',
+      );
       return response.status === 200;
     } catch {
       return false;
@@ -222,13 +235,15 @@ export class PriceOracleService {
   }
 
   // CoinGecko implementation
-  private async getCoinGeckoPrice(tokenMint: string): Promise<PriceData | null> {
+  private async getCoinGeckoPrice(
+    tokenMint: string,
+  ): Promise<PriceData | null> {
     try {
       // Map token mints to CoinGecko IDs
       const tokenMap: Record<string, string> = {
-        'So11111111111111111111111111111111111111112': 'solana', // SOL
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'usd-coin', // USDC
-        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'tether', // USDT
+        So11111111111111111111111111111111111111112: 'solana', // SOL
+        EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: 'usd-coin', // USDC
+        Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB: 'tether', // USDT
       };
 
       const coingeckoId = tokenMap[tokenMint];
@@ -237,7 +252,7 @@ export class PriceOracleService {
       }
 
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`
+        `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
       );
 
       if (response.data && response.data[coingeckoId]) {
@@ -268,9 +283,9 @@ export class PriceOracleService {
     try {
       // Map token mints to Binance symbols
       const tokenMap: Record<string, string> = {
-        'So11111111111111111111111111111111111111112': 'SOLUSDT', // SOL
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': 'USDCUSDT', // USDC
-        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': 'USDTUSDT', // USDT
+        So11111111111111111111111111111111111111112: 'SOLUSDT', // SOL
+        EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: 'USDCUSDT', // USDC
+        Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB: 'USDTUSDT', // USDT
       };
 
       const symbol = tokenMap[tokenMint];
@@ -278,8 +293,10 @@ export class PriceOracleService {
         return null;
       }
 
-      const response = await axios.get(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
-      
+      const response = await axios.get(
+        `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`,
+      );
+
       if (response.data && response.data.price) {
         return {
           tokenMint,
@@ -306,9 +323,15 @@ export class PriceOracleService {
   // Jupiter API implementation
   private async getJupiterPrice(tokenMint: string): Promise<PriceData | null> {
     try {
-      const response = await axios.get(`https://price.jup.ag/v4/price?ids=${tokenMint}`);
-      
-      if (response.data && response.data.data && response.data.data[tokenMint]) {
+      const response = await axios.get(
+        `https://price.jup.ag/v4/price?ids=${tokenMint}`,
+      );
+
+      if (
+        response.data &&
+        response.data.data &&
+        response.data.data[tokenMint]
+      ) {
         const priceData = response.data.data[tokenMint];
         return {
           tokenMint,
@@ -325,7 +348,9 @@ export class PriceOracleService {
 
   private async isJupiterAvailable(): Promise<boolean> {
     try {
-      const response = await axios.get('https://price.jup.ag/v4/price?ids=So11111111111111111111111111111111111111112');
+      const response = await axios.get(
+        'https://price.jup.ag/v4/price?ids=So11111111111111111111111111111111111111112',
+      );
       return response.status === 200;
     } catch {
       return false;

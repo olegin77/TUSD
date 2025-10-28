@@ -43,11 +43,7 @@ describe("Deposit and Boost Tests", () => {
       );
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -95,11 +91,7 @@ describe("Deposit and Boost Tests", () => {
       );
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId2.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId2.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -124,11 +116,7 @@ describe("Deposit and Boost Tests", () => {
 
     it("Should verify wexel maturity date is set correctly", async () => {
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -146,11 +134,7 @@ describe("Deposit and Boost Tests", () => {
       const boostAmount = new anchor.BN(300_000000); // $300 (30% of $1000 = max boost)
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -173,7 +157,7 @@ describe("Deposit and Boost Tests", () => {
 
       // Fetch and verify wexel account
       const wexelAfter = await program.account.wexel.fetch(wexelPda);
-      
+
       // Verify boost APY calculation
       // boost_target = 1000 * 3000 / 10000 = 300
       // boost_ratio = min(300, 300) / 300 = 1.0
@@ -195,11 +179,7 @@ describe("Deposit and Boost Tests", () => {
       );
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId3.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId3.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -227,7 +207,7 @@ describe("Deposit and Boost Tests", () => {
 
       // Verify partial boost
       const wexelAccount = await program.account.wexel.fetch(wexelPda);
-      
+
       // boost_ratio = 150 / 300 = 0.5
       // boost_apy_bp = 0.5 * 500 = 250 (2.5%)
       expect(wexelAccount.apyBoostBp).to.equal(250);
@@ -247,11 +227,7 @@ describe("Deposit and Boost Tests", () => {
       );
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId4.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId4.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -279,7 +255,7 @@ describe("Deposit and Boost Tests", () => {
 
       // Verify boost is capped at maximum
       const wexelAccount = await program.account.wexel.fetch(wexelPda);
-      
+
       // boost_ratio = min(500, 300) / 300 = 1.0
       // boost_apy_bp = 1.0 * 500 = 500 (5%)
       expect(wexelAccount.apyBoostBp).to.equal(500);
@@ -291,11 +267,7 @@ describe("Deposit and Boost Tests", () => {
       const invalidBoostAmount = new anchor.BN(0);
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -330,11 +302,7 @@ describe("Deposit and Boost Tests", () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -371,11 +339,7 @@ describe("Deposit and Boost Tests", () => {
       );
 
       const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("wexel"),
-          user.publicKey.toBuffer(),
-          poolId5.toArrayLike(Buffer, "le", 8),
-        ],
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId5.toArrayLike(Buffer, "le", 8)],
         program.programId
       );
 
@@ -411,7 +375,7 @@ describe("Deposit and Boost Tests", () => {
       expect(wexelAccount.principalUsd.toString()).to.equal(principalUsd.toString());
       expect(wexelAccount.apyBp).to.equal(1800); // 18% base APY
       expect(wexelAccount.apyBoostBp).to.equal(500); // 5% boost APY
-      
+
       const totalApyBp = wexelAccount.apyBp + wexelAccount.apyBoostBp;
       expect(totalApyBp).to.equal(2300); // 23% total APY
 

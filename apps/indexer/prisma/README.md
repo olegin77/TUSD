@@ -5,6 +5,7 @@ This directory contains the Prisma schema, migrations, and database utilities fo
 ## Overview
 
 We use **Prisma** as our ORM to manage the PostgreSQL database. Prisma provides:
+
 - Type-safe database client
 - Automatic migrations
 - Schema introspection
@@ -15,52 +16,62 @@ We use **Prisma** as our ORM to manage the PostgreSQL database. Prisma provides:
 ### Core Models
 
 **Pools** - Liquidity pool configurations
+
 - APY settings (base and boost)
 - Lock period (12-36 months)
 - Minimum deposit requirements
 - Active status
 
 **Wexels** - NFT-backed promissory notes
+
 - Owner addresses (Solana/Tron)
 - Principal amount and APY
 - Collateral status
 - Claim tracking
 
 **Users** - User profiles
+
 - Multi-chain addresses (Solana, Tron)
 - KYC status
 - Contact information
 
 **CollateralPosition** - Loan positions
+
 - Loan amount (60% LTV)
 - Repayment status
 - Timestamps
 
 **Listings** - Marketplace entries
+
 - Ask price
 - Auction settings
 - Status tracking
 
 **Claims** - Reward distributions
+
 - Claim amounts and types
 - Transaction hashes
 
 **Boosts** - Boost token applications
+
 - Token mint addresses
 - USD values
 - APY boost calculations
 
 **Deposits** - Deposit transactions
+
 - User addresses
 - Amounts and status
 - Transaction tracking
 
 **TokenPrice** - Oracle price cache
+
 - Token mint → USD price
 - Price sources (Pyth, Chainlink, DEX, CEX)
 - Last update timestamp
 
 **BlockchainEvent** - Event indexing
+
 - Chain (Solana/Tron)
 - Event types
 - Processing status
@@ -111,6 +122,7 @@ pnpm prisma:migrate:dev
 ```
 
 Example:
+
 ```bash
 pnpm prisma:migrate:dev
 # Enter migration name: add_user_preferences
@@ -126,6 +138,7 @@ pnpm prisma:migrate:deploy
 ```
 
 This command:
+
 - Runs all pending migrations
 - Does NOT generate new migrations
 - Safe for CI/CD pipelines
@@ -179,6 +192,7 @@ prisma/migrations/TIMESTAMP_migration_name/migration.sql
 ```
 
 Check for:
+
 - Data loss operations (DROP, DELETE)
 - Index additions for performance
 - Constraint changes
@@ -189,6 +203,7 @@ Check for:
 When possible, make schema changes backward compatible:
 
 **Good**: Add nullable column
+
 ```prisma
 model User {
   // ...existing fields
@@ -197,6 +212,7 @@ model User {
 ```
 
 **Bad**: Add required column
+
 ```prisma
 model User {
   // ...existing fields
@@ -205,6 +221,7 @@ model User {
 ```
 
 If you must add a required field:
+
 1. Add as optional first
 2. Backfill data
 3. Make required in separate migration
@@ -247,6 +264,7 @@ pnpm db:seed
 ```
 
 The seed script (`seed.ts`) populates:
+
 - Initial pools (5 pools with different APY and lock periods)
 - Test user (development only)
 
@@ -257,7 +275,9 @@ Edit `prisma/seed.ts` to add more initial data:
 ```typescript
 // Add custom seed logic
 const customData = await prisma.model.create({
-  data: { /* ... */ }
+  data: {
+    /* ... */
+  },
 });
 ```
 
@@ -273,29 +293,32 @@ const customData = await prisma.model.create({
 ### Adding a New Model
 
 1. Define model in `schema.prisma`:
+
 ```prisma
 model NewModel {
   id         BigInt   @id @default(autoincrement())
   field1     String
   field2     Int
   created_at DateTime @default(now())
-  
+
   @@map("new_models")
 }
 ```
 
 2. Create migration:
+
 ```bash
 pnpm prisma:migrate:dev
 ```
 
 3. Use in code:
+
 ```typescript
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const record = await prisma.newModel.create({
-  data: { field1: 'value', field2: 123 }
+  data: { field1: 'value', field2: 123 },
 });
 ```
 
@@ -303,6 +326,7 @@ const record = await prisma.newModel.create({
 
 1. Update model in `schema.prisma`
 2. Generate migration:
+
 ```bash
 pnpm prisma:migrate:dev
 ```
@@ -318,13 +342,14 @@ For performance optimization:
 ```prisma
 model Wexel {
   // ... fields
-  
+
   @@index([owner_solana])  // Index for fast lookups
   @@index([pool_id, created_at])  // Composite index
 }
 ```
 
 Then run:
+
 ```bash
 pnpm prisma:migrate:dev
 ```

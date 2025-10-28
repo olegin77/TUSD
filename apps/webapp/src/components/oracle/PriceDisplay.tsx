@@ -1,11 +1,11 @@
 "use client";
 
-import React from 'react';
-import { usePrice, usePriceUtils } from '@/hooks/useOracle';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { TrendingUp, TrendingDown, AlertCircle, RefreshCw } from 'lucide-react';
+import React from "react";
+import { usePrice, usePriceUtils } from "@/hooks/useOracle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TrendingUp, TrendingDown, AlertCircle, RefreshCw } from "lucide-react";
 
 interface PriceDisplayProps {
   tokenMint: string;
@@ -18,11 +18,11 @@ interface PriceDisplayProps {
 
 export const PriceDisplay: React.FC<PriceDisplayProps> = ({
   tokenMint,
-  tokenName = 'Token',
-  tokenSymbol = 'TKN',
+  tokenName = "Token",
+  tokenSymbol = "TKN",
   showSource = true,
   showTimestamp = false,
-  className = '',
+  className = "",
 }) => {
   const { data: price, isLoading, error, refetch } = usePrice(tokenMint);
   const { formatPrice } = usePriceUtils();
@@ -61,10 +61,7 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
         <CardContent>
           <div className="flex items-center justify-between">
             <span className="text-red-600 text-sm">Price unavailable</span>
-            <button
-              onClick={() => refetch()}
-              className="p-1 hover:bg-red-50 rounded"
-            >
+            <button onClick={() => refetch()} className="p-1 hover:bg-red-50 rounded">
               <RefreshCw className="h-4 w-4 text-red-500" />
             </button>
           </div>
@@ -75,33 +72,33 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
 
   const getSourceColor = (source: string) => {
     switch (source) {
-      case 'pyth':
-        return 'bg-purple-100 text-purple-800';
-      case 'coingecko':
-        return 'bg-blue-100 text-blue-800';
-      case 'binance':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'jupiter':
-        return 'bg-green-100 text-green-800';
-      case 'aggregated':
-        return 'bg-gray-100 text-gray-800';
+      case "pyth":
+        return "bg-purple-100 text-purple-800";
+      case "coingecko":
+        return "bg-blue-100 text-blue-800";
+      case "binance":
+        return "bg-yellow-100 text-yellow-800";
+      case "jupiter":
+        return "bg-green-100 text-green-800";
+      case "aggregated":
+        return "bg-gray-100 text-gray-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getSourceName = (source: string) => {
     switch (source) {
-      case 'pyth':
-        return 'Pyth';
-      case 'coingecko':
-        return 'CoinGecko';
-      case 'binance':
-        return 'Binance';
-      case 'jupiter':
-        return 'Jupiter';
-      case 'aggregated':
-        return 'Aggregated';
+      case "pyth":
+        return "Pyth";
+      case "coingecko":
+        return "CoinGecko";
+      case "binance":
+        return "Binance";
+      case "jupiter":
+        return "Jupiter";
+      case "aggregated":
+        return "Aggregated";
       default:
         return source;
     }
@@ -121,26 +118,19 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
             </div>
           </div>
           {showSource && (
-            <Badge className={getSourceColor(price.source)}>
-              {getSourceName(price.source)}
-            </Badge>
+            <Badge className={getSourceColor(price.source)}>{getSourceName(price.source)}</Badge>
           )}
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold">
-              {formatPrice(price.priceUsd)}
-            </span>
-            <button
-              onClick={() => refetch()}
-              className="p-1 hover:bg-gray-100 rounded"
-            >
+            <span className="text-2xl font-bold">{formatPrice(price.priceUsd)}</span>
+            <button onClick={() => refetch()} className="p-1 hover:bg-gray-100 rounded">
               <RefreshCw className="h-4 w-4 text-gray-500" />
             </button>
           </div>
-          
+
           {showTimestamp && (
             <p className="text-xs text-gray-500">
               Updated: {new Date(price.timestamp).toLocaleTimeString()}
@@ -156,9 +146,7 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
                   style={{ width: `${price.confidence * 100}%` }}
                 />
               </div>
-              <span className="text-xs text-gray-500">
-                {Math.round(price.confidence * 100)}%
-              </span>
+              <span className="text-xs text-gray-500">{Math.round(price.confidence * 100)}%</span>
             </div>
           )}
         </div>
@@ -176,12 +164,12 @@ interface PriceListProps {
 export const PriceList: React.FC<PriceListProps> = ({
   tokenMints,
   tokenMap = {},
-  className = '',
+  className = "",
 }) => {
   return (
     <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>
       {tokenMints.map((mint) => {
-        const tokenInfo = tokenMap[mint] || { name: 'Unknown Token', symbol: 'UNK' };
+        const tokenInfo = tokenMap[mint] || { name: "Unknown Token", symbol: "UNK" };
         return (
           <PriceDisplay
             key={mint}

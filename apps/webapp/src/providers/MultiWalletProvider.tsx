@@ -1,11 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { WalletContextProvider } from './WalletProvider';
-import { TronProvider, useTron } from './TronProvider';
-import { useWallet } from '@solana/wallet-adapter-react';
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { WalletContextProvider } from "./WalletProvider";
+import { TronProvider, useTron } from "./TronProvider";
+import { useWallet } from "@solana/wallet-adapter-react";
 
-export type WalletType = 'solana' | 'tron';
+export type WalletType = "solana" | "tron";
 
 interface MultiWalletContextType {
   activeWallet: WalletType | null;
@@ -26,19 +26,21 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
   const solanaWallet = useWallet();
   const tronWallet = useTron();
 
-  const isConnected = 
-    (activeWallet === 'solana' && solanaWallet.connected) ||
-    (activeWallet === 'tron' && tronWallet.isConnected);
+  const isConnected =
+    (activeWallet === "solana" && solanaWallet.connected) ||
+    (activeWallet === "tron" && tronWallet.isConnected);
 
-  const address = 
-    activeWallet === 'solana' ? solanaWallet.publicKey?.toString() || null :
-    activeWallet === 'tron' ? tronWallet.address :
-    null;
+  const address =
+    activeWallet === "solana"
+      ? solanaWallet.publicKey?.toString() || null
+      : activeWallet === "tron"
+        ? tronWallet.address
+        : null;
 
   const disconnect = () => {
-    if (activeWallet === 'solana') {
+    if (activeWallet === "solana") {
       solanaWallet.disconnect();
-    } else if (activeWallet === 'tron') {
+    } else if (activeWallet === "tron") {
       tronWallet.disconnect();
     }
     setActiveWallet(null);
@@ -52,20 +54,14 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
     disconnect,
   };
 
-  return (
-    <MultiWalletContext.Provider value={value}>
-      {children}
-    </MultiWalletContext.Provider>
-  );
+  return <MultiWalletContext.Provider value={value}>{children}</MultiWalletContext.Provider>;
 };
 
 export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ children }) => {
   return (
     <WalletContextProvider>
       <TronProvider>
-        <MultiWalletContent>
-          {children}
-        </MultiWalletContent>
+        <MultiWalletContent>{children}</MultiWalletContent>
       </TronProvider>
     </WalletContextProvider>
   );
@@ -74,7 +70,7 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
 export const useMultiWallet = (): MultiWalletContextType => {
   const context = useContext(MultiWalletContext);
   if (context === undefined) {
-    throw new Error('useMultiWallet must be used within a MultiWalletProvider');
+    throw new Error("useMultiWallet must be used within a MultiWalletProvider");
   }
   return context;
 };

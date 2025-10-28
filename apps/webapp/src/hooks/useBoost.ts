@@ -1,7 +1,13 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { boostService, BoostCalculation, BoostHistory, BoostStats, ApplyBoostRequest } from '@/lib/api/boost';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  boostService,
+  BoostCalculation,
+  BoostHistory,
+  BoostStats,
+  ApplyBoostRequest,
+} from "@/lib/api/boost";
 
 export const useBoostCalculation = (
   wexelId: number,
@@ -10,7 +16,7 @@ export const useBoostCalculation = (
   enabled: boolean = true
 ) => {
   return useQuery({
-    queryKey: ['boost-calculation', wexelId, tokenMint, amount],
+    queryKey: ["boost-calculation", wexelId, tokenMint, amount],
     queryFn: () => boostService.calculateBoost(wexelId, tokenMint, amount),
     enabled: enabled && !!wexelId && !!tokenMint && !!amount,
     staleTime: 30 * 1000, // 30 seconds
@@ -20,7 +26,7 @@ export const useBoostCalculation = (
 
 export const useBoostHistory = (wexelId: number, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['boost-history', wexelId],
+    queryKey: ["boost-history", wexelId],
     queryFn: () => boostService.getBoostHistory(wexelId),
     enabled: enabled && !!wexelId,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -30,7 +36,7 @@ export const useBoostHistory = (wexelId: number, enabled: boolean = true) => {
 
 export const useBoostStats = (wexelId: number, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['boost-stats', wexelId],
+    queryKey: ["boost-stats", wexelId],
     queryFn: () => boostService.getBoostStats(wexelId),
     enabled: enabled && !!wexelId,
     staleTime: 2 * 60 * 1000, // 2 minutes
@@ -47,16 +53,16 @@ export const useApplyBoost = () => {
       boostService.applyBoost(wexelId, boostRequest),
     onSuccess: (_, { wexelId }) => {
       // Invalidate related queries
-      queryClient.invalidateQueries({ queryKey: ['boost-stats', wexelId] });
-      queryClient.invalidateQueries({ queryKey: ['boost-history', wexelId] });
-      queryClient.invalidateQueries({ queryKey: ['wexel', wexelId] });
+      queryClient.invalidateQueries({ queryKey: ["boost-stats", wexelId] });
+      queryClient.invalidateQueries({ queryKey: ["boost-history", wexelId] });
+      queryClient.invalidateQueries({ queryKey: ["wexel", wexelId] });
     },
   });
 };
 
 export const useValidateToken = (tokenMint: string, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['validate-token', tokenMint],
+    queryKey: ["validate-token", tokenMint],
     queryFn: () => boostService.validateToken(tokenMint),
     enabled: enabled && !!tokenMint,
     staleTime: 10 * 60 * 1000, // 10 minutes
@@ -74,7 +80,7 @@ export const useBoostUtils = () => {
     return boostService.parseAmount(amount, decimals);
   };
 
-  const formatCurrency = (amount: number, currency: string = 'USD'): string => {
+  const formatCurrency = (amount: number, currency: string = "USD"): string => {
     return boostService.formatCurrency(amount, currency);
   };
 

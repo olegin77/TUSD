@@ -47,6 +47,7 @@ End-to-end tests simulating real user workflows:
 ### Prerequisites
 
 Ensure you have installed:
+
 - Rust (latest stable)
 - Solana CLI (v1.18+)
 - Anchor CLI (latest)
@@ -96,12 +97,12 @@ start coverage/index.html  # Windows
 
 ### Coverage Targets
 
-| Component | Target | Current |
-|-----------|--------|---------|
-| Instructions | >90% | TBD |
-| Event Emissions | 100% | TBD |
-| Error Handling | >90% | TBD |
-| Overall | >90% | TBD |
+| Component       | Target | Current |
+| --------------- | ------ | ------- |
+| Instructions    | >90%   | TBD     |
+| Event Emissions | 100%   | TBD     |
+| Error Handling  | >90%   | TBD     |
+| Overall         | >90%   | TBD     |
 
 ### Interpreting Coverage
 
@@ -112,6 +113,7 @@ The HTML report shows:
 - **Yellow lines**: Partially covered (branches)
 
 Focus on:
+
 1. Critical paths (deposits, withdrawals, collateral)
 2. Error conditions
 3. Edge cases (overflow, underflow, boundary values)
@@ -119,6 +121,7 @@ Focus on:
 ### CI/CD Integration
 
 Coverage is automatically checked on:
+
 - Every push to `tusd` or `main` branches
 - All pull requests
 
@@ -130,9 +133,9 @@ The build fails if coverage drops below 90%.
 
 ```typescript
 // Amounts (6 decimals for USDT)
-const PRINCIPAL = 1000_000000;  // $1,000
-const BOOST_FULL = 300_000000;   // $300 (30% of principal)
-const BOOST_HALF = 150_000000;   // $150 (15% of principal)
+const PRINCIPAL = 1000_000000; // $1,000
+const BOOST_FULL = 300_000000; // $300 (30% of principal)
+const BOOST_HALF = 150_000000; // $150 (15% of principal)
 
 // Time periods
 const LOCK_PERIOD = 12; // months
@@ -140,9 +143,9 @@ const SECONDS_PER_DAY = 86400;
 const SECONDS_PER_MONTH = 30 * 86400;
 
 // APY (basis points)
-const BASE_APY_BP = 1800;  // 18%
-const MAX_BOOST_APY_BP = 500;  // 5%
-const LTV_BP = 6000;  // 60%
+const BASE_APY_BP = 1800; // 18%
+const MAX_BOOST_APY_BP = 500; // 5%
+const LTV_BP = 6000; // 60%
 ```
 
 ### Test Accounts
@@ -153,10 +156,7 @@ Each test suite generates fresh keypairs:
 before(async () => {
   user = anchor.web3.Keypair.generate();
   // Airdrop SOL for transaction fees
-  await provider.connection.requestAirdrop(
-    user.publicKey,
-    10 * anchor.web3.LAMPORTS_PER_SOL
-  );
+  await provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
 });
 ```
 
@@ -223,11 +223,7 @@ const [poolPda, poolBump] = anchor.web3.PublicKey.findProgramAddressSync(
 
 // Wexel PDA
 const [wexelPda, wexelBump] = anchor.web3.PublicKey.findProgramAddressSync(
-  [
-    Buffer.from("wexel"),
-    user.publicKey.toBuffer(),
-    poolId.toArrayLike(Buffer, "le", 8)
-  ],
+  [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
   program.programId
 );
 ```
@@ -247,14 +243,17 @@ ANCHOR_LOG=true anchor test
 ### Common Issues
 
 **Issue**: `AccountNotFound` error
+
 - **Solution**: Verify PDA derivation seeds match contract
 - **Solution**: Ensure account is initialized before use
 
 **Issue**: `ConstraintRaw` error
+
 - **Solution**: Check account ownership constraints
 - **Solution**: Verify signer requirements
 
 **Issue**: Test timeout
+
 - **Solution**: Increase Mocha timeout: `this.timeout(60000)`
 - **Solution**: Confirm local validator is running
 
@@ -297,6 +296,7 @@ console.log("Compute units used:", txDetails.meta.computeUnitsConsumed);
 See `.github/workflows/test-coverage.yml` for the CI configuration.
 
 The workflow:
+
 1. Installs Rust, Solana, and Anchor
 2. Builds contracts
 3. Runs all tests

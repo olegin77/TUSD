@@ -4,16 +4,16 @@ on:
   push:
     branches: [tusd, main]
     paths:
-      - 'contracts/solana/**'
+      - "contracts/solana/**"
   pull_request:
     branches: [tusd, main]
     paths:
-      - 'contracts/solana/**'
+      - "contracts/solana/**"
 
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -61,7 +61,7 @@ jobs:
         run: |
           # Generate coverage report
           cargo llvm-cov --html --output-dir coverage --target-dir target || true
-          
+
           # Check coverage threshold (>90%)
           cargo llvm-cov --fail-under-lines 90 --target-dir target || echo "Coverage below 90%"
 

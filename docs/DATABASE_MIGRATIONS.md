@@ -52,6 +52,7 @@ pnpm prisma:migrate:dev
 ```
 
 This will:
+
 1. Generate migration SQL
 2. Apply to database
 3. Regenerate Prisma Client
@@ -103,11 +104,13 @@ pnpm prisma:generate
 ### Feature Branch Workflow
 
 1. **Create feature branch**
+
    ```bash
    git checkout -b feature/add-notifications
    ```
 
 2. **Modify schema**
+
    ```prisma
    // apps/indexer/prisma/schema.prisma
    model User {
@@ -117,6 +120,7 @@ pnpm prisma:generate
    ```
 
 3. **Generate migration**
+
    ```bash
    cd apps/indexer
    pnpm prisma:migrate:dev
@@ -124,12 +128,14 @@ pnpm prisma:generate
    ```
 
 4. **Test locally**
+
    ```bash
    pnpm start:dev
    # Verify application works
    ```
 
 5. **Commit**
+
    ```bash
    git add prisma/
    git commit -m "feat(db): Add notifications_enabled field to users"
@@ -183,6 +189,7 @@ pnpm prisma:migrate:dev
 ⚠️ **Requires data backfill**
 
 **Step 1**: Add as optional
+
 ```prisma
 model User {
   // ... existing
@@ -195,12 +202,14 @@ pnpm prisma:migrate:dev --name add_status_optional
 ```
 
 **Step 2**: Backfill data
+
 ```sql
 -- Edit migration SQL to add:
 UPDATE users SET status = 'active' WHERE status IS NULL;
 ```
 
 **Step 3**: Make required (separate PR)
+
 ```prisma
 model User {
   // ... existing
@@ -215,6 +224,7 @@ pnpm prisma:migrate:dev --name make_status_required
 ### Renaming Column
 
 **Step 1**: Add new column
+
 ```prisma
 model Wexel {
   // ... existing
@@ -224,16 +234,19 @@ model Wexel {
 ```
 
 **Step 2**: Migrate data
+
 ```sql
 UPDATE wexels SET owner_wallet = owner_address;
 ```
 
 **Step 3**: Update application code
+
 ```typescript
 // Use owner_wallet instead of owner_address
 ```
 
 **Step 4**: Remove old column
+
 ```prisma
 model Wexel {
   // ... existing
@@ -249,7 +262,7 @@ For performance:
 ```prisma
 model Wexel {
   // ... fields
-  
+
   @@index([owner_solana])  // Fast lookups
   @@index([pool_id, is_collateralized])  // Composite
 }
@@ -260,6 +273,7 @@ pnpm prisma:migrate:dev --name add_wexel_indexes
 ```
 
 Review generated SQL to ensure indexes are created:
+
 ```sql
 CREATE INDEX "wexels_owner_solana_idx" ON "wexels"("owner_solana");
 ```
@@ -284,12 +298,14 @@ Migrations are automatically applied in CI:
 ### Deployment
 
 **Staging**:
+
 ```bash
 # Automatic via CI/CD
 # Migrations run before app deployment
 ```
 
 **Production**:
+
 ```bash
 # Manual approval required
 # Review migration SQL before applying

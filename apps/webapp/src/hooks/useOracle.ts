@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { oracleService, PriceData } from '@/lib/api/oracles';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { oracleService, PriceData } from "@/lib/api/oracles";
 
 export const usePrice = (tokenMint: string, enabled: boolean = true) => {
   return useQuery({
-    queryKey: ['price', tokenMint],
+    queryKey: ["price", tokenMint],
     queryFn: () => oracleService.getPrice(tokenMint),
     enabled: enabled && !!tokenMint,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -17,7 +17,7 @@ export const usePrice = (tokenMint: string, enabled: boolean = true) => {
 
 export const useSupportedTokens = () => {
   return useQuery({
-    queryKey: ['supported-tokens'],
+    queryKey: ["supported-tokens"],
     queryFn: () => oracleService.getSupportedTokens(),
     staleTime: 60 * 60 * 1000, // 1 hour
     retry: 3,
@@ -26,7 +26,7 @@ export const useSupportedTokens = () => {
 
 export const useOracleHealth = () => {
   return useQuery({
-    queryKey: ['oracle-health'],
+    queryKey: ["oracle-health"],
     queryFn: () => oracleService.getHealth(),
     staleTime: 2 * 60 * 1000, // 2 minutes
     refetchInterval: 5 * 60 * 1000, // 5 minutes
@@ -38,17 +38,17 @@ export const useMultiplePrices = (tokenMints: string[]) => {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: ['prices', tokenMints],
+    queryKey: ["prices", tokenMints],
     queryFn: async () => {
       const prices = await Promise.allSettled(
-        tokenMints.map(mint => oracleService.getPrice(mint))
+        tokenMints.map((mint) => oracleService.getPrice(mint))
       );
 
       const result: Record<string, PriceData | null> = {};
-      
+
       prices.forEach((price, index) => {
         const tokenMint = tokenMints[index];
-        if (price.status === 'fulfilled') {
+        if (price.status === "fulfilled") {
           result[tokenMint] = price.value;
         } else {
           result[tokenMint] = null;

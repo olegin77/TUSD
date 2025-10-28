@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import TronWeb from 'tronweb';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import TronWeb from "tronweb";
 
 interface TronContextType {
   tronWeb: any | null;
@@ -40,8 +40,8 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
           setTronWeb(null);
         }
       } catch (err) {
-        console.error('Failed to initialize TronWeb:', err);
-        setError('Failed to initialize TronWeb');
+        console.error("Failed to initialize TronWeb:", err);
+        setError("Failed to initialize TronWeb");
       }
     };
 
@@ -56,7 +56,7 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
       if (window.tronWeb && window.tronWeb.ready) {
         // Request account access
         const accounts = await window.tronWeb.request({
-          method: 'tron_requestAccounts',
+          method: "tron_requestAccounts",
         });
 
         if (accounts && accounts.length > 0) {
@@ -64,14 +64,14 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
           setIsConnected(true);
           setAddress(accounts[0]);
         } else {
-          throw new Error('No accounts found');
+          throw new Error("No accounts found");
         }
       } else {
-        throw new Error('TronLink not found. Please install TronLink extension.');
+        throw new Error("TronLink not found. Please install TronLink extension.");
       }
     } catch (err) {
-      console.error('Failed to connect to TronLink:', err);
-      setError(err instanceof Error ? err.message : 'Failed to connect to TronLink');
+      console.error("Failed to connect to TronLink:", err);
+      setError(err instanceof Error ? err.message : "Failed to connect to TronLink");
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +99,7 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
 export const useTron = (): TronContextType => {
   const context = useContext(TronContext);
   if (context === undefined) {
-    throw new Error('useTron must be used within a TronProvider');
+    throw new Error("useTron must be used within a TronProvider");
   }
   return context;
 };

@@ -14,7 +14,7 @@ describe("Solana Contract Math Operations", () => {
       const principalUsd = 1000 * 1e6; // $1000 USDT
       const apyBp = 1800; // 18%
       const expectedDailyReward = (principalUsd * apyBp) / (365 * 10000);
-      
+
       expect(expectedDailyReward).to.be.closeTo(493150.68, 0.01); // ~$493.15 per day
     });
 
@@ -22,7 +22,7 @@ describe("Solana Contract Math Operations", () => {
       const principalUsd = 1000 * 1e6; // $1000 USDT
       const apyBp = 3600; // 36%
       const expectedDailyReward = (principalUsd * apyBp) / (365 * 10000);
-      
+
       expect(expectedDailyReward).to.be.closeTo(986301.37, 0.01); // ~$986.30 per day
     });
 
@@ -33,7 +33,7 @@ describe("Solana Contract Math Operations", () => {
       const boostRatio = boostValue / boostTarget;
       const maxBoostBp = 500; // 5%
       const expectedBoostBp = Math.min(boostRatio * maxBoostBp, maxBoostBp);
-      
+
       expect(expectedBoostBp).to.equal(500); // Should be 5% (max boost)
     });
   });
@@ -43,7 +43,7 @@ describe("Solana Contract Math Operations", () => {
       const principalUsd = 1000 * 1e6; // $1000 USDT
       const ltvBp = 6000; // 60%
       const expectedLoanAmount = (principalUsd * ltvBp) / 10000;
-      
+
       expect(expectedLoanAmount).to.equal(600 * 1e6); // $600
     });
 
@@ -65,10 +65,10 @@ describe("Solana Contract Math Operations", () => {
   describe("Overflow Protection", () => {
     it("Should handle maximum u64 values without overflow", () => {
       const maxU64 = BigInt("18446744073709551615");
-      
+
       // Test that we can create BigInt with max value
       expect(maxU64.toString()).to.equal("18446744073709551615");
-      
+
       // Test arithmetic operations that should not overflow
       const half = maxU64 / BigInt(2);
       expect(half.toString()).to.equal("9223372036854775807");
@@ -77,11 +77,11 @@ describe("Solana Contract Math Operations", () => {
     it("Should detect potential overflow in calculations", () => {
       const largeNumber = BigInt("18446744073709551615");
       const smallNumber = BigInt(1);
-      
+
       // This should not overflow
       const sum = largeNumber + smallNumber;
       expect(sum.toString()).to.equal("18446744073709551616");
-      
+
       // This should overflow and wrap around
       const overflow = largeNumber + largeNumber;
       expect(overflow.toString()).to.equal("36893488147419103230"); // Wraps around
@@ -93,7 +93,7 @@ describe("Solana Contract Math Operations", () => {
       const principalUsd = 1000 * 1e6; // $1000 USDT
       const apyBp = 1833; // 18.33%
       const dailyReward = (principalUsd * apyBp) / (365 * 10000);
-      
+
       // Should round down to avoid overpaying
       const roundedReward = Math.floor(dailyReward);
       expect(roundedReward).to.equal(502191); // Should be 502191 (not 5)
@@ -103,7 +103,7 @@ describe("Solana Contract Math Operations", () => {
       const principalUsd = 1; // 1 micro-USDT
       const apyBp = 1800; // 18%
       const dailyReward = (principalUsd * apyBp) / (365 * 10000);
-      
+
       // Should be very small for very small amounts
       expect(dailyReward).to.be.closeTo(0.000493, 0.000001);
     });
@@ -113,7 +113,7 @@ describe("Solana Contract Math Operations", () => {
     it("Should calculate lock periods correctly", () => {
       const secondsPerDay = 86400;
       const secondsPerMonth = 30 * secondsPerDay;
-      
+
       const testCases = [
         { months: 12, expectedSeconds: 12 * secondsPerMonth },
         { months: 18, expectedSeconds: 18 * secondsPerMonth },
@@ -133,7 +133,7 @@ describe("Solana Contract Math Operations", () => {
       const endTime = 1640995200; // Jan 1, 2022 00:00:00 UTC
       const secondsPerDay = 86400;
       const expectedDays = (endTime - startTime) / secondsPerDay;
-      
+
       expect(expectedDays).to.equal(365);
     });
   });
@@ -142,7 +142,7 @@ describe("Solana Contract Math Operations", () => {
     it("Should validate input amounts", () => {
       const validAmount = 1000 * 1e6;
       const invalidAmount = 0;
-      
+
       expect(validAmount > 0).to.be.true;
       expect(invalidAmount > 0).to.be.false;
     });
@@ -150,7 +150,7 @@ describe("Solana Contract Math Operations", () => {
     it("Should validate APY bounds", () => {
       const validAPY = 1800; // 18%
       const invalidAPY = 10000; // 100%
-      
+
       expect(validAPY <= 10000).to.be.true; // Max 100%
       expect(invalidAPY <= 10000).to.be.true; // 100% is valid
     });
@@ -158,7 +158,7 @@ describe("Solana Contract Math Operations", () => {
     it("Should validate LTV bounds", () => {
       const validLTV = 6000; // 60%
       const invalidLTV = 10000; // 100%
-      
+
       expect(validLTV <= 10000).to.be.true; // Max 100%
       expect(invalidLTV <= 10000).to.be.true; // 100% is valid
     });

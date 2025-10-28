@@ -1,19 +1,19 @@
 "use client";
 
-import React, { FC, ReactNode, useMemo } from 'react';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+import React, { FC, ReactNode, useMemo } from "react";
+import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
   TorusWalletAdapter,
   LedgerWalletAdapter,
-} from '@solana/wallet-adapter-wallets';
-import { clusterApiUrl } from '@solana/web3.js';
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl } from "@solana/web3.js";
 
 // Default styles that can be overridden by your app
-require('@solana/wallet-adapter-react-ui/styles.css');
+require("@solana/wallet-adapter-react-ui/styles.css");
 
 interface WalletContextProviderProps {
   children: ReactNode;
@@ -39,9 +39,7 @@ export const WalletContextProvider: FC<WalletContextProviderProps> = ({ children
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          {children}
-        </WalletModalProvider>
+        <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
