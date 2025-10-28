@@ -22,6 +22,8 @@ export default function AdminUsersPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
     if (!searchQuery) {
       setFilteredUsers(users);
       return;

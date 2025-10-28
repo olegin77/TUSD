@@ -82,9 +82,17 @@ export default function AdminSettingsPage() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
+    );
   }
+
   if (!settings) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
         <p className="text-gray-600">Не удалось загрузить настройки</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}

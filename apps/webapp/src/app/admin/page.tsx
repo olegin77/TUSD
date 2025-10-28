@@ -64,7 +64,13 @@ export default function AdminDashboard() {
     );
   }
   if (!stats) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
         <p className="text-gray-600">Не удалось загрузить статистику</p>
+      </div>
+    );
+  }
+
   const statCards = [
     {
       title: "Total Value Locked",
@@ -73,31 +79,41 @@ export default function AdminDashboard() {
       color: "text-green-600",
       bgColor: "bg-green-100",
     },
+    {
       title: "Всего пользователей",
       value: stats.totalUsers.toLocaleString(),
       icon: Users,
       color: "text-blue-600",
       bgColor: "bg-blue-100",
+    },
+    {
       title: "Всего векселей",
       value: stats.totalWexels.toLocaleString(),
       icon: FileText,
       color: "text-purple-600",
       bgColor: "bg-purple-100",
+    },
+    {
       title: "Активные векселя",
       value: stats.activeWexels.toLocaleString(),
       icon: Activity,
       color: "text-emerald-600",
       bgColor: "bg-emerald-100",
+    },
+    {
       title: "В залоге",
       value: stats.collateralizedWexels.toLocaleString(),
       icon: Clock,
       color: "text-orange-600",
       bgColor: "bg-orange-100",
+    },
+    {
       title: "Выплачено наград",
       value: stats.totalRewardsPaid,
       icon: TrendingUp,
       color: "text-indigo-600",
       bgColor: "bg-indigo-100",
+    },
   ];
   return (
     <div className="space-y-8">

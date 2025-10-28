@@ -64,20 +64,31 @@ export default function AdminPoolsPage() {
   const startEdit = (pool: Pool) => {
     setEditingId(pool.id);
     setEditForm(pool);
+  };
+
   const cancelEdit = () => {
     setEditingId(null);
     setEditForm({});
+  };
+
   const saveEdit = async () => {
+    try {
       const response = await fetch(`/api/v1/admin/pools/${editingId}`, {
         method: "PATCH",
+        headers: {
           "Content-Type": "application/json",
+        },
         body: JSON.stringify(editForm),
+      });
       if (!response.ok) throw new Error("Failed to update pool");
       await fetchPools();
       setEditingId(null);
       setEditForm({});
+    } catch (error) {
       console.error("Error updating pool:", error);
       alert("Ошибка при обновлении пула");
+    }
+  };
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
