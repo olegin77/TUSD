@@ -33,7 +33,9 @@ export class IndexerModule implements OnModuleInit {
         this.logger.error('Failed to auto-start indexer', error);
       }
     } else {
-      this.logger.log('Auto-start disabled, indexer will need to be started manually');
+      this.logger.log(
+        'Auto-start disabled, indexer will need to be started manually',
+      );
     }
   }
 }
