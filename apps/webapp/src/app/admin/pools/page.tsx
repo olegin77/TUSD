@@ -166,10 +166,12 @@ export default function AdminPoolsPage() {
                       <Button size="sm" variant="ghost" onClick={() => startEdit(pool)}>
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                </tr>
+                    </td>
+                  </tr>
               ))}
             </tbody>
           </table>
+        </div>
       </Card>
       {/* Info Card */}
       <Card className="p-6 bg-blue-50 border-blue-200">
