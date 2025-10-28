@@ -63,35 +63,27 @@ export const authApi = {
 
 // Pools API
 export const poolsApi = {
-  getAll: (): Promise<Pool[]> => api.get("/pools").then((res) => res.data),
+  getAll: (): Promise<Pool[]> => api.get("/api/v1/pools").then((res) => res.data),
 
-  getById: (id: number): Promise<Pool> => api.get(`/pools/${id}`).then((res) => res.data),
+  getById: (id: number): Promise<Pool> => api.get(`/api/v1/pools/${id}`).then((res) => res.data),
 
-  getStats: (): Promise<Stats> => api.get("/pools/stats").then((res) => res.data),
-
-  create: (data: any): Promise<Pool> => api.post("/pools", data).then((res) => res.data),
+  create: (data: any): Promise<Pool> => api.post("/api/v1/pools", data).then((res) => res.data),
 
   update: (id: number, data: any): Promise<Pool> =>
-    api.patch(`/pools/${id}`, data).then((res) => res.data),
+    api.patch(`/api/v1/pools/${id}`, data).then((res) => res.data),
 };
 
 // Wexels API
 export const wexelsApi = {
-  getMy: (): Promise<Wexel[]> => api.get("/wexels/my").then((res) => res.data),
+  getMy: (): Promise<Wexel[]> => api.get("/api/v1/wexels").then((res) => res.data),
 
-  getById: (id: string): Promise<Wexel> => api.get(`/wexels/${id}`).then((res) => res.data),
+  getById: (id: string): Promise<Wexel> => api.get(`/api/v1/wexels/${id}`).then((res) => res.data),
 
   calculateRewards: (id: string): Promise<RewardsCalculation> =>
-    api.get(`/wexels/${id}/rewards`).then((res) => res.data),
+    api.get(`/api/v1/wexels/${id}/rewards`).then((res) => res.data),
 
-  claimRewards: (id: string, data: ClaimRewardsRequest): Promise<any> =>
-    api.post(`/wexels/${id}/claim`, data).then((res) => res.data),
-
-  collateralize: (data: CollateralizeRequest): Promise<any> =>
-    api.post("/wexels/collateralize", data).then((res) => res.data),
-
-  repayLoan: (data: RepayLoanRequest): Promise<any> =>
-    api.post("/wexels/repay-loan", data).then((res) => res.data),
+  claimRewards: (id: string, txHash: string): Promise<any> =>
+    api.post(`/api/v1/wexels/${id}/claim`, { txHash }).then((res) => res.data),
 };
 
 // Users API
@@ -109,16 +101,13 @@ export const usersApi = {
 
 // Oracles API
 export const oraclesApi = {
-  getAllPrices: (): Promise<TokenPrice[]> => api.get("/oracles/prices").then((res) => res.data),
-
   getPrice: (tokenMint: string): Promise<TokenPrice> =>
-    api.get(`/oracles/prices/${tokenMint}`).then((res) => res.data),
+    api.get(`/api/v1/oracles/price`, { params: { mint: tokenMint } }).then((res) => res.data),
 
-  updatePrice: (data: UpdatePriceRequest): Promise<TokenPrice> =>
-    api.post("/oracles/prices", data).then((res) => res.data),
+  getTokens: (): Promise<TokenPrice[]> => api.get("/api/v1/oracles/tokens").then((res) => res.data),
 
-  calculateBoost: (data: CalculateBoostRequest): Promise<{ valueUsd: string }> =>
-    api.post("/oracles/calculate-boost", data).then((res) => res.data),
+  getHealth: (): Promise<{ status: string }> =>
+    api.get("/api/v1/oracles/health").then((res) => res.data),
 };
 
 // Health check

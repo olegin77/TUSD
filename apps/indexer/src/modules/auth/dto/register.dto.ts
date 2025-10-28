@@ -1,37 +1,27 @@
-import {
-  IsString,
-  IsNotEmpty,
-  MinLength,
-  IsEmail,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
+import { IsEmail, IsOptional, IsString, IsBoolean } from 'class-validator';
 
 export class RegisterDto {
-  @IsOptional()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   solana_address?: string;
 
-  @IsOptional()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   tron_address?: string;
 
-  @IsOptional()
   @IsEmail()
+  @IsOptional()
   email?: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  password: string;
-
   @IsOptional()
+  password?: string;
+
   @IsString()
+  @IsOptional()
   telegram_id?: string;
 
-  @IsOptional()
   @IsBoolean()
-  is_kyc_verified?: boolean = false;
+  @IsOptional()
+  is_kyc_verified?: boolean;
 }

@@ -10,13 +10,16 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { WexelsService } from './wexels.service';
 import { BoostService } from './services/boost.service';
 import { CreateWexelDto } from './dto/create-wexel.dto';
 import { ApplyBoostDto } from './dto/apply-boost.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser, CurrentUserData } from '../../common/decorators/current-user.decorator';
 
-@Controller('wexels')
+@Controller('api/v1/wexels')
 export class WexelsController {
   constructor(
     private readonly wexelsService: WexelsService,
@@ -184,5 +187,50 @@ export class WexelsController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.wexelsService.remove(id.toString());
+  }
+
+  /**
+   * GET /api/v1/wexels/:id/rewards
+   * Calculate rewards for a wexel
+   */
+  @Get(':id/rewards')
+  async calculateRewards(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const rewards = await this.wexelsService.calculateRewards(id);
+      return {
+        success: true,
+        data: rewards,
+      };
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Failed to calculate rewards',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  /**
+   * POST /api/v1/wexels/:id/claim
+   * Claim rewards for a wexel (Protected)
+   */
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/claim')
+  async claimRewards(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('txHash') txHash: string,
+    @CurrentUser() user: CurrentUserData,
+  ) {
+    try {
+      const result = await this.wexelsService.claimRewards(id, txHash);
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Failed to claim rewards',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
