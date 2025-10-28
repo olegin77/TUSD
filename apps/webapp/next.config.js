@@ -27,18 +27,18 @@ const nextConfig = {
         os: false,
       };
     }
-    
+
     // Ignore pino-pretty to avoid import errors
     config.ignoreWarnings = [
       { module: /node_modules\/pino/ },
       { module: /node_modules\/@walletconnect/ },
     ];
-    
+
     config.externals = config.externals || [];
     if (isServer) {
-      config.externals.push('pino-pretty');
+      config.externals.push("pino-pretty");
     }
-    
+
     return config;
   },
 };

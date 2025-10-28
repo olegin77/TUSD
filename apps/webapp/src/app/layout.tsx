@@ -22,7 +22,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <SkipToContent />
         <AnnouncerProvider>
-          <ClientOnly fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+          <ClientOnly
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">Loading...</div>
+            }
+          >
             <MultiWalletProvider>
               <Providers>
                 <Navigation />

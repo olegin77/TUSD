@@ -91,7 +91,7 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
 
 export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
-  
+
   useEffect(() => {
     // Wait for client-side imports to complete
     const checkReady = setInterval(() => {
@@ -100,10 +100,10 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
         clearInterval(checkReady);
       }
     }, 100);
-    
+
     return () => clearInterval(checkReady);
   }, []);
-  
+
   if (!isClient || !isReady) {
     return (
       <TronProvider>
@@ -113,9 +113,9 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
       </TronProvider>
     );
   }
-  
+
   const Provider = WalletContextProvider;
-  
+
   return (
     <Provider>
       <TronProvider>
