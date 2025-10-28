@@ -114,7 +114,7 @@ describe("Accrue and Claim Tests", () => {
         .rpc();
 
       const wexel = await program.account.wexel.fetch(wexelPda);
-      
+
       // With full boost (5%), total APY = 18% + 5% = 23%
       // Rewards should reflect the boosted APY
       expect(wexel.apyBoostBp.toNumber()).to.equal(500); // 5% boost
@@ -191,7 +191,7 @@ describe("Accrue and Claim Tests", () => {
       // Manually update wexel to be finalized (in real scenario, would need to wait for maturity)
       // For this test, we'll just try to accrue on a finalized wexel
       // Note: This test requires the contract to check is_finalized flag properly
-      
+
       // This test is conceptual - in practice, we'd need to manipulate time or state
       // to properly test this scenario
     });
@@ -271,7 +271,7 @@ describe("Accrue and Claim Tests", () => {
             systemProgram: anchor.web3.SystemProgram.programId,
           })
           .rpc();
-        
+
         expect.fail("Should have thrown an error");
       } catch (err) {
         expect(err.toString()).to.include("InvalidAmount");
@@ -321,7 +321,7 @@ describe("Accrue and Claim Tests", () => {
             systemProgram: anchor.web3.SystemProgram.programId,
           })
           .rpc();
-        
+
         expect.fail("Should have thrown an error");
       } catch (err) {
         expect(err.toString()).to.include("InvalidAmount");
@@ -430,7 +430,7 @@ describe("Accrue and Claim Tests", () => {
           })
           .signers([anotherUser])
           .rpc();
-        
+
         expect.fail("Should have thrown an error");
       } catch (err) {
         // Should fail due to constraint check
@@ -510,7 +510,7 @@ describe("Accrue and Claim Tests", () => {
       // Expected daily reward with boost = Principal * (APY + Boost) / 365
       // Total APY = 18% + 5% = 23% = 2300 bp
       // Daily reward ≈ 1000 * 0.23 / 365 ≈ 0.6301 USD
-      
+
       console.log("Total rewards with boost:", wexel.totalRewards.toNumber());
       console.log("APY boost bp:", wexel.apyBoostBp.toNumber());
     });

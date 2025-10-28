@@ -34,7 +34,7 @@ export class PriceOracleService {
   async getTokenPrice(tokenMint: string): Promise<bigint> {
     try {
       const aggregated = await this.getAggregatedPrice(tokenMint);
-      
+
       if (!aggregated) {
         // Fallback to cached price
         const cached = await this.getCachedPrice(tokenMint);
@@ -42,12 +42,15 @@ export class PriceOracleService {
           this.logger.warn(`Using cached price for ${tokenMint}`);
           return cached;
         }
-        
+
         throw new Error(`No price available for ${tokenMint}`);
       }
 
       // Store in cache
-      await this.updateCachedPrice(tokenMint, BigInt(Math.floor(aggregated.price * 1_000000)));
+      await this.updateCachedPrice(
+        tokenMint,
+        BigInt(Math.floor(aggregated.price * 1_000000)),
+      );
 
       // Return price in micro-units (6 decimals)
       return BigInt(Math.floor(aggregated.price * 1_000000));
@@ -95,8 +98,10 @@ export class PriceOracleService {
     }
 
     // Check if we have at least one source
-    const availableSources = Object.entries(sources).filter(([_, price]) => price !== undefined);
-    
+    const availableSources = Object.entries(sources).filter(
+      ([_, price]) => price !== undefined,
+    );
+
     if (availableSources.length === 0) {
       return null;
     }
@@ -113,7 +118,7 @@ export class PriceOracleService {
 
     // Aggregate multiple sources
     const prices = availableSources.map(([_, p]) => p!);
-    
+
     // Check deviation between sources
     const maxPrice = Math.max(...prices);
     const minPrice = Math.min(...prices);
@@ -140,7 +145,10 @@ export class PriceOracleService {
   /**
    * Calculate boost value in USD
    */
-  async calculateBoostValue(tokenMint: string, amount: bigint): Promise<bigint> {
+  async calculateBoostValue(
+    tokenMint: string,
+    amount: bigint,
+  ): Promise<bigint> {
     const pricePerToken = await this.getTokenPrice(tokenMint);
     // amount is in token's native decimals, price is in micro-USD
     // result should be in micro-USD
@@ -153,11 +161,11 @@ export class PriceOracleService {
   private calculateMedian(values: number[]): number {
     const sorted = [...values].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
-    
+
     if (sorted.length % 2 === 0) {
       return (sorted[mid - 1] + sorted[mid]) / 2;
     }
-    
+
     return sorted[mid];
   }
 
@@ -205,12 +213,19 @@ export class PriceOracleService {
   /**
    * Get all tracked token prices
    */
-  async getAllPrices(): Promise<Array<{ tokenMint: string; priceUsd: bigint; source: string; updatedAt: Date }>> {
+  async getAllPrices(): Promise<
+    Array<{
+      tokenMint: string;
+      priceUsd: bigint;
+      source: string;
+      updatedAt: Date;
+    }>
+  > {
     const prices = await this.prisma.tokenPrice.findMany({
       orderBy: { updated_at: 'desc' },
     });
 
-    return prices.map(p => ({
+    return prices.map((p) => ({
       tokenMint: p.token_mint,
       priceUsd: p.price_usd,
       source: p.source,

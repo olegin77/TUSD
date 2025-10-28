@@ -73,7 +73,7 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
       const collateralPosition = await program.account.collateralPosition.fetch(collateralPda);
       expect(collateralPosition.wexelId.toNumber()).to.equal(poolId);
       expect(collateralPosition.owner.toString()).to.equal(user.publicKey.toString());
-      
+
       // Loan should be 60% of principal
       const expectedLoan = Math.floor(principalUsd * 0.6);
       expect(collateralPosition.loanUsd.toNumber()).to.equal(expectedLoan);
@@ -130,9 +130,11 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
       // Note: In a real scenario, we'd need to wait for maturity and finalize
       // For this test, we're checking the contract logic exists
       // The actual test would require time manipulation or mocking
-      
+
       // This is a conceptual test to show what should be tested
-      console.log("Test: Should not allow collateralizing finalized wexel (requires time manipulation)");
+      console.log(
+        "Test: Should not allow collateralizing finalized wexel (requires time manipulation)"
+      );
     });
 
     it("should calculate correct loan amount for different principals", async () => {
@@ -309,7 +311,7 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
 
       const collateral = await program.account.collateralPosition.fetch(collateralPda);
       const loanAmount = collateral.loanUsd;
-      
+
       // Repay with extra amount
       const repayAmount = loanAmount.add(new anchor.BN(100_000000)); // Extra $100
 
@@ -350,7 +352,7 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
         .rpc();
 
       const collateral = await program.account.collateralPosition.fetch(collateralPda);
-      
+
       await program.methods
         .repayLoan(new anchor.BN(poolId), collateral.loanUsd)
         .accounts({
@@ -392,9 +394,9 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
 
       // First finalize (assuming time has passed)
       // In a real test environment, we'd mock time or use devnet with time travel
-      
+
       console.log("Test: Redeem requires time manipulation for proper testing");
-      
+
       // The test would look like:
       // 1. Create wexel
       // 2. Wait for maturity or manipulate time
@@ -545,7 +547,7 @@ describe("Collateral Tests (collateralize, repay_loan, redeem)", () => {
       // - Cannot be listed on marketplace
       // - Have different reward distribution (40/60)
       // - Cannot be transferred
-      
+
       console.log("Test: Collateralized wexels should have restricted operations");
     });
   });

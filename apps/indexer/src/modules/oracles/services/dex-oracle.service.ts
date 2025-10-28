@@ -14,11 +14,16 @@ export class DexOracleService {
   private connection: Connection;
 
   // Known DEX program IDs
-  private readonly RAYDIUM_AMM_PROGRAM = new PublicKey('675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8');
-  private readonly ORCA_WHIRLPOOL_PROGRAM = new PublicKey('whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc');
+  private readonly RAYDIUM_AMM_PROGRAM = new PublicKey(
+    '675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8',
+  );
+  private readonly ORCA_WHIRLPOOL_PROGRAM = new PublicKey(
+    'whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc',
+  );
 
   constructor() {
-    const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
+    const rpcUrl =
+      process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
     this.connection = new Connection(rpcUrl, 'confirmed');
   }
 
@@ -42,7 +47,9 @@ export class DexOracleService {
       // - Calculating spot price from reserves
       // - Averaging over time window
 
-      this.logger.debug(`TWAP query for ${tokenMint}/${quoteMint} not yet implemented`);
+      this.logger.debug(
+        `TWAP query for ${tokenMint}/${quoteMint} not yet implemented`,
+      );
       return null;
     } catch (error) {
       this.logger.error('Failed to get DEX TWAP', error);

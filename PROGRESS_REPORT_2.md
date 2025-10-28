@@ -11,6 +11,7 @@
 **Status:** ✅ Complete
 
 #### Implemented Features:
+
 - **SIWS (Sign-In With Solana)** - Full signature verification flow
 - **WalletAuthService** - Core authentication logic
   - Message nonce generation with timestamp
@@ -23,6 +24,7 @@
   - `POST /api/v1/auth/wallet/verify` - Verify wallet ownership
 
 #### Security Enhancements:
+
 - JWT guards applied to sensitive endpoints
 - `@CurrentUser()` decorator for easy authenticated user access
 - Protected `/api/v1/wexels/:id/claim` endpoint
@@ -30,6 +32,7 @@
 - Support for both Solana and Tron wallets (Tron pending full implementation)
 
 #### Code Additions:
+
 ```
 apps/indexer/src/modules/auth/
 ├── services/wallet-auth.service.ts (198 lines)
@@ -41,6 +44,7 @@ apps/indexer/src/common/decorators/
 ```
 
 #### Dependencies Added:
+
 - `tweetnacl` ^1.0.3 - Ed25519 signature verification
 - `bs58` ^6.0.0 - Base58 encoding/decoding
 - `@noble/ed25519` ^3.0.0 - Alternative ED25519 implementation
@@ -52,6 +56,7 @@ apps/indexer/src/common/decorators/
 #### Multi-Source Price Aggregation:
 
 **PythOracleService** ✅
+
 - Integration with Pyth Network Hermes price service
 - Real-time on-chain price feeds
 - Confidence interval checks (max 1% deviation)
@@ -60,12 +65,14 @@ apps/indexer/src/common/decorators/
 - Built-in feed IDs for SOL, USDT
 
 **DexOracleService** 🚧 (Structure ready, awaiting SDK integration)
+
 - TWAP (Time-Weighted Average Price) framework
 - Support for Raydium and Orca pools
 - Liquidity-weighted price aggregation
 - Pool discovery logic (placeholder)
 
 **PriceOracleService** ✅ (Aggregator)
+
 - Multi-source price aggregation
 - Median calculation for robustness
 - **Deviation checks:** Max 1.5% between sources (150 bp)
@@ -74,6 +81,7 @@ apps/indexer/src/common/decorators/
 - Automatic price updates in DB
 
 #### Aggregation Logic:
+
 ```
 1. Query Pyth Network (highest priority)
 2. Query DEX TWAP (if available)
@@ -84,6 +92,7 @@ apps/indexer/src/common/decorators/
 ```
 
 #### Code Structure:
+
 ```
 apps/indexer/src/modules/oracles/services/
 ├── pyth-oracle.service.ts (182 lines)
@@ -92,12 +101,14 @@ apps/indexer/src/modules/oracles/services/
 ```
 
 #### Dependencies Added:
+
 - `@pythnetwork/client` ^2.22.1
 - `@pythnetwork/price-service-client` ^1.9.1
 
 ### 📈 Price Oracle Features
 
 #### Confidence & Validation:
+
 - ✅ Confidence interval checks (Pyth)
 - ✅ Multi-source deviation validation
 - ✅ Staleness detection
@@ -105,24 +116,26 @@ apps/indexer/src/modules/oracles/services/
 - ✅ Error handling and logging
 
 #### Supported Operations:
+
 ```typescript
 // Get single token price
-const price = await priceOracle.getTokenPrice('SOL');
+const price = await priceOracle.getTokenPrice("SOL");
 
 // Get aggregated price with sources
-const aggregated = await priceOracle.getAggregatedPrice('SOL');
+const aggregated = await priceOracle.getAggregatedPrice("SOL");
 // Returns: { price, sources: { pyth, dex, cached }, confidence, timestamp }
 
 // Calculate boost value
 const valueUsd = await priceOracle.calculateBoostValue(tokenMint, amount);
 
 // Register custom price feed
-pythOracle.registerPriceFeedId('MYTOKEN', '0x...');
+pythOracle.registerPriceFeedId("MYTOKEN", "0x...");
 ```
 
 ## Technical Implementation
 
 ### Authentication Flow:
+
 ```
 1. User clicks "Connect Wallet"
 2. Frontend calls POST /auth/wallet/nonce { walletAddress }
@@ -135,6 +148,7 @@ pythOracle.registerPriceFeedId('MYTOKEN', '0x...');
 ```
 
 ### Price Aggregation Flow:
+
 ```
 1. Request price for token
 2. Query Pyth Network via Hermes
@@ -149,16 +163,19 @@ pythOracle.registerPriceFeedId('MYTOKEN', '0x...');
 ## API Changes
 
 ### New Endpoints:
+
 - `POST /api/v1/auth/wallet/nonce`
-- `POST /api/v1/auth/wallet/login`  
+- `POST /api/v1/auth/wallet/login`
 - `POST /api/v1/auth/wallet/verify`
 
 ### Protected Endpoints:
+
 - `POST /api/v1/wexels/:id/claim` (now requires JWT)
 
 ## Environment Variables
 
 Added to `.env.example`:
+
 ```bash
 # Pyth Network
 PYTH_PRICE_SERVICE_URL=https://hermes.pyth.network
@@ -189,19 +206,22 @@ PYTH_USDT_FEED_ID=0x2b89b9dc8fdf9f34709a5b106b472f0f39bb6ca9ce04b0fd7f2e971688e2
 ## Next Steps
 
 ### High Priority:
+
 1. ✅ ~~Wallet authentication~~ **DONE**
-2. ✅ ~~Price oracles~~ **DONE**  
+2. ✅ ~~Price oracles~~ **DONE**
 3. 🔄 **Frontend integration** (connect wallet flow)
 4. 🔄 **DEX price feeds** (Raydium/Orca SDK integration)
 5. ⏳ **Admin panel** (T-0108+)
 
 ### Medium Priority:
+
 1. ⏳ End-to-end testing
 2. ⏳ Performance optimization
 3. ⏳ Additional test coverage
 4. ⏳ Tron wallet signature verification
 
 ### Low Priority:
+
 1. ⏳ Documentation updates
 2. ⏳ API versioning
 3. ⏳ GraphQL endpoints

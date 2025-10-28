@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { authApi, WalletType, WalletLoginRequest } from '@/lib/api/auth';
-import bs58 from 'bs58';
+import { useState, useCallback } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { authApi, WalletType, WalletLoginRequest } from "@/lib/api/auth";
+import bs58 from "bs58";
 
 export const useWalletAuth = () => {
   const { publicKey, signMessage, connected } = useWallet();
@@ -14,7 +14,7 @@ export const useWalletAuth = () => {
    */
   const signInWithSolana = useCallback(async () => {
     if (!publicKey || !signMessage) {
-      setError('Wallet not connected');
+      setError("Wallet not connected");
       return false;
     }
 
@@ -47,11 +47,11 @@ export const useWalletAuth = () => {
         return true;
       }
 
-      setError('Login failed');
+      setError("Login failed");
       return false;
     } catch (err: any) {
-      console.error('Sign in error:', err);
-      setError(err.message || 'Failed to sign in');
+      console.error("Sign in error:", err);
+      setError(err.message || "Failed to sign in");
       return false;
     } finally {
       setIsLoading(false);
@@ -78,7 +78,7 @@ export const useWalletAuth = () => {
       const profile = await authApi.getProfile();
       setUser(profile);
     } catch (err) {
-      console.error('Failed to load profile:', err);
+      console.error("Failed to load profile:", err);
       // Token might be expired, logout
       logout();
     }

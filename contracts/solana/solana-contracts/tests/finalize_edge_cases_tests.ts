@@ -71,9 +71,9 @@ describe("Finalize and Edge Cases Tests", () => {
 
       // Note: In a real test, we'd need time manipulation to reach maturity
       // This is a conceptual test showing the expected behavior
-      
+
       console.log("Test: Should not allow double finalization (requires time manipulation)");
-      
+
       // The test would be:
       // 1. Create wexel
       // 2. Wait for or mock maturity
@@ -93,7 +93,7 @@ describe("Finalize and Edge Cases Tests", () => {
       // 3. Call mint_wexel_finalize
       // 4. Verify is_finalized = true
       // 5. Verify WexelFinalized event is emitted
-      
+
       console.log("Test: Finalization requires time manipulation for proper testing");
     });
 
@@ -129,7 +129,7 @@ describe("Finalize and Edge Cases Tests", () => {
   describe("Edge Cases - Invalid Inputs", () => {
     it("should reject deposit with zero amount", async () => {
       const poolId = Math.floor(Math.random() * 1000000);
-      
+
       const poolPda = anchor.web3.PublicKey.findProgramAddressSync(
         [Buffer.from("pool"), Buffer.from(poolId.toString().padStart(8, "0"))],
         program.programId
@@ -189,7 +189,7 @@ describe("Finalize and Edge Cases Tests", () => {
 
       try {
         await createTestWexel(poolId, largePrincipal);
-        
+
         // Should succeed if no overflow
         console.log("Successfully created wexel with large principal");
       } catch (err) {
@@ -467,7 +467,7 @@ describe("Finalize and Edge Cases Tests", () => {
 
       const wexel = await program.account.wexel.fetch(wexelPda);
       console.log("Cumulative claimed rewards:", wexel.claimedRewards.toNumber());
-      
+
       // Should not overflow
       expect(wexel.claimedRewards.toNumber()).to.be.greaterThan(0);
     });
