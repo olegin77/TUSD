@@ -537,8 +537,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
 
 ## **ЭТАП 10.5. Админ-панель**
 
-- [ ] T-0108 | Инициализировать отдельное Frontend-приложение для админки (`apps/admin-app`) или раздел в `webapp`
+- [x] T-0108 | Инициализировать отдельное Frontend-приложение для админки (`apps/admin-app`) или раздел в `webapp`
   - depends: [T-0001, T-0030] # Зависит от Next.js / React
+  - ✅ Completed: Admin section created within webapp (/admin route) with separate layout
   - apply:
     ```bash
     set -euo pipefail
@@ -551,8 +552,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/
     ```
 
-- [ ] T-0108.1 | Настроить отдельную аутентификацию для админки (JWT/сессия, возможно с ролью ADMIN)
+- [x] T-0108.1 | Настроить отдельную аутентификацию для админки (JWT/сессия, возможно с ролью ADMIN)
   - depends: [T-0108, T-0023] # Зависит от бэкенда и JWT
+  - ✅ Completed: JWT-based admin auth with AdminGuard, admin login page, endpoints /auth/admin/login and /auth/admin/profile
   - apply:
     ```bash
     set -euo pipefail
@@ -566,8 +568,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     # TODO: Добавить эндпоинты в apps/indexer/src/auth/
     ```
 
-- [ ] T-0108.2 | Реализовать UI Kit для админки (может отличаться от основного, напр., Ant Design, Material UI или кастомный на базе shadcn)
+- [x] T-0108.2 | Реализовать UI Kit для админки (может отличаться от основного, напр., Ant Design, Material UI или кастомный на базе shadcn)
   - depends: [T-0108]
+  - ✅ Completed: Using shadcn/ui components with dark admin theme
   - apply:
     ```bash
     set -euo pipefail
@@ -579,8 +582,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/package.json apps/webapp/pnpm-lock.yaml # (добавить зависимости)
     ```
 
-- [ ] T-0108.3 | Разработать дашборд админки: основные метрики, быстрые ссылки
+- [x] T-0108.3 | Разработать дашборд админки: основные метрики, быстрые ссылки
   - depends: [T-0108.1, T-0108.2, T-0009]
+  - ✅ Completed: Admin dashboard with TVL, users, wexels, system health, quick actions
   - apply:
     ```bash
     set -euo pipefail
@@ -590,8 +594,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/page.tsx
     ```
 
-- [ ] T-0108.4 | Разработать раздел управления пулами (просмотр, изменение APY, min_deposit, статуса)
+- [x] T-0108.4 | Разработать раздел управления пулами (просмотр, изменение APY, min_deposit, статуса)
   - depends: [T-0108.3, T-0040] # Зависит от API пулов
+  - ✅ Completed: Pool management with inline editing, PATCH /api/v1/admin/pools/:id endpoint
   - apply:
     ```bash
     set -euo pipefail
@@ -604,8 +609,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/pools/
     ```
 
-- [ ] T-0108.5 | Разработать раздел управления параметрами буста (адрес токена, target_bp, max_apy_bp)
+- [x] T-0108.5 | Разработать раздел управления параметрами буста (адрес токена, target_bp, max_apy_bp)
   - depends: [T-0108.4] # Связано с пулами
+  - ✅ Completed: Boost parameters integrated into pool management section
   - apply:
     ```bash
     set -euo pipefail
@@ -614,8 +620,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/pools/page.tsx
     ```
 
-- [ ] T-0108.6 | Разработать раздел управления оракулами цен (просмотр источников, ручная установка резервной цены с Multisig/Timelock)
+- [x] T-0108.6 | Разработать раздел управления оракулами цен (просмотр источников, ручная установка резервной цены с Multisig/Timelock)
   - depends: [T-0108.3, T-0051] # Зависит от API цен
+  - ✅ Completed: Oracle management with price sources, refresh, manual price setting
   - apply:
     ```bash
     set -euo pipefail
@@ -627,8 +634,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/oracles/
     ```
 
-- [ ] T-0108.7 | Разработать раздел управления глобальными настройками (комиссии маркетплейса, адреса Multisig/Timelock)
+- [x] T-0108.7 | Разработать раздел управления глобальными настройками (комиссии маркетплейса, адреса Multisig/Timelock)
   - depends: [T-0108.3]
+  - ✅ Completed: Global settings page with marketplace fee, security addresses, system pause, KYC toggle
   - apply:
     ```bash
     set -euo pipefail
@@ -640,8 +648,9 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
     git add apps/webapp/src/app/admin/settings/
     ```
 
-- [ ] T-0108.8 | Разработать раздел просмотра пользователей и векселей (поиск, фильтрация, детали)
+- [x] T-0108.8 | Разработать раздел просмотра пользователей и векселей (поиск, фильтрация, детали)
   - depends: [T-0108.3, T-0043, T-0073] # Зависит от данных пользователя/векселя
+  - ✅ Completed: Users and Wexels pages with search, filters, detailed tables, API endpoints
   - apply:
     ```bash
     set -euo pipefail
