@@ -4,8 +4,10 @@ import { IndexerController } from './indexer.controller';
 import { SolanaIndexerService } from './services/solana-indexer.service';
 import { EventProcessorService } from './services/event-processor.service';
 import { PrismaService } from '../../database/prisma.service';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
+  imports: [NotificationsModule],
   controllers: [IndexerController],
   providers: [
     IndexerService,
