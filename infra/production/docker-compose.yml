@@ -19,7 +19,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./backups:/backups:ro
     ports:
-      - "127.0.0.1:5432:5432"  # Only expose on localhost for security
+      - "127.0.0.1:5432:5432" # Only expose on localhost for security
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-usdx}"]
       interval: 10s
@@ -35,10 +35,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 4G
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 2G
 
   # Redis Cache
@@ -58,7 +58,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "127.0.0.1:6379:6379"  # Only expose on localhost
+      - "127.0.0.1:6379:6379" # Only expose on localhost
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
@@ -74,10 +74,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 2G
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 1G
 
   # Backend/Indexer Application
@@ -97,7 +97,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
       API_PORT: 3001
       CORS_ORIGIN: ${CORS_ORIGIN:-https://app.usdx-wexel.com}
-      
+
       # Solana Configuration
       SOLANA_RPC_URL: ${SOLANA_RPC_URL:?SOLANA_RPC_URL is required}
       SOLANA_WEBSOCKET_URL: ${SOLANA_WEBSOCKET_URL:?SOLANA_WEBSOCKET_URL is required}
@@ -107,24 +107,24 @@ services:
       SOLANA_COLLATERAL_PROGRAM_ID: ${SOLANA_COLLATERAL_PROGRAM_ID:?Required}
       SOLANA_ORACLE_PROGRAM_ID: ${SOLANA_ORACLE_PROGRAM_ID:?Required}
       SOLANA_MARKETPLACE_PROGRAM_ID: ${SOLANA_MARKETPLACE_PROGRAM_ID:?Required}
-      
+
       # Tron Configuration
       TRON_GRID_API_KEY: ${TRON_GRID_API_KEY:?Required}
       TRON_NETWORK: mainnet
       TRON_DEPOSIT_VAULT_ADDRESS: ${TRON_DEPOSIT_VAULT_ADDRESS:?Required}
       TRON_PRICE_FEED_ADDRESS: ${TRON_PRICE_FEED_ADDRESS:?Required}
-      
+
       # Oracles
       PYTH_PRICE_FEED_ID: ${PYTH_PRICE_FEED_ID}
       CHAINLINK_PRICE_FEED_ADDRESS: ${CHAINLINK_PRICE_FEED_ADDRESS}
-      
+
       # Security
       ADMIN_MULTISIG_ADDRESS: ${ADMIN_MULTISIG_ADDRESS:?Required}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:?Required}
-      
+
       # Monitoring
       SENTRY_DSN: ${SENTRY_DSN}
-      
+
       # Notifications
       NOTIFICATION_WEBHOOK_URL: ${NOTIFICATION_WEBHOOK_URL}
     ports:
@@ -146,10 +146,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 4G
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 2G
 
   # Frontend Web Application
@@ -183,10 +183,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 2G
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 1G
 
   # Nginx Reverse Proxy
@@ -215,13 +215,13 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
 
 networks:
   backend:
     driver: bridge
-    internal: true  # Backend network is internal only
+    internal: true # Backend network is internal only
   frontend:
     driver: bridge
 

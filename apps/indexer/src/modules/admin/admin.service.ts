@@ -48,9 +48,12 @@ export class AdminService {
 
       // Calculate average APY across all pools
       const pools = await this.prisma.pools.findMany();
-      const avgAPY = pools.length > 0
-        ? pools.reduce((sum, p) => sum + p.apy_base_bp, 0) / pools.length / 100
-        : 0;
+      const avgAPY =
+        pools.length > 0
+          ? pools.reduce((sum, p) => sum + p.apy_base_bp, 0) /
+            pools.length /
+            100
+          : 0;
 
       return {
         totalValueLocked: `$${((wexelsAgg._sum.principal_usd || 0) / 1e6).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
@@ -88,7 +91,10 @@ export class AdminService {
         solana_address: user.solana_address,
         tron_address: user.tron_address,
         created_at: user.created_at,
-        total_deposited: user.wexels.reduce((sum, w) => sum + Number(w.principal_usd), 0),
+        total_deposited: user.wexels.reduce(
+          (sum, w) => sum + Number(w.principal_usd),
+          0,
+        ),
         total_wexels: user.wexels.length,
         kyc_status: 'approved', // TODO: Implement KYC status
       }));
@@ -156,9 +162,27 @@ export class AdminService {
         lastUpdate: Date.now(),
         maxDeviation: 150,
         sources: [
-          { source: 'Pyth', price: 0.0246, timestamp: Date.now(), status: 'active', deviation: 0.4 },
-          { source: 'Raydium TWAP', price: 0.0244, timestamp: Date.now(), status: 'active', deviation: -0.4 },
-          { source: 'Binance', price: 0.0245, timestamp: Date.now(), status: 'active', deviation: 0 },
+          {
+            source: 'Pyth',
+            price: 0.0246,
+            timestamp: Date.now(),
+            status: 'active',
+            deviation: 0.4,
+          },
+          {
+            source: 'Raydium TWAP',
+            price: 0.0244,
+            timestamp: Date.now(),
+            status: 'active',
+            deviation: -0.4,
+          },
+          {
+            source: 'Binance',
+            price: 0.0245,
+            timestamp: Date.now(),
+            status: 'active',
+            deviation: 0,
+          },
         ],
       },
     ];
@@ -171,9 +195,15 @@ export class AdminService {
     // TODO: Store in database
     return {
       marketplace_fee_bp: 250,
-      multisig_address: process.env.ADMIN_MULTISIG_ADDRESS || '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
-      timelock_address: process.env.TIMELOCK_ADDRESS || '9xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
-      pause_guardian_address: process.env.PAUSE_GUARDIAN_ADDRESS || '8xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+      multisig_address:
+        process.env.ADMIN_MULTISIG_ADDRESS ||
+        '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+      timelock_address:
+        process.env.TIMELOCK_ADDRESS ||
+        '9xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+      pause_guardian_address:
+        process.env.PAUSE_GUARDIAN_ADDRESS ||
+        '8xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
       system_paused: false,
       kyc_required: false,
       min_deposit_global: 100,

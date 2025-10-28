@@ -32,9 +32,15 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" aria-label="Wexel - Главная страница">
+          <Link
+            href="/"
+            className="flex items-center space-x-2"
+            aria-label="Wexel - Главная страница"
+          >
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm" aria-hidden="true">W</span>
+              <span className="text-white font-bold text-sm" aria-hidden="true">
+                W
+              </span>
             </div>
             <span className="text-xl font-bold text-gray-900">Wexel</span>
           </Link>
@@ -73,15 +79,19 @@ export function Navigation() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              {isOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+              {isOpen ? (
+                <X className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              )}
             </Button>
           </div>
         </div>

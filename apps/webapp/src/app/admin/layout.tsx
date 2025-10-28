@@ -80,7 +80,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button size="sm" variant="ghost" onClick={handleLogout} className="text-gray-300 hover:text-white">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleLogout}
+                className="text-gray-300 hover:text-white"
+              >
                 <LogOut className="h-4 w-4 mr-2" />
                 Выйти
               </Button>
@@ -88,7 +93,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Mobile menu button */}
             <div className="md:hidden">
-              <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)} className="text-gray-300">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(!isOpen)}
+                className="text-gray-300"
+              >
                 {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>

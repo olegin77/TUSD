@@ -54,14 +54,23 @@ export default function AdminSettingsPage() {
   };
   const saveSettings = async () => {
     setSaving(true);
+    try {
+      const response = await fetch("/api/v1/admin/settings", {
         method: "PATCH",
+        headers: {
           "Content-Type": "application/json",
+        },
         body: JSON.stringify(editForm),
+      });
       if (!response.ok) throw new Error("Failed to save settings");
       alert("Настройки сохранены успешно");
+    } catch (error) {
       console.error("Error saving settings:", error);
       alert("Ошибка при сохранении настроек");
+    } finally {
       setSaving(false);
+    }
+  };
   const toggleSystemPause = async () => {
     const confirmed = confirm(
       `Вы уверены, что хотите ${editForm.system_paused ? "возобновить" : "приостановить"} работу системы?`

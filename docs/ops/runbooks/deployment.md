@@ -190,8 +190,8 @@ docker-compose up -d
 
 ---
 
-**Deployment Time**: ____  
-**Deployed By**: ____  
-**Version**: ____  
+**Deployment Time**: \_**\_  
+**Deployed By**: \_\_**  
+**Version**: \_**\_  
 **Status**: ☐ Success ☐ Rolled Back  
-**Notes**: ____
+**Notes**: \_\_**

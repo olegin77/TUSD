@@ -24,6 +24,7 @@ export default function PoolsPage() {
       description: "Краткосрочные инвестиции с умеренной доходностью",
       features: ["Ежедневные выплаты", "Возможность залога", "Низкий риск"],
     },
+    {
       id: 2,
       name: "24 месяца",
       apy: 24,
@@ -32,6 +33,8 @@ export default function PoolsPage() {
       maxDeposit: 500000,
       description: "Среднесрочные инвестиции с повышенной доходностью",
       features: ["Ежедневные выплаты", "Возможность залога", "Средний риск"],
+    },
+    {
       id: 3,
       name: "36 месяцев",
       apy: 30,
@@ -40,6 +43,7 @@ export default function PoolsPage() {
       maxDeposit: 1000000,
       description: "Долгосрочные инвестиции с максимальной доходностью",
       features: ["Ежедневные выплаты", "Возможность залога", "Высокий риск"],
+    },
   ];
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {

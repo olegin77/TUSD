@@ -78,19 +78,20 @@ for i in {1..10}; do curl http://localhost:3001/health; done
 
 1. Open http://localhost:9090
 2. Try these queries:
+
    ```promql
    # Total HTTP requests
    usdx_http_requests_total
-   
+
    # HTTP request rate (per second)
    rate(usdx_http_requests_total[1m])
-   
+
    # HTTP request duration (95th percentile)
    histogram_quantile(0.95, rate(usdx_http_request_duration_seconds_bucket[5m]))
-   
+
    # Total Value Locked
    usdx_total_value_locked
-   
+
    # Active Wexels
    usdx_active_wexels_count
    ```
@@ -119,14 +120,14 @@ Edit `infra/monitoring/prometheus/prometheus.yml`:
 
 ```yaml
 scrape_configs:
-  - job_name: 'usdx-indexer'
-    metrics_path: '/metrics'
+  - job_name: "usdx-indexer"
+    metrics_path: "/metrics"
     static_configs:
-      - targets: ['your-backend.example.com:3001']
+      - targets: ["your-backend.example.com:3001"]
     # Add authentication
     basic_auth:
-      username: 'metrics_user'
-      password: 'secure_password'
+      username: "metrics_user"
+      password: "secure_password"
     # OR use bearer token
     # bearer_token: 'your_secret_token'
 ```
@@ -137,18 +138,21 @@ Add authentication middleware in your backend:
 
 ```typescript
 // apps/indexer/src/main.ts
-import { NestFactory } from '@nestjs/core';
-import * as basicAuth from 'express-basic-auth';
+import { NestFactory } from "@nestjs/core";
+import * as basicAuth from "express-basic-auth";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   // Protect /metrics endpoint
-  app.use('/metrics', basicAuth({
-    users: { 'metrics_user': 'secure_password' },
-    challenge: true,
-  }));
-  
+  app.use(
+    "/metrics",
+    basicAuth({
+      users: { metrics_user: "secure_password" },
+      challenge: true,
+    })
+  );
+
   await app.listen(3001);
 }
 ```
@@ -161,12 +165,12 @@ Edit `infra/monitoring/alertmanager/alertmanager.yml`:
 
 ```yaml
 receivers:
-  - name: 'critical-alerts'
+  - name: "critical-alerts"
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
-        channel: '#critical-alerts'
-        title: '[CRITICAL] {{ .GroupLabels.alertname }}'
-        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+      - api_url: "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+        channel: "#critical-alerts"
+        title: "[CRITICAL] {{ .GroupLabels.alertname }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}{{ end }}"
         send_resolved: true
 ```
 
@@ -174,27 +178,27 @@ receivers:
 
 ```yaml
 global:
-  smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'alerts@usdx-wexel.com'
-  smtp_auth_username: 'your-email@gmail.com'
-  smtp_auth_password: 'your-app-password'
+  smtp_smarthost: "smtp.gmail.com:587"
+  smtp_from: "alerts@usdx-wexel.com"
+  smtp_auth_username: "your-email@gmail.com"
+  smtp_auth_password: "your-app-password"
 
 receivers:
-  - name: 'critical-alerts'
+  - name: "critical-alerts"
     email_configs:
-      - to: 'oncall@usdx-wexel.com'
+      - to: "oncall@usdx-wexel.com"
         headers:
-          Subject: '[CRITICAL] {{ .GroupLabels.alertname }}'
+          Subject: "[CRITICAL] {{ .GroupLabels.alertname }}"
 ```
 
 #### PagerDuty Notifications
 
 ```yaml
 receivers:
-  - name: 'critical-alerts'
+  - name: "critical-alerts"
     pagerduty_configs:
-      - service_key: 'your_pagerduty_integration_key'
-        description: '{{ .GroupLabels.alertname }}: {{ .Annotations.summary }}'
+      - service_key: "your_pagerduty_integration_key"
+        description: "{{ .GroupLabels.alertname }}: {{ .Annotations.summary }}"
 ```
 
 ### Step 4: Deploy with Docker Compose
@@ -218,19 +222,21 @@ docker-compose ps
 ### Step 5: Configure Grafana for Production
 
 1. **Change Admin Password**:
+
    ```bash
    docker exec -it usdx-grafana grafana-cli admin reset-admin-password NEW_PASSWORD
    ```
 
 2. **Set up HTTPS** (using reverse proxy like Nginx):
+
    ```nginx
    server {
        listen 443 ssl http2;
        server_name grafana.example.com;
-       
+
        ssl_certificate /path/to/cert.pem;
        ssl_certificate_key /path/to/key.pem;
-       
+
        location / {
            proxy_pass http://localhost:3002;
            proxy_set_header Host $host;
@@ -257,8 +263,8 @@ Edit `infra/monitoring/docker-compose.yml`:
 services:
   prometheus:
     command:
-      - '--storage.tsdb.retention.time=90d'  # Keep data for 90 days
-      - '--storage.tsdb.retention.size=50GB' # Or limit by size
+      - "--storage.tsdb.retention.time=90d" # Keep data for 90 days
+      - "--storage.tsdb.retention.size=50GB" # Or limit by size
 ```
 
 ### Step 7: Configure Backups
@@ -288,6 +294,7 @@ chmod +x /etc/cron.daily/backup-monitoring
 ### Problem: Metrics endpoint returns 404
 
 **Solution**:
+
 ```bash
 # Check if backend is running
 curl http://localhost:3001/health
@@ -300,6 +307,7 @@ cd apps/indexer && pnpm start:dev
 ### Problem: Prometheus not scraping
 
 **Solution**:
+
 1. Check Prometheus targets: http://localhost:9090/targets
 2. Verify backend URL in `prometheus/prometheus.yml`
 3. Check network connectivity:
@@ -310,6 +318,7 @@ cd apps/indexer && pnpm start:dev
 ### Problem: Grafana dashboard shows "No Data"
 
 **Solution**:
+
 1. Verify Prometheus datasource: Grafana → Configuration → Data Sources
 2. Test query in Explore view
 3. Check if metrics are present in Prometheus: http://localhost:9090/graph
@@ -318,6 +327,7 @@ cd apps/indexer && pnpm start:dev
 ### Problem: Alerts not firing
 
 **Solution**:
+
 1. Check alert rules: http://localhost:9090/alerts
 2. Verify Alertmanager is running: http://localhost:9093
 3. Check Prometheus logs:
@@ -329,6 +339,7 @@ cd apps/indexer && pnpm start:dev
 ### Problem: Business metrics not updating
 
 **Solution**:
+
 1. Check backend logs for cron job execution:
    ```bash
    cd apps/indexer && pnpm start:dev
@@ -354,24 +365,28 @@ cd apps/indexer && pnpm start:dev
 ### 3. Create Runbooks
 
 For each alert, document:
+
 - What it means
 - How to investigate
 - How to resolve
 - Who to escalate to
 
 Example:
+
 ```markdown
 ## Alert: HighErrorRate
 
 **Description**: API error rate exceeded 5% for 5 minutes
 
 **Investigation**:
+
 1. Check error logs: `docker logs usdx-indexer | grep ERROR`
 2. Check recent deployments
 3. Check database connectivity
 4. Check external service status (Solana RPC, Oracles)
 
 **Resolution**:
+
 - If deployment issue: Rollback to previous version
 - If database issue: Check connection pool, restart if needed
 - If external service: Wait for recovery or switch to backup
@@ -432,6 +447,7 @@ For issues or questions:
    - `/infra/monitoring/README.md` - Infrastructure guide
 
 2. Review logs:
+
    ```bash
    docker logs usdx-prometheus
    docker logs usdx-grafana

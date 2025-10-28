@@ -24,9 +24,11 @@ nano backup.conf
 ## Scripts
 
 ### backup_db.sh
+
 Main backup script - creates timestamped backups of PostgreSQL and Redis.
 
 **Features:**
+
 - ✅ PostgreSQL full backup (SQL + custom format)
 - ✅ Redis RDB snapshot backup
 - ✅ Automatic compression (gzip)
@@ -36,14 +38,17 @@ Main backup script - creates timestamped backups of PostgreSQL and Redis.
 - ✅ Detailed logging
 
 **Usage:**
+
 ```bash
 ./backup_db.sh
 ```
 
 ### restore_db_test.sh
+
 Automated restore testing - verifies backup integrity without affecting production.
 
 **Features:**
+
 - ✅ Creates test database
 - ✅ Restores from latest backup
 - ✅ Verifies data integrity
@@ -52,23 +57,28 @@ Automated restore testing - verifies backup integrity without affecting producti
 - ✅ Detailed reporting
 
 **Usage:**
+
 ```bash
 ./restore_db_test.sh
 ```
 
 ### setup_backup_cron.sh
+
 Setup automated backup scheduling via cron or systemd.
 
 **Usage:**
+
 ```bash
 ./setup_backup_cron.sh
 # Follow printed instructions
 ```
 
 ### test_backup_scripts.sh
+
 Unit tests for backup scripts.
 
 **Usage:**
+
 ```bash
 ./test_backup_scripts.sh
 ```
@@ -201,6 +211,7 @@ s3cmd sync /var/backups/usdx-wexel/ s3://usdx-backups/ --encrypt
 ## Troubleshooting
 
 ### No space left on device
+
 ```bash
 # Clean old backups
 find /var/backups/usdx-wexel -mtime +30 -delete
@@ -210,6 +221,7 @@ RETENTION_DAYS=14 ./backup_db.sh
 ```
 
 ### Restore fails: role does not exist
+
 ```bash
 # Create role
 psql -U postgres -c "CREATE ROLE usdx WITH LOGIN PASSWORD 'password';"
@@ -219,6 +231,7 @@ pg_restore --no-owner --role=usdx ...
 ```
 
 ### Backup too slow
+
 ```bash
 # Use parallel dump
 pg_dump --format=directory --jobs=4 ...
@@ -227,6 +240,7 @@ pg_dump --format=directory --jobs=4 ...
 ## Documentation
 
 See [docs/ops/BACKUP_RESTORE.md](../../docs/ops/BACKUP_RESTORE.md) for:
+
 - 📖 Complete procedures
 - 🚨 Disaster recovery plan
 - 📋 Maintenance checklists
@@ -242,6 +256,7 @@ All scripts include comprehensive tests:
 ```
 
 **Test coverage:**
+
 - ✅ Script existence and permissions
 - ✅ Bash syntax validation
 - ✅ Function definitions
@@ -255,6 +270,7 @@ All scripts include comprehensive tests:
 ## Support
 
 Issues? Check:
+
 1. Logs: `/workspace/scripts/logs/`
 2. Run tests: `./test_backup_scripts.sh`
 3. Documentation: `../../docs/ops/BACKUP_RESTORE.md`

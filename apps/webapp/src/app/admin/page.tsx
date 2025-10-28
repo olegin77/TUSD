@@ -51,6 +51,7 @@ export default function AdminDashboard() {
         totalRewardsPaid: "$2,340,000",
         averageAPY: 21.5,
         systemHealth: "healthy",
+      });
     } finally {
       setLoading(false);
     }

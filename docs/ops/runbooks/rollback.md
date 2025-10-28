@@ -50,6 +50,7 @@ cd /opt/usdx-wexel
 ```
 
 **Checklist:**
+
 - [ ] Team alerted
 - [ ] Status page updated
 - [ ] Logged into server
@@ -65,6 +66,7 @@ docker-compose stop webapp indexer nginx
 ```
 
 **Checklist:**
+
 - [ ] Application services stopped
 - [ ] Database still running
 - [ ] Redis still running
@@ -82,6 +84,7 @@ cat package.json | grep version
 ```
 
 **Checklist:**
+
 - [ ] Code rolled back to v1.0.2
 - [ ] Version verified
 
@@ -106,8 +109,8 @@ docker-compose stop indexer
 # Restore database
 gunzip -c "$BACKUP_FILE" | \
   docker-compose exec -T db psql -U usdx -d postgres -c "
-    SELECT pg_terminate_backend(pid) 
-    FROM pg_stat_activity 
+    SELECT pg_terminate_backend(pid)
+    FROM pg_stat_activity
     WHERE datname = 'usdx_wexel' AND pid <> pg_backend_pid();
   "
 
@@ -129,6 +132,7 @@ docker-compose exec db psql -U usdx -d usdx_wexel -c "
 ```
 
 **Checklist:**
+
 - [ ] Backup file identified
 - [ ] Current state backed up
 - [ ] Database restored
@@ -154,6 +158,7 @@ docker-compose logs -f
 ```
 
 **Checklist:**
+
 - [ ] Images rebuilt
 - [ ] Services started
 - [ ] No error logs
@@ -178,6 +183,7 @@ curl https://api.usdx-wexel.com/health | jq .version
 ```
 
 **Manual verification:**
+
 - [ ] Open https://app.usdx-wexel.com
 - [ ] Connect wallet
 - [ ] View dashboard
@@ -185,6 +191,7 @@ curl https://api.usdx-wexel.com/health | jq .version
 - [ ] Verify critical functionality
 
 **Metrics verification:**
+
 - [ ] Error rate < 0.1%
 - [ ] Response time < 500ms (p95)
 - [ ] No alerts firing
@@ -204,6 +211,7 @@ docker-compose logs -f --tail=100 indexer | grep -i error
 ```
 
 **Monitoring checklist:**
+
 - [ ] Error rates stable and low
 - [ ] Response times normal
 - [ ] Database performance normal
@@ -224,6 +232,7 @@ docker-compose logs -f --tail=100 indexer | grep -i error
 ```
 
 **Communication checklist:**
+
 - [ ] Status page updated (resolved)
 - [ ] Users notified
 - [ ] Team notified
@@ -350,8 +359,8 @@ docker-compose exec db pg_dump -U usdx usdx_wexel | gzip > /tmp/safety_backup.sq
 
 # 4. Drop and recreate database
 docker-compose exec db psql -U postgres -c "
-  SELECT pg_terminate_backend(pid) 
-  FROM pg_stat_activity 
+  SELECT pg_terminate_backend(pid)
+  FROM pg_stat_activity
   WHERE datname = 'usdx_wexel';
   DROP DATABASE IF EXISTS usdx_wexel;
   CREATE DATABASE usdx_wexel OWNER usdx;
@@ -400,13 +409,13 @@ docker-compose exec db psql -U usdx -d usdx_wexel -c "
 
 ## Rollback Decision Matrix
 
-| Condition | Action | Approver |
-|-----------|--------|----------|
-| P0 - Service down > 10 min | **Immediate rollback** | On-call engineer |
-| P0 - Data at risk | **Immediate rollback** | On-call + Team lead |
-| P1 - Error rate > 5% | **Rollback within 15 min** | On-call + Team lead |
-| P1 - Critical feature broken | **Rollback or hotfix** | Team lead |
-| P2 - Non-critical bug | **Hotfix or next release** | Product owner |
+| Condition                    | Action                     | Approver            |
+| ---------------------------- | -------------------------- | ------------------- |
+| P0 - Service down > 10 min   | **Immediate rollback**     | On-call engineer    |
+| P0 - Data at risk            | **Immediate rollback**     | On-call + Team lead |
+| P1 - Error rate > 5%         | **Rollback within 15 min** | On-call + Team lead |
+| P1 - Critical feature broken | **Rollback or hotfix**     | Team lead           |
+| P2 - Non-critical bug        | **Hotfix or next release** | Product owner       |
 
 ---
 

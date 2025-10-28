@@ -68,6 +68,7 @@
 ## Архитектура
 
 ### Frontend (Next.js)
+
 ```
 apps/webapp/src/app/admin/
 ├── layout.tsx           # Админ layout с навигацией
@@ -87,6 +88,7 @@ apps/webapp/src/app/admin/
 ```
 
 ### Backend (NestJS)
+
 ```
 apps/indexer/src/modules/
 ├── admin/
@@ -105,10 +107,12 @@ apps/indexer/src/modules/
 ## API Endpoints
 
 ### Аутентификация
+
 - `POST /api/v1/auth/admin/login` - Вход администратора
 - `GET /api/v1/auth/admin/profile` - Профиль администратора
 
 ### Админ-панель (требует JWT + ADMIN роль)
+
 - `GET /api/v1/admin/dashboard` - Статистика дашборда
 - `GET /api/v1/admin/users` - Список пользователей
 - `GET /api/v1/admin/wexels?status=active` - Список векселей с фильтрацией
@@ -135,12 +139,14 @@ apps/indexer/src/modules/
 ## Безопасность
 
 ### Реализовано
+
 - ✅ JWT-аутентификация с ролевым контролем
 - ✅ AdminGuard для защиты всех админских роутов
 - ✅ Валидация входящих данных (class-validator)
 - ✅ Rate limiting (через глобальный ThrottlerGuard)
 
 ### Требует дополнительной настройки в production
+
 - ⚠️ Хранение админов в БД вместо in-memory массива
 - ⚠️ Bcrypt хеширование паролей (сейчас plain text для демо)
 - ⚠️ 2FA для администраторов
@@ -153,18 +159,21 @@ apps/indexer/src/modules/
 ## Следующие шаги
 
 ### Высокий приоритет
+
 1. Перенести админов в БД (таблица `admins`)
 2. Добавить bcrypt хеширование
 3. Реализовать audit log
 4. Подключить real-time данные вместо mock
 
 ### Средний приоритет
+
 5. Добавить пагинацию в списки пользователей/векселей
 6. Расширенные фильтры и сортировка
 7. Экспорт данных (CSV/Excel)
 8. Графики и аналитика
 
 ### Низкий приоритет
+
 9. 2FA для админов
 10. Activity log в интерфейсе
 11. Настройка email уведомлений администраторам
@@ -176,12 +185,14 @@ apps/indexer/src/modules/
 ### Как протестировать
 
 1. Запустить backend:
+
 ```bash
 cd apps/indexer
 pnpm dev
 ```
 
 2. Запустить frontend:
+
 ```bash
 cd apps/webapp
 pnpm dev
@@ -196,6 +207,7 @@ pnpm dev
 5. Проверить все разделы админ-панели
 
 ### Mock данные
+
 Сейчас используются mock данные для демонстрации. После интеграции с БД будут отображаться реальные данные.
 
 ---

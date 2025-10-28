@@ -7,21 +7,25 @@ Guide for responding to production incidents.
 ## Severity Levels
 
 ### P0 - Critical (Production Down)
+
 - **Response Time**: Immediate
 - **Examples**: API unavailable, data loss, security breach
 - **Actions**: All hands on deck, immediate escalation
 
 ### P1 - High (Major Feature Broken)
+
 - **Response Time**: < 15 minutes
 - **Examples**: Wallet connection fails, deposits broken
 - **Actions**: On-call engineer responds, team notified
 
 ### P2 - Medium (Minor Feature Broken)
+
 - **Response Time**: < 1 hour
 - **Examples**: UI bug, slow response times
 - **Actions**: Normal response, fix in next release
 
 ### P3 - Low (Cosmetic Issue)
+
 - **Response Time**: Next business day
 - **Examples**: Styling issue, typo
 - **Actions**: Log as bug, schedule fix
@@ -41,6 +45,7 @@ Guide for responding to production incidents.
 ```
 
 **Actions:**
+
 - [ ] Incident detected
 - [ ] Alert sent
 - [ ] On-call engineer paged
@@ -66,12 +71,14 @@ curl https://app.usdx-wexel.com/
 ```
 
 **Questions:**
+
 - What is broken?
 - How many users affected?
 - Is data at risk?
 - What changed recently?
 
 **Actions:**
+
 - [ ] Scope determined
 - [ ] Impact assessed
 - [ ] Root cause hypothesis
@@ -79,6 +86,7 @@ curl https://app.usdx-wexel.com/
 ### Step 3: Contain (T+10)
 
 **If data at risk:**
+
 ```bash
 # Pause blockchain operations
 docker-compose exec indexer npm run pause:contracts
@@ -88,6 +96,7 @@ docker-compose stop indexer
 ```
 
 **If service unavailable:**
+
 ```bash
 # Route to maintenance page
 # Update DNS or load balancer
@@ -97,6 +106,7 @@ docker-compose exec indexer npm run maintenance:on
 ```
 
 **Actions:**
+
 - [ ] Further damage prevented
 - [ ] Users notified (status page)
 - [ ] Stakeholders notified
@@ -126,6 +136,7 @@ git log --oneline -10
 ```
 
 **Common Issues:**
+
 - Database connection exhaustion
 - Out of memory
 - Disk full
@@ -133,22 +144,26 @@ git log --oneline -10
 - External service failure (RPC, oracle)
 
 **Actions:**
+
 - [ ] Root cause identified
 - [ ] Fix strategy determined
 
 ### Step 5: Fix (T+30)
 
 **Option A: Restart services**
+
 ```bash
 docker-compose restart indexer webapp
 ```
 
 **Option B: Rollback deployment**
+
 ```bash
 ./scripts/rollback.sh v1.x.x-prev
 ```
 
 **Option C: Hotfix**
+
 ```bash
 # Make fix
 git checkout -b hotfix/issue-123
@@ -164,6 +179,7 @@ docker-compose up -d indexer
 ```
 
 **Option D: Scale resources**
+
 ```bash
 # Increase database connections
 docker-compose exec db psql -U postgres -c "
@@ -175,6 +191,7 @@ docker-compose restart db
 ```
 
 **Actions:**
+
 - [ ] Fix applied
 - [ ] Services restored
 - [ ] Functionality verified
@@ -196,6 +213,7 @@ docker-compose restart db
 ```
 
 **Actions:**
+
 - [ ] All services healthy
 - [ ] Error rates normal
 - [ ] Critical functionality verified
@@ -212,6 +230,7 @@ docker-compose restart db
 ```
 
 **Actions:**
+
 - [ ] Status page updated (resolved)
 - [ ] Users notified
 - [ ] Stakeholders updated
@@ -220,6 +239,7 @@ docker-compose restart db
 ### Step 8: Post-Mortem (T+24h)
 
 **Actions:**
+
 - [ ] Post-mortem meeting scheduled
 - [ ] Timeline documented
 - [ ] Root cause confirmed
@@ -262,11 +282,13 @@ docker-compose restart db
 ### Scenario: API Unavailable
 
 **Symptoms:**
+
 - API health check failing
 - 502/503 errors
 - Timeout errors
 
 **Diagnosis:**
+
 ```bash
 docker-compose logs indexer
 docker-compose ps
@@ -274,11 +296,13 @@ netstat -tlnp | grep 3001
 ```
 
 **Common Causes:**
+
 - Service crashed
 - Database connection issue
 - Out of memory
 
 **Fix:**
+
 ```bash
 docker-compose restart indexer
 # Or if OOM:
@@ -289,11 +313,13 @@ docker-compose restart indexer
 ### Scenario: Database Connection Exhausted
 
 **Symptoms:**
+
 - "Too many connections" errors
 - Slow API responses
 - Connection timeout errors
 
 **Diagnosis:**
+
 ```bash
 docker-compose exec db psql -U usdx -d usdx_wexel -c "
   SELECT count(*) FROM pg_stat_activity;
@@ -301,13 +327,14 @@ docker-compose exec db psql -U usdx -d usdx_wexel -c "
 ```
 
 **Fix:**
+
 ```bash
 # Kill idle connections
 docker-compose exec db psql -U postgres -c "
-  SELECT pg_terminate_backend(pid) 
-  FROM pg_stat_activity 
-  WHERE datname = 'usdx_wexel' 
-  AND state = 'idle' 
+  SELECT pg_terminate_backend(pid)
+  FROM pg_stat_activity
+  WHERE datname = 'usdx_wexel'
+  AND state = 'idle'
   AND state_change < now() - interval '5 minutes';
 "
 
@@ -321,17 +348,20 @@ docker-compose restart db
 ### Scenario: Blockchain Indexer Lagging
 
 **Symptoms:**
+
 - Events not showing in UI
 - Indexer lag metric high
 - Users report missing transactions
 
 **Diagnosis:**
+
 ```bash
 docker-compose logs indexer | grep "indexer lag"
 docker-compose exec indexer npm run indexer:status
 ```
 
 **Fix:**
+
 ```bash
 # Check RPC connection
 docker-compose exec indexer npm run rpc:ping
@@ -346,17 +376,20 @@ docker-compose restart indexer
 ### Scenario: Out of Disk Space
 
 **Symptoms:**
+
 - Database errors
 - Log errors
 - Application crashes
 
 **Diagnosis:**
+
 ```bash
 df -h
 docker system df
 ```
 
 **Fix:**
+
 ```bash
 # Clean Docker
 docker system prune -a -f
@@ -375,21 +408,25 @@ find /var/backups/usdx-wexel -type f -mtime +60 -delete
 ## Escalation
 
 ### Level 1: On-Call Engineer
+
 - Initial response
 - Common fixes
 - 0-30 minutes
 
 ### Level 2: Team Lead / Senior Engineer
+
 - Complex issues
 - Architecture decisions
 - 30-60 minutes
 
 ### Level 3: CTO / Founders
+
 - Business decisions
 - Security incidents
 - Major outages
 
 ### External: Infrastructure Provider
+
 - Cloud platform issues
 - Network problems
 - Contact: support@provider.com
@@ -401,7 +438,7 @@ find /var/backups/usdx-wexel -type f -mtime +60 -delete
 ### Status Page - Investigating
 
 ```
-We are currently investigating reports of [issue]. 
+We are currently investigating reports of [issue].
 We will provide an update in 15 minutes.
 ```
 
@@ -433,7 +470,7 @@ What happened: [brief explanation]
 What we did: [actions taken]
 Status: Resolved
 
-We apologize for the inconvenience. If you have questions, 
+We apologize for the inconvenience. If you have questions,
 please contact support@usdx-wexel.com.
 
 Thank you for your patience.
@@ -454,6 +491,7 @@ The USDX/Wexel Team
 [Brief description of what happened]
 
 **Timeline** (all times UTC):
+
 - HH:MM - Incident detected
 - HH:MM - Team alerted
 - HH:MM - Root cause identified
@@ -468,10 +506,12 @@ The USDX/Wexel Team
 [What was done to fix it]
 
 **Action Items**:
+
 - [ ] [Action 1] - Owner: [Name] - Due: [Date]
 - [ ] [Action 2] - Owner: [Name] - Due: [Date]
 
 **Lessons Learned**:
+
 - What went well:
 - What could be improved:
 - What we learned:

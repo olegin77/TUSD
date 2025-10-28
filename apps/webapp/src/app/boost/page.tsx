@@ -128,11 +128,11 @@ export default function BoostPage() {
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription className="text-sm">
                         <div className="space-y-1">
-                          <p>
-                            • Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY
+                          <p>• Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY</p>
                           <p>• Целевое значение: {formatPercentage(30)} от основной суммы</p>
                           <p>• Цены обновляются в реальном времени</p>
                           <p>• Буст применяется немедленно</p>
+                        </div>
                       </AlertDescription>
                     </Alert>
                   </CardContent>

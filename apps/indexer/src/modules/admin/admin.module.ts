@@ -8,7 +8,13 @@ import { UsersModule } from '../users/users.module';
 import { OraclesModule } from '../oracles/oracles.module';
 
 @Module({
-  imports: [PrismaModule, PoolsModule, WexelsModule, UsersModule, OraclesModule],
+  imports: [
+    PrismaModule,
+    PoolsModule,
+    WexelsModule,
+    UsersModule,
+    OraclesModule,
+  ],
   controllers: [AdminController],
   providers: [AdminService],
   exports: [AdminService],

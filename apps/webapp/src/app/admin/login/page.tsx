@@ -49,6 +49,7 @@ export default function AdminLoginPage() {
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
             <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-red-800">{error}</p>
+          </div>
         )}
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
@@ -65,13 +66,22 @@ export default function AdminLoginPage() {
               className="w-full"
               disabled={loading}
             />
+          </div>
+          <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Пароль
+            </label>
+            <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              required
+              className="w-full"
+              disabled={loading}
+            />
+          </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Вход..." : "Войти"}
           </Button>
@@ -80,6 +90,7 @@ export default function AdminLoginPage() {
           <a href="/" className="text-sm text-gray-600 hover:text-gray-900">
             ← Вернуться на сайт
           </a>
+        </div>
       </Card>
     </div>
   );
