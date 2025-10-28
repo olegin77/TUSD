@@ -1,7 +1,23 @@
+# Anchor
 .anchor
+target/
+node_modules/
+test-ledger/
 .DS_Store
-target
-**/*.rs.bk
-node_modules
-test-ledger
-.yarn
+
+# Coverage
+coverage/
+*.profraw
+*.profdata
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
