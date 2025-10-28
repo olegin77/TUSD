@@ -1,4 +1,4 @@
-import api from '../api';
+import api from "../api";
 
 export interface CreateDepositDto {
   poolId: number;
@@ -24,7 +24,7 @@ export const depositsApi = {
    * Initialize a new deposit
    */
   create: async (data: CreateDepositDto) => {
-    const response = await api.post('/api/v1/deposits', data);
+    const response = await api.post("/api/v1/deposits", data);
     return response.data;
   },
 
@@ -49,7 +49,7 @@ export const depositsApi = {
    */
   getAll: async (userAddress?: string) => {
     const params = userAddress ? { userAddress } : {};
-    const response = await api.get('/api/v1/deposits', { params });
+    const response = await api.get("/api/v1/deposits", { params });
     return response.data;
   },
 

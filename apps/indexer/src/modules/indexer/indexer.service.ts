@@ -5,20 +5,20 @@ import { SolanaIndexerService } from './services/solana-indexer.service';
 export class IndexerService implements OnModuleInit {
   private readonly logger = new Logger(IndexerService.name);
 
-  constructor(
-    private readonly solanaIndexer: SolanaIndexerService,
-  ) {}
+  constructor(private readonly solanaIndexer: SolanaIndexerService) {}
 
   async onModuleInit() {
     this.logger.log('Initializing Indexer Service...');
-    
+
     // Start indexing if enabled
     const startIndexing = process.env.START_INDEXING === 'true';
     if (startIndexing) {
       this.logger.log('Auto-starting indexer...');
       await this.startIndexing();
     } else {
-      this.logger.log('Indexer not auto-started. Set START_INDEXING=true to enable.');
+      this.logger.log(
+        'Indexer not auto-started. Set START_INDEXING=true to enable.',
+      );
     }
   }
 
@@ -27,7 +27,7 @@ export class IndexerService implements OnModuleInit {
    */
   async startIndexing() {
     this.logger.log('Starting blockchain event indexing...');
-    
+
     try {
       // Start Solana indexer
       await this.solanaIndexer.start();

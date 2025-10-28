@@ -49,6 +49,7 @@ async health() {
 ## Response Headers
 
 When rate limited, the API returns:
+
 - Status: `429 Too Many Requests`
 - Headers:
   - `X-RateLimit-Limit`: Max requests allowed

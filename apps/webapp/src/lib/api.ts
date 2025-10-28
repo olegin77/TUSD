@@ -104,8 +104,7 @@ export const oraclesApi = {
   getPrice: (tokenMint: string): Promise<TokenPrice> =>
     api.get(`/api/v1/oracles/price`, { params: { mint: tokenMint } }).then((res) => res.data),
 
-  getTokens: (): Promise<TokenPrice[]> => 
-    api.get("/api/v1/oracles/tokens").then((res) => res.data),
+  getTokens: (): Promise<TokenPrice[]> => api.get("/api/v1/oracles/tokens").then((res) => res.data),
 
   getHealth: (): Promise<{ status: string }> =>
     api.get("/api/v1/oracles/health").then((res) => res.data),

@@ -26,7 +26,10 @@ export class CollateralController {
     @Body() openCollateralDto: OpenCollateralDto,
   ) {
     try {
-      const position = await this.collateralService.open(wexelId, openCollateralDto);
+      const position = await this.collateralService.open(
+        wexelId,
+        openCollateralDto,
+      );
       return {
         success: true,
         data: position,
@@ -71,7 +74,10 @@ export class CollateralController {
     try {
       const position = await this.collateralService.getPosition(wexelId);
       if (!position) {
-        throw new HttpException('Collateral position not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Collateral position not found',
+          HttpStatus.NOT_FOUND,
+        );
       }
       return {
         success: true,

@@ -10,13 +10,16 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { WexelsService } from './wexels.service';
 import { BoostService } from './services/boost.service';
 import { CreateWexelDto } from './dto/create-wexel.dto';
 import { ApplyBoostDto } from './dto/apply-boost.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser, CurrentUserData } from '../../common/decorators/current-user.decorator';
 
-@Controller('wexels')
+@Controller('api/v1/wexels')
 export class WexelsController {
   constructor(
     private readonly wexelsService: WexelsService,
@@ -208,12 +211,14 @@ export class WexelsController {
 
   /**
    * POST /api/v1/wexels/:id/claim
-   * Claim rewards for a wexel
+   * Claim rewards for a wexel (Protected)
    */
+  @UseGuards(JwtAuthGuard)
   @Post(':id/claim')
   async claimRewards(
     @Param('id', ParseIntPipe) id: number,
     @Body('txHash') txHash: string,
+    @CurrentUser() user: CurrentUserData,
   ) {
     try {
       const result = await this.wexelsService.claimRewards(id, txHash);

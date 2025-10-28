@@ -19,7 +19,9 @@ export class EventProcessorService {
    * Process blockchain event and update database
    */
   async processEvent(event: BlockchainEvent) {
-    this.logger.log(`Processing event: ${event.eventType} from tx ${event.txHash}`);
+    this.logger.log(
+      `Processing event: ${event.eventType} from tx ${event.txHash}`,
+    );
 
     try {
       switch (event.eventType) {
@@ -68,11 +70,14 @@ export class EventProcessorService {
    * Handle WexelCreated event
    */
   private async handleWexelCreated(event: BlockchainEvent) {
-    const { id, owner, principal_usd, apy_bp, lock_period_months, created_at } = event.data;
+    const { id, owner, principal_usd, apy_bp, lock_period_months, created_at } =
+      event.data;
 
     // Calculate end timestamp
     const startTs = new Date(created_at * 1000);
-    const endTs = new Date(startTs.getTime() + lock_period_months * 30 * 24 * 60 * 60 * 1000);
+    const endTs = new Date(
+      startTs.getTime() + lock_period_months * 30 * 24 * 60 * 60 * 1000,
+    );
 
     await this.prisma.wexel.upsert({
       where: { id: BigInt(id) },

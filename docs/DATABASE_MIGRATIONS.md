@@ -7,6 +7,7 @@ This project uses Prisma for database migrations and schema management.
 ## Commands
 
 ### Development
+
 ```bash
 # Create a new migration
 cd apps/indexer
@@ -23,6 +24,7 @@ pnpm prisma:studio
 ```
 
 ### Production
+
 ```bash
 # Apply migrations (no dev features)
 pnpm prisma:migrate:deploy
@@ -34,11 +36,13 @@ pnpm prisma:generate
 ## Migration Status
 
 Current migrations:
+
 - ✅ `20241201000000_init` - Initial schema with all tables
 
 ## Schema Overview
 
 ### Tables
+
 - `pools` - Pool configurations (APY, lock periods)
 - `users` - User accounts and KYC info
 - `wexels` - NFT-векселя (NFT vouchers)

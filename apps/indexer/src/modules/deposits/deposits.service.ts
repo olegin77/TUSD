@@ -14,7 +14,9 @@ export class DepositsService {
    * Create a new deposit (reserve ID and initial data)
    */
   async create(createDepositDto: CreateDepositDto) {
-    this.logger.log(`Creating deposit for user: ${createDepositDto.userAddress}`);
+    this.logger.log(
+      `Creating deposit for user: ${createDepositDto.userAddress}`,
+    );
 
     const deposit = await this.prisma.deposit.create({
       data: {
@@ -35,15 +37,19 @@ export class DepositsService {
    * Confirm deposit after on-chain transaction
    */
   async confirm(id: number, confirmDepositDto: ConfirmDepositDto) {
-    this.logger.log(`Confirming deposit ${id} with tx: ${confirmDepositDto.txHash}`);
+    this.logger.log(
+      `Confirming deposit ${id} with tx: ${confirmDepositDto.txHash}`,
+    );
 
     // Verify transaction exists on-chain (TODO: implement on-chain verification)
-    
+
     const deposit = await this.prisma.deposit.update({
       where: { id: BigInt(id) },
       data: {
         tx_hash: confirmDepositDto.txHash,
-        wexel_id: confirmDepositDto.wexelId ? BigInt(confirmDepositDto.wexelId) : null,
+        wexel_id: confirmDepositDto.wexelId
+          ? BigInt(confirmDepositDto.wexelId)
+          : null,
         status: 'confirmed',
         updated_at: new Date(),
       },

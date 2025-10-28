@@ -90,7 +90,9 @@ export class MarketplaceService {
 
     // Check if wexel is collateralized (may restrict listing)
     if (wexel.is_collateralized) {
-      this.logger.warn(`Attempting to list collateralized wexel ${createListingDto.wexelId}`);
+      this.logger.warn(
+        `Attempting to list collateralized wexel ${createListingDto.wexelId}`,
+      );
       // According to TZ: listing impossible or special market with disclaimer
       throw new Error('Cannot list collateralized wexel');
     }
@@ -113,8 +115,12 @@ export class MarketplaceService {
         wexel_id: BigInt(createListingDto.wexelId),
         ask_price_usd: BigInt(createListingDto.askPriceUsd),
         auction: createListingDto.auction || false,
-        min_bid_usd: createListingDto.minBidUsd ? BigInt(createListingDto.minBidUsd) : null,
-        expiry_ts: createListingDto.expiryTs ? new Date(createListingDto.expiryTs) : null,
+        min_bid_usd: createListingDto.minBidUsd
+          ? BigInt(createListingDto.minBidUsd)
+          : null,
+        expiry_ts: createListingDto.expiryTs
+          ? new Date(createListingDto.expiryTs)
+          : null,
         status: 'active',
       },
       include: {
@@ -168,13 +174,19 @@ export class MarketplaceService {
     await this.prisma.wexel.update({
       where: { id: listing.wexel_id },
       data: {
-        owner_solana: buyListingDto.buyerAddress.startsWith('T') ? null : buyListingDto.buyerAddress,
-        owner_tron: buyListingDto.buyerAddress.startsWith('T') ? buyListingDto.buyerAddress : null,
+        owner_solana: buyListingDto.buyerAddress.startsWith('T')
+          ? null
+          : buyListingDto.buyerAddress,
+        owner_tron: buyListingDto.buyerAddress.startsWith('T')
+          ? buyListingDto.buyerAddress
+          : null,
         updated_at: new Date(),
       },
     });
 
-    this.logger.log(`Listing ${buyListingDto.listingId} sold to ${buyListingDto.buyerAddress}`);
+    this.logger.log(
+      `Listing ${buyListingDto.listingId} sold to ${buyListingDto.buyerAddress}`,
+    );
 
     return {
       listing_id: buyListingDto.listingId,

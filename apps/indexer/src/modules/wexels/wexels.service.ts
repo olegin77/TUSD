@@ -151,7 +151,8 @@ export class WexelsService {
     const wexel = await this.prisma.wexel.update({
       where: { id: BigInt(id) },
       data: {
-        total_claimed_usd: BigInt(rewards.total_claimed) + BigInt(rewards.unclaimed_rewards),
+        total_claimed_usd:
+          BigInt(rewards.total_claimed) + BigInt(rewards.unclaimed_rewards),
         updated_at: new Date(),
       },
     });

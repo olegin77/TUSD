@@ -1,4 +1,4 @@
-import api from '../api';
+import api from "../api";
 
 export interface CreateListingDto {
   wexelId: string;
@@ -27,7 +27,7 @@ export const marketplaceApi = {
    * Get all active listings
    */
   getListings: async (filters?: MarketplaceFilterDto) => {
-    const response = await api.get('/api/v1/market/listings', { params: filters });
+    const response = await api.get("/api/v1/market/listings", { params: filters });
     return response.data;
   },
 
@@ -43,7 +43,7 @@ export const marketplaceApi = {
    * Create new listing
    */
   createListing: async (data: CreateListingDto) => {
-    const response = await api.post('/api/v1/market/listings', data);
+    const response = await api.post("/api/v1/market/listings", data);
     return response.data;
   },
 
@@ -51,7 +51,7 @@ export const marketplaceApi = {
    * Purchase a listing
    */
   buyListing: async (data: BuyListingDto) => {
-    const response = await api.post('/api/v1/market/buy', data);
+    const response = await api.post("/api/v1/market/buy", data);
     return response.data;
   },
 

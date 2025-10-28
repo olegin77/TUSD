@@ -23,7 +23,8 @@ export class SolanaIndexerService {
     private readonly prisma: PrismaService,
     private readonly eventProcessor: EventProcessorService,
   ) {
-    const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
+    const rpcUrl =
+      process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
     this.connection = new Connection(rpcUrl, {
       commitment: 'confirmed',
       wsEndpoint: process.env.SOLANA_WEBSOCKET_URL,
@@ -82,8 +83,13 @@ export class SolanaIndexerService {
   /**
    * Subscribe to program logs
    */
-  private async subscribeToProgramLogs(programName: string, programId: PublicKey) {
-    this.logger.log(`Subscribing to ${programName} program: ${programId.toString()}`);
+  private async subscribeToProgramLogs(
+    programName: string,
+    programId: PublicKey,
+  ) {
+    this.logger.log(
+      `Subscribing to ${programName} program: ${programId.toString()}`,
+    );
 
     const subscriptionId = this.connection.onLogs(
       programId,
@@ -94,7 +100,7 @@ export class SolanaIndexerService {
           this.logger.error(`Error processing logs for ${programName}`, error);
         }
       },
-      'confirmed'
+      'confirmed',
     );
 
     this.subscriptionIds.push(subscriptionId);
@@ -104,7 +110,11 @@ export class SolanaIndexerService {
   /**
    * Handle program logs
    */
-  private async handleProgramLogs(programName: string, logs: any, context: any) {
+  private async handleProgramLogs(
+    programName: string,
+    logs: any,
+    context: any,
+  ) {
     const signature = logs.signature;
     this.logger.debug(`New transaction for ${programName}: ${signature}`);
 
