@@ -274,29 +274,13 @@ fi; git add README.md docs/PROJECT_STRUCTURE.md
     git add programs/solana-contracts/src/lib.rs
     ```
 
-- [ ] T-0015.1 | Убедиться, что все state-changing инструкции эмитируют события
+- [x] T-0015.1 | Убедиться, что все state-changing инструкции эмитируют события
   - depends: [T-0013, T-0015] # Зависит от инструкций, меняющих состояние
-  - apply:
-    ```bash
-    set -euo pipefail
-    # Проверить код инструкций deposit, apply_boost, и будущих (collateralize, claim и т.д.) на наличие emit!(EventName { ... })
-    echo "// TODO: Review all Solana instructions and ensure necessary events are emitted for indexing."
-    ```
+  - ✅ Completed: All instructions emit events (WexelCreated, BoostApplied, Accrued, Claimed, Collateralized, LoanRepaid, Redeemed, WexelFinalized)
 
-- [ ] T-0016 | Юнит-тесты для `deposit` и `apply_boost` - depends: [T-0013, T-0015] - apply:
-      `bash
-        # ... (код из предыдущего ответа) ...
-        set -euo pipefail; mkdir -p contracts/solana/solana-contracts/tests
-        if [ ! -f contracts/solana/solana-contracts/tests/deposit_boost.ts ]; then cat > contracts/solana/solana-contracts/tests/deposit_boost.ts <<'TS'
-// ... imports ...
-describe("Deposit and Boost", () => { it("Should deposit USDT", async () => { /*...*/ }); it("Should apply boost", async () => { /*...*/ }); });
-TS
-        fi
-        if [ ! -f contracts/solana/solana-contracts/tsconfig.json ]; then cat > contracts/solana/solana-contracts/tsconfig.json <<'JSON'
-{ "compilerOptions": { "types": ["mocha", "node"], "typeRoots": ["./node_modules/@types"], "lib": ["es2015"], "module": "commonjs", "target": "es6", "esModuleInterop": true, "resolveJsonModule": true, "outDir": "dist" }, "include": ["tests/**/*.ts"] }
-JSON
-        fi; git add contracts/solana/solana-contracts/tests/deposit_boost.ts contracts/solana/solana-contracts/tsconfig.json
-        `
+- [x] T-0016 | Юнит-тесты для `deposit` и `apply_boost` - depends: [T-0013, T-0015]
+  - ✅ Completed: Comprehensive tests in contracts/solana/solana-contracts/tests/deposit_boost.ts
+  - Tests cover: deposit validation, boost calculation, partial boost, max boost cap, error cases, unauthorized access
 
 - [ ] T-0017 | Установить целевое покрытие тестами для контрактов (>90%)
   - depends: [T-0010]
@@ -346,102 +330,37 @@ JSON
     git add src/modules/
     ```
 
-- [ ] T-0022.1 | Настроить Prisma Migrate для управления миграциями БД
+- [x] T-0022.1 | Настроить Prisma Migrate для управления миграциями БД
   - depends: [T-0021]
-  - apply:
-    ```bash
-    set -euo pipefail
-    cd apps/indexer
-    # Создать первую миграцию после определения схемы (T-0021)
-    # npx prisma migrate dev --name init
-    echo "// TODO: Run 'npx prisma migrate dev --name init' after schema definition (T-0021)."
-    # Добавить скрипты миграции в package.json
-    if command -v jq >/dev/null 2>&1; then
-      jq '.scripts += {"prisma:migrate:dev":"prisma migrate dev","prisma:migrate:deploy":"prisma migrate deploy"}' package.json > pkg.tmp && mv pkg.tmp package.json
-    fi
-    cd ../..
-    git add apps/indexer/package.json apps/indexer/prisma/migrations
-    ```
+  - ✅ Completed: Migration 20241201000000_init created, scripts added to package.json, documentation in docs/DATABASE_MIGRATIONS.md
 
-- [ ] T-0023 | Настроить конфигурацию приложения (`@nestjs/config`)
+- [x] T-0023 | Настроить конфигурацию приложения (`@nestjs/config`)
   - depends: [T-0020, T-0005]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    set -euo pipefail; cd apps/indexer; pnpm add @nestjs/config
-    echo "// TODO: Import ConfigModule.forRoot({ isGlobal: true }) in AppModule"
-    cd ../..; git add apps/indexer/src/app.module.ts apps/indexer/package.json apps/indexer/pnpm-lock.yaml
-    ```
+  - ✅ Completed: ConfigModule configured with Joi validation, config service, validation schema
 
-- [ ] T-0024 | Создать базовый `AppController` с `/health`
+- [x] T-0024 | Создать базовый `AppController` с `/health`
   - depends: [T-0020]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    git add apps/indexer/src/app.controller.ts
-    ```
+  - ✅ Completed: Health endpoint implemented in AppController
 
-- [ ] T-0025 | Настроить базовое логирование (`@nestjs/common` Logger)
+- [x] T-0025 | Настроить базовое логирование (`@nestjs/common` Logger)
   - depends: [T-0020]
-  - apply:
-    ```bash
-    echo "// INFO: NestJS Logger is available by default. Use it via 'private readonly logger = new Logger(...)'"
-    ```
+  - ✅ Completed: Logger used throughout services
 
-- [ ] T-0025.1 | Настроить отправку ошибок в Sentry (или аналог)
+- [x] T-0025.1 | Настроить отправку ошибок в Sentry (или аналог)
   - depends: [T-0025, T-0123]
-  - apply:
-    ```bash
-    set -euo pipefail
-    cd apps/indexer
-    # pnpm add @sentry/node @sentry/profiling-node # Уже добавлено в T-0123
-    # Настроить SentryModule или интерцептор для отлова и отправки ошибок
-    echo "// TODO: Configure Sentry integration for error reporting in NestJS app."
-    cd ../..
-    git add apps/indexer/src/app.module.ts # (или где будет настройка Sentry)
-    ```
+  - ✅ Completed: SentryModule, SentryInterceptor configured in AppModule
 
-- [ ] T-0025.2 | Реализовать валидацию входящих DTO (`class-validator`, `ValidationPipe`)
+- [x] T-0025.2 | Реализовать валидацию входящих DTO (`class-validator`, `ValidationPipe`)
   - depends: [T-0020]
-  - apply:
-    ```bash
-    set -euo pipefail
-    cd apps/indexer
-    pnpm add class-validator class-transformer
-    # Добавить `app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));` в main.ts
-    # Использовать декораторы class-validator в DTO (Data Transfer Objects) для API эндпоинтов
-    echo "// TODO: Apply ValidationPipe globally in main.ts and add validation decorators to DTOs."
-    cd ../..
-    git add apps/indexer/src/main.ts apps/indexer/package.json apps/indexer/pnpm-lock.yaml
-    ```
+  - ✅ Completed: ValidationPipe configured globally in main.ts, all DTOs use class-validator decorators
 
-- [ ] T-0025.3 | Определить стратегию обработки ошибок API (формат ответа, коды)
+- [x] T-0025.3 | Определить стратегию обработки ошибок API (формат ответа, коды)
   - depends: [T-0020]
-  - apply:
-    ```bash
-    set -euo pipefail
-    # Создать кастомный Exception Filter или использовать встроенные механизмы NestJS
-    # Задокументировать стандартный формат ответа при ошибках
-    mkdir -p apps/indexer/src/common/filters
-    touch apps/indexer/src/common/filters/http-exception.filter.ts
-    echo "// TODO: Implement a consistent API error response format using Exception Filters."
-    echo "# API Error Handling Strategy" > docs/API_ERROR_HANDLING.md
-    echo "Format: { statusCode: number, message: string | string[], error: string }" >> docs/API_ERROR_HANDLING.md
-    git add apps/indexer/src/common/filters/ apps/indexer/src/main.ts docs/API_ERROR_HANDLING.md
-    ```
+  - ✅ Completed: HttpExceptionFilter created, API_ERROR_HANDLING.md documented
 
-- [ ] T-0025.4 | Внедрить Rate Limiting для API (`@nestjs/throttler`)
+- [x] T-0025.4 | Внедрить Rate Limiting для API (`@nestjs/throttler`)
   - depends: [T-0020]
-  - apply:
-    ```bash
-    set -euo pipefail
-    cd apps/indexer
-    pnpm add @nestjs/throttler
-    # Настроить ThrottlerModule в AppModule и использовать @Throttle декораторы или глобальную защиту
-    echo "// TODO: Configure ThrottlerModule for API rate limiting in AppModule."
-    cd ../..
-    git add apps/indexer/src/app.module.ts apps/indexer/package.json apps/indexer/pnpm-lock.yaml
-    ```
+  - ✅ Completed: ThrottlerModule configured, CustomThrottlerGuard, documentation in docs/RATE_LIMITING.md
 
 ---
 
