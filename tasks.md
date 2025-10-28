@@ -771,25 +771,26 @@ _(Задачи T-0120 - T-0122 остаются)_
     - docs/ops/BACKUP_RESTORE.md: Complete documentation with DR procedures
   - Features: Multiple backup formats, parallel restore, automatic cleanup, monitoring integration
 
-- [ ] T-0125 | Подготовка инфраструктуры для Production
+- [x] T-0125 | Подготовка инфраструктуры для Production
   - depends: [T-0003, T-0122]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    echo "// TODO: Provision production DB, Redis, RPC nodes. Configure firewall, load balancer etc."
-    ```
+  - ✅ Completed: Comprehensive production infrastructure prepared
+    - docs/DEPLOYMENT_READINESS.md: Complete deployment checklist with 75+ items
+    - infra/production/docker-compose.yml: Production Docker Compose with all services
+    - infra/production/nginx/: Nginx reverse proxy with SSL, rate limiting, security headers
+    - infra/production/.env.production.template: Complete environment variable template
+    - docs/ops/DEPLOYMENT_GUIDE.md: Step-by-step deployment guide (200+ lines)
+    - docs/ops/runbooks/deployment.md: Deployment runbook with checklist
+    - docs/ops/runbooks/incident_response.md: Incident response procedures (P0-P3)
+    - docs/ops/runbooks/rollback.md: Rollback procedures and scenarios
+  - Features: Multi-service setup, monitoring integration, security hardening, automated backups
 
-- [ ] T-0125.1 | Создать операционные Runbooks (деплой, откат, реагирование на инциденты)
+- [x] T-0125.1 | Создать операционные Runbooks (деплой, откат, реагирование на инциденты)
   - depends: [T-0122, T-0124]
-  - apply:
-    ```bash
-    set -euo pipefail
-    mkdir -p docs/ops/runbooks
-    touch docs/ops/runbooks/deployment.md docs/ops/runbooks/rollback.md docs/ops/runbooks/incident_response.md
-    # Заполнить runbooks пошаговыми инструкциями
-    echo "// TODO: Write detailed operational runbooks."
-    git add docs/ops/runbooks/
-    ```
+  - ✅ Completed: Comprehensive operational runbooks created (completed in T-0125)
+    - docs/ops/runbooks/deployment.md: Step-by-step deployment checklist with validation
+    - docs/ops/runbooks/rollback.md: Emergency rollback procedures for various scenarios
+    - docs/ops/runbooks/incident_response.md: P0-P3 incident response with common scenarios
+  - All runbooks include: procedures, checklists, commands, communication templates, escalation paths
 
 - [ ] T-0126 | Провести финальное комплексное тестирование на стейджинге
   - depends: [T-0111, T-0112, T-0114.1, T-0116.1, T-0122, T-0125]
