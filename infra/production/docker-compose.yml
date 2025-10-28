@@ -82,7 +82,7 @@ services:
 
   # Backend/Indexer Application
   indexer:
-    image: usdx-indexer:${VERSION:-latest}
+    image: ${REGISTRY:-}usdx-wexel-indexer:${IMAGE_TAG:-latest}
     container_name: usdx-indexer
     restart: always
     depends_on:
@@ -154,7 +154,7 @@ services:
 
   # Frontend Web Application
   webapp:
-    image: usdx-webapp:${VERSION:-latest}
+    image: ${REGISTRY:-}usdx-wexel-webapp:${IMAGE_TAG:-latest}
     container_name: usdx-webapp
     restart: always
     depends_on:
