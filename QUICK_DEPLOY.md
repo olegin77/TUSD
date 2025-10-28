@@ -185,6 +185,7 @@ docker-compose up -d
 ## Поддержка
 
 Если что-то не работает:
+
 1. Проверьте логи: `docker logs usdx-indexer`
 2. Проверьте .env файл: `cat .env.production`
 3. Посмотрите документацию: `DEPLOYMENT_GUIDE.md`

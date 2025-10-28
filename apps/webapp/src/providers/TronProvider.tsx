@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+// Type-only import for TronWeb interface
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type TronWeb from "tronweb";
 
 interface TronContextType {

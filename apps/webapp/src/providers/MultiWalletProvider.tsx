@@ -24,7 +24,7 @@ interface MultiWalletProviderProps {
 
 const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType | null>(null);
-  const [solanaWallet, setSolanaWallet] = useState<{
+  const [solanaWallet] = useState<{
     connected: boolean;
     publicKey: any;
     disconnect: () => void;
@@ -34,16 +34,12 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
     disconnect: () => {},
   });
 
+  // ESLint cleanup: Removed unused setSolanaWallet
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Dynamically import and setup Solana wallet
-      import("@solana/wallet-adapter-react").then((_mod) => {
-        // This will be handled by the WalletProvider when it's loaded
-        setSolanaWallet({
-          connected: false,
-          publicKey: null,
-          disconnect: () => {},
-        });
+      // Dynamically import Solana wallet - handled by WalletProvider when loaded
+      import("@solana/wallet-adapter-react").catch((err) => {
+        console.error("Failed to load Solana wallet adapter:", err);
       });
     }
   }, []);

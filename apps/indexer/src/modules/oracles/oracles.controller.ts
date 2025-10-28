@@ -5,13 +5,22 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { PriceOracleService } from './services/price-oracle.service';
 
+/**
+ * MEDIUM-03 FIX: Rate limiting applied to all oracle endpoints
+ */
 @Controller('oracles')
 export class OraclesController {
   constructor(private readonly priceOracleService: PriceOracleService) {}
 
+  /**
+   * Get price for a token
+   * Rate limit: 100 requests per minute (public endpoint)
+   */
   @Get('price')
+  @Throttle({ default: { limit: 100, ttl: 60000 } })
   async getPrice(@Query('mint') mint: string) {
     if (!mint) {
       throw new HttpException(
@@ -52,7 +61,12 @@ export class OraclesController {
     }
   }
 
+  /**
+   * Get list of supported tokens
+   * Rate limit: 60 requests per minute
+   */
   @Get('tokens')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   async getSupportedTokens() {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();
@@ -72,7 +86,12 @@ export class OraclesController {
     }
   }
 
+  /**
+   * Oracle health check
+   * Rate limit: 30 requests per minute
+   */
   @Get('health')
+  @Throttle({ default: { limit: 30, ttl: 60000 } })
   async getHealth() {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();

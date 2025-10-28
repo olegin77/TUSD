@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { oracleService, PriceData } from "@/lib/api/oracles";
 
 export const usePrice = (tokenMint: string, enabled: boolean = true) => {

@@ -157,15 +157,15 @@ nano .env.production
 
 ### Options
 
-| Option | Description | Example |
-|--------|-------------|---------|
-| `--env ENV` | Deployment environment | `--env production` |
-| `--tag TAG` | Docker image tag | `--tag v1.0.0` |
-| `--registry REGISTRY` | Docker registry URL | `--registry ghcr.io/org/` |
-| `--skip-backup` | Skip database backup | `--skip-backup` |
-| `--skip-tests` | Skip running tests | `--skip-tests` |
-| `--skip-migrations` | Skip DB migrations | `--skip-migrations` |
-| `--help` | Show help message | `--help` |
+| Option                | Description            | Example                   |
+| --------------------- | ---------------------- | ------------------------- |
+| `--env ENV`           | Deployment environment | `--env production`        |
+| `--tag TAG`           | Docker image tag       | `--tag v1.0.0`            |
+| `--registry REGISTRY` | Docker registry URL    | `--registry ghcr.io/org/` |
+| `--skip-backup`       | Skip database backup   | `--skip-backup`           |
+| `--skip-tests`        | Skip running tests     | `--skip-tests`            |
+| `--skip-migrations`   | Skip DB migrations     | `--skip-migrations`       |
+| `--help`              | Show help message      | `--help`                  |
 
 ### Examples
 
@@ -541,6 +541,7 @@ For production, use a paid RPC provider:
 - [Triton](https://triton.one/)
 
 Update `.env.production`:
+
 ```bash
 SOLANA_RPC_URL=https://your-paid-rpc-url
 SOLANA_WEBSOCKET_URL=wss://your-paid-rpc-url
@@ -570,16 +571,19 @@ SOLANA_WEBSOCKET_URL=wss://your-paid-rpc-url
 ### Regular Tasks
 
 **Daily:**
+
 - Check service health
 - Review error logs
 - Monitor TVL and activity
 
 **Weekly:**
+
 - Review security alerts
 - Check backup integrity
 - Update dependencies if needed
 
 **Monthly:**
+
 - Rotate JWT secrets
 - Review access logs
 - Performance optimization
