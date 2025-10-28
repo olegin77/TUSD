@@ -4,6 +4,8 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
 import { Providers } from "@/components/providers";
+import { SkipToContent } from "@/components/a11y/a11y-provider";
+import { Announcer } from "@/components/a11y/announcer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,10 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru">
       <body className={inter.className}>
+        <SkipToContent />
+        <Announcer />
         <MultiWalletProvider>
           <Providers>
             <Navigation />
-            {children}
+            <main id="main-content">{children}</main>
           </Providers>
         </MultiWalletProvider>
       </body>

@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
+import { A11yProvider } from "@/components/a11y/a11y-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -19,8 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      <A11yProvider>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </A11yProvider>
     </QueryClientProvider>
   );
 }
