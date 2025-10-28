@@ -115,12 +115,15 @@ export default function AdminDashboard() {
       bgColor: "bg-indigo-100",
     },
   ];
+  
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Панель администратора</h1>
         <p className="text-gray-600 mt-2">Обзор платформы Wexel</p>
+      </div>
+
       {/* System Health */}
       <Card className="p-6">
         <div className="flex items-center justify-between">
