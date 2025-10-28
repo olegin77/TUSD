@@ -63,11 +63,17 @@ export default function AdminOraclesPage() {
             { source: "Raydium TWAP", price: 0.0244, timestamp: Date.now(), status: "active", deviation: -0.4 },
             { source: "Binance", price: 0.0245, timestamp: Date.now(), status: "active", deviation: 0 },
           ],
+        },
+        {
           token: "USDT",
           aggregatedPrice: 1.0,
           maxDeviation: 50,
+          lastUpdate: Date.now(),
+          sources: [
             { source: "Chainlink", price: 1.0001, timestamp: Date.now(), status: "active", deviation: 0.01 },
             { source: "Pyth", price: 0.9999, timestamp: Date.now(), status: "active", deviation: -0.01 },
+          ],
+        },
       ]);
     } finally {
       setLoading(false);
