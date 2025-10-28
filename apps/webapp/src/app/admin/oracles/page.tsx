@@ -13,6 +13,7 @@ import {
   TrendingDown,
   Minus,
 } from "lucide-react";
+
 interface OraclePrice {
   source: string;
   price: number;
@@ -20,6 +21,7 @@ interface OraclePrice {
   status: "active" | "stale" | "error";
   deviation?: number;
 }
+
 interface OracleData {
   token: string;
   aggregatedPrice: number;
@@ -33,11 +35,13 @@ export default function AdminOraclesPage() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
   const [manualPrice, setManualPrice] = useState("");
+
   useEffect(() => {
     fetchOracleData();
     const interval = setInterval(fetchOracleData, 30000); // Update every 30s
     return () => clearInterval(interval);
   }, []);
+
   const fetchOracleData = async () => {
     try {
       const token = localStorage.getItem("admin_token");
@@ -79,6 +83,7 @@ export default function AdminOraclesPage() {
       setLoading(false);
     }
   };
+
   const refreshOracle = async (token: string) => {
     setUpdating(token);
     try {
@@ -98,18 +103,29 @@ export default function AdminOraclesPage() {
       setUpdating(null);
     }
   };
+
   const setManualPriceSubmit = async (token: string) => {
     if (!manualPrice || isNaN(parseFloat(manualPrice))) {
       alert("Введите корректную цену");
       return;
+    }
+    try {
       const response = await fetch(`/api/v1/admin/oracles/${token}/manual-price`, {
+        method: "POST",
+        headers: {
           "Content-Type": "application/json",
+        },
         body: JSON.stringify({ price: parseFloat(manualPrice) }),
+      });
       if (!response.ok) throw new Error("Failed to set manual price");
       setManualPrice("");
       alert("Ручная цена установлена. Требуется подтверждение Multisig.");
+    } catch (error) {
       console.error("Error setting manual price:", error);
       alert("Ошибка при установке ручной цены");
+    }
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "active":
@@ -120,11 +136,16 @@ export default function AdminOraclesPage() {
         return <AlertTriangle className="h-5 w-5 text-red-600" />;
       default:
         return <Minus className="h-5 w-5 text-gray-400" />;
+    }
+  };
+
   const getDeviationIcon = (deviation?: number) => {
     if (!deviation) return <Minus className="h-4 w-4 text-gray-400" />;
     if (deviation > 0) return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (deviation < 0) return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <Minus className="h-4 w-4 text-gray-400" />;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -132,12 +153,15 @@ export default function AdminOraclesPage() {
       </div>
     );
   }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Управление оракулами цен</h1>
         <p className="text-gray-600 mt-2">Мониторинг и управление источниками ценовых данных</p>
+      </div>
+
       {/* Oracle Cards */}
       <div className="space-y-6">
         {oracles.map((oracle) => (
@@ -159,6 +183,7 @@ export default function AdminOraclesPage() {
                 Обновить
               </Button>
             </div>
+
             {/* Sources */}
             <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Источники данных</h3>
@@ -183,8 +208,12 @@ export default function AdminOraclesPage() {
                           </span>
                         </div>
                       )}
+                    </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
             {/* Manual Price Override */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Ручная установка цены (Multisig)</h3>
@@ -203,16 +232,23 @@ export default function AdminOraclesPage() {
                   />
                 </div>
                 <Button onClick={() => setManualPriceSubmit(oracle.token)}>Установить цену</Button>
+              </div>
               <p className="text-sm text-gray-600 mt-2">
                 * Требуется подтверждение Multisig. Изменение вступит в силу после задержки Timelock.
               </p>
+            </div>
+
             {/* Config Info */}
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-700">
                 <span className="font-medium">Макс. отклонение:</span> {oracle.maxDeviation} bp (
                 {oracle.maxDeviation / 100}%)
+              </p>
+            </div>
           </Card>
         ))}
+      </div>
+
       {/* Alert Card */}
       <Card className="p-6 bg-yellow-50 border-yellow-200">
         <div className="flex items-start space-x-3">
@@ -230,3 +266,4 @@ export default function AdminOraclesPage() {
       </Card>
     </div>
   );
+}

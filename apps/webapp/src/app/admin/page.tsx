@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Clock,
 } from "lucide-react";
+
 interface DashboardStats {
   totalValueLocked: string;
   totalUsers: number;
@@ -22,12 +23,15 @@ interface DashboardStats {
   averageAPY: number;
   systemHealth: "healthy" | "warning" | "error";
 }
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchDashboardStats();
   }, []);
+
   const fetchDashboardStats = async () => {
     try {
       const token = localStorage.getItem("admin_token");
@@ -56,6 +60,7 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -63,8 +68,15 @@ export default function AdminDashboard() {
       </div>
     );
   }
+
   if (!stats) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
         <p className="text-gray-600">Не удалось загрузить статистику</p>
+      </div>
+    );
+  }
+
   const statCards = [
     {
       title: "Total Value Locked",
@@ -73,38 +85,51 @@ export default function AdminDashboard() {
       color: "text-green-600",
       bgColor: "bg-green-100",
     },
+    {
       title: "Всего пользователей",
       value: stats.totalUsers.toLocaleString(),
       icon: Users,
       color: "text-blue-600",
       bgColor: "bg-blue-100",
+    },
+    {
       title: "Всего векселей",
       value: stats.totalWexels.toLocaleString(),
       icon: FileText,
       color: "text-purple-600",
       bgColor: "bg-purple-100",
+    },
+    {
       title: "Активные векселя",
       value: stats.activeWexels.toLocaleString(),
       icon: Activity,
       color: "text-emerald-600",
       bgColor: "bg-emerald-100",
+    },
+    {
       title: "В залоге",
       value: stats.collateralizedWexels.toLocaleString(),
       icon: Clock,
       color: "text-orange-600",
       bgColor: "bg-orange-100",
+    },
+    {
       title: "Выплачено наград",
       value: stats.totalRewardsPaid,
       icon: TrendingUp,
       color: "text-indigo-600",
       bgColor: "bg-indigo-100",
+    },
   ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Панель администратора</h1>
         <p className="text-gray-600 mt-2">Обзор платформы Wexel</p>
+      </div>
+
       {/* System Health */}
       <Card className="p-6">
         <div className="flex items-center justify-between">
@@ -130,8 +155,10 @@ export default function AdminDashboard() {
           <div className="text-right">
             <p className="text-sm text-gray-600">Средний APY</p>
             <p className="text-2xl font-bold text-gray-900">{stats.averageAPY}%</p>
+          </div>
         </div>
       </Card>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat) => {
@@ -145,11 +172,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
                   <Icon className={`h-6 w-6 ${stat.color}`} />
+                </div>
               </div>
             </Card>
           );
         })}
+      </div>
+
       {/* Quick Actions */}
+      <Card className="p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Быстрые действия</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <a
@@ -158,14 +189,26 @@ export default function AdminDashboard() {
           >
             <p className="font-medium text-blue-900">Управление пулами</p>
           </a>
+          <a
             href="/admin/oracles"
             className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-purple-900">Настройка оракулов</p>
+          </a>
+          <a
             href="/admin/users"
             className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-green-900">Просмотр пользователей</p>
+          </a>
+          <a
             href="/admin/settings"
             className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-orange-900">Глобальные настройки</p>
+          </a>
+        </div>
+      </Card>
     </div>
   );
+}

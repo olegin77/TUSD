@@ -10,10 +10,8 @@ import {
 import { UsersService } from '../users/users.service';
 import { LinkWalletDto } from '../users/dto/link-wallet.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import {
-  CurrentUser,
-  CurrentUserData,
-} from '../../common/decorators/current-user.decorator';
+import type { CurrentUserData } from '../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 /**
  * API endpoints for user profile and wallet management
@@ -31,7 +29,7 @@ export class UserApiController {
   @Get('profile')
   async getProfile(@CurrentUser() user: CurrentUserData) {
     try {
-      const profile = await this.usersService.findOne(user.userId);
+      const profile = await this.usersService.findOne(user.sub);
       return {
         success: true,
         data: profile,
@@ -52,7 +50,7 @@ export class UserApiController {
   @Get('wallets')
   async getWallets(@CurrentUser() user: CurrentUserData) {
     try {
-      const profile = await this.usersService.findOne(user.userId);
+      const profile = await this.usersService.findOne(user.sub);
       return {
         success: true,
         data: {
@@ -83,7 +81,7 @@ export class UserApiController {
       // For Solana: use @solana/web3.js to verify signature
       // For Tron: use TronWeb to verify signature
 
-      const profile = await this.usersService.findOne(user.userId);
+      const profile = await this.usersService.findOne(user.sub);
 
       const updateData: any = {};
       if (linkWalletDto.walletType === 'solana') {
@@ -96,7 +94,7 @@ export class UserApiController {
         updateData.tron_address = linkWalletDto.address;
       }
 
-      await this.usersService.update(user.userId, updateData);
+      await this.usersService.update(user.sub, updateData);
 
       return {
         success: true,

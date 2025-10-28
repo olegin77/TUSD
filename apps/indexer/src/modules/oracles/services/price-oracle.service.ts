@@ -232,4 +232,44 @@ export class PriceOracleService {
       updatedAt: p.updated_at,
     }));
   }
+
+  /**
+   * Alias for getAggregatedPrice (used by controllers)
+   */
+  async getPrice(tokenMint: string): Promise<AggregatedPrice | null> {
+    return this.getAggregatedPrice(tokenMint);
+  }
+
+  /**
+   * Get list of supported tokens
+   * Returns token mints that have cached prices or are configured
+   */
+  async getSupportedTokens(): Promise<string[]> {
+    try {
+      // Get all tokens from cache/database
+      const cachedPrices = await this.prisma.tokenPrice.findMany({
+        select: { token_mint: true },
+      });
+
+      const tokens = cachedPrices.map((p) => p.token_mint);
+
+      // Add commonly used tokens if not in cache
+      const commonTokens = [
+        'So11111111111111111111111111111111111111112', // SOL
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
+        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
+      ];
+
+      const uniqueTokens = [...new Set([...tokens, ...commonTokens])];
+      return uniqueTokens;
+    } catch (error) {
+      this.logger.error('Failed to get supported tokens', error);
+      // Return fallback list
+      return [
+        'So11111111111111111111111111111111111111112',
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+      ];
+    }
+  }
 }
