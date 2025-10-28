@@ -723,8 +723,9 @@ _(Задачи T-0115 - T-0116 остаются)_
 
 _(Задачи T-0120 - T-0122 остаются)_
 
-- [ ] T-0122.1 | Настроить управление конфигурациями (env-файлы, Vault, DO Secrets)
+- [x] T-0122.1 | Настроить управление конфигурациями (env-файлы, Vault, DO Secrets)
   - depends: [T-0005, T-0122]
+  - ✅ Completed: Comprehensive configuration management documentation created in docs/ops/CONFIGURATION_MANAGEMENT.md
   - apply:
     ```bash
     set -euo pipefail
