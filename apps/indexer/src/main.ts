@@ -39,11 +39,10 @@ async function bootstrap() {
   // Enhanced CORS configuration (HIGH-03 FIX)
   app.enableCors({
     origin: (origin, callback) => {
-      const allowedOrigins =
-        process.env.CORS_ALLOWED_ORIGINS?.split(',') || [
-          'http://localhost:3000',
-          'http://localhost:3001',
-        ];
+      const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS?.split(',') || [
+        'http://localhost:3000',
+        'http://localhost:3001',
+      ];
 
       // Allow requests with no origin (mobile apps, curl, postman)
       if (!origin || allowedOrigins.includes(origin)) {
@@ -62,7 +61,9 @@ async function bootstrap() {
   const port = process.env.API_PORT || 3001;
   await app.listen(port);
   console.log(`🚀 Indexer running on port ${port}`);
-  console.log(`✅ CORS configured for: ${process.env.CORS_ALLOWED_ORIGINS || 'localhost'}`);
+  console.log(
+    `✅ CORS configured for: ${process.env.CORS_ALLOWED_ORIGINS || 'localhost'}`,
+  );
   console.log(`✅ Security headers enabled`);
 }
 void bootstrap();

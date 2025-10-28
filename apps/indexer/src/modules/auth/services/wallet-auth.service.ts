@@ -92,19 +92,26 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
   }
 
   /**
-   * M-5 fix: Verify Tron wallet signature using TronWeb
+   * HIGH-02 FIX: Verify Tron wallet signature using TronWeb
+   * Updated to properly handle async verification
    */
-  private verifyTronSignature(
+  private async verifyTronSignature(
     walletAddress: string,
     message: string,
     signature: string,
-  ): boolean {
+  ): Promise<boolean> {
     try {
       // Initialize TronWeb (no need for full nodes for signature verification)
       // @ts-ignore - TronWeb constructor types are not accurate
       const tronWeb = new TronWeb({
         fullHost: 'https://api.trongrid.io', // Mainnet (can be changed to testnet)
       });
+
+      // Validate address format
+      if (!tronWeb.isAddress(walletAddress)) {
+        this.logger.warn(`Invalid Tron address format: ${walletAddress}`);
+        return false;
+      }
 
       // Convert hex address to base58 format if needed
       let base58Address = walletAddress;
@@ -123,26 +130,65 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
         ? signature.slice(2)
         : signature;
 
-      // Verify signature
-      // TronWeb.Trx.verifyMessage(message, signature) returns the address that signed
-      const recoveredAddress = tronWeb.trx.verifyMessageV2(
-        message,
-        cleanSignature,
-      );
-
-      // Compare recovered address with provided wallet address
-      const isValid =
-        recoveredAddress.toLowerCase() === base58Address.toLowerCase();
-
-      if (!isValid) {
+      // Validate signature format (should be 130 hex characters: r(64) + s(64) + v(2))
+      if (!/^[0-9a-fA-F]{130}$/.test(cleanSignature)) {
         this.logger.warn(
-          `Tron signature mismatch. Expected: ${base58Address}, Got: ${recoveredAddress}`,
+          `Invalid Tron signature format. Expected 130 hex chars, got ${cleanSignature.length}`,
         );
+        return false;
       }
 
-      return isValid;
+      // Verify signature using verifyMessageV2 (preferred, more secure)
+      try {
+        const messageHex = tronWeb.toHex(message);
+        const recoveredAddress = await tronWeb.trx.verifyMessageV2(
+          messageHex,
+          cleanSignature,
+        );
+
+        // Compare recovered address with provided wallet address
+        const isValid =
+          recoveredAddress &&
+          recoveredAddress.toLowerCase() === base58Address.toLowerCase();
+
+        if (!isValid) {
+          this.logger.warn(
+            `Tron signature mismatch. Expected: ${base58Address}, Got: ${recoveredAddress}`,
+          );
+        } else {
+          this.logger.log(
+            `Successfully verified Tron signature for: ${base58Address}`,
+          );
+        }
+
+        return isValid;
+      } catch (v2Error) {
+        // Fallback to verifyMessage (older method, still supported)
+        this.logger.debug(
+          'verifyMessageV2 failed, trying verifyMessage fallback',
+        );
+        const recoveredAddress = await tronWeb.trx.verifyMessage(
+          message,
+          cleanSignature,
+        );
+
+        const isValid =
+          recoveredAddress &&
+          recoveredAddress.toLowerCase() === base58Address.toLowerCase();
+
+        if (isValid) {
+          this.logger.log(
+            `Successfully verified Tron signature using fallback for: ${base58Address}`,
+          );
+        }
+
+        return isValid;
+      }
     } catch (error) {
-      this.logger.error('Failed to verify Tron signature', error);
+      this.logger.error(
+        `Failed to verify Tron signature: ${error.message}`,
+        error.stack,
+      );
       return false;
     }
   }
@@ -158,7 +204,11 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
     if (walletType === WalletType.SOLANA) {
       isValid = this.verifySolanaSignature(walletAddress, message, signature);
     } else if (walletType === WalletType.TRON) {
-      isValid = this.verifyTronSignature(walletAddress, message, signature);
+      isValid = await this.verifyTronSignature(
+        walletAddress,
+        message,
+        signature,
+      );
     }
 
     if (!isValid) {
