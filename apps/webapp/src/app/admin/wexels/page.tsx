@@ -182,18 +182,27 @@ export default function AdminWexelsPage() {
                       {wexel.is_collateralized && <Lock className="h-4 w-4 text-orange-600" />}
                     </div>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <code className="text-xs text-gray-600">{wexel.owner_address}</code>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pool #{wexel.pool_id}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${wexel.principal_usd.toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-1">
                       <TrendingUp className="h-4 w-4 text-green-600" />
                       <span className="text-sm font-medium text-gray-900">
                         {((wexel.apy_base_bp + wexel.apy_boost_bp) / 100).toFixed(1)}%
                       </span>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {calculateDaysRemaining(wexel.end_ts)} дней
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${wexel.total_claimed_usd.toLocaleString()}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(wexel.status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Button size="sm" variant="ghost">
@@ -206,6 +215,7 @@ export default function AdminWexelsPage() {
         {filteredWexels.length === 0 && (
           <div className="py-12 text-center">
             <p className="text-gray-600">Векселя не найдены</p>
+          </div>
         )}
     </div>
   );
