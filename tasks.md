@@ -738,39 +738,29 @@ _(Задачи T-0120 - T-0122 остаются)_
     git add docs/ops/CONFIGURATION.md
     ```
 
-- [ ] T-0123 | Настроить систему мониторинга (Prometheus/Grafana или Datadog/Sentry)
+- [x] T-0123 | Настроить систему мониторинга (Prometheus/Grafana или Datadog/Sentry)
   - depends: [T-0024, T-0025.1]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    set -euo pipefail
-    echo "// TODO: Implement Prometheus metrics endpoint in NestJS (/metrics) and configure Sentry DSNs."
-    git add apps/indexer/src/app.module.ts apps/webapp/next.config.js # (для Sentry)
-    ```
+  - ✅ Completed: Full monitoring stack implemented with Prometheus, Grafana, Alertmanager
+    - MetricsModule with 25+ metrics (business, API, DB, indexer, oracle)
+    - MetricsService for easy metric recording
+    - MetricsInterceptor for automatic HTTP instrumentation
+    - Docker Compose stack with Prometheus:9090, Grafana:3002, Alertmanager:9093
+    - Comprehensive documentation in docs/MONITORING.md
 
-- [ ] T-0123.1 | Настроить мониторинг бизнес-метрик (TVL, объем торгов и т.д.)
-  - depends: [T-0123, T-0043, T-0107] # Зависит от индексации данных
-  - apply:
-    ```bash
-    set -euo pipefail
-    # Создать запросы к БД или использовать метрики Prometheus для отслеживания TVL, объема и т.д.
-    # Настроить дашборды в Grafana/Metabase/аналоге
-    echo "// TODO: Setup dashboards for monitoring key business metrics (TVL, volume, etc.)."
-    mkdir -p infra/monitoring/dashboards
-    touch infra/monitoring/dashboards/business_kpi.json # (пример структуры дашборда)
-    git add infra/monitoring/dashboards/
-    ```
+- [x] T-0123.1 | Настроить мониторинг бизнес-метрик (TVL, объем торгов и т.д.)
+  - depends: [T-0123, T-0043, T-0107]
+  - ✅ Completed: BusinessMetricsService with scheduled updates every 5 minutes
+    - TVL, active wexels, users, deposits, marketplace, loans metrics
+    - Grafana dashboard with 10 panels visualizing all key metrics
+    - Business KPIs: TVL gauge, wexels timeline, deposits by pool, outstanding loans
 
-- [ ] T-0124 | Настроить систему алертинга
+- [x] T-0124 | Настроить систему алертинга
   - depends: [T-0123]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    echo "// TODO: Define alert rules in Alertmanager/Sentry for critical errors, high latency, low TVL threshold etc."
-    mkdir -p infra/monitoring/alerts
-    touch infra/monitoring/alerts/rules.yml # (пример для Alertmanager)
-    git add infra/monitoring/alerts/
-    ```
+  - ✅ Completed: Alertmanager with 10+ alert rules
+    - Critical alerts: ServiceDown, HighErrorRate, OraclePriceUpdateFailures
+    - Warning alerts: HighResponseTime, IndexerHighLag, TVLDropped, SlowDatabaseQueries
+    - Info alerts: LowActiveWexels, NoDepositsDetected
+    - Alert routing by severity with webhook, Slack, Email, PagerDuty support
 
 - [ ] T-0124.1 | Настроить регулярные бэкапы БД и Redis, протестировать восстановление
   - depends: [T-0003]
