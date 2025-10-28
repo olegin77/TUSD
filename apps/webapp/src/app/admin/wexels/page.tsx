@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, ExternalLink, FileText, Lock, TrendingUp } from "lucide-react";
-
 interface WexelData {
   id: number;
   owner_address: string;
@@ -19,21 +18,16 @@ interface WexelData {
   total_claimed_usd: number;
   status: "active" | "completed" | "liquidated";
 }
-
 export default function AdminWexelsPage() {
   const [wexels, setWexels] = useState<WexelData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredWexels, setFilteredWexels] = useState<WexelData[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("all");
-
   useEffect(() => {
     fetchWexels();
   }, []);
-
-  useEffect(() => {
     let filtered = wexels;
-
     // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -42,7 +36,6 @@ export default function AdminWexelsPage() {
           wexel.id.toString().includes(query) || wexel.owner_address.toLowerCase().includes(query)
       );
     }
-
     // Filter by status
     if (filterStatus !== "all") {
       if (filterStatus === "collateralized") {
@@ -50,11 +43,8 @@ export default function AdminWexelsPage() {
       } else {
         filtered = filtered.filter((w) => w.status === filterStatus);
       }
-    }
-
     setFilteredWexels(filtered);
   }, [searchQuery, filterStatus, wexels]);
-
   const fetchWexels = async () => {
     try {
       const token = localStorage.getItem("admin_token");
@@ -63,9 +53,7 @@ export default function AdminWexelsPage() {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (!response.ok) throw new Error("Failed to fetch wexels");
-
       const data = await response.json();
       setWexels(data);
       setFilteredWexels(data);
@@ -89,9 +77,7 @@ export default function AdminWexelsPage() {
       setFilteredWexels(mockWexels);
     } finally {
       setLoading(false);
-    }
   };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
@@ -102,14 +88,9 @@ export default function AdminWexelsPage() {
         return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Ликвидирован</span>;
       default:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">Неизвестно</span>;
-    }
-  };
-
   const calculateDaysRemaining = (endTs: string) => {
     const days = Math.floor((new Date(endTs).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
     return days > 0 ? days : 0;
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -117,41 +98,28 @@ export default function AdminWexelsPage() {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Управление векселями</h1>
         <p className="text-gray-600 mt-2">Просмотр и мониторинг всех векселей платформы</p>
-      </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Всего векселей</p>
           <p className="text-2xl font-bold text-gray-900">{wexels.length}</p>
         </Card>
-        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Активные</p>
           <p className="text-2xl font-bold text-green-600">
             {wexels.filter((w) => w.status === "active").length}
           </p>
-        </Card>
-        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">В залоге</p>
           <p className="text-2xl font-bold text-orange-600">
             {wexels.filter((w) => w.is_collateralized).length}
-          </p>
-        </Card>
-        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Общий объём</p>
           <p className="text-2xl font-bold text-blue-600">
             ${wexels.reduce((sum, w) => sum + w.principal_usd, 0).toLocaleString()}
-          </p>
-        </Card>
-      </div>
-
       {/* Filters */}
       <Card className="p-4">
         <div className="flex flex-col md:flex-row gap-4">
@@ -173,31 +141,17 @@ export default function AdminWexelsPage() {
             >
               Все
             </Button>
-            <Button
               variant={filterStatus === "active" ? "default" : "outline"}
-              size="sm"
               onClick={() => setFilterStatus("active")}
-            >
               Активные
-            </Button>
-            <Button
               variant={filterStatus === "collateralized" ? "default" : "outline"}
-              size="sm"
               onClick={() => setFilterStatus("collateralized")}
-            >
               В залоге
-            </Button>
-            <Button
               variant={filterStatus === "completed" ? "default" : "outline"}
-              size="sm"
               onClick={() => setFilterStatus("completed")}
-            >
               Завершённые
-            </Button>
-          </div>
         </div>
       </Card>
-
       {/* Wexels Table */}
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
@@ -207,30 +161,15 @@ export default function AdminWexelsPage() {
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   ID
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Владелец
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Пул
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Сумма
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   APY
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Дней до погашения
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Выплачено
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Статус
-                </th>
                 <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Действия
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -243,45 +182,30 @@ export default function AdminWexelsPage() {
                       {wexel.is_collateralized && <Lock className="h-4 w-4 text-orange-600" />}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
                     <code className="text-xs text-gray-600">{wexel.owner_address}</code>
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pool #{wexel.pool_id}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${wexel.principal_usd.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-1">
                       <TrendingUp className="h-4 w-4 text-green-600" />
                       <span className="text-sm font-medium text-gray-900">
                         {((wexel.apy_base_bp + wexel.apy_boost_bp) / 100).toFixed(1)}%
                       </span>
-                    </div>
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {calculateDaysRemaining(wexel.end_ts)} дней
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${wexel.total_claimed_usd.toLocaleString()}
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(wexel.status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Button size="sm" variant="ghost">
                       <ExternalLink className="h-4 w-4" />
                     </Button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-
         {filteredWexels.length === 0 && (
           <div className="py-12 text-center">
             <p className="text-gray-600">Векселя не найдены</p>
-          </div>
         )}
-      </Card>
     </div>
   );
-}
