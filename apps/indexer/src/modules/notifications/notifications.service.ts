@@ -20,10 +20,10 @@ export class NotificationsService {
     apyBp: number;
   }) {
     this.logger.log(`Notifying wexel created: ${data.wexelId}`);
-    
+
     // Notify the owner
     this.gateway.emitToUser(data.owner, 'wexel:created', data);
-    
+
     // Broadcast to marketplace
     this.gateway.emitToMarketplace('wexel:created', {
       wexelId: data.wexelId,
@@ -41,7 +41,7 @@ export class NotificationsService {
     valueUsd: string;
   }) {
     this.logger.log(`Notifying boost applied: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:boost_applied', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:boost_applied', data);
   }
@@ -55,7 +55,7 @@ export class NotificationsService {
     rewardUsd: string;
   }) {
     this.logger.debug(`Notifying rewards accrued: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:rewards_accrued', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:rewards_accrued', data);
   }
@@ -63,13 +63,9 @@ export class NotificationsService {
   /**
    * Notify about claim
    */
-  notifyClaimed(data: {
-    wexelId: number;
-    owner: string;
-    amountUsd: string;
-  }) {
+  notifyClaimed(data: { wexelId: number; owner: string; amountUsd: string }) {
     this.logger.log(`Notifying claim: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:claimed', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:claimed', data);
   }
@@ -84,7 +80,7 @@ export class NotificationsService {
     ltvBp: number;
   }) {
     this.logger.log(`Notifying collateralized: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:collateralized', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:collateralized', data);
   }
@@ -98,7 +94,7 @@ export class NotificationsService {
     repaidAmount: string;
   }) {
     this.logger.log(`Notifying loan repaid: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:loan_repaid', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:loan_repaid', data);
   }
@@ -112,7 +108,7 @@ export class NotificationsService {
     principalUsd: string;
   }) {
     this.logger.log(`Notifying redeemed: wexel ${data.wexelId}`);
-    
+
     this.gateway.emitToUser(data.owner, 'wexel:redeemed', data);
     this.gateway.emitToWexel(data.wexelId, 'wexel:redeemed', data);
   }
@@ -127,7 +123,7 @@ export class NotificationsService {
     askPriceUsd: string;
   }) {
     this.logger.log(`Notifying listing created: ${data.listingId}`);
-    
+
     this.gateway.emitToUser(data.seller, 'marketplace:listing_created', data);
     this.gateway.emitToMarketplace('marketplace:listing_created', data);
   }
@@ -143,7 +139,7 @@ export class NotificationsService {
     priceUsd: string;
   }) {
     this.logger.log(`Notifying listing sold: ${data.listingId}`);
-    
+
     this.gateway.emitToUser(data.seller, 'marketplace:listing_sold', data);
     this.gateway.emitToUser(data.buyer, 'marketplace:listing_sold', data);
     this.gateway.emitToMarketplace('marketplace:listing_sold', {
@@ -162,7 +158,7 @@ export class NotificationsService {
     seller: string;
   }) {
     this.logger.log(`Notifying listing cancelled: ${data.listingId}`);
-    
+
     this.gateway.emitToUser(data.seller, 'marketplace:listing_cancelled', data);
     this.gateway.emitToMarketplace('marketplace:listing_cancelled', {
       listingId: data.listingId,

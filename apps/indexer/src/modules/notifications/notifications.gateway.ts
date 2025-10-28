@@ -18,7 +18,7 @@ interface ClientData {
 
 /**
  * WebSocket Gateway for real-time notifications
- * 
+ *
  * Events:
  * - wexel:created - New wexel created
  * - wexel:boost_applied - Boost applied to wexel
@@ -106,7 +106,10 @@ export class NotificationsGateway
       clientData.subscriptions.add('marketplace:all');
       this.logger.log(`Client ${client.id} subscribed to marketplace`);
     }
-    return { success: true, message: 'Subscribed to marketplace notifications' };
+    return {
+      success: true,
+      message: 'Subscribed to marketplace notifications',
+    };
   }
 
   /**
@@ -163,7 +166,9 @@ export class NotificationsGateway
     this.clients.forEach((clientData, clientId) => {
       if (clientData.subscriptions.has(channel)) {
         this.server.to(clientId).emit(event, data);
-        this.logger.debug(`Emitted ${event} to marketplace (client: ${clientId})`);
+        this.logger.debug(
+          `Emitted ${event} to marketplace (client: ${clientId})`,
+        );
       }
     });
   }

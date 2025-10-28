@@ -253,7 +253,10 @@ export class EventProcessorService {
     if (collateralizedWexel) {
       this.notifications.notifyCollateralized({
         wexelId: wexel_id,
-        owner: collateralizedWexel.owner_solana || collateralizedWexel.owner_tron || '',
+        owner:
+          collateralizedWexel.owner_solana ||
+          collateralizedWexel.owner_tron ||
+          '',
         loanUsd: loan_usd.toString(),
         ltvBp: ltv_bp,
       });

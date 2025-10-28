@@ -13,8 +13,7 @@ interface NotificationCenterProps {
 
 export function NotificationCenter({ walletAddress }: NotificationCenterProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isConnected, notifications, clearNotifications } =
-    useNotifications(walletAddress);
+  const { isConnected, notifications, clearNotifications } = useNotifications(walletAddress);
 
   const unreadCount = notifications.length;
 
@@ -47,12 +46,7 @@ export function NotificationCenter({ walletAddress }: NotificationCenterProps) {
   return (
     <div className="relative">
       {/* Notification Bell */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="relative"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <Button variant="ghost" size="icon" className="relative" onClick={() => setIsOpen(!isOpen)}>
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
           <Badge
@@ -71,10 +65,7 @@ export function NotificationCenter({ walletAddress }: NotificationCenterProps) {
       {isOpen && (
         <>
           {/* Overlay */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
 
           {/* Panel */}
           <Card className="absolute right-0 mt-2 w-96 max-h-96 overflow-y-auto z-50 shadow-lg">
@@ -89,19 +80,11 @@ export function NotificationCenter({ walletAddress }: NotificationCenterProps) {
               </div>
               <div className="flex items-center space-x-2">
                 {unreadCount > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearNotifications}
-                  >
+                  <Button variant="ghost" size="sm" onClick={clearNotifications}>
                     Clear all
                   </Button>
                 )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -116,10 +99,7 @@ export function NotificationCenter({ walletAddress }: NotificationCenterProps) {
               ) : (
                 <div className="divide-y">
                   {notifications.map((notification, index) => (
-                    <div
-                      key={index}
-                      className="p-4 hover:bg-gray-50 transition-colors"
-                    >
+                    <div key={index} className="p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start space-x-3">
                         {getIcon(notification.type)}
                         <div className="flex-1 min-w-0">
