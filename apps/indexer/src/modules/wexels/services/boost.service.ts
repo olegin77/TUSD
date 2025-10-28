@@ -78,10 +78,11 @@ export class BoostService {
       }
 
       const priceUsd = priceData.priceUsd;
-      const valueUsd = Number(amount) / 1e6 * priceUsd; // Convert from micro-units
+      const valueUsd = (Number(amount) / 1e6) * priceUsd; // Convert from micro-units
 
       // Calculate boost target (30% of principal)
-      const targetValueUsd = Number(wexel.principal_usd) / 1e6 * (this.BOOST_TARGET_BP / 10000);
+      const targetValueUsd =
+        (Number(wexel.principal_usd) / 1e6) * (this.BOOST_TARGET_BP / 10000);
 
       // Get existing boost value
       const existingBoosts = await this.prisma.boost.findMany({
@@ -90,7 +91,7 @@ export class BoostService {
 
       const existingValueUsd = existingBoosts.reduce(
         (sum, boost) => sum + Number(boost.value_usd) / 1e6,
-        0
+        0,
       );
 
       const totalValueUsd = existingValueUsd + valueUsd;
@@ -114,7 +115,7 @@ export class BoostService {
       const boostRatio = totalValueUsd / (Number(wexel.principal_usd) / 1e6);
       const apyBoostBp = Math.min(
         Math.floor(boostRatio * 10000),
-        this.BOOST_MAX_BP
+        this.BOOST_MAX_BP,
       );
 
       return {
@@ -167,7 +168,7 @@ export class BoostService {
         if (wexel) {
           const newApyBoostBp = Math.min(
             wexel.apy_boost_bp + boostApplication.apyBoostBp,
-            this.BOOST_MAX_BP
+            this.BOOST_MAX_BP,
           );
 
           await tx.wexel.update({
@@ -177,7 +178,9 @@ export class BoostService {
         }
       });
 
-      this.logger.log(`Boost applied successfully for wexel ${boostApplication.wexelId}`);
+      this.logger.log(
+        `Boost applied successfully for wexel ${boostApplication.wexelId}`,
+      );
       return true;
     } catch (error) {
       this.logger.error(`Failed to apply boost: ${error.message}`);
@@ -194,8 +197,8 @@ export class BoostService {
 
   async getBoostHistory(wexelId: bigint) {
     const boosts = await this.getWexelBoosts(wexelId);
-    
-    return boosts.map(boost => ({
+
+    return boosts.map((boost) => ({
       id: boost.id,
       tokenMint: boost.token_mint,
       amount: Number(boost.amount) / 1e6,
@@ -210,7 +213,7 @@ export class BoostService {
     const boosts = await this.getWexelBoosts(wexelId);
     return boosts.reduce(
       (sum, boost) => sum + Number(boost.value_usd) / 1e6,
-      0
+      0,
     );
   }
 
@@ -223,9 +226,10 @@ export class BoostService {
       return 0;
     }
 
-    const targetValueUsd = Number(wexel.principal_usd) / 1e6 * (this.BOOST_TARGET_BP / 10000);
+    const targetValueUsd =
+      (Number(wexel.principal_usd) / 1e6) * (this.BOOST_TARGET_BP / 10000);
     const currentValueUsd = await this.getTotalBoostValue(wexelId);
-    
+
     return Math.max(0, targetValueUsd - currentValueUsd);
   }
 
@@ -246,9 +250,11 @@ export class BoostService {
     }
 
     const totalBoostValue = await this.getTotalBoostValue(wexelId);
-    const targetValueUsd = Number(wexel.principal_usd) / 1e6 * (this.BOOST_TARGET_BP / 10000);
+    const targetValueUsd =
+      (Number(wexel.principal_usd) / 1e6) * (this.BOOST_TARGET_BP / 10000);
     const remainingCapacity = await this.getRemainingBoostCapacity(wexelId);
-    const boostProgress = targetValueUsd > 0 ? (totalBoostValue / targetValueUsd) * 100 : 0;
+    const boostProgress =
+      targetValueUsd > 0 ? (totalBoostValue / targetValueUsd) * 100 : 0;
 
     return {
       wexelId: wexel.id,

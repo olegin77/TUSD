@@ -28,7 +28,7 @@ describe("Math Operations and Edge Cases", () => {
       const principalUsd = new anchor.BN(1000 * 1e6); // $1000 USDT
       const apyBp = 1800; // 18%
       const expectedDailyReward = (principalUsd.toNumber() * apyBp) / (365 * 10000);
-      
+
       // Test the calculation
       expect(expectedDailyReward).to.be.closeTo(4.93, 0.01); // ~$4.93 per day
     });
@@ -37,7 +37,7 @@ describe("Math Operations and Edge Cases", () => {
       const principalUsd = new anchor.BN(1000 * 1e6); // $1000 USDT
       const apyBp = 3600; // 36%
       const expectedDailyReward = (principalUsd.toNumber() * apyBp) / (365 * 10000);
-      
+
       expect(expectedDailyReward).to.be.closeTo(9.86, 0.01); // ~$9.86 per day
     });
 
@@ -48,7 +48,7 @@ describe("Math Operations and Edge Cases", () => {
       const boostRatio = boostValue.toNumber() / boostTarget;
       const maxBoostBp = 500; // 5%
       const expectedBoostBp = Math.min(boostRatio * maxBoostBp, maxBoostBp);
-      
+
       expect(expectedBoostBp).to.equal(500); // Should be 5% (max boost)
     });
   });
@@ -58,7 +58,7 @@ describe("Math Operations and Edge Cases", () => {
       const principalUsd = new anchor.BN(1000 * 1e6); // $1000 USDT
       const ltvBp = 6000; // 60%
       const expectedLoanAmount = (principalUsd.toNumber() * ltvBp) / 10000;
-      
+
       expect(expectedLoanAmount).to.equal(600 * 1e6); // $600
     });
 
@@ -80,10 +80,10 @@ describe("Math Operations and Edge Cases", () => {
   describe("Overflow Protection", () => {
     it("Should handle maximum u64 values without overflow", async () => {
       const maxU64 = new anchor.BN("18446744073709551615");
-      
+
       // Test that we can create BN with max value
       expect(maxU64.toString()).to.equal("18446744073709551615");
-      
+
       // Test arithmetic operations that should not overflow
       const half = maxU64.div(new anchor.BN(2));
       expect(half.toString()).to.equal("9223372036854775807");
@@ -92,11 +92,11 @@ describe("Math Operations and Edge Cases", () => {
     it("Should detect potential overflow in calculations", async () => {
       const largeNumber = new anchor.BN("18446744073709551615");
       const smallNumber = new anchor.BN(1);
-      
+
       // This should not overflow
       const sum = largeNumber.add(smallNumber);
       expect(sum.toString()).to.equal("18446744073709551616");
-      
+
       // This should overflow and wrap around
       const overflow = largeNumber.add(largeNumber);
       expect(overflow.toString()).to.equal("18446744073709551614"); // Wraps around
@@ -108,7 +108,7 @@ describe("Math Operations and Edge Cases", () => {
       const principalUsd = new anchor.BN(1000 * 1e6); // $1000 USDT
       const apyBp = 1833; // 18.33%
       const dailyReward = (principalUsd.toNumber() * apyBp) / (365 * 10000);
-      
+
       // Should round down to avoid overpaying
       const roundedReward = Math.floor(dailyReward);
       expect(roundedReward).to.equal(5); // Should be 5 (not 5.02...)
@@ -118,7 +118,7 @@ describe("Math Operations and Edge Cases", () => {
       const principalUsd = new anchor.BN(1); // 1 micro-USDT
       const apyBp = 1800; // 18%
       const dailyReward = (principalUsd.toNumber() * apyBp) / (365 * 10000);
-      
+
       // Should be 0 for very small amounts
       expect(dailyReward).to.equal(0);
     });
@@ -128,7 +128,7 @@ describe("Math Operations and Edge Cases", () => {
     it("Should calculate lock periods correctly", async () => {
       const secondsPerDay = 86400;
       const secondsPerMonth = 30 * secondsPerDay;
-      
+
       const testCases = [
         { months: 12, expectedSeconds: 12 * secondsPerMonth },
         { months: 18, expectedSeconds: 18 * secondsPerMonth },
@@ -148,7 +148,7 @@ describe("Math Operations and Edge Cases", () => {
       const endTime = 1640995200; // Jan 1, 2022 00:00:00 UTC
       const secondsPerDay = 86400;
       const expectedDays = (endTime - startTime) / secondsPerDay;
-      
+
       expect(expectedDays).to.equal(365);
     });
   });

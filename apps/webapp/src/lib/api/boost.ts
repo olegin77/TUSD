@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export interface BoostCalculation {
   tokenMint: string;
@@ -63,7 +63,7 @@ export class BoostService {
   async calculateBoost(
     wexelId: number,
     tokenMint: string,
-    amount: string,
+    amount: string
   ): Promise<BoostCalculation | null> {
     try {
       const response = await axios.get<{ success: boolean; data: BoostCalculation }>(
@@ -79,7 +79,7 @@ export class BoostService {
 
       return null;
     } catch (error) {
-      console.error('Failed to calculate boost:', error);
+      console.error("Failed to calculate boost:", error);
       return null;
     }
   }
@@ -96,7 +96,7 @@ export class BoostService {
 
       return [];
     } catch (error) {
-      console.error('Failed to fetch boost history:', error);
+      console.error("Failed to fetch boost history:", error);
       return [];
     }
   }
@@ -113,7 +113,7 @@ export class BoostService {
 
       return null;
     } catch (error) {
-      console.error('Failed to fetch boost stats:', error);
+      console.error("Failed to fetch boost stats:", error);
       return null;
     }
   }
@@ -127,7 +127,7 @@ export class BoostService {
 
       return response.data.success;
     } catch (error) {
-      console.error('Failed to apply boost:', error);
+      console.error("Failed to apply boost:", error);
       return false;
     }
   }
@@ -147,7 +147,7 @@ export class BoostService {
 
       return false;
     } catch (error) {
-      console.error('Failed to validate token:', error);
+      console.error("Failed to validate token:", error);
       return false;
     }
   }
@@ -157,30 +157,30 @@ export class BoostService {
     const divisor = BigInt(10 ** decimals);
     const wholePart = amount / divisor;
     const fractionalPart = amount % divisor;
-    
+
     if (fractionalPart === 0n) {
       return wholePart.toString();
     }
-    
-    const fractionalStr = fractionalPart.toString().padStart(decimals, '0');
-    const trimmedFractional = fractionalStr.replace(/0+$/, '');
-    
-    if (trimmedFractional === '') {
+
+    const fractionalStr = fractionalPart.toString().padStart(decimals, "0");
+    const trimmedFractional = fractionalStr.replace(/0+$/, "");
+
+    if (trimmedFractional === "") {
       return wholePart.toString();
     }
-    
+
     return `${wholePart}.${trimmedFractional}`;
   }
 
   parseAmount(amount: string, decimals: number = 6): bigint {
-    const [wholePart, fractionalPart = ''] = amount.split('.');
-    const paddedFractional = fractionalPart.padEnd(decimals, '0').slice(0, decimals);
+    const [wholePart, fractionalPart = ""] = amount.split(".");
+    const paddedFractional = fractionalPart.padEnd(decimals, "0").slice(0, decimals);
     return BigInt(wholePart) * BigInt(10 ** decimals) + BigInt(paddedFractional);
   }
 
-  formatCurrency(amount: number, currency: string = 'USD'): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
+  formatCurrency(amount: number, currency: string = "USD"): string {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
       currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,

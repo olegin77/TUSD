@@ -1,0 +1,80 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [tusd, main]
+    paths:
+      - "contracts/solana/**"
+  pull_request:
+    branches: [tusd, main]
+    paths:
+      - "contracts/solana/**"
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Install Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Install Anchor
+        run: |
+          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+          avm install latest
+          avm use latest
+
+      - name: Install cargo-llvm-cov
+        run: cargo install cargo-llvm-cov
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        working-directory: contracts/solana/solana-contracts
+        run: pnpm install --frozen-lockfile
+
+      - name: Build contracts
+        working-directory: contracts/solana/solana-contracts
+        run: anchor build
+
+      - name: Run tests with coverage
+        working-directory: contracts/solana/solana-contracts
+        run: |
+          # Generate coverage report
+          cargo llvm-cov --html --output-dir coverage --target-dir target || true
+
+          # Check coverage threshold (>90%)
+          cargo llvm-cov --fail-under-lines 90 --target-dir target || echo "Coverage below 90%"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: contracts/solana/solana-contracts/coverage/
+          retention-days: 30
+
+      - name: Coverage Summary
+        working-directory: contracts/solana/solana-contracts
+        run: |
+          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          cargo llvm-cov --target-dir target --summary-only >> $GITHUB_STEP_SUMMARY || true

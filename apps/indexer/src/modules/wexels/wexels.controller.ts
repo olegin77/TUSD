@@ -130,7 +130,7 @@ export class WexelsController {
       };
 
       const success = await this.boostService.applyBoost(boostApplication);
-      
+
       if (!success) {
         throw new HttpException(
           'Failed to apply boost',
@@ -156,10 +156,7 @@ export class WexelsController {
   @Get('boost/validate-token')
   async validateBoostToken(@Query('tokenMint') tokenMint: string) {
     if (!tokenMint) {
-      throw new HttpException(
-        'Token mint is required',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Token mint is required', HttpStatus.BAD_REQUEST);
     }
 
     try {

@@ -15,11 +15,19 @@ import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { SentryInterceptor } from './common/sentry/sentry.interceptor';
 import { throttleConfig } from './common/config/throttle.config';
+import configuration from './common/config/configuration';
+import { validationSchema } from './common/config/validation.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [configuration],
+      validationSchema,
+      validationOptions: {
+        abortEarly: false, // Show all validation errors
+        allowUnknown: true, // Allow unknown keys (for flexibility)
+      },
     }),
     ThrottlerModule.forRoot(throttleConfig),
     SentryModule,

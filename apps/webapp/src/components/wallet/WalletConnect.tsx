@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useTron } from '@/providers/TronProvider';
-import { useMultiWallet } from '@/providers/MultiWalletProvider';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Wallet, WalletIcon, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import React, { useState } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useTron } from "@/providers/TronProvider";
+import { useMultiWallet } from "@/providers/MultiWalletProvider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Wallet, WalletIcon, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 interface WalletOptionProps {
-  type: 'solana' | 'tron';
+  type: "solana" | "tron";
   name: string;
   description: string;
   icon: React.ReactNode;
@@ -34,7 +34,7 @@ const WalletOption: React.FC<WalletOptionProps> = ({
   address,
 }) => {
   return (
-    <Card className={`transition-all ${isConnected ? 'ring-2 ring-green-500' : 'hover:shadow-md'}`}>
+    <Card className={`transition-all ${isConnected ? "ring-2 ring-green-500" : "hover:shadow-md"}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -53,7 +53,7 @@ const WalletOption: React.FC<WalletOptionProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-500">Адрес:</span>
               <Badge variant="outline" className="font-mono text-xs">
-                {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'N/A'}
+                {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "N/A"}
               </Badge>
             </div>
             <Button
@@ -71,11 +71,7 @@ const WalletOption: React.FC<WalletOptionProps> = ({
             </Button>
           </div>
         ) : (
-          <Button
-            onClick={onConnect}
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button onClick={onConnect} className="w-full" disabled={isLoading}>
             {isLoading ? (
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
             ) : (
@@ -99,9 +95,9 @@ export const WalletConnect: React.FC = () => {
     setIsConnecting(true);
     try {
       await solanaWallet.connect();
-      setActiveWallet('solana');
+      setActiveWallet("solana");
     } catch (error) {
-      console.error('Failed to connect Solana wallet:', error);
+      console.error("Failed to connect Solana wallet:", error);
     } finally {
       setIsConnecting(false);
     }
@@ -111,9 +107,9 @@ export const WalletConnect: React.FC = () => {
     setIsConnecting(true);
     try {
       await tronWallet.connect();
-      setActiveWallet('tron');
+      setActiveWallet("tron");
     } catch (error) {
-      console.error('Failed to connect Tron wallet:', error);
+      console.error("Failed to connect Tron wallet:", error);
     } finally {
       setIsConnecting(false);
     }
@@ -127,9 +123,7 @@ export const WalletConnect: React.FC = () => {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Подключите кошелек</h2>
-        <p className="text-gray-600">
-          Выберите кошелек для подключения к платформе Wexel
-        </p>
+        <p className="text-gray-600">Выберите кошелек для подключения к платформе Wexel</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -137,9 +131,13 @@ export const WalletConnect: React.FC = () => {
           type="solana"
           name="Solana"
           description="Phantom, Solflare и другие"
-          icon={<div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">S</div>}
+          icon={
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
+              S
+            </div>
+          }
           isConnected={solanaWallet.connected}
-          isLoading={isConnecting && activeWallet === 'solana'}
+          isLoading={isConnecting && activeWallet === "solana"}
           onConnect={handleSolanaConnect}
           onDisconnect={handleDisconnect}
           address={solanaWallet.publicKey?.toString()}
@@ -149,9 +147,13 @@ export const WalletConnect: React.FC = () => {
           type="tron"
           name="Tron"
           description="TronLink и другие"
-          icon={<div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center text-white font-bold">T</div>}
+          icon={
+            <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center text-white font-bold">
+              T
+            </div>
+          }
           isConnected={tronWallet.isConnected}
-          isLoading={isConnecting && activeWallet === 'tron'}
+          isLoading={isConnecting && activeWallet === "tron"}
           onConnect={handleTronConnect}
           onDisconnect={handleDisconnect}
           address={tronWallet.address}

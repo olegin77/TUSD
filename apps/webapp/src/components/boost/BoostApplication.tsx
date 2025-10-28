@@ -1,25 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useBoostCalculation, useApplyBoost, useValidateToken, useBoostUtils } from '@/hooks/useBoost';
-import { usePrice } from '@/hooks/useOracle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Zap, 
-  TrendingUp, 
-  AlertCircle, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import {
+  useBoostCalculation,
+  useApplyBoost,
+  useValidateToken,
+  useBoostUtils,
+} from "@/hooks/useBoost";
+import { usePrice } from "@/hooks/useOracle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Zap,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle,
   Loader2,
   Info,
   Target,
-  DollarSign
-} from 'lucide-react';
+  DollarSign,
+} from "lucide-react";
 
 interface BoostApplicationProps {
   wexelId: number;
@@ -36,8 +41,8 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
   maxApyBoostBp,
   onBoostApplied,
 }) => {
-  const [tokenMint, setTokenMint] = useState('');
-  const [amount, setAmount] = useState('');
+  const [tokenMint, setTokenMint] = useState("");
+  const [amount, setAmount] = useState("");
   const [isCalculating, setIsCalculating] = useState(false);
 
   const { data: priceData } = usePrice(tokenMint, !!tokenMint);
@@ -49,7 +54,8 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
     !!tokenMint && !!amount
   );
   const applyBoostMutation = useApplyBoost();
-  const { formatAmount, formatCurrency, formatPercentage, calculateBoostProgress } = useBoostUtils();
+  const { formatAmount, formatCurrency, formatPercentage, calculateBoostProgress } =
+    useBoostUtils();
 
   // Calculate target value (30% of principal)
   const targetValueUsd = principalUsd * 0.3;
@@ -74,12 +80,12 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
       });
 
       if (success) {
-        setTokenMint('');
-        setAmount('');
+        setTokenMint("");
+        setAmount("");
         onBoostApplied?.();
       }
     } catch (error) {
-      console.error('Failed to apply boost:', error);
+      console.error("Failed to apply boost:", error);
     }
   };
 
@@ -115,7 +121,7 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
               +{formatPercentage(currentApyBoostBp / 100)}
             </Badge>
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span>Прогресс буста</span>
@@ -123,7 +129,9 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
             </div>
             <Progress value={boostProgress} className="h-2" />
             <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>{formatCurrency(totalBoostValue)} / {formatCurrency(targetValueUsd)}</span>
+              <span>
+                {formatCurrency(totalBoostValue)} / {formatCurrency(targetValueUsd)}
+              </span>
               <span>Осталось: {formatCurrency(remainingCapacity)}</span>
             </div>
           </div>
@@ -157,12 +165,12 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
                   ) : (
                     <AlertCircle className="h-4 w-4 text-red-500" />
                   )}
-                  <span className={isValidToken ? 'text-green-600' : 'text-red-600'}>
+                  <span className={isValidToken ? "text-green-600" : "text-red-600"}>
                     {isValidToken === undefined
-                      ? 'Проверка токена...'
+                      ? "Проверка токена..."
                       : isValidToken
-                      ? 'Токен поддерживается'
-                      : 'Токен не поддерживается'}
+                        ? "Токен поддерживается"
+                        : "Токен не поддерживается"}
                   </span>
                 </div>
               )}
@@ -225,17 +233,13 @@ export const BoostApplication: React.FC<BoostApplicationProps> = ({
             )}
 
             {/* Apply Button */}
-            <Button
-              onClick={handleApplyBoost}
-              disabled={!canApplyBoost}
-              className="w-full"
-            >
+            <Button onClick={handleApplyBoost} disabled={!canApplyBoost} className="w-full">
               {applyBoostMutation.isPending ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
                 <Zap className="h-4 w-4 mr-2" />
               )}
-              {applyBoostMutation.isPending ? 'Применение...' : 'Применить буст'}
+              {applyBoostMutation.isPending ? "Применение..." : "Применить буст"}
             </Button>
           </>
         )}

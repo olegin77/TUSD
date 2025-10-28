@@ -1,22 +1,15 @@
 "use client";
 
-import { useState } from 'react';
-import { BoostApplication } from '@/components/boost/BoostApplication';
-import { BoostHistory } from '@/components/boost/BoostHistory';
-import { useBoostStats } from '@/hooks/useBoost';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Zap, 
-  TrendingUp, 
-  Target, 
-  DollarSign,
-  Info,
-  AlertCircle
-} from 'lucide-react';
+import { useState } from "react";
+import { BoostApplication } from "@/components/boost/BoostApplication";
+import { BoostHistory } from "@/components/boost/BoostHistory";
+import { useBoostStats } from "@/hooks/useBoost";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Zap, TrendingUp, Target, DollarSign, Info, AlertCircle } from "lucide-react";
 
 // Mock data for demonstration
 const MOCK_WEXEL_ID = 1;
@@ -25,7 +18,7 @@ const MOCK_CURRENT_APY_BOOST_BP = 200; // 2%
 const MOCK_MAX_APY_BOOST_BP = 500; // 5%
 
 export default function BoostPage() {
-  const [activeTab, setActiveTab] = useState('apply');
+  const [activeTab, setActiveTab] = useState("apply");
   const { data: boostStats, isLoading } = useBoostStats(MOCK_WEXEL_ID);
 
   const stats = boostStats || {
@@ -41,9 +34,9 @@ export default function BoostPage() {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -59,9 +52,7 @@ export default function BoostPage() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Система буст-монет
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Система буст-монет</h1>
             <p className="text-xl text-gray-600">
               Увеличьте доходность ваших векселей с помощью буст-токенов
             </p>
@@ -192,7 +183,9 @@ export default function BoostPage() {
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription className="text-sm">
                         <div className="space-y-1">
-                          <p>• Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY</p>
+                          <p>
+                            • Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY
+                          </p>
                           <p>• Целевое значение: {formatPercentage(30)} от основной суммы</p>
                           <p>• Цены обновляются в реальном времени</p>
                           <p>• Буст применяется немедленно</p>
@@ -225,7 +218,9 @@ export default function BoostPage() {
                   </div>
                   <div>
                     <p className="font-medium">Solana (SOL)</p>
-                    <p className="text-sm text-gray-500">So11111111111111111111111111111111111111112</p>
+                    <p className="text-sm text-gray-500">
+                      So11111111111111111111111111111111111111112
+                    </p>
                   </div>
                 </div>
 
@@ -235,7 +230,9 @@ export default function BoostPage() {
                   </div>
                   <div>
                     <p className="font-medium">USD Coin (USDC)</p>
-                    <p className="text-sm text-gray-500">EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</p>
+                    <p className="text-sm text-gray-500">
+                      EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+                    </p>
                   </div>
                 </div>
 
@@ -245,7 +242,9 @@ export default function BoostPage() {
                   </div>
                   <div>
                     <p className="font-medium">Tether USD (USDT)</p>
-                    <p className="text-sm text-gray-500">Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB</p>
+                    <p className="text-sm text-gray-500">
+                      Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+                    </p>
                   </div>
                 </div>
               </div>

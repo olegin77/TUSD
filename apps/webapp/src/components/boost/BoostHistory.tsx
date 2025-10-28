@@ -1,19 +1,12 @@
 "use client";
 
-import React from 'react';
-import { useBoostHistory, useBoostUtils } from '@/hooks/useBoost';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  History, 
-  TrendingUp, 
-  Clock, 
-  DollarSign,
-  Zap,
-  AlertCircle
-} from 'lucide-react';
+import React from "react";
+import { useBoostHistory, useBoostUtils } from "@/hooks/useBoost";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { History, TrendingUp, Clock, DollarSign, Zap, AlertCircle } from "lucide-react";
 
 interface BoostHistoryProps {
   wexelId: number;
@@ -62,9 +55,7 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
         <CardContent>
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Не удалось загрузить историю бустов
-            </AlertDescription>
+            <AlertDescription>Не удалось загрузить историю бустов</AlertDescription>
           </Alert>
         </CardContent>
       </Card>
@@ -79,9 +70,7 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
             <History className="h-5 w-5" />
             <span>История бустов</span>
           </CardTitle>
-          <CardDescription>
-            История применения буст-монет для этого векселя
-          </CardDescription>
+          <CardDescription>История применения буст-монет для этого векселя</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
@@ -100,9 +89,7 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
           <History className="h-5 w-5" />
           <span>История бустов</span>
         </CardTitle>
-        <CardDescription>
-          История применения буст-монет для этого векселя
-        </CardDescription>
+        <CardDescription>История применения буст-монет для этого векселя</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -114,7 +101,7 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
               <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
                 <Zap className="h-5 w-5 text-white" />
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
                   <span className="font-medium text-sm">
@@ -124,7 +111,7 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
                     +{formatPercentage(boost.apyBoostBp / 100)} APY
                   </Badge>
                 </div>
-                
+
                 <div className="flex items-center space-x-4 text-xs text-gray-500">
                   <div className="flex items-center space-x-1">
                     <DollarSign className="h-3 w-3" />
@@ -136,22 +123,22 @@ export const BoostHistory: React.FC<BoostHistoryProps> = ({ wexelId }) => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className="flex items-center space-x-1 text-xs text-gray-500 mb-1">
                   <Clock className="h-3 w-3" />
                   <span>
-                    {new Date(boost.createdAt).toLocaleDateString('ru-RU', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
+                    {new Date(boost.createdAt).toLocaleDateString("ru-RU", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
                     })}
                   </span>
                 </div>
                 <div className="text-xs text-gray-400">
-                  {new Date(boost.createdAt).toLocaleTimeString('ru-RU', {
-                    hour: '2-digit',
-                    minute: '2-digit',
+                  {new Date(boost.createdAt).toLocaleTimeString("ru-RU", {
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })}
                 </div>
               </div>

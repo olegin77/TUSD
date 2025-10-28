@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export interface PriceData {
   tokenMint: string;
@@ -42,7 +42,7 @@ export class OracleService {
 
       return null;
     } catch (error) {
-      console.error('Failed to fetch price:', error);
+      console.error("Failed to fetch price:", error);
       return null;
     }
   }
@@ -59,7 +59,7 @@ export class OracleService {
 
       return [];
     } catch (error) {
-      console.error('Failed to fetch supported tokens:', error);
+      console.error("Failed to fetch supported tokens:", error);
       return [];
     }
   }
@@ -71,12 +71,14 @@ export class OracleService {
     timestamp: string;
   } | null> {
     try {
-      const response = await axios.get<OracleResponse<{
-        status: string;
-        availableSources: number;
-        totalTokens: number;
-        timestamp: string;
-      }>>(`${this.baseURL}/health`);
+      const response = await axios.get<
+        OracleResponse<{
+          status: string;
+          availableSources: number;
+          totalTokens: number;
+          timestamp: string;
+        }>
+      >(`${this.baseURL}/health`);
 
       if (response.data.success) {
         return response.data.data;
@@ -84,23 +86,26 @@ export class OracleService {
 
       return null;
     } catch (error) {
-      console.error('Failed to fetch oracle health:', error);
+      console.error("Failed to fetch oracle health:", error);
       return null;
     }
   }
 
   // Helper method to format price for display
   formatPrice(price: number, decimals: number = 2): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     }).format(price);
   }
 
   // Helper method to calculate price change
-  calculatePriceChange(currentPrice: number, previousPrice: number): {
+  calculatePriceChange(
+    currentPrice: number,
+    previousPrice: number
+  ): {
     absolute: number;
     percentage: number;
   } {

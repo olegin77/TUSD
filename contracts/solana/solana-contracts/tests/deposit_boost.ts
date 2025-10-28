@@ -3,7 +3,7 @@ import { Program } from "@coral-xyz/anchor";
 import { SolanaContracts } from "../target/types/solana_contracts";
 import { expect } from "chai";
 
-describe("Comprehensive Solana Contracts Tests", () => {
+describe("Deposit and Boost Tests", () => {
   // Configure the client to use the local cluster.
   anchor.setProvider(anchor.AnchorProvider.env());
 
@@ -12,360 +12,378 @@ describe("Comprehensive Solana Contracts Tests", () => {
 
   // Test accounts
   let user: anchor.web3.Keypair;
-  let pool: anchor.web3.Keypair;
-  let wexel: anchor.web3.Keypair;
-  let collateralPosition: anchor.web3.Keypair;
-  let rewardsVault: anchor.web3.Keypair;
-  let tokenMint: anchor.web3.Keypair;
+  let poolId: anchor.BN;
+  let wexelId: anchor.BN;
 
   before(async () => {
     // Generate test keypairs
     user = anchor.web3.Keypair.generate();
-    pool = anchor.web3.Keypair.generate();
-    wexel = anchor.web3.Keypair.generate();
-    collateralPosition = anchor.web3.Keypair.generate();
-    rewardsVault = anchor.web3.Keypair.generate();
-    tokenMint = anchor.web3.Keypair.generate();
+    poolId = new anchor.BN(1);
+    wexelId = poolId; // For simplicity, using same ID
 
     // Airdrop SOL to user for transaction fees
-    await provider.connection.requestAirdrop(user.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL);
-  });
+    const signature = await provider.connection.requestAirdrop(
+      user.publicKey,
+      10 * anchor.web3.LAMPORTS_PER_SOL
+    );
+    await provider.connection.confirmTransaction(signature);
 
-  describe("Pool Management", () => {
-    it("Should initialize program", async () => {
-      const tx = await program.methods.initialize().rpc();
-
-      console.log("Initialize transaction signature:", tx);
-      expect(tx).to.be.a("string");
-    });
+    // Wait for confirmation
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   });
 
   describe("Deposit Functionality", () => {
-    it("Should deposit USDT successfully", async () => {
-      const poolId = 1;
-      const principalUsd = new anchor.BN(1000 * 1e6); // $1000 USDT
+    it("Should deposit USDT successfully and emit WexelCreated event", async () => {
+      const principalUsd = new anchor.BN(1000_000000); // $1000 USDT (6 decimals)
 
-      // Create pool account
-      const poolSpace = 48; // Pool::LEN
-      const poolRent = await provider.connection.getMinimumBalanceForRentExemption(poolSpace);
-
-      const createPoolTx = new anchor.web3.Transaction().add(
-        anchor.web3.SystemProgram.createAccount({
-          fromPubkey: user.publicKey,
-          newAccountPubkey: pool.publicKey,
-          lamports: poolRent,
-          space: poolSpace,
-          programId: program.programId,
-        })
+      // Derive PDAs
+      const [poolPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("pool"), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
       );
 
-      await provider.sendAndConfirm(createPoolTx, [user, pool]);
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
 
-      // Now test deposit
+      // Execute deposit
       const tx = await program.methods
         .deposit(poolId, principalUsd)
         .accounts({
           user: user.publicKey,
-          pool: pool.publicKey,
-          wexel: wexel.publicKey,
+          pool: poolPda,
+          wexel: wexelPda,
           systemProgram: anchor.web3.SystemProgram.programId,
         })
-        .signers([user, wexel])
+        .signers([user])
         .rpc();
 
-      console.log("Deposit transaction signature:", tx);
-      expect(tx).to.be.a("string");
+      console.log("✓ Deposit transaction signature:", tx);
+
+      // Fetch and verify wexel account
+      const wexelAccount = await program.account.wexel.fetch(wexelPda);
+      expect(wexelAccount.id.toString()).to.equal(poolId.toString());
+      expect(wexelAccount.owner.toString()).to.equal(user.publicKey.toString());
+      expect(wexelAccount.principalUsd.toString()).to.equal(principalUsd.toString());
+      expect(wexelAccount.apyBp).to.equal(1800); // 18% APY
+      expect(wexelAccount.apyBoostBp).to.equal(0); // No boost yet
+      expect(wexelAccount.lockPeriodMonths).to.equal(12);
+      expect(wexelAccount.isCollateralized).to.equal(false);
+      expect(wexelAccount.isFinalized).to.equal(false);
+
+      // Fetch and verify pool account
+      const poolAccount = await program.account.pool.fetch(poolPda);
+      expect(poolAccount.id.toString()).to.equal(poolId.toString());
+      expect(poolAccount.totalDeposits.toString()).to.equal(principalUsd.toString());
+      expect(poolAccount.apyBp).to.equal(1800);
+
+      console.log("✓ Wexel created successfully with principal:", principalUsd.toString());
     });
 
-    it("Should fail with insufficient deposit amount", async () => {
-      const poolId = 1;
-      const insufficientAmount = new anchor.BN(50 * 1e6); // $50 USDT (below $100 minimum)
+    it("Should fail deposit with zero amount", async () => {
+      const invalidAmount = new anchor.BN(0);
+      const poolId2 = new anchor.BN(2);
+
+      const [poolPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("pool"), poolId2.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId2.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
 
       try {
         await program.methods
-          .deposit(poolId, insufficientAmount)
+          .deposit(poolId2, invalidAmount)
           .accounts({
             user: user.publicKey,
-            pool: pool.publicKey,
-            wexel: wexel.publicKey,
+            pool: poolPda,
+            wexel: wexelPda,
             systemProgram: anchor.web3.SystemProgram.programId,
           })
-          .signers([user, wexel])
+          .signers([user])
           .rpc();
 
-        expect.fail("Should have failed with insufficient deposit amount");
-      } catch (error) {
-        expect(error.message).to.include("InsufficientDeposit");
+        expect.fail("Should have failed with InvalidAmount error");
+      } catch (error: any) {
+        expect(error.error.errorCode.code).to.equal("InvalidAmount");
+        console.log("✓ Correctly rejected zero amount deposit");
       }
+    });
+
+    it("Should verify wexel maturity date is set correctly", async () => {
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      const wexelAccount = await program.account.wexel.fetch(wexelPda);
+      const lockPeriodSeconds = 12 * 30 * 86400; // 12 months in seconds
+      const expectedMaturity = wexelAccount.createdAt.toNumber() + lockPeriodSeconds;
+
+      expect(wexelAccount.maturedAt.toNumber()).to.be.closeTo(expectedMaturity, 2);
+      console.log("✓ Wexel maturity date set correctly");
     });
   });
 
   describe("Boost Functionality", () => {
-    it("Should apply boost successfully", async () => {
-      const wexelId = new anchor.BN(1);
-      const amount = new anchor.BN(300 * 1e6); // $300 boost tokens
+    it("Should apply boost successfully and emit BoostApplied event", async () => {
+      const boostAmount = new anchor.BN(300_000000); // $300 (30% of $1000 = max boost)
 
-      const tx = await program.methods
-        .applyBoost(wexelId, tokenMint.publicKey, amount)
-        .accounts({
-          user: user.publicKey,
-          wexel: wexel.publicKey,
-          tokenMint: tokenMint.publicKey,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([user])
-        .rpc();
-
-      console.log("Apply boost transaction signature:", tx);
-      expect(tx).to.be.a("string");
-    });
-
-    it("Should fail with excessive boost amount", async () => {
-      const wexelId = new anchor.BN(1);
-      const excessiveAmount = new anchor.BN(1000 * 1e6); // Too much boost
-
-      try {
-        await program.methods
-          .applyBoost(wexelId, tokenMint.publicKey, excessiveAmount)
-          .accounts({
-            user: user.publicKey,
-            wexel: wexel.publicKey,
-            tokenMint: tokenMint.publicKey,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .signers([user])
-          .rpc();
-
-        expect.fail("Should have failed with excessive boost amount");
-      } catch (error) {
-        expect(error.message).to.include("BoostTargetExceeded");
-      }
-    });
-  });
-
-  describe("Wexel Finalization", () => {
-    it("Should finalize wexel mint", async () => {
-      const wexelId = new anchor.BN(1);
-
-      const tx = await program.methods
-        .mintWexelFinalize(wexelId)
-        .accounts({
-          user: user.publicKey,
-          wexel: wexel.publicKey,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([user])
-        .rpc();
-
-      console.log("Mint wexel finalize transaction signature:", tx);
-      expect(tx).to.be.a("string");
-    });
-  });
-
-  describe("Rewards and Accrual", () => {
-    it("Should accrue rewards", async () => {
-      const wexelId = new anchor.BN(1);
-
-      // Create rewards vault
-      const vaultSpace = 16; // RewardsVault::LEN
-      const vaultRent = await provider.connection.getMinimumBalanceForRentExemption(vaultSpace);
-
-      const createVaultTx = new anchor.web3.Transaction().add(
-        anchor.web3.SystemProgram.createAccount({
-          fromPubkey: user.publicKey,
-          newAccountPubkey: rewardsVault.publicKey,
-          lamports: vaultRent,
-          space: vaultSpace,
-          programId: program.programId,
-        })
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
       );
 
-      await provider.sendAndConfirm(createVaultTx, [user, rewardsVault]);
+      // Get wexel before boost
+      const wexelBefore = await program.account.wexel.fetch(wexelPda);
+      expect(wexelBefore.apyBoostBp).to.equal(0);
 
+      // Apply boost
       const tx = await program.methods
-        .accrue(wexelId)
+        .applyBoost(wexelId, boostAmount)
         .accounts({
-          wexel: wexel.publicKey,
-          rewardsVault: rewardsVault.publicKey,
+          user: user.publicKey,
+          wexel: wexelPda,
           systemProgram: anchor.web3.SystemProgram.programId,
         })
         .signers([user])
         .rpc();
 
-      console.log("Accrue transaction signature:", tx);
-      expect(tx).to.be.a("string");
+      console.log("✓ Apply boost transaction signature:", tx);
+
+      // Fetch and verify wexel account
+      const wexelAfter = await program.account.wexel.fetch(wexelPda);
+
+      // Verify boost APY calculation
+      // boost_target = 1000 * 3000 / 10000 = 300
+      // boost_ratio = min(300, 300) / 300 = 1.0
+      // boost_apy_bp = 1.0 * 500 = 500 (5%)
+      expect(wexelAfter.apyBoostBp).to.equal(500);
+
+      console.log("✓ Boost applied successfully, APY boost:", wexelAfter.apyBoostBp, "bp");
     });
 
-    it("Should claim rewards", async () => {
-      const wexelId = new anchor.BN(1);
+    it("Should apply partial boost correctly", async () => {
+      const poolId3 = new anchor.BN(3);
+      const principalUsd = new anchor.BN(1000_000000); // $1000
+      const partialBoostAmount = new anchor.BN(150_000000); // $150 (50% of target)
 
-      const tx = await program.methods
-        .claim(wexelId)
+      // Create new deposit
+      const [poolPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("pool"), poolId3.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId3.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      await program.methods
+        .deposit(poolId3, principalUsd)
         .accounts({
           user: user.publicKey,
-          wexel: wexel.publicKey,
+          pool: poolPda,
+          wexel: wexelPda,
           systemProgram: anchor.web3.SystemProgram.programId,
         })
         .signers([user])
         .rpc();
 
-      console.log("Claim transaction signature:", tx);
-      expect(tx).to.be.a("string");
-    });
-  });
-
-  describe("Collateral Functionality", () => {
-    it("Should collateralize wexel", async () => {
-      const wexelId = new anchor.BN(1);
-
-      const tx = await program.methods
-        .collateralize(wexelId)
+      // Apply partial boost
+      await program.methods
+        .applyBoost(poolId3, partialBoostAmount)
         .accounts({
           user: user.publicKey,
-          wexel: wexel.publicKey,
-          collateralPosition: collateralPosition.publicKey,
+          wexel: wexelPda,
           systemProgram: anchor.web3.SystemProgram.programId,
         })
-        .signers([user, collateralPosition])
+        .signers([user])
         .rpc();
 
-      console.log("Collateralize transaction signature:", tx);
-      expect(tx).to.be.a("string");
+      // Verify partial boost
+      const wexelAccount = await program.account.wexel.fetch(wexelPda);
+
+      // boost_ratio = 150 / 300 = 0.5
+      // boost_apy_bp = 0.5 * 500 = 250 (2.5%)
+      expect(wexelAccount.apyBoostBp).to.equal(250);
+
+      console.log("✓ Partial boost applied correctly, APY boost:", wexelAccount.apyBoostBp, "bp");
     });
 
-    it("Should fail to collateralize already collateralized wexel", async () => {
-      const wexelId = new anchor.BN(1);
+    it("Should cap boost at maximum when exceeding target", async () => {
+      const poolId4 = new anchor.BN(4);
+      const principalUsd = new anchor.BN(1000_000000); // $1000
+      const excessiveBoostAmount = new anchor.BN(500_000000); // $500 (exceeds 30% target)
+
+      // Create new deposit
+      const [poolPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("pool"), poolId4.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId4.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      await program.methods
+        .deposit(poolId4, principalUsd)
+        .accounts({
+          user: user.publicKey,
+          pool: poolPda,
+          wexel: wexelPda,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .signers([user])
+        .rpc();
+
+      // Apply excessive boost
+      await program.methods
+        .applyBoost(poolId4, excessiveBoostAmount)
+        .accounts({
+          user: user.publicKey,
+          wexel: wexelPda,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .signers([user])
+        .rpc();
+
+      // Verify boost is capped at maximum
+      const wexelAccount = await program.account.wexel.fetch(wexelPda);
+
+      // boost_ratio = min(500, 300) / 300 = 1.0
+      // boost_apy_bp = 1.0 * 500 = 500 (5%)
+      expect(wexelAccount.apyBoostBp).to.equal(500);
+
+      console.log("✓ Boost correctly capped at maximum, APY boost:", wexelAccount.apyBoostBp, "bp");
+    });
+
+    it("Should fail boost with zero amount", async () => {
+      const invalidBoostAmount = new anchor.BN(0);
+
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
 
       try {
         await program.methods
-          .collateralize(wexelId)
+          .applyBoost(wexelId, invalidBoostAmount)
           .accounts({
             user: user.publicKey,
-            wexel: wexel.publicKey,
-            collateralPosition: collateralPosition.publicKey,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .signers([user, collateralPosition])
-          .rpc();
-
-        expect.fail("Should have failed - wexel already collateralized");
-      } catch (error) {
-        expect(error.message).to.include("AlreadyCollateralized");
-      }
-    });
-
-    it("Should repay loan", async () => {
-      const wexelId = new anchor.BN(1);
-      const repayAmount = new anchor.BN(600 * 1e6); // $600 (60% of $1000)
-
-      const tx = await program.methods
-        .repayLoan(wexelId, repayAmount)
-        .accounts({
-          user: user.publicKey,
-          wexel: wexel.publicKey,
-          collateralPosition: collateralPosition.publicKey,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .signers([user])
-        .rpc();
-
-      console.log("Repay loan transaction signature:", tx);
-      expect(tx).to.be.a("string");
-    });
-  });
-
-  describe("Redemption", () => {
-    it("Should redeem matured wexel", async () => {
-      const wexelId = new anchor.BN(1);
-
-      // Note: In a real test, we would need to wait for the wexel to mature
-      // or manipulate the clock for testing purposes
-      try {
-        const tx = await program.methods
-          .redeem(wexelId)
-          .accounts({
-            user: user.publicKey,
-            wexel: wexel.publicKey,
+            wexel: wexelPda,
             systemProgram: anchor.web3.SystemProgram.programId,
           })
           .signers([user])
           .rpc();
 
-        console.log("Redeem transaction signature:", tx);
-        expect(tx).to.be.a("string");
-      } catch (error) {
-        // Expected to fail if wexel hasn't matured yet
-        expect(error.message).to.include("WexelNotMatured");
+        expect.fail("Should have failed with InvalidAmount error");
+      } catch (error: any) {
+        expect(error.error.errorCode.code).to.equal("InvalidAmount");
+        console.log("✓ Correctly rejected zero boost amount");
       }
     });
-  });
 
-  describe("Error Handling", () => {
-    it("Should handle unauthorized access", async () => {
+    it("Should fail boost when unauthorized user tries to apply", async () => {
       const unauthorizedUser = anchor.web3.Keypair.generate();
-      const wexelId = new anchor.BN(1);
+      const boostAmount = new anchor.BN(100_000000);
+
+      // Airdrop to unauthorized user
+      const signature = await provider.connection.requestAirdrop(
+        unauthorizedUser.publicKey,
+        2 * anchor.web3.LAMPORTS_PER_SOL
+      );
+      await provider.connection.confirmTransaction(signature);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
 
       try {
         await program.methods
-          .claim(wexelId)
+          .applyBoost(wexelId, boostAmount)
           .accounts({
             user: unauthorizedUser.publicKey,
-            wexel: wexel.publicKey,
+            wexel: wexelPda,
             systemProgram: anchor.web3.SystemProgram.programId,
           })
           .signers([unauthorizedUser])
           .rpc();
 
-        expect.fail("Should have failed with unauthorized access");
-      } catch (error) {
-        expect(error.message).to.include("Unauthorized");
-      }
-    });
-
-    it("Should handle invalid wexel ID", async () => {
-      const invalidWexelId = new anchor.BN(999);
-
-      try {
-        await program.methods
-          .claim(invalidWexelId)
-          .accounts({
-            user: user.publicKey,
-            wexel: wexel.publicKey,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .signers([user])
-          .rpc();
-
-        expect.fail("Should have failed with invalid wexel ID");
-      } catch (error) {
-        expect(error.message).to.include("WexelNotFound");
+        expect.fail("Should have failed with Unauthorized error");
+      } catch (error: any) {
+        // Anchor constraint error for unauthorized access
+        expect(error).to.exist;
+        console.log("✓ Correctly rejected unauthorized boost attempt");
       }
     });
   });
 
-  describe("Math Operations", () => {
-    it("Should handle large numbers without overflow", async () => {
-      const poolId = 1;
-      const largeAmount = new anchor.BN("18446744073709551615"); // Max u64
+  describe("Integration: Deposit + Boost Flow", () => {
+    it("Should complete full deposit and boost flow", async () => {
+      const poolId5 = new anchor.BN(5);
+      const principalUsd = new anchor.BN(5000_000000); // $5000
+      const boostAmount = new anchor.BN(1500_000000); // $1500 (30% of $5000)
 
-      try {
-        await program.methods
-          .deposit(poolId, largeAmount)
-          .accounts({
-            user: user.publicKey,
-            pool: pool.publicKey,
-            wexel: wexel.publicKey,
-            systemProgram: anchor.web3.SystemProgram.programId,
-          })
-          .signers([user, wexel])
-          .rpc();
+      // Derive PDAs
+      const [poolPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("pool"), poolId5.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
 
-        // If it succeeds, that's fine
-        console.log("Large amount deposit succeeded");
-      } catch (error) {
-        // Expected to fail due to overflow or other constraints
-        expect(error.message).to.include("MathOverflow");
-      }
+      const [wexelPda] = anchor.web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("wexel"), user.publicKey.toBuffer(), poolId5.toArrayLike(Buffer, "le", 8)],
+        program.programId
+      );
+
+      // Step 1: Deposit
+      await program.methods
+        .deposit(poolId5, principalUsd)
+        .accounts({
+          user: user.publicKey,
+          pool: poolPda,
+          wexel: wexelPda,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .signers([user])
+        .rpc();
+
+      console.log("✓ Step 1: Deposit completed");
+
+      // Step 2: Apply boost
+      await program.methods
+        .applyBoost(poolId5, boostAmount)
+        .accounts({
+          user: user.publicKey,
+          wexel: wexelPda,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .signers([user])
+        .rpc();
+
+      console.log("✓ Step 2: Boost applied");
+
+      // Verify final state
+      const wexelAccount = await program.account.wexel.fetch(wexelPda);
+      expect(wexelAccount.principalUsd.toString()).to.equal(principalUsd.toString());
+      expect(wexelAccount.apyBp).to.equal(1800); // 18% base APY
+      expect(wexelAccount.apyBoostBp).to.equal(500); // 5% boost APY
+
+      const totalApyBp = wexelAccount.apyBp + wexelAccount.apyBoostBp;
+      expect(totalApyBp).to.equal(2300); // 23% total APY
+
+      console.log("✓ Full flow completed successfully");
+      console.log("  - Principal:", principalUsd.toString());
+      console.log("  - Base APY:", wexelAccount.apyBp, "bp (18%)");
+      console.log("  - Boost APY:", wexelAccount.apyBoostBp, "bp (5%)");
+      console.log("  - Total APY:", totalApyBp, "bp (23%)");
     });
   });
 });

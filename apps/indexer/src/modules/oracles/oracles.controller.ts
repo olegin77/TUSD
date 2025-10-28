@@ -1,4 +1,10 @@
-import { Controller, Get, Query, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { PriceOracleService } from './services/price-oracle.service';
 
 @Controller('oracles')
@@ -8,14 +14,20 @@ export class OraclesController {
   @Get('price')
   async getPrice(@Query('mint') mint: string) {
     if (!mint) {
-      throw new HttpException('Token mint address is required', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Token mint address is required',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     try {
       const price = await this.priceOracleService.getPrice(mint);
-      
+
       if (!price) {
-        throw new HttpException('Price not available for this token', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Price not available for this token',
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       return {
@@ -32,10 +44,10 @@ export class OraclesController {
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         'Failed to fetch price data',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -44,7 +56,7 @@ export class OraclesController {
   async getSupportedTokens() {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();
-      
+
       return {
         success: true,
         data: {
@@ -55,7 +67,7 @@ export class OraclesController {
     } catch (error) {
       throw new HttpException(
         'Failed to fetch supported tokens',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -65,11 +77,13 @@ export class OraclesController {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();
       const healthChecks = await Promise.allSettled(
-        tokens.slice(0, 3).map(token => this.priceOracleService.getPrice(token))
+        tokens
+          .slice(0, 3)
+          .map((token) => this.priceOracleService.getPrice(token)),
       );
 
       const availableSources = healthChecks.filter(
-        result => result.status === 'fulfilled' && result.value !== null
+        (result) => result.status === 'fulfilled' && result.value !== null,
       ).length;
 
       return {

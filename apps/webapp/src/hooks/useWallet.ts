@@ -1,8 +1,8 @@
 "use client";
 
-import { useMultiWallet } from '@/providers/MultiWalletProvider';
-import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
-import { useTron } from '@/providers/TronProvider';
+import { useMultiWallet } from "@/providers/MultiWalletProvider";
+import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
+import { useTron } from "@/providers/TronProvider";
 
 export const useWallet = () => {
   const multiWallet = useMultiWallet();
@@ -10,18 +10,18 @@ export const useWallet = () => {
   const tronWallet = useTron();
 
   const getWalletInfo = () => {
-    if (multiWallet.activeWallet === 'solana' && solanaWallet.connected) {
+    if (multiWallet.activeWallet === "solana" && solanaWallet.connected) {
       return {
-        type: 'solana' as const,
+        type: "solana" as const,
         address: solanaWallet.publicKey?.toString() || null,
         connected: true,
         wallet: solanaWallet,
       };
     }
 
-    if (multiWallet.activeWallet === 'tron' && tronWallet.isConnected) {
+    if (multiWallet.activeWallet === "tron" && tronWallet.isConnected) {
       return {
-        type: 'tron' as const,
+        type: "tron" as const,
         address: tronWallet.address,
         connected: true,
         wallet: tronWallet,
@@ -38,17 +38,17 @@ export const useWallet = () => {
 
   const signMessage = async (message: string) => {
     const walletInfo = getWalletInfo();
-    
+
     if (!walletInfo.connected || !walletInfo.wallet) {
-      throw new Error('Wallet not connected');
+      throw new Error("Wallet not connected");
     }
 
-    if (walletInfo.type === 'solana') {
+    if (walletInfo.type === "solana") {
       const solanaWallet = walletInfo.wallet as any;
       if (!solanaWallet.signMessage) {
-        throw new Error('Wallet does not support message signing');
+        throw new Error("Wallet does not support message signing");
       }
-      
+
       const messageBytes = new TextEncoder().encode(message);
       const signature = await solanaWallet.signMessage(messageBytes);
       return {
@@ -57,12 +57,12 @@ export const useWallet = () => {
       };
     }
 
-    if (walletInfo.type === 'tron') {
+    if (walletInfo.type === "tron") {
       const tronWallet = walletInfo.wallet as any;
       if (!tronWallet.tronWeb.trx.signMessage) {
-        throw new Error('Wallet does not support message signing');
+        throw new Error("Wallet does not support message signing");
       }
-      
+
       const signature = await tronWallet.tronWeb.trx.signMessage(message);
       return {
         signature,
@@ -70,35 +70,35 @@ export const useWallet = () => {
       };
     }
 
-    throw new Error('Unsupported wallet type');
+    throw new Error("Unsupported wallet type");
   };
 
   const sendTransaction = async (transaction: any) => {
     const walletInfo = getWalletInfo();
-    
+
     if (!walletInfo.connected || !walletInfo.wallet) {
-      throw new Error('Wallet not connected');
+      throw new Error("Wallet not connected");
     }
 
-    if (walletInfo.type === 'solana') {
+    if (walletInfo.type === "solana") {
       const solanaWallet = walletInfo.wallet as any;
       if (!solanaWallet.sendTransaction) {
-        throw new Error('Wallet does not support sending transactions');
+        throw new Error("Wallet does not support sending transactions");
       }
-      
+
       return await solanaWallet.sendTransaction(transaction);
     }
 
-    if (walletInfo.type === 'tron') {
+    if (walletInfo.type === "tron") {
       const tronWallet = walletInfo.wallet as any;
       if (!tronWallet.tronWeb.trx.sendTransaction) {
-        throw new Error('Wallet does not support sending transactions');
+        throw new Error("Wallet does not support sending transactions");
       }
-      
+
       return await tronWallet.tronWeb.trx.sendTransaction(transaction);
     }
 
-    throw new Error('Unsupported wallet type');
+    throw new Error("Unsupported wallet type");
   };
 
   return {

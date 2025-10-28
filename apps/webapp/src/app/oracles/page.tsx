@@ -1,52 +1,49 @@
 "use client";
 
-import { useState } from 'react';
-import { PriceList } from '@/components/oracle/PriceDisplay';
-import { useSupportedTokens, useOracleHealth } from '@/hooks/useOracle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { AlertCircle, CheckCircle, RefreshCw, Activity } from 'lucide-react';
+import { useState } from "react";
+import { PriceList } from "@/components/oracle/PriceDisplay";
+import { useSupportedTokens, useOracleHealth } from "@/hooks/useOracle";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AlertCircle, CheckCircle, RefreshCw, Activity } from "lucide-react";
 
 const TOKEN_MAP: Record<string, { name: string; symbol: string }> = {
-  'So11111111111111111111111111111111111111112': {
-    name: 'Solana',
-    symbol: 'SOL',
+  So11111111111111111111111111111111111111112: {
+    name: "Solana",
+    symbol: "SOL",
   },
-  'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': {
-    name: 'USD Coin',
-    symbol: 'USDC',
+  EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: {
+    name: "USD Coin",
+    symbol: "USDC",
   },
-  'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB': {
-    name: 'Tether USD',
-    symbol: 'USDT',
+  Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB: {
+    name: "Tether USD",
+    symbol: "USDT",
   },
 };
 
 export default function OraclesPage() {
-  const [customTokenMint, setCustomTokenMint] = useState('');
+  const [customTokenMint, setCustomTokenMint] = useState("");
   const [customTokens, setCustomTokens] = useState<string[]>([]);
-  
+
   const { data: supportedTokens, isLoading: tokensLoading } = useSupportedTokens();
   const { data: health, isLoading: healthLoading, refetch: refetchHealth } = useOracleHealth();
 
   const handleAddCustomToken = () => {
     if (customTokenMint && !customTokens.includes(customTokenMint)) {
       setCustomTokens([...customTokens, customTokenMint]);
-      setCustomTokenMint('');
+      setCustomTokenMint("");
     }
   };
 
   const handleRemoveCustomToken = (mint: string) => {
-    setCustomTokens(customTokens.filter(token => token !== mint));
+    setCustomTokens(customTokens.filter((token) => token !== mint));
   };
 
-  const allTokens = [
-    ...(supportedTokens || []),
-    ...customTokens,
-  ];
+  const allTokens = [...(supportedTokens || []), ...customTokens];
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -54,9 +51,7 @@ export default function OraclesPage() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Система оракулов цен
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Система оракулов цен</h1>
             <p className="text-xl text-gray-600">
               Получайте актуальные цены токенов из множества источников
             </p>
@@ -71,9 +66,7 @@ export default function OraclesPage() {
                     <Activity className="h-5 w-5" />
                     <span>Статус системы</span>
                   </CardTitle>
-                  <CardDescription>
-                    Мониторинг доступности источников цен
-                  </CardDescription>
+                  <CardDescription>Мониторинг доступности источников цен</CardDescription>
                 </div>
                 <Button
                   variant="outline"
@@ -81,7 +74,7 @@ export default function OraclesPage() {
                   onClick={() => refetchHealth()}
                   disabled={healthLoading}
                 >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${healthLoading ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-4 w-4 mr-2 ${healthLoading ? "animate-spin" : ""}`} />
                   Обновить
                 </Button>
               </div>
@@ -96,21 +89,17 @@ export default function OraclesPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
-                      {health.status === 'healthy' ? (
+                      {health.status === "healthy" ? (
                         <CheckCircle className="h-5 w-5 text-green-500" />
                       ) : (
                         <AlertCircle className="h-5 w-5 text-red-500" />
                       )}
                       <span className="font-medium">
-                        {health.status === 'healthy' ? 'Система работает' : 'Проблемы с системой'}
+                        {health.status === "healthy" ? "Система работает" : "Проблемы с системой"}
                       </span>
                     </div>
-                    <Badge variant="outline">
-                      {health.availableSources} источников доступно
-                    </Badge>
-                    <Badge variant="outline">
-                      {health.totalTokens} токенов поддерживается
-                    </Badge>
+                    <Badge variant="outline">{health.availableSources} источников доступно</Badge>
+                    <Badge variant="outline">{health.totalTokens} токенов поддерживается</Badge>
                   </div>
                   <span className="text-sm text-gray-500">
                     Обновлено: {new Date(health.timestamp).toLocaleTimeString()}
@@ -129,9 +118,7 @@ export default function OraclesPage() {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Добавить пользовательский токен</CardTitle>
-              <CardDescription>
-                Введите адрес токена для получения цены
-              </CardDescription>
+              <CardDescription>Введите адрес токена для получения цены</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex space-x-2">
@@ -150,17 +137,13 @@ export default function OraclesPage() {
                   </Button>
                 </div>
               </div>
-              
+
               {customTokens.length > 0 && (
                 <div className="mt-4">
                   <Label>Пользовательские токены:</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {customTokens.map((mint) => (
-                      <Badge
-                        key={mint}
-                        variant="outline"
-                        className="flex items-center space-x-1"
-                      >
+                      <Badge key={mint} variant="outline" className="flex items-center space-x-1">
                         <span className="font-mono text-xs">
                           {mint.slice(0, 8)}...{mint.slice(-8)}
                         </span>
@@ -199,10 +182,7 @@ export default function OraclesPage() {
                 ))}
               </div>
             ) : (
-              <PriceList
-                tokenMints={allTokens}
-                tokenMap={TOKEN_MAP}
-              />
+              <PriceList tokenMints={allTokens} tokenMap={TOKEN_MAP} />
             )}
           </div>
 
@@ -223,7 +203,7 @@ export default function OraclesPage() {
                   <h3 className="font-semibold">Pyth Network</h3>
                   <p className="text-sm text-gray-500">Децентрализованные оракулы</p>
                 </div>
-                
+
                 <div className="text-center p-4 border rounded-lg">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-blue-600 font-bold">CG</span>
@@ -231,7 +211,7 @@ export default function OraclesPage() {
                   <h3 className="font-semibold">CoinGecko</h3>
                   <p className="text-sm text-gray-500">Агрегатор цен</p>
                 </div>
-                
+
                 <div className="text-center p-4 border rounded-lg">
                   <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-yellow-600 font-bold">B</span>
@@ -239,7 +219,7 @@ export default function OraclesPage() {
                   <h3 className="font-semibold">Binance</h3>
                   <p className="text-sm text-gray-500">Криптобиржа</p>
                 </div>
-                
+
                 <div className="text-center p-4 border rounded-lg">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-green-600 font-bold">J</span>
