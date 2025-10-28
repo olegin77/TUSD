@@ -1,0 +1,129 @@
+groups:
+  - name: usdx_alerts
+    interval: 30s
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: |
+          (sum(rate(usdx_http_requests_total{status_code=~"5.."}[5m])) 
+          / sum(rate(usdx_http_requests_total[5m]))) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "High API error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} over the last 5 minutes"
+
+      # High response time
+      - alert: HighResponseTime
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(usdx_http_request_duration_seconds_bucket[5m])) by (le, route)
+          ) > 3
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High API response time"
+          description: "95th percentile response time is {{ $value }}s for route {{ $labels.route }}"
+
+      # Indexer lag
+      - alert: IndexerHighLag
+        expr: usdx_indexer_lag_seconds > 300
+        for: 10m
+        labels:
+          severity: warning
+          component: indexer
+        annotations:
+          summary: "Indexer is lagging behind blockchain"
+          description: "{{ $labels.chain }} indexer is {{ $value }}s behind the chain head"
+
+      # TVL drop
+      - alert: TVLDropped
+        expr: |
+          (usdx_total_value_locked - usdx_total_value_locked offset 1h) 
+          / usdx_total_value_locked offset 1h < -0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: business
+        annotations:
+          summary: "Total Value Locked dropped significantly"
+          description: "TVL decreased by {{ $value | humanizePercentage }} in the last hour"
+
+      # High database query time
+      - alert: SlowDatabaseQueries
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(usdx_db_query_duration_seconds_bucket[5m])) by (le, operation)
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Slow database queries detected"
+          description: "95th percentile query time is {{ $value }}s for {{ $labels.operation }}"
+
+      # Oracle price update failures
+      - alert: OraclePriceUpdateFailures
+        expr: |
+          rate(usdx_oracle_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          component: oracle
+        annotations:
+          summary: "Oracle price update failures"
+          description: "{{ $labels.asset }} price updates failing from {{ $labels.source }}"
+
+      # Service down
+      - alert: ServiceDown
+        expr: up{job="usdx-indexer"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "USDX Indexer service is down"
+          description: "The indexer service has been down for more than 1 minute"
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: |
+          process_resident_memory_bytes{job="usdx-indexer"} 
+          / node_memory_MemTotal_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is at {{ $value | humanizePercentage }}"
+
+      # Low active wexels (potential issue)
+      - alert: LowActiveWexels
+        expr: |
+          (usdx_active_wexels_count - usdx_active_wexels_count offset 1d) 
+          / usdx_active_wexels_count offset 1d < -0.2
+        for: 1h
+        labels:
+          severity: info
+          component: business
+        annotations:
+          summary: "Active wexels count decreased"
+          description: "Active wexels decreased by {{ $value | humanizePercentage }} in the last day"
+
+      # No deposits for extended period
+      - alert: NoDepositsDetected
+        expr: |
+          rate(usdx_deposits_total[1h]) == 0
+        for: 4h
+        labels:
+          severity: warning
+          component: business
+        annotations:
+          summary: "No new deposits detected"
+          description: "No deposits have been made in the last 4 hours"
