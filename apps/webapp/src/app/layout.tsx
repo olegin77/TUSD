@@ -1,12 +1,13 @@
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
-import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/a11y/a11y-provider";
 import { AnnouncerProvider } from "@/components/a11y/announcer";
-import { ClientOnly } from "@/components/ClientOnly";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,18 +23,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <SkipToContent />
         <AnnouncerProvider>
-          <ClientOnly
-            fallback={
-              <div className="min-h-screen flex items-center justify-center">Loading...</div>
-            }
-          >
-            <MultiWalletProvider>
-              <Providers>
-                <Navigation />
-                <main id="main-content">{children}</main>
-              </Providers>
-            </MultiWalletProvider>
-          </ClientOnly>
+          <Providers>
+            <Navigation />
+            <main id="main-content">{children}</main>
+          </Providers>
         </AnnouncerProvider>
       </body>
     </html>

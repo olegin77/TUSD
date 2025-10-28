@@ -7,9 +7,6 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   },
   // Disable static optimization to avoid SSR issues with wallet adapters
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
   // Webpack configuration
   webpack: (config, { isServer }) => {
     if (!isServer) {

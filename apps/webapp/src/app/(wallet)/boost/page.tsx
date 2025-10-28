@@ -1,5 +1,8 @@
 "use client";
 
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamicImport from "next/dynamic";
@@ -13,7 +16,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Zap, TrendingUp, Target, DollarSign, Info, AlertCircle } from "lucide-react";
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 // Dynamic imports to avoid SSR issues
 const BoostApplication = dynamicImport(
