@@ -17,9 +17,11 @@ import { IndexerModule } from './modules/indexer/indexer.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { SentryModule } from './common/sentry/sentry.module';
+import { MetricsModule } from './common/monitoring/metrics.module';
 import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { SentryInterceptor } from './common/sentry/sentry.interceptor';
+import { MetricsInterceptor } from './common/interceptors/metrics.interceptor';
 import { throttleConfig } from './common/config/throttle.config';
 import configuration from './common/config/configuration';
 import { validationSchema } from './common/config/validation.schema';
@@ -37,6 +39,7 @@ import { validationSchema } from './common/config/validation.schema';
     }),
     ThrottlerModule.forRoot(throttleConfig),
     SentryModule,
+    MetricsModule,
     AuthModule,
     PoolsModule,
     WexelsModule,
@@ -64,6 +67,10 @@ import { validationSchema } from './common/config/validation.schema';
     {
       provide: APP_INTERCEPTOR,
       useClass: SentryInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: MetricsInterceptor,
     },
   ],
 })

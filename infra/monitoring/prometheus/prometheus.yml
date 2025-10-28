@@ -1,0 +1,57 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: "usdx-wexel"
+    environment: "production"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - "/etc/prometheus/alerts.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # USDX/Wexel Backend/Indexer
+  - job_name: "usdx-indexer"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["host.docker.internal:3001"] # Adjust host as needed
+        labels:
+          service: "indexer"
+          environment: "production"
+    # Optional: authentication if metrics endpoint is protected
+    # basic_auth:
+    #   username: 'metrics'
+    #   password: 'secure_password'
+
+  # Node Exporter (if monitoring host metrics)
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
+
+  # PostgreSQL Exporter (if monitoring database)
+  # - job_name: 'postgres-exporter'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+
+  # Redis Exporter (if monitoring Redis)
+  # - job_name: 'redis-exporter'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+
+  # Solana RPC Node (if using custom exporter)
+  # - job_name: 'solana-exporter'
+  #   static_configs:
+  #     - targets: ['solana-exporter:9700']
