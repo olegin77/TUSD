@@ -702,8 +702,9 @@ _(Задачи T-0115 - T-0116 остаются)_
     git add docs/security/
     ```
 
-- [ ] T-0118 | Настроить управление админскими ключами (Multisig/Timelock)
+- [x] T-0118 | Настроить управление админскими ключами (Multisig/Timelock)
   - depends: [T-0012, T-0108.6, T-0108.7] # Зависит от функций, требующих админ. прав
+  - ✅ Completed: Comprehensive admin key management documentation with multisig and timelock procedures
   - apply:
     ```bash
     set -euo pipefail
