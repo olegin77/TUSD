@@ -5,15 +5,19 @@ import type {
   User,
   Pool,
   Wexel,
+  Stats,
+  UserStats,
+  RewardsCalculation,
+  TokenPrice,
+} from "@/types";
+
+// Export unused types for potential future use
+export type {
   ClaimRewardsRequest,
   CollateralizeRequest,
   RepayLoanRequest,
   UpdatePriceRequest,
   CalculateBoostRequest,
-  Stats,
-  UserStats,
-  RewardsCalculation,
-  TokenPrice,
 } from "@/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";

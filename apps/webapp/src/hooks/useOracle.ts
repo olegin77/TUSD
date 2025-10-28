@@ -35,8 +35,6 @@ export const useOracleHealth = () => {
 };
 
 export const useMultiplePrices = (tokenMints: string[]) => {
-  const queryClient = useQueryClient();
-
   return useQuery({
     queryKey: ["prices", tokenMints],
     queryFn: async () => {
