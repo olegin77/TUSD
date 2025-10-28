@@ -298,6 +298,7 @@ fi; git add README.md docs/PROJECT_STRUCTURE.md
 ## СЕССИИ 1-3: ВЫПОЛНЕННЫЕ ЗАДАЧИ (2025-10-28)
 
 ### ✅ Сессия 1: Тестирование контрактов
+
 - [x] T-0017 | Установить целевое покрытие тестами для контрактов (>90%)
   - ✅ Добавлено 42+ теста (~654 строк)
   - ✅ Покрытие: deposit, boost, accrue, claim, collateralize, repay, redeem, finalize
@@ -305,12 +306,14 @@ fi; git add README.md docs/PROJECT_STRUCTURE.md
   - Файлы: accrue_claim_tests.ts, collateral_tests.ts, finalize_edge_cases_tests.ts
 
 ### ✅ Сессия 2: Backend API и индексация
+
 - [x] Автозапуск индексера Solana при старте приложения
 - [x] User API endpoints (profile, wallets, link wallet)
 - [x] Feeds API endpoints (wexel feed, global feed)
 - ✅ 5 новых API endpoints (~270 строк)
 
 ### ✅ Сессия 3: WebSocket и Real-Time
+
 - [x] WebSocket Gateway для real-time уведомлений (~210 строк)
 - [x] NotificationsService для управления событиями (~170 строк)
 - [x] Frontend hook useNotifications (~180 строк)
