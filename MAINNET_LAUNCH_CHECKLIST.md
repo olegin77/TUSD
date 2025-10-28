@@ -39,6 +39,7 @@
   - [ ] WebSocket notifications
 
 - [ ] **Solana Contracts Tests**
+
   ```bash
   cd contracts/solana/solana-contracts
   anchor test --skip-local-validator  # Against devnet
