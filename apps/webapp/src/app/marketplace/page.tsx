@@ -219,7 +219,9 @@ export default function MarketplacePage() {
                       {/* Ask Price */}
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Цена продажи:</span>
-                        <span className="font-bold text-lg">{formatCurrency(listing.askPrice)}</span>
+                        <span className="font-bold text-lg">
+                          {formatCurrency(listing.askPrice)}
+                        </span>
                       </div>
 
                       {/* Days Left */}
@@ -344,7 +346,9 @@ export default function MarketplacePage() {
                     <CardContent className="p-12 text-center">
                       <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold mb-2">Нет активных объявлений</h3>
-                      <p className="text-gray-500">Создайте первое объявление для продажи векселя</p>
+                      <p className="text-gray-500">
+                        Создайте первое объявление для продажи векселя
+                      </p>
                     </CardContent>
                   </Card>
                 )}
