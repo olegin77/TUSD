@@ -50,14 +50,14 @@ Build time: ~41s (webapp), <5s (indexer)
 
 ### Покрытие по модулям:
 
-| Модуль | Coverage | Критичность |
-|--------|----------|-------------|
-| app.controller.ts | 100% | ✅ Low |
-| auth (wallet-auth) | 0% | ⚠️ High |
-| pools | 0% | ⚠️ Medium |
-| wexels | 0% | ⚠️ High |
-| oracles | 0% | ⚠️ High |
-| indexer (solana) | 0% | ⚠️ High |
+| Модуль             | Coverage | Критичность |
+| ------------------ | -------- | ----------- |
+| app.controller.ts  | 100%     | ✅ Low      |
+| auth (wallet-auth) | 0%       | ⚠️ High     |
+| pools              | 0%       | ⚠️ Medium   |
+| wexels             | 0%       | ⚠️ High     |
+| oracles            | 0%       | ⚠️ High     |
+| indexer (solana)   | 0%       | ⚠️ High     |
 
 ### Рекомендации:
 
@@ -122,6 +122,7 @@ Route sizes:
 ### Рекомендация:
 
 Warnings не критичны, но желательно очистить перед production для:
+
 - Уменьшения bundle size
 - Улучшения читаемости кода
 - Соответствия best practices
@@ -292,18 +293,18 @@ anchor test  # Запустить все тесты контрактов
 
 ## 10. Метрики качества
 
-| Метрика | Текущее | Целевое | Статус |
-|---------|---------|---------|--------|
-| TypeScript errors | 0 | 0 | ✅ |
-| Backend build | ✅ Pass | Pass | ✅ |
-| Frontend build | ✅ Pass | Pass | ✅ |
-| Backend test coverage | ~1% | >90% | ❌ |
-| Frontend SSR | ✅ Works | Works | ✅ |
-| Linting warnings | 35 | <10 | ⚠️ |
-| Build time | 41s | <60s | ✅ |
-| Security score | 67/100 | 85/100 | ⚠️ |
-| UI/UX score | 84/100 | 85/100 | ⚠️ |
-| Deployment readiness | 95% | 100% | ⚠️ |
+| Метрика               | Текущее  | Целевое | Статус |
+| --------------------- | -------- | ------- | ------ |
+| TypeScript errors     | 0        | 0       | ✅     |
+| Backend build         | ✅ Pass  | Pass    | ✅     |
+| Frontend build        | ✅ Pass  | Pass    | ✅     |
+| Backend test coverage | ~1%      | >90%    | ❌     |
+| Frontend SSR          | ✅ Works | Works   | ✅     |
+| Linting warnings      | 35       | <10     | ⚠️     |
+| Build time            | 41s      | <60s    | ✅     |
+| Security score        | 67/100   | 85/100  | ⚠️     |
+| UI/UX score           | 84/100   | 85/100  | ⚠️     |
+| Deployment readiness  | 95%      | 100%    | ⚠️     |
 
 ---
 
@@ -314,7 +315,6 @@ anchor test  # Запустить все тесты контрактов
 1. ❌ **Тестовое покрытие** - добавить unit тесты для critical modules (auth, wexels, oracles)
    - Estimate: 3-5 days
    - Priority: P0
-   
 2. ❌ **Внешний аудит** - провести security audit с Trail of Bits / OpenZeppelin
    - Estimate: 3-4 weeks
    - Budget: $50k-$100k
@@ -364,6 +364,7 @@ anchor test  # Запустить все тесты контрактов
 ### В течение недели:
 
 3. ⏳ **Запустить staging deployment**
+
    ```bash
    cd infra/production
    docker-compose up -d
@@ -414,16 +415,16 @@ anchor test  # Запустить все тесты контрактов
 
 ### Оставшиеся задачи:
 
-| Задача | Estimate | Budget | Priority |
-|--------|----------|--------|----------|
-| Unit Tests | 3-5 days | $3k-$5k | P0 |
-| External Audit | 3-4 weeks | $50k-$100k | P0 |
-| JWT Refresh | 1 day | $500 | P1 |
-| Redis Nonces | 1 day | $500 | P1 |
-| Cleanup Warnings | 3 hours | $300 | P2 |
-| API Integration | 1-2 days | $1k-$2k | P2 |
-| E2E Tests | 3-5 days | $3k-$5k | P3 |
-| **TOTAL** | **5-7 weeks** | **$58k-$113k** | - |
+| Задача           | Estimate      | Budget         | Priority |
+| ---------------- | ------------- | -------------- | -------- |
+| Unit Tests       | 3-5 days      | $3k-$5k        | P0       |
+| External Audit   | 3-4 weeks     | $50k-$100k     | P0       |
+| JWT Refresh      | 1 day         | $500           | P1       |
+| Redis Nonces     | 1 day         | $500           | P1       |
+| Cleanup Warnings | 3 hours       | $300           | P2       |
+| API Integration  | 1-2 days      | $1k-$2k        | P2       |
+| E2E Tests        | 3-5 days      | $3k-$5k        | P3       |
+| **TOTAL**        | **5-7 weeks** | **$58k-$113k** | -        |
 
 ### Timeline до Mainnet:
 
@@ -489,6 +490,7 @@ anchor test  # Запустить все тесты контрактов
 ### Рекомендация:
 
 **Перейти к staging deployment и параллельно:**
+
 1. Добавить unit тесты
 2. Инициировать внешний аудит
 3. Провести нагрузочное тестирование
@@ -541,12 +543,14 @@ pnpm run build              # All packages
 ### C. Критичные файлы
 
 **Backend:**
+
 - `apps/indexer/src/database/prisma.module.ts` (NEW)
 - `apps/indexer/src/modules/oracles/oracles.controller.ts` (FIXED)
 - `apps/indexer/src/modules/auth/services/wallet-auth.service.ts` (FIXED)
 - `apps/indexer/src/common/config/config.service.ts` (FIXED)
 
 **Frontend:**
+
 - `apps/webapp/src/providers/MultiWalletProvider.tsx` (SSR FIXED)
 - `apps/webapp/src/providers/TronProvider.tsx` (SSR FIXED)
 - `apps/webapp/src/lib/api.ts` (SSR FIXED)

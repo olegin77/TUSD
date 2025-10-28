@@ -43,6 +43,7 @@
   cd contracts/solana/solana-contracts
   anchor test --skip-local-validator  # Against devnet
   ```
+
   - [ ] All 42+ tests pass
   - [ ] Gas optimization verified
   - [ ] Account rent exemption checks
@@ -198,10 +199,12 @@
   - [ ] CDN setup (optional)
 
 - [ ] **Deploy Staging Environment**
+
   ```bash
   cd infra/production
   docker-compose up -d
   ```
+
   - [ ] Backend API running
   - [ ] Frontend served
   - [ ] Database migrations applied
@@ -260,11 +263,13 @@
   - [ ] SOL funded for deployment (~5-10 SOL)
 
 - [ ] **Deploy Programs**
+
   ```bash
   cd contracts/solana/solana-contracts
   anchor build --verifiable
   solana program deploy --program-id <PROGRAM_ID> target/deploy/program.so
   ```
+
   - [ ] LiquidityPool program
   - [ ] WexelNFT program
   - [ ] Rewards program
@@ -316,13 +321,14 @@
 #### Update Configuration:
 
 - [ ] **Backend Environment Variables**
+
   ```bash
   # Update .env.production
   SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
   SOLANA_POOL_PROGRAM_ID=<deployed_program_id>
   SOLANA_WEXEL_NFT_PROGRAM_ID=<deployed_program_id>
   # ... (all other program IDs)
-  
+
   TRON_NETWORK=mainnet
   TRON_DEPOSIT_VAULT_ADDRESS=<deployed_contract_address>
   # ... (all other contract addresses)
@@ -339,6 +345,7 @@
 #### Deploy Applications:
 
 - [ ] **Backend Deployment**
+
   ```bash
   cd apps/indexer
   pnpm run build
@@ -347,6 +354,7 @@
   ```
 
 - [ ] **Frontend Deployment**
+
   ```bash
   cd apps/webapp
   pnpm run build
@@ -496,11 +504,13 @@
 See: `docs/ops/runbooks/rollback.md`
 
 1. **Database Rollback**
+
    ```bash
    psql $DATABASE_URL < backup_YYYYMMDD_HHMMSS.sql
    ```
 
 2. **Code Rollback**
+
    ```bash
    git checkout <previous_commit>
    pnpm run build
@@ -555,16 +565,16 @@ See: `docs/ops/runbooks/rollback.md`
 
 ## Estimated Budget
 
-| Item | Cost | Notes |
-|------|------|-------|
-| External Audit | $50k-$100k | Trail of Bits / OpenZeppelin |
-| Infrastructure (1st month) | $500-$1000 | Servers, DB, CDN |
-| Solana Program Deploy | ~$10 SOL | (~$2000 at $200/SOL) |
-| Tron Contract Deploy | ~5000 TRX | (~$700) |
-| Domain & SSL | $50/year | |
-| Monitoring Tools | $0-$200/mo | Grafana Cloud (optional) |
-| Marketing (initial) | $5k-$10k | Launch campaign |
-| **TOTAL (1st month)** | **$58k-$114k** | |
+| Item                       | Cost           | Notes                        |
+| -------------------------- | -------------- | ---------------------------- |
+| External Audit             | $50k-$100k     | Trail of Bits / OpenZeppelin |
+| Infrastructure (1st month) | $500-$1000     | Servers, DB, CDN             |
+| Solana Program Deploy      | ~$10 SOL       | (~$2000 at $200/SOL)         |
+| Tron Contract Deploy       | ~5000 TRX      | (~$700)                      |
+| Domain & SSL               | $50/year       |                              |
+| Monitoring Tools           | $0-$200/mo     | Grafana Cloud (optional)     |
+| Marketing (initial)        | $5k-$10k       | Launch campaign              |
+| **TOTAL (1st month)**      | **$58k-$114k** |                              |
 
 ### Ongoing Costs (per month):
 
@@ -579,7 +589,7 @@ See: `docs/ops/runbooks/rollback.md`
 
 ```
 Week 1-2:  Unit Tests + Bug Fixes
-Week 3-6:  External Security Audit + Remediation  
+Week 3-6:  External Security Audit + Remediation
 Week 7:    Performance Testing + Staging Deploy
 Week 8:    Smart Contracts Deploy + App Deploy + Launch
 Week 9+:   Monitoring, Feedback, Optimization

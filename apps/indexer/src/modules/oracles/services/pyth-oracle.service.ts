@@ -56,9 +56,8 @@ export class PythOracleService {
       }
 
       // Get latest price feeds
-      const priceFeeds = (await this.priceService.getLatestPriceFeeds([
-        priceFeedId,
-      ])) || [];
+      const priceFeeds =
+        (await this.priceService.getLatestPriceFeeds([priceFeedId])) || [];
 
       if (priceFeeds.length === 0) {
         this.logger.warn(`No price data from Pyth for ${tokenSymbol}`);
