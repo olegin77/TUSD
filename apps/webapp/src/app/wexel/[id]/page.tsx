@@ -142,19 +142,38 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
                         <div>
                           <p className="font-medium">Начало</p>
                           <p className="text-sm text-gray-500">{formatDate(wexel.startDate)}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div>
                           <p className="font-medium">Текущий момент</p>
                           <p className="text-sm text-gray-500">
                             {wexel.daysLeft} дней до погашения
                           </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
                         <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div>
                           <p className="font-medium">Погашение</p>
                           <p className="text-sm text-gray-500">{formatDate(wexel.endDate)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
                 {/* NFT Info */}
+                <Card>
+                  <CardHeader>
                     <CardTitle>NFT информация</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <div className="flex items-center justify-between">
+                      <div>
                         <p className="text-sm text-gray-500">NFT Mint Address</p>
                         <p className="font-mono text-sm">{wexel.nftMint}</p>
+                      </div>
                       <div className="flex space-x-2">
                         <Button
                           variant="outline"

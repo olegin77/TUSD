@@ -43,6 +43,7 @@ export default function PoolsPage() {
       maxDeposit: 1000000,
       description: "Долгосрочные инвестиции с максимальной доходностью",
       features: ["Ежедневные выплаты", "Возможность залога", "Высокий риск"],
+    },
   ];
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("ru-RU", {
