@@ -81,15 +81,23 @@ export default function AdminOraclesPage() {
   };
   const refreshOracle = async (token: string) => {
     setUpdating(token);
+    try {
       const adminToken = localStorage.getItem("admin_token");
       const response = await fetch(`/api/v1/admin/oracles/${token}/refresh`, {
         method: "POST",
+        headers: {
           Authorization: `Bearer ${adminToken}`,
+        },
+      });
       if (!response.ok) throw new Error("Failed to refresh oracle");
       await fetchOracleData();
+    } catch (error) {
       console.error("Error refreshing oracle:", error);
       alert("Ошибка при обновлении оракула");
+    } finally {
       setUpdating(null);
+    }
+  };
   const setManualPriceSubmit = async (token: string) => {
     if (!manualPrice || isNaN(parseFloat(manualPrice))) {
       alert("Введите корректную цену");

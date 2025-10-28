@@ -90,6 +90,7 @@ export default function AdminLoginPage() {
           <a href="/" className="text-sm text-gray-600 hover:text-gray-900">
             ← Вернуться на сайт
           </a>
+        </div>
       </Card>
     </div>
   );
