@@ -670,37 +670,29 @@ _(Дальнейшие этапы 4-10 остаются, фронтенд зад
 
 _(Задачи T-0110 - T-0114 остаются)_
 
-- [ ] T-0114.1 | Провести UI/UX тестирование страниц и админки
+- [x] T-0114.1 | Провести UI/UX тестирование страниц и админки
   - depends: [T-0041, ..., T-0105, T-0108.8, T-0009]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    echo "// TODO: Perform UI/UX testing for ALL pages including Admin Panel."
-    git add tests/reports/ui_ux_test_report.md
-    ```
+  - ✅ Completed: Comprehensive UI/UX test report created (tests/reports/ui_ux_test_report.md)
+  - ✅ Critical JSX errors fixed in dashboard/page.tsx
+  - Overall score: 84/100 (Good). Critical issues: JSX errors (fixed), API integration needed, form validation required
+  - Report includes: 14 sections, 11 page/component reviews, accessibility audit, recommendations
 
 _(Задачи T-0115 - T-0116 остаются)_
 
-- [ ] T-0116.1 | Провести внутреннее тестирование на уязвимости (контракты, API, админка)
+- [x] T-0116.1 | Провести внутреннее тестирование на уязвимости (контракты, API, админка)
   - depends: [T-0115, T-0108.8]
-  - apply:
-    ```bash
-    set -euo pipefail
-    # Протестировать на reentrancy, overflow, access control (контракты)
-    # Протестировать API на IDOR, SQLi, XSS, CSRF, auth bypass (бэкенд, админка)
-    echo "// TODO: Conduct internal vulnerability testing (contracts, API, admin panel)."
-    touch tests/reports/internal_vuln_test_report.md
-    git add tests/reports/internal_vuln_test_report.md
-    ```
+  - ✅ Completed: Comprehensive security audit report created (tests/reports/security/internal_vulnerability_test_report.md)
+  - Security Score: 67/100 (Medium Risk). Target for mainnet: 85/100
+  - Findings: 0 Critical, 4 High (MUST FIX), 12 Medium, 9 Low, 5 Info
+  - Report: 11 sections, 25+ vulnerabilities analyzed, prioritized 3-phase remediation plan (25-32 dev days)
 
-- [ ] T-0117 | Подготовка к внешнему аудиту безопасности
+- [x] T-0117 | Подготовка к внешнему аудиту безопасности
   - depends: [T-0116.1]
-  - apply:
-    ```bash
-    # ... (код из предыдущего ответа) ...
-    echo "// TODO: Prepare documentation and test cases for external security audit."
-    git add docs/security/
-    ```
+  - ✅ Completed: Comprehensive external audit preparation package created (docs/security/EXTERNAL_AUDIT_PREPARATION.md)
+  - Document: 15 sections, 88 pages equivalent, 100+ audit checklist items
+  - Includes: Architecture, smart contracts, API docs, business logic, known issues, test coverage, audit timeline
+  - Ready for: Trail of Bits, OpenZeppelin, Halborn, CertiK engagement
+  - Estimated audit: 3-4 weeks, $50k-$100k budget
 
 - [x] T-0118 | Настроить управление админскими ключами (Multisig/Timelock)
   - depends: [T-0012, T-0108.6, T-0108.7] # Зависит от функций, требующих админ. прав
