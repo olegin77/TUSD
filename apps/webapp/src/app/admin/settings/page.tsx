@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -116,10 +118,14 @@ export default function AdminSettingsPage() {
       </div>
 
       {/* System Status */}
-      <Card className={`p-6 ${editForm.system_paused ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"}`}>
+      <Card
+        className={`p-6 ${editForm.system_paused ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"}`}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Shield className={`h-8 w-8 ${editForm.system_paused ? "text-red-600" : "text-green-600"}`} />
+            <Shield
+              className={`h-8 w-8 ${editForm.system_paused ? "text-red-600" : "text-green-600"}`}
+            />
             <div>
               <h2 className="text-xl font-semibold text-gray-900">Статус системы</h2>
               <p className={`${editForm.system_paused ? "text-red-800" : "text-green-800"}`}>
@@ -144,14 +150,19 @@ export default function AdminSettingsPage() {
         </h2>
         <div className="space-y-4">
           <div>
-            <label htmlFor="marketplace_fee" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="marketplace_fee"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Комиссия маркетплейса (базисные пункты)
             </label>
             <Input
               id="marketplace_fee"
               type="number"
               value={editForm.marketplace_fee_bp}
-              onChange={(e) => setEditForm({ ...editForm, marketplace_fee_bp: parseInt(e.target.value) })}
+              onChange={(e) =>
+                setEditForm({ ...editForm, marketplace_fee_bp: parseInt(e.target.value) })
+              }
             />
             <p className="text-sm text-gray-600 mt-1">
               Текущая комиссия: {(editForm.marketplace_fee_bp || 0) / 100}% от суммы сделки
@@ -194,7 +205,10 @@ export default function AdminSettingsPage() {
           </div>
 
           <div>
-            <label htmlFor="pause_guardian" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="pause_guardian"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Адрес Pause Guardian
             </label>
             <Input
@@ -215,7 +229,9 @@ export default function AdminSettingsPage() {
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div>
               <p className="font-medium text-gray-900">Обязательное KYC</p>
-              <p className="text-sm text-gray-600">Требовать прохождение KYC для всех пользователей</p>
+              <p className="text-sm text-gray-600">
+                Требовать прохождение KYC для всех пользователей
+              </p>
             </div>
             <Button
               variant={editForm.kyc_required ? "default" : "outline"}
@@ -233,7 +249,9 @@ export default function AdminSettingsPage() {
               id="min_deposit"
               type="number"
               value={editForm.min_deposit_global}
-              onChange={(e) => setEditForm({ ...editForm, min_deposit_global: parseInt(e.target.value) })}
+              onChange={(e) =>
+                setEditForm({ ...editForm, min_deposit_global: parseInt(e.target.value) })
+              }
             />
           </div>
         </div>

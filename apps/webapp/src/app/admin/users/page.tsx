@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,7 +62,8 @@ export default function AdminUsersPage() {
       const mockUsers: UserData[] = Array.from({ length: 20 }, (_, i) => ({
         id: `user-${i + 1}`,
         solana_address: `${Math.random().toString(36).substring(2, 15)}...${Math.random().toString(36).substring(2, 6)}`,
-        tron_address: i % 3 === 0 ? `T${Math.random().toString(36).substring(2, 15)}...` : undefined,
+        tron_address:
+          i % 3 === 0 ? `T${Math.random().toString(36).substring(2, 15)}...` : undefined,
         created_at: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
         total_deposited: Math.floor(Math.random() * 50000) + 1000,
         total_wexels: Math.floor(Math.random() * 10) + 1,
@@ -76,13 +79,29 @@ export default function AdminUsersPage() {
   const getKycBadge = (status?: string) => {
     switch (status) {
       case "approved":
-        return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">Одобрено</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">
+            Одобрено
+          </span>
+        );
       case "pending":
-        return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">Ожидает</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">
+            Ожидает
+          </span>
+        );
       case "rejected":
-        return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Отклонено</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">
+            Отклонено
+          </span>
+        );
       default:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">Не указано</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">
+            Не указано
+          </span>
+        );
     }
   };
 
@@ -210,7 +229,9 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${user.total_deposited.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.total_wexels}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {user.total_wexels}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">{getKycBadge(user.kyc_status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Button size="sm" variant="ghost">

@@ -5,7 +5,8 @@ import { Navigation } from "@/components/navigation";
 import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/a11y/a11y-provider";
-import { Announcer } from "@/components/a11y/announcer";
+import { AnnouncerProvider } from "@/components/a11y/announcer";
+import { ClientOnly } from "@/components/ClientOnly";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru">
       <body className={inter.className}>
         <SkipToContent />
-        <Announcer />
-        <MultiWalletProvider>
-          <Providers>
-            <Navigation />
-            <main id="main-content">{children}</main>
-          </Providers>
-        </MultiWalletProvider>
+        <AnnouncerProvider>
+          <ClientOnly
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">Loading...</div>
+            }
+          >
+            <MultiWalletProvider>
+              <Providers>
+                <Navigation />
+                <main id="main-content">{children}</main>
+              </Providers>
+            </MultiWalletProvider>
+          </ClientOnly>
+        </AnnouncerProvider>
       </body>
     </html>
   );

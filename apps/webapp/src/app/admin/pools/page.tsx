@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -168,7 +170,9 @@ export default function AdminPoolsPage() {
                       <Input
                         type="number"
                         value={editForm.apy_base_bp}
-                        onChange={(e) => setEditForm({ ...editForm, apy_base_bp: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, apy_base_bp: parseInt(e.target.value) })
+                        }
                         className="w-24"
                       />
                     ) : (
@@ -180,7 +184,9 @@ export default function AdminPoolsPage() {
                       <Input
                         type="number"
                         value={editForm.lock_months}
-                        onChange={(e) => setEditForm({ ...editForm, lock_months: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, lock_months: parseInt(e.target.value) })
+                        }
                         className="w-24"
                       />
                     ) : (
@@ -192,7 +198,9 @@ export default function AdminPoolsPage() {
                       <Input
                         type="number"
                         value={editForm.boost_target_bp}
-                        onChange={(e) => setEditForm({ ...editForm, boost_target_bp: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, boost_target_bp: parseInt(e.target.value) })
+                        }
                         className="w-24"
                       />
                     ) : (
@@ -204,7 +212,9 @@ export default function AdminPoolsPage() {
                       <Input
                         type="number"
                         value={editForm.boost_max_bp}
-                        onChange={(e) => setEditForm({ ...editForm, boost_max_bp: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, boost_max_bp: parseInt(e.target.value) })
+                        }
                         className="w-24"
                       />
                     ) : (

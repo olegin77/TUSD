@@ -85,6 +85,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     if (animate) {
+      // Extract and filter out event handlers that conflict with framer-motion
+      const {
+        onAnimationStart,
+        onAnimationEnd,
+        onAnimationIteration,
+        onDragStart,
+        onDragEnd,
+        onDrag,
+        onDragEnter,
+        onDragLeave,
+        onDragOver,
+        onDrop,
+        ...restProps
+      } = props;
       return (
         <motion.button
           className={cn(buttonVariants({ variant, size, className }))}
@@ -95,7 +109,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           whileHover={isDisabled ? {} : { scale: 1.02 }}
           whileTap={isDisabled ? {} : { scale: 0.98 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          {...props}
+          {...(restProps as any)}
         >
           {loading ? (
             <>

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
@@ -170,7 +172,9 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
                 </div>
-                <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
+                <div
+                  className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}
+                >
                   <Icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>

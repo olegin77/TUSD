@@ -43,7 +43,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
         localStorage.removeItem("access_token");
-        window.location.href = "/login";
+        // Use Next.js router instead of window.location for client-side navigation
+        import("next/navigation").then(({ redirect }) => {
+          redirect("/login");
+        });
       }
     }
     return Promise.reject(error);
@@ -66,6 +69,8 @@ export const poolsApi = {
   getAll: (): Promise<Pool[]> => api.get("/api/v1/pools").then((res) => res.data),
 
   getById: (id: number): Promise<Pool> => api.get(`/api/v1/pools/${id}`).then((res) => res.data),
+
+  getStats: (): Promise<Stats> => api.get("/api/v1/pools/stats").then((res) => res.data),
 
   create: (data: any): Promise<Pool> => api.post("/api/v1/pools", data).then((res) => res.data),
 

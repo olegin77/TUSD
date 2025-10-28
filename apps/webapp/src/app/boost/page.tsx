@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import dynamicImport from "next/dynamic";
 import { PageTransition } from "@/components/ui/page-transition";
-import { BoostApplication } from "@/components/boost/BoostApplication";
-import { BoostHistory } from "@/components/boost/BoostHistory";
 import { useBoostStats } from "@/hooks/useBoost";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Zap, TrendingUp, Target, DollarSign, Info, AlertCircle } from "lucide-react";
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
+// Dynamic imports to avoid SSR issues
+const BoostApplication = dynamicImport(
+  () =>
+    import("@/components/boost/BoostApplication").then((mod) => ({
+      default: mod.BoostApplication,
+    })),
+  { ssr: false }
+);
+const BoostHistory = dynamicImport(
+  () => import("@/components/boost/BoostHistory").then((mod) => ({ default: mod.BoostHistory })),
+  { ssr: false }
+);
+
 // Mock data for demonstration
 const MOCK_WEXEL_ID = 1;
 const MOCK_PRINCIPAL_USD = 10000;
@@ -19,6 +35,7 @@ const MOCK_CURRENT_APY_BOOST_BP = 200; // 2%
 const MOCK_MAX_APY_BOOST_BP = 500; // 5%
 
 export default function BoostPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("apply");
   const { data: boostStats, isLoading } = useBoostStats(MOCK_WEXEL_ID);
 
@@ -131,7 +148,7 @@ export default function BoostPage() {
                     maxApyBoostBp={stats.maxApyBoostBp}
                     onBoostApplied={() => {
                       // Refresh stats
-                      window.location.reload();
+                      router.refresh();
                     }}
                   />
 
@@ -185,7 +202,9 @@ export default function BoostPage() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription className="text-sm">
                           <div className="space-y-1">
-                            <p>• Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY</p>
+                            <p>
+                              • Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY
+                            </p>
                             <p>• Целевое значение: {formatPercentage(30)} от основной суммы</p>
                             <p>• Цены обновляются в реальном времени</p>
                             <p>• Буст применяется немедленно</p>

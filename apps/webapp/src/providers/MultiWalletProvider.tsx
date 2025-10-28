@@ -1,9 +1,24 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { WalletContextProvider } from "./WalletProvider";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { TronProvider, useTron } from "./TronProvider";
-import { useWallet } from "@solana/wallet-adapter-react";
+
+// Check if we're on the client side
+const isClient = typeof window !== "undefined";
+
+// Dynamic imports to avoid SSR issues
+let WalletContextProvider: any;
+let useWallet: any;
+
+if (isClient) {
+  // Only import on client side
+  import("./WalletProvider").then((mod) => {
+    WalletContextProvider = mod.WalletContextProvider;
+  });
+  import("@solana/wallet-adapter-react").then((mod) => {
+    useWallet = mod.useWallet;
+  });
+}
 
 export type WalletType = "solana" | "tron";
 
@@ -23,7 +38,24 @@ interface MultiWalletProviderProps {
 
 const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType | null>(null);
-  const solanaWallet = useWallet();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Dynamically import useWallet hook after mount
+  const [solanaHook, setSolanaHook] = useState<any>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (typeof window !== "undefined") {
+      import("@solana/wallet-adapter-react").then((mod) => {
+        setSolanaHook(() => mod.useWallet);
+      });
+    }
+  }, []);
+
+  // Use the hook only if available
+  const solanaWallet = solanaHook
+    ? solanaHook()
+    : { connected: false, publicKey: null, disconnect: () => {} };
   const tronWallet = useTron();
 
   const isConnected =
@@ -58,12 +90,38 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
 };
 
 export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ children }) => {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    // Wait for client-side imports to complete
+    const checkReady = setInterval(() => {
+      if (WalletContextProvider) {
+        setIsReady(true);
+        clearInterval(checkReady);
+      }
+    }, 100);
+
+    return () => clearInterval(checkReady);
+  }, []);
+
+  if (!isClient || !isReady) {
+    return (
+      <TronProvider>
+        <div className="min-h-screen flex items-center justify-center">
+          <p>Initializing wallet providers...</p>
+        </div>
+      </TronProvider>
+    );
+  }
+
+  const Provider = WalletContextProvider;
+
   return (
-    <WalletContextProvider>
+    <Provider>
       <TronProvider>
         <MultiWalletContent>{children}</MultiWalletContent>
       </TronProvider>
-    </WalletContextProvider>
+    </Provider>
   );
 };
 
