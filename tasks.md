@@ -762,19 +762,14 @@ _(Задачи T-0120 - T-0122 остаются)_
     - Info alerts: LowActiveWexels, NoDepositsDetected
     - Alert routing by severity with webhook, Slack, Email, PagerDuty support
 
-- [ ] T-0124.1 | Настроить регулярные бэкапы БД и Redis, протестировать восстановление
+- [x] T-0124.1 | Настроить регулярные бэкапы БД и Redis, протестировать восстановление
   - depends: [T-0003]
-  - apply:
-    ```bash
-    set -euo pipefail
-    # Настроить pg_dump cron job или использовать сервис бэкапов облачного провайдера
-    # Настроить Redis RDB/AOF snapshots/persistence
-    # Провести тестовое восстановление на отдельном окружении
-    echo "// TODO: Setup database and Redis backup procedures and test restoration."
-    mkdir -p scripts/backup
-    touch scripts/backup/backup_db.sh scripts/backup/restore_db_test.sh
-    git add scripts/backup/
-    ```
+  - ✅ Completed: Comprehensive backup and restore system implemented
+    - backup_db.sh: Full PostgreSQL and Redis backup with compression, integrity checks, notifications
+    - restore_db_test.sh: Automated restore testing with verification
+    - setup_backup_cron.sh: Automated scheduling setup (cron/systemd)
+    - docs/ops/BACKUP_RESTORE.md: Complete documentation with DR procedures
+  - Features: Multiple backup formats, parallel restore, automatic cleanup, monitoring integration
 
 - [ ] T-0125 | Подготовка инфраструктуры для Production
   - depends: [T-0003, T-0122]
