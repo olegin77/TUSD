@@ -45,6 +45,10 @@ pub mod solana_contracts {
         WexelAlreadyFinalized,
         #[msg("Wexel not finalized")]
         WexelNotFinalized,
+        #[msg("Reentrancy detected")]
+        ReentrancyDetected,
+        #[msg("Too early to accrue rewards")]
+        TooEarlyToAccrue,
     }
 
     // Events
@@ -129,6 +133,8 @@ pub mod solana_contracts {
         pub is_finalized: bool,
         pub total_rewards: u64,
         pub claimed_rewards: u64,
+        pub last_accrued_at: i64,  // H-3 fix: track last accrual time
+        pub is_locked: bool,        // H-1 fix: reentrancy guard
     }
 
     #[account]
@@ -145,6 +151,12 @@ pub mod solana_contracts {
     pub struct RewardsVault {
         pub total_rewards: u64,
         pub distributed_rewards: u64,
+    }
+
+    // H-1 fix: Reentrancy guard for pool-level operations
+    #[account]
+    pub struct ReentrancyGuard {
+        pub is_locked: bool,
     }
 
     // Instructions
@@ -176,6 +188,8 @@ pub mod solana_contracts {
         wexel.is_finalized = false;
         wexel.total_rewards = 0;
         wexel.claimed_rewards = 0;
+        wexel.last_accrued_at = clock.unix_timestamp;  // H-3 fix: initialize
+        wexel.is_locked = false;  // H-1 fix: initialize reentrancy guard
 
         // Update pool
         pool.total_deposits = pool.total_deposits
@@ -198,9 +212,16 @@ pub mod solana_contracts {
     pub fn apply_boost(ctx: Context<ApplyBoost>, wexel_id: u64, amount: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
 
+        // H-2 fix: Verify ownership before applying boost
+        require!(
+            wexel.owner == ctx.accounts.user.key(),
+            ErrorCode::Unauthorized
+        );
+
         // Validate input
         require!(amount > 0, ErrorCode::InvalidAmount);
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
+        require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
 
         // Calculate boost APY
         let boost_target = (wexel.principal_usd * BOOST_TARGET_BP as u64) / 10000;
@@ -254,6 +275,13 @@ pub mod solana_contracts {
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
         require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
 
+        // H-3 fix: Ensure at least 1 day has passed since last accrual
+        let time_since_last_accrual = clock.unix_timestamp - wexel.last_accrued_at;
+        require!(
+            time_since_last_accrual >= SECONDS_PER_DAY as i64,
+            ErrorCode::TooEarlyToAccrue
+        );
+
         // Calculate rewards
         let days_elapsed = (clock.unix_timestamp - wexel.created_at) / SECONDS_PER_DAY as i64;
         let total_apy_bp = wexel.apy_bp + wexel.apy_boost_bp;
@@ -262,6 +290,7 @@ pub mod solana_contracts {
 
         // Update wexel
         wexel.total_rewards = total_rewards;
+        wexel.last_accrued_at = clock.unix_timestamp;  // H-3 fix: update last accrual time
 
         // Update rewards vault
         rewards_vault.total_rewards = rewards_vault.total_rewards
@@ -281,6 +310,10 @@ pub mod solana_contracts {
     pub fn claim(ctx: Context<Claim>, wexel_id: u64) -> Result<()> {
         let wexel = &mut ctx.accounts.wexel;
         let rewards_vault = &mut ctx.accounts.rewards_vault;
+
+        // H-1 fix: Reentrancy guard
+        require!(!wexel.is_locked, ErrorCode::ReentrancyDetected);
+        wexel.is_locked = true;
 
         // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
@@ -307,6 +340,9 @@ pub mod solana_contracts {
             amount_usd: claimable_amount,
         });
 
+        // H-1 fix: Release reentrancy lock
+        wexel.is_locked = false;
+
         Ok(())
     }
 
@@ -315,10 +351,18 @@ pub mod solana_contracts {
         let collateral_position = &mut ctx.accounts.collateral_position;
         let clock = Clock::get()?;
 
+        // H-1 fix: Reentrancy guard
+        require!(!wexel.is_locked, ErrorCode::ReentrancyDetected);
+        wexel.is_locked = true;
+
         // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
         require!(!wexel.is_collateralized, ErrorCode::WexelAlreadyCollateralized);
         require!(!wexel.is_finalized, ErrorCode::WexelAlreadyFinalized);
+        require!(
+            wexel.owner == ctx.accounts.user.key(),
+            ErrorCode::Unauthorized
+        );
 
         // Calculate loan amount
         let loan_usd = (wexel.principal_usd * LTV_BP as u64) / 10000;
@@ -342,6 +386,9 @@ pub mod solana_contracts {
             ltv_bp: LTV_BP,
         });
 
+        // H-1 fix: Release reentrancy lock
+        wexel.is_locked = false;
+
         Ok(())
     }
 
@@ -349,10 +396,18 @@ pub mod solana_contracts {
         let wexel = &mut ctx.accounts.wexel;
         let collateral_position = &mut ctx.accounts.collateral_position;
 
+        // H-1 fix: Reentrancy guard
+        require!(!wexel.is_locked, ErrorCode::ReentrancyDetected);
+        wexel.is_locked = true;
+
         // Validate wexel
         require!(wexel.id == wexel_id, ErrorCode::WexelNotFound);
         require!(wexel.is_collateralized, ErrorCode::WexelNotCollateralized);
         require!(!collateral_position.is_repaid, ErrorCode::InvalidRepaymentAmount);
+        require!(
+            wexel.owner == ctx.accounts.user.key(),
+            ErrorCode::Unauthorized
+        );
 
         // Validate repayment amount
         require!(repay_amount > 0, ErrorCode::InvalidAmount);
@@ -369,6 +424,9 @@ pub mod solana_contracts {
             wexel_id: wexel.id,
             repaid_amount: repay_amount,
         });
+
+        // H-1 fix: Release reentrancy lock
+        wexel.is_locked = false;
 
         Ok(())
     }

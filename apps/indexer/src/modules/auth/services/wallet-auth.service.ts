@@ -9,10 +9,39 @@ import { WalletLoginDto, WalletType } from '../dto/wallet-login.dto';
 export class WalletAuthService {
   private readonly logger = new Logger(WalletAuthService.name);
 
+  // H-4 fix: In-memory nonce tracking
+  // TODO: Replace with Redis for production (distributed system)
+  private usedNonces = new Map<string, number>(); // nonce -> timestamp
+  private readonly NONCE_CLEANUP_INTERVAL = 60000; // 1 minute
+  private readonly NONCE_TTL = 5 * 60 * 1000; // 5 minutes
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    // H-4 fix: Periodic cleanup of expired nonces
+    setInterval(() => this.cleanupExpiredNonces(), this.NONCE_CLEANUP_INTERVAL);
+  }
+
+  /**
+   * H-4 fix: Clean up expired nonces to prevent memory leak
+   */
+  private cleanupExpiredNonces() {
+    const now = Date.now();
+    const expiredKeys: string[] = [];
+
+    for (const [nonce, timestamp] of this.usedNonces.entries()) {
+      if (now - timestamp > this.NONCE_TTL) {
+        expiredKeys.push(nonce);
+      }
+    }
+
+    expiredKeys.forEach((key) => this.usedNonces.delete(key));
+
+    if (expiredKeys.length > 0) {
+      this.logger.debug(`Cleaned up ${expiredKeys.length} expired nonces`);
+    }
+  }
 
   /**
    * Generate a nonce message for wallet to sign
@@ -92,17 +121,38 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
       throw new UnauthorizedException('Invalid signature');
     }
 
+    // H-4 fix: Extract and validate nonce to prevent replay attacks
+    const nonceMatch = message.match(/Nonce: (\w+)/);
+    if (!nonceMatch) {
+      throw new UnauthorizedException('Invalid message format: nonce missing');
+    }
+
+    const nonce = nonceMatch[1];
+
+    // H-4 fix: Check if nonce was already used (replay attack)
+    if (this.usedNonces.has(nonce)) {
+      this.logger.warn(
+        `Replay attack detected: nonce ${nonce} already used for wallet ${walletAddress}`,
+      );
+      throw new UnauthorizedException('Replay attack detected: nonce already used');
+    }
+
     // Check if message is recent (within 5 minutes)
     const timestampMatch = message.match(/Timestamp: (\d+)/);
-    if (timestampMatch) {
-      const messageTimestamp = parseInt(timestampMatch[1]);
-      const now = Date.now();
-      const fiveMinutes = 5 * 60 * 1000;
-
-      if (now - messageTimestamp > fiveMinutes) {
-        throw new UnauthorizedException('Message expired');
-      }
+    if (!timestampMatch) {
+      throw new UnauthorizedException('Invalid message format: timestamp missing');
     }
+
+    const messageTimestamp = parseInt(timestampMatch[1]);
+    const now = Date.now();
+
+    if (now - messageTimestamp > this.NONCE_TTL) {
+      throw new UnauthorizedException('Message expired');
+    }
+
+    // H-4 fix: Mark nonce as used
+    this.usedNonces.set(nonce, now);
+    this.logger.debug(`Nonce ${nonce} marked as used for wallet ${walletAddress}`);
 
     // Find or create user
     let user = await this.prisma.user.findFirst({
