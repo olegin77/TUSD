@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import { PageTransition } from "@/components/ui/page-transition";
 import { useBoostStats } from "@/hooks/useBoost";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,15 +13,17 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Zap, TrendingUp, Target, DollarSign, Info, AlertCircle } from "lucide-react";
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamicParams = true;
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 // Dynamic imports to avoid SSR issues
-const BoostApplication = dynamic(
-  () => import("@/components/boost/BoostApplication").then((mod) => ({ default: mod.BoostApplication })),
+const BoostApplication = dynamicImport(
+  () =>
+    import("@/components/boost/BoostApplication").then((mod) => ({
+      default: mod.BoostApplication,
+    })),
   { ssr: false }
 );
-const BoostHistory = dynamic(
+const BoostHistory = dynamicImport(
   () => import("@/components/boost/BoostHistory").then((mod) => ({ default: mod.BoostHistory })),
   { ssr: false }
 );
@@ -200,7 +202,9 @@ export default function BoostPage() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription className="text-sm">
                           <div className="space-y-1">
-                            <p>• Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY</p>
+                            <p>
+                              • Максимальный буст: {formatPercentage(stats.maxApyBoostBp / 100)} APY
+                            </p>
                             <p>• Целевое значение: {formatPercentage(30)} от основной суммы</p>
                             <p>• Цены обновляются в реальном времени</p>
                             <p>• Буст применяется немедленно</p>

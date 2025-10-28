@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,9 +65,27 @@ export default function AdminOraclesPage() {
           lastUpdate: Date.now(),
           maxDeviation: 150,
           sources: [
-            { source: "Pyth", price: 0.0246, timestamp: Date.now(), status: "active", deviation: 0.4 },
-            { source: "Raydium TWAP", price: 0.0244, timestamp: Date.now(), status: "active", deviation: -0.4 },
-            { source: "Binance", price: 0.0245, timestamp: Date.now(), status: "active", deviation: 0 },
+            {
+              source: "Pyth",
+              price: 0.0246,
+              timestamp: Date.now(),
+              status: "active",
+              deviation: 0.4,
+            },
+            {
+              source: "Raydium TWAP",
+              price: 0.0244,
+              timestamp: Date.now(),
+              status: "active",
+              deviation: -0.4,
+            },
+            {
+              source: "Binance",
+              price: 0.0245,
+              timestamp: Date.now(),
+              status: "active",
+              deviation: 0,
+            },
           ],
         },
         {
@@ -74,8 +94,20 @@ export default function AdminOraclesPage() {
           maxDeviation: 50,
           lastUpdate: Date.now(),
           sources: [
-            { source: "Chainlink", price: 1.0001, timestamp: Date.now(), status: "active", deviation: 0.01 },
-            { source: "Pyth", price: 0.9999, timestamp: Date.now(), status: "active", deviation: -0.01 },
+            {
+              source: "Chainlink",
+              price: 1.0001,
+              timestamp: Date.now(),
+              status: "active",
+              deviation: 0.01,
+            },
+            {
+              source: "Pyth",
+              price: 0.9999,
+              timestamp: Date.now(),
+              status: "active",
+              deviation: -0.01,
+            },
           ],
         },
       ]);
@@ -169,7 +201,9 @@ export default function AdminOraclesPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">{oracle.token}</h2>
-                <p className="text-3xl font-bold text-blue-600 mt-2">${oracle.aggregatedPrice.toFixed(6)}</p>
+                <p className="text-3xl font-bold text-blue-600 mt-2">
+                  ${oracle.aggregatedPrice.toFixed(6)}
+                </p>
                 <p className="text-sm text-gray-600 mt-1">
                   Обновлено: {new Date(oracle.lastUpdate).toLocaleString("ru-RU")}
                 </p>
@@ -179,7 +213,9 @@ export default function AdminOraclesPage() {
                 onClick={() => refreshOracle(oracle.token)}
                 disabled={updating === oracle.token}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${updating === oracle.token ? "animate-spin" : ""}`} />
+                <RefreshCw
+                  className={`h-4 w-4 mr-2 ${updating === oracle.token ? "animate-spin" : ""}`}
+                />
                 Обновить
               </Button>
             </div>
@@ -216,10 +252,15 @@ export default function AdminOraclesPage() {
 
             {/* Manual Price Override */}
             <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Ручная установка цены (Multisig)</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Ручная установка цены (Multisig)
+              </h3>
               <div className="flex items-end space-x-4">
                 <div className="flex-1">
-                  <label htmlFor={`manual-price-${oracle.token}`} className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor={`manual-price-${oracle.token}`}
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Резервная цена (USD)
                   </label>
                   <Input
@@ -234,7 +275,8 @@ export default function AdminOraclesPage() {
                 <Button onClick={() => setManualPriceSubmit(oracle.token)}>Установить цену</Button>
               </div>
               <p className="text-sm text-gray-600 mt-2">
-                * Требуется подтверждение Multisig. Изменение вступит в силу после задержки Timelock.
+                * Требуется подтверждение Multisig. Изменение вступит в силу после задержки
+                Timelock.
               </p>
             </div>
 

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -90,13 +92,29 @@ export default function AdminWexelsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">Активен</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">
+            Активен
+          </span>
+        );
       case "completed":
-        return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">Завершён</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+            Завершён
+          </span>
+        );
       case "liquidated":
-        return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Ликвидирован</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">
+            Ликвидирован
+          </span>
+        );
       default:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">Неизвестно</span>;
+        return (
+          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">
+            Неизвестно
+          </span>
+        );
     }
   };
 
@@ -241,7 +259,9 @@ export default function AdminWexelsPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <code className="text-xs text-gray-600">{wexel.owner_address}</code>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pool #{wexel.pool_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    Pool #{wexel.pool_id}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${wexel.principal_usd.toLocaleString()}
                   </td>

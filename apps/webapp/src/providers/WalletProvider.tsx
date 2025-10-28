@@ -7,8 +7,7 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   PhantomWalletAdapter,
   SolflareWalletAdapter,
-  TorusWalletAdapter,
-  LedgerWalletAdapter,
+  // Removed: TorusWalletAdapter, LedgerWalletAdapter - cause SSR issues
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 
@@ -30,8 +29,10 @@ export const WalletContextProvider: FC<WalletContextProviderProps> = ({ children
     () => [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
-      new TorusWalletAdapter(),
-      new LedgerWalletAdapter(),
+      // Removed problematic adapters that cause SSR window errors:
+      // - TorusWalletAdapter (uses window at import)
+      // - LedgerWalletAdapter (USB access issues in SSR)
+      // - WalletConnectAdapter (pino logger issues)
     ],
     [network]
   );

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { WalletConnect } from "@/components/wallet/WalletConnect";
 import { PageTransition } from "@/components/ui/page-transition";
 export default function WalletPage() {
