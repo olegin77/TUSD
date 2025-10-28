@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Clock,
 } from "lucide-react";
+
 interface DashboardStats {
   totalValueLocked: string;
   totalUsers: number;
@@ -22,12 +23,15 @@ interface DashboardStats {
   averageAPY: number;
   systemHealth: "healthy" | "warning" | "error";
 }
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchDashboardStats();
   }, []);
+
   const fetchDashboardStats = async () => {
     try {
       const token = localStorage.getItem("admin_token");
@@ -56,6 +60,7 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -63,6 +68,7 @@ export default function AdminDashboard() {
       </div>
     );
   }
+
   if (!stats) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -115,7 +121,7 @@ export default function AdminDashboard() {
       bgColor: "bg-indigo-100",
     },
   ];
-  
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -149,8 +155,10 @@ export default function AdminDashboard() {
           <div className="text-right">
             <p className="text-sm text-gray-600">Средний APY</p>
             <p className="text-2xl font-bold text-gray-900">{stats.averageAPY}%</p>
+          </div>
         </div>
       </Card>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat) => {
@@ -164,11 +172,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
                   <Icon className={`h-6 w-6 ${stat.color}`} />
+                </div>
               </div>
             </Card>
           );
         })}
+      </div>
+
       {/* Quick Actions */}
+      <Card className="p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Быстрые действия</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <a
@@ -177,14 +189,26 @@ export default function AdminDashboard() {
           >
             <p className="font-medium text-blue-900">Управление пулами</p>
           </a>
+          <a
             href="/admin/oracles"
             className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-purple-900">Настройка оракулов</p>
+          </a>
+          <a
             href="/admin/users"
             className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-green-900">Просмотр пользователей</p>
+          </a>
+          <a
             href="/admin/settings"
             className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors text-center"
+          >
             <p className="font-medium text-orange-900">Глобальные настройки</p>
+          </a>
+        </div>
+      </Card>
     </div>
   );
+}
