@@ -28,9 +28,7 @@ describe('Load Testing', () => {
 
       for (let i = 0; i < concurrentRequests; i++) {
         requests.push(
-          request(app.getHttpServer())
-            .get('/api/v1/pools')
-            .expect(200)
+          request(app.getHttpServer()).get('/api/v1/pools').expect(200),
         );
       }
 
@@ -39,7 +37,7 @@ describe('Load Testing', () => {
       const duration = endTime - startTime;
 
       // All requests should succeed
-      expect(responses.every(r => r.status === 200)).toBe(true);
+      expect(responses.every((r) => r.status === 200)).toBe(true);
 
       // Average response time
       const avgResponseTime = duration / concurrentRequests;
@@ -62,18 +60,18 @@ Load Test Results (100 concurrent requests):
 
       for (let i = 0; i < iterations; i++) {
         const start = Date.now();
-        
-        await request(app.getHttpServer())
-          .get('/api/v1/pools')
-          .expect(200);
-        
+
+        await request(app.getHttpServer()).get('/api/v1/pools').expect(200);
+
         times.push(Date.now() - start);
       }
 
       const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
       const minTime = Math.min(...times);
       const maxTime = Math.max(...times);
-      const p95Time = times.sort((a, b) => a - b)[Math.floor(times.length * 0.95)];
+      const p95Time = times.sort((a, b) => a - b)[
+        Math.floor(times.length * 0.95)
+      ];
 
       console.log(`
 Sequential Load Test Results (50 requests):
@@ -97,10 +95,7 @@ Sequential Load Test Results (50 requests):
         const burstStart = Date.now();
 
         for (let i = 0; i < requestsPerBurst; i++) {
-          burstRequests.push(
-            request(app.getHttpServer())
-              .get('/api/v1/pools')
-          );
+          burstRequests.push(request(app.getHttpServer()).get('/api/v1/pools'));
         }
 
         const responses = await Promise.all(burstRequests);
@@ -109,20 +104,23 @@ Sequential Load Test Results (50 requests):
         results.push({
           burst: burst + 1,
           duration: burstDuration,
-          successRate: responses.filter(r => r.status === 200).length / requestsPerBurst,
+          successRate:
+            responses.filter((r) => r.status === 200).length / requestsPerBurst,
         });
 
         // Small delay between bursts
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       console.log('Burst Traffic Results:');
-      results.forEach(r => {
-        console.log(`  Burst ${r.burst}: ${r.duration}ms, Success: ${(r.successRate * 100).toFixed(1)}%`);
+      results.forEach((r) => {
+        console.log(
+          `  Burst ${r.burst}: ${r.duration}ms, Success: ${(r.successRate * 100).toFixed(1)}%`,
+        );
       });
 
       // All bursts should have high success rate
-      results.forEach(r => {
+      results.forEach((r) => {
         expect(r.successRate).toBeGreaterThan(0.9); // >90% success
       });
     });
@@ -135,11 +133,11 @@ Sequential Load Test Results (50 requests):
 
       for (let i = 0; i < iterations; i++) {
         const start = Date.now();
-        
+
         await request(app.getHttpServer())
           .get('/api/v1/pools?include=wexels&include=deposits')
           .expect(200);
-        
+
         times.push(Date.now() - start);
       }
 
@@ -157,9 +155,7 @@ Sequential Load Test Results (50 requests):
       const iterations = 100;
 
       for (let i = 0; i < iterations; i++) {
-        await request(app.getHttpServer())
-          .get('/api/v1/pools')
-          .expect(200);
+        await request(app.getHttpServer()).get('/api/v1/pools').expect(200);
       }
 
       // Force garbage collection if available
@@ -189,16 +185,13 @@ Memory Stability Test (${iterations} requests):
       const totalRequests = 150; // Over the limit
 
       for (let i = 0; i < totalRequests; i++) {
-        requests.push(
-          request(app.getHttpServer())
-            .get('/api/v1/pools')
-        );
+        requests.push(request(app.getHttpServer()).get('/api/v1/pools'));
       }
 
       const responses = await Promise.all(requests);
-      
-      const successCount = responses.filter(r => r.status === 200).length;
-      const rateLimitedCount = responses.filter(r => r.status === 429).length;
+
+      const successCount = responses.filter((r) => r.status === 200).length;
+      const rateLimitedCount = responses.filter((r) => r.status === 429).length;
 
       console.log(`
 Rate Limiting Test (${totalRequests} requests):
@@ -209,7 +202,7 @@ Rate Limiting Test (${totalRequests} requests):
 
       // Should have some rate limited requests
       expect(rateLimitedCount).toBeGreaterThan(0);
-      
+
       // But should allow reasonable amount through
       expect(successCount).toBeGreaterThan(50);
     });
