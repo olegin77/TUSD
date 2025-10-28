@@ -503,8 +503,9 @@ fi; git add README.md docs/PROJECT_STRUCTURE.md
     echo "// INFO: NestJS Logger is available by default. Use it via 'private readonly logger = new Logger(...)'"
     ```
 
-- [ ] T-0036 | Реализовать анимации и переходы согласно дизайну (если есть)
+- [x] T-0036 | Реализовать анимации и переходы согласно дизайну (если есть)
   - depends: [T-0007, T-0033]
+  - ✅ Completed: framer-motion animations enabled in Button, PageTransition added to all main user pages
   - apply:
     ```bash
     set -euo pipefail
@@ -517,8 +518,9 @@ fi; git add README.md docs/PROJECT_STRUCTURE.md
     git add apps/webapp/src/components/ui/ # (или где будут анимации)
     ```
 
-- [ ] T-0037 | Обеспечить Accessibility (A11y) базовых компонентов и страниц
+- [x] T-0037 | Обеспечить Accessibility (A11y) базовых компонентов и страниц
   - depends: [T-0033, T-0034]
+  - ✅ Completed: A11yProvider integrated, SkipToContent added, Navigation enhanced with ARIA attributes, all UI components verified
   - apply:
     ```bash
     set -euo pipefail
