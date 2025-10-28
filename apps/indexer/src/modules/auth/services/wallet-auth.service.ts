@@ -20,7 +20,7 @@ export class WalletAuthService {
   generateNonce(walletAddress: string): string {
     const timestamp = Date.now();
     const nonce = Math.random().toString(36).substring(7);
-    
+
     return `USDX/Wexel Authentication
 
 Please sign this message to verify your wallet ownership.
@@ -174,7 +174,11 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
   /**
    * Verify user owns a wallet address
    */
-  async verifyWalletOwnership(userId: string, walletAddress: string, walletType: WalletType) {
+  async verifyWalletOwnership(
+    userId: string,
+    walletAddress: string,
+    walletType: WalletType,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: BigInt(userId) },
     });

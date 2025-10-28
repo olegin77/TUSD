@@ -1,8 +1,8 @@
-import api from '../api';
+import api from "../api";
 
 export enum WalletType {
-  SOLANA = 'solana',
-  TRON = 'tron',
+  SOLANA = "solana",
+  TRON = "tron",
 }
 
 export interface WalletLoginRequest {
@@ -30,7 +30,7 @@ export const authApi = {
    * Get nonce message for wallet to sign
    */
   getNonce: async (walletAddress: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.post('/api/v1/auth/wallet/nonce', { walletAddress });
+    const response = await api.post("/api/v1/auth/wallet/nonce", { walletAddress });
     return response.data;
   },
 
@@ -38,21 +38,24 @@ export const authApi = {
    * Login with wallet signature
    */
   walletLogin: async (data: WalletLoginRequest): Promise<WalletLoginResponse> => {
-    const response = await api.post('/api/v1/auth/wallet/login', data);
-    
+    const response = await api.post("/api/v1/auth/wallet/login", data);
+
     // Store token in localStorage
     if (response.data.success && response.data.token) {
-      localStorage.setItem('access_token', response.data.token);
+      localStorage.setItem("access_token", response.data.token);
     }
-    
+
     return response.data;
   },
 
   /**
    * Verify wallet ownership
    */
-  verifyWallet: async (walletAddress: string, walletType: WalletType): Promise<{ success: boolean; isOwner: boolean }> => {
-    const response = await api.post('/api/v1/auth/wallet/verify', {
+  verifyWallet: async (
+    walletAddress: string,
+    walletType: WalletType
+  ): Promise<{ success: boolean; isOwner: boolean }> => {
+    const response = await api.post("/api/v1/auth/wallet/verify", {
       walletAddress,
       walletType,
     });
@@ -63,7 +66,7 @@ export const authApi = {
    * Get current user profile
    */
   getProfile: async () => {
-    const response = await api.get('/api/v1/auth/profile');
+    const response = await api.get("/api/v1/auth/profile");
     return response.data;
   },
 
@@ -71,13 +74,13 @@ export const authApi = {
    * Logout
    */
   logout: () => {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem("access_token");
   },
 
   /**
    * Check if user is authenticated
    */
   isAuthenticated: (): boolean => {
-    return !!localStorage.getItem('access_token');
+    return !!localStorage.getItem("access_token");
   },
 };

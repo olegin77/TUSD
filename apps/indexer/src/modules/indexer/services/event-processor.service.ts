@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../database/prisma.service';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 interface BlockchainEvent {
   chain: string;
@@ -13,7 +14,10 @@ interface BlockchainEvent {
 export class EventProcessorService {
   private readonly logger = new Logger(EventProcessorService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   /**
    * Process blockchain event and update database
@@ -102,6 +106,14 @@ export class EventProcessorService {
     });
 
     this.logger.log(`Wexel ${id} created/updated`);
+
+    // Send notification
+    this.notifications.notifyWexelCreated({
+      wexelId: id,
+      owner: owner,
+      principalUsd: principal_usd.toString(),
+      apyBp: apy_bp,
+    });
   }
 
   /**
@@ -132,6 +144,20 @@ export class EventProcessorService {
     });
 
     this.logger.log(`Boost applied to wexel ${wexel_id}`);
+
+    // Get wexel owner for notification
+    const wexel = await this.prisma.wexel.findUnique({
+      where: { id: BigInt(wexel_id) },
+    });
+
+    if (wexel) {
+      this.notifications.notifyBoostApplied({
+        wexelId: wexel_id,
+        owner: wexel.owner_solana || wexel.owner_tron || '',
+        apyBoostBp: apy_boost_bp,
+        valueUsd: value_usd.toString(),
+      });
+    }
   }
 
   /**
@@ -175,6 +201,15 @@ export class EventProcessorService {
     }
 
     this.logger.log(`Rewards claimed for wexel ${wexel_id}: ${amount_usd}`);
+
+    // Send notification
+    if (wexel) {
+      this.notifications.notifyClaimed({
+        wexelId: wexel_id,
+        owner: wexel.owner_solana || wexel.owner_tron || '',
+        amountUsd: amount_usd.toString(),
+      });
+    }
   }
 
   /**
@@ -209,6 +244,23 @@ export class EventProcessorService {
     });
 
     this.logger.log(`Wexel ${wexel_id} collateralized with loan ${loan_usd}`);
+
+    // Send notification
+    const collateralizedWexel = await this.prisma.wexel.findUnique({
+      where: { id: BigInt(wexel_id) },
+    });
+
+    if (collateralizedWexel) {
+      this.notifications.notifyCollateralized({
+        wexelId: wexel_id,
+        owner:
+          collateralizedWexel.owner_solana ||
+          collateralizedWexel.owner_tron ||
+          '',
+        loanUsd: loan_usd.toString(),
+        ltvBp: ltv_bp,
+      });
+    }
   }
 
   /**

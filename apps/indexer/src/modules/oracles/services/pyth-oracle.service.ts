@@ -25,11 +25,13 @@ export class PythOracleService {
   };
 
   constructor() {
-    const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
+    const rpcUrl =
+      process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
     this.connection = new Connection(rpcUrl, 'confirmed');
-    
+
     // Hermes price service (Pyth's data delivery network)
-    const pythPriceServiceUrl = process.env.PYTH_PRICE_SERVICE_URL || 'https://hermes.pyth.network';
+    const pythPriceServiceUrl =
+      process.env.PYTH_PRICE_SERVICE_URL || 'https://hermes.pyth.network';
     this.priceService = new PriceServiceConnection(pythPriceServiceUrl, {
       logger: {
         error: (...args) => this.logger.error(...args),
@@ -46,15 +48,17 @@ export class PythOracleService {
   async getPrice(tokenSymbol: string): Promise<PythPrice | null> {
     try {
       const priceFeedId = this.priceFeedIds[tokenSymbol.toUpperCase()];
-      
+
       if (!priceFeedId) {
         this.logger.warn(`No Pyth price feed ID configured for ${tokenSymbol}`);
         return null;
       }
 
       // Get latest price feeds
-      const priceFeeds = await this.priceService.getLatestPriceFeeds([priceFeedId]);
-      
+      const priceFeeds = await this.priceService.getLatestPriceFeeds([
+        priceFeedId,
+      ]);
+
       if (!priceFeeds || priceFeeds.length === 0) {
         this.logger.warn(`No price data from Pyth for ${tokenSymbol}`);
         return null;
@@ -82,15 +86,16 @@ export class PythOracleService {
     const prices = new Map<string, PythPrice>();
 
     const priceFeedIds = tokenSymbols
-      .map(symbol => this.priceFeedIds[symbol.toUpperCase()])
-      .filter(id => id !== undefined);
+      .map((symbol) => this.priceFeedIds[symbol.toUpperCase()])
+      .filter((id) => id !== undefined);
 
     if (priceFeedIds.length === 0) {
       return prices;
     }
 
     try {
-      const priceFeeds = await this.priceService.getLatestPriceFeeds(priceFeedIds);
+      const priceFeeds =
+        await this.priceService.getLatestPriceFeeds(priceFeedIds);
 
       for (let i = 0; i < tokenSymbols.length; i++) {
         const symbol = tokenSymbols[i];
@@ -158,6 +163,8 @@ export class PythOracleService {
    */
   registerPriceFeedId(tokenSymbol: string, priceFeedId: string) {
     this.priceFeedIds[tokenSymbol.toUpperCase()] = priceFeedId;
-    this.logger.log(`Registered Pyth price feed for ${tokenSymbol}: ${priceFeedId}`);
+    this.logger.log(
+      `Registered Pyth price feed for ${tokenSymbol}: ${priceFeedId}`,
+    );
   }
 }

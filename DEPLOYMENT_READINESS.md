@@ -233,16 +233,16 @@ TELEGRAM_BOT_TOKEN=<bot-token>
 
 ## 📊 Component Readiness
 
-| Component | Status | Blocker | Priority |
-|-----------|--------|---------|----------|
-| Solana Contracts | ✅ Ready | None | Critical |
-| Backend API | ✅ Ready | None | Critical |
-| Database | ✅ Ready | Provision instance | Critical |
-| Event Indexer | ✅ Ready | Program IDs | Critical |
-| Price Oracles | ⚠️  Partial | DEX integration | High |
-| Frontend | ⚠️  Partial | Data integration | High |
-| Admin Panel | ❌ Not Ready | Not implemented | Medium |
-| Tron Integration | ❌ Not Ready | Contracts needed | Low |
+| Component        | Status       | Blocker            | Priority |
+| ---------------- | ------------ | ------------------ | -------- |
+| Solana Contracts | ✅ Ready     | None               | Critical |
+| Backend API      | ✅ Ready     | None               | Critical |
+| Database         | ✅ Ready     | Provision instance | Critical |
+| Event Indexer    | ✅ Ready     | Program IDs        | Critical |
+| Price Oracles    | ⚠️ Partial   | DEX integration    | High     |
+| Frontend         | ⚠️ Partial   | Data integration   | High     |
+| Admin Panel      | ❌ Not Ready | Not implemented    | Medium   |
+| Tron Integration | ❌ Not Ready | Contracts needed   | Low      |
 
 **Overall Readiness: 75%** - Can deploy for testing
 
@@ -253,18 +253,22 @@ TELEGRAM_BOT_TOKEN=<bot-token>
 ### Recommended Approach: **Phased Deployment**
 
 #### Phase 1: Core Features (Now)
+
 Deploy to devnet with:
+
 - ✅ Solana contracts
 - ✅ Backend API
 - ✅ Event indexing
 - ✅ Wallet authentication
-- ⚠️  Basic price oracles (Pyth only)
-- ⚠️  Frontend (limited features)
+- ⚠️ Basic price oracles (Pyth only)
+- ⚠️ Frontend (limited features)
 
 **Status:** Ready to deploy
 
 #### Phase 2: Enhanced Features (1-2 weeks)
+
 Add:
+
 - DEX price integration (Raydium/Orca)
 - Full frontend with real data
 - Admin panel
@@ -273,7 +277,9 @@ Add:
 **Status:** In development
 
 #### Phase 3: Production (4-6 weeks)
+
 Add:
+
 - Tron integration
 - External security audit
 - Mainnet deployment
@@ -371,12 +377,14 @@ Add:
 ## 📞 Contacts & Resources
 
 ### Documentation:
+
 - Technical Spec: `/workspace/tz.md`
 - Tasks List: `/workspace/tasks.md`
 - API Docs: `/workspace/docs/`
 - Progress Reports: `/workspace/WORK_SUMMARY.md`, `/workspace/PROGRESS_REPORT_2.md`
 
 ### Quick Start:
+
 ```bash
 # Start local development
 docker-compose up -d                  # Start DB & Redis
@@ -386,6 +394,7 @@ cd apps/webapp && pnpm dev            # Start frontend
 ```
 
 ### Monitoring:
+
 - Health: `GET /health`
 - Indexer: `GET /api/v1/indexer/status`
 - Oracles: `GET /api/v1/oracles/health`
@@ -397,6 +406,7 @@ cd apps/webapp && pnpm dev            # Start frontend
 **The platform is ready for devnet deployment.**
 
 All core components are implemented and tested:
+
 - ✅ Smart contracts with events
 - ✅ Complete backend API
 - ✅ Real-time event indexing

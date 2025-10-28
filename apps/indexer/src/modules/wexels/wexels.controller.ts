@@ -17,7 +17,10 @@ import { BoostService } from './services/boost.service';
 import { CreateWexelDto } from './dto/create-wexel.dto';
 import { ApplyBoostDto } from './dto/apply-boost.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser, CurrentUserData } from '../../common/decorators/current-user.decorator';
+import {
+  CurrentUser,
+  CurrentUserData,
+} from '../../common/decorators/current-user.decorator';
 
 @Controller('api/v1/wexels')
 export class WexelsController {
