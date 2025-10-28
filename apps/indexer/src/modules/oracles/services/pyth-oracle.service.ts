@@ -38,6 +38,7 @@ export class PythOracleService {
         warn: (...args) => this.logger.warn(...args),
         info: (...args) => this.logger.log(...args),
         debug: (...args) => this.logger.debug(...args),
+        trace: (...args) => this.logger.verbose(...args),
       },
     });
   }
@@ -55,11 +56,11 @@ export class PythOracleService {
       }
 
       // Get latest price feeds
-      const priceFeeds = await this.priceService.getLatestPriceFeeds([
+      const priceFeeds = (await this.priceService.getLatestPriceFeeds([
         priceFeedId,
-      ]);
+      ])) || [];
 
-      if (!priceFeeds || priceFeeds.length === 0) {
+      if (priceFeeds.length === 0) {
         this.logger.warn(`No price data from Pyth for ${tokenSymbol}`);
         return null;
       }
@@ -99,7 +100,8 @@ export class PythOracleService {
 
       for (let i = 0; i < tokenSymbols.length; i++) {
         const symbol = tokenSymbols[i];
-        const priceFeed = priceFeeds[i];
+        const priceFeed = priceFeeds?.[i];
+        if (!priceFeed) continue;
 
         if (priceFeed) {
           const price = priceFeed.getPriceUnchecked();

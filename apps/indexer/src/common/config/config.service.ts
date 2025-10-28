@@ -238,12 +238,12 @@ export class TypedConfigService {
 
   // Generic getter for custom values
   get<T>(key: string): T | undefined {
-    return this.configService.get<T>(key);
+    return this.configService.get<T>(key as any);
   }
 
   // Get with default
-  getOrThrow<T>(key: string, defaultValue?: T): T {
-    const value = this.configService.get<T>(key);
+  getOrThrow<T = any>(key: string, defaultValue?: T): T {
+    const value = this.configService.get<T>(key as any);
     if (value === undefined && defaultValue === undefined) {
       throw new Error(`Configuration key "${key}" is not defined`);
     }
