@@ -152,17 +152,19 @@ docs/
 ## Metrics Overview
 
 ### Business Metrics (7)
-| Metric | Type | Update Frequency |
-|--------|------|------------------|
-| usdx_total_value_locked | Gauge | 5 min |
-| usdx_active_wexels_count | Gauge | 5 min |
-| usdx_total_users_count | Gauge | 5 min |
-| usdx_collateralized_wexels_count | Gauge | 5 min |
-| usdx_total_loans_outstanding_usd | Gauge | 5 min |
-| usdx_deposits_total | Counter | Real-time |
-| usdx_marketplace_trades_total | Counter | Real-time |
+
+| Metric                           | Type    | Update Frequency |
+| -------------------------------- | ------- | ---------------- |
+| usdx_total_value_locked          | Gauge   | 5 min            |
+| usdx_active_wexels_count         | Gauge   | 5 min            |
+| usdx_total_users_count           | Gauge   | 5 min            |
+| usdx_collateralized_wexels_count | Gauge   | 5 min            |
+| usdx_total_loans_outstanding_usd | Gauge   | 5 min            |
+| usdx_deposits_total              | Counter | Real-time        |
+| usdx_marketplace_trades_total    | Counter | Real-time        |
 
 ### Technical Metrics (18)
+
 - HTTP: requests_total, request_duration_seconds
 - Database: queries_total, query_duration_seconds
 - Indexer: last_block, events_processed, lag_seconds
@@ -192,12 +194,14 @@ Created comprehensive documentation:
 ## Integration Points
 
 ### Backend Integration
+
 - `MetricsInterceptor`: Automatic HTTP instrumentation
 - `BusinessMetricsService`: Scheduled business metrics updates
 - `IndexerService`: (Ready for integration - metrics recording for blockchain events)
 - `OracleService`: (Ready for integration - price and error metrics)
 
 ### Infrastructure
+
 - Prometheus scrapes backend at `http://localhost:3001/metrics`
 - Grafana queries Prometheus datasource
 - Alertmanager receives alerts from Prometheus
@@ -206,6 +210,7 @@ Created comprehensive documentation:
 ## Testing & Verification
 
 ### Manual Testing Checklist
+
 - [x] Metrics endpoint accessible `/metrics`
 - [x] Prometheus scraping backend successfully
 - [x] Grafana datasource configured correctly
@@ -216,6 +221,7 @@ Created comprehensive documentation:
 - [ ] Alertmanager routing notifications
 
 ### Next Steps for Testing
+
 1. Generate test load to trigger alerts
 2. Verify alert notification delivery
 3. Test alert escalation and resolution
@@ -231,12 +237,14 @@ Created comprehensive documentation:
 ## Production Readiness
 
 ### ✅ Ready
+
 - Metrics collection and exposition
 - Basic dashboard with key metrics
 - Alert rules configuration
 - Documentation
 
 ### 🔄 Needs Configuration
+
 - Production Prometheus/Grafana URLs
 - Alert notification channels (Slack, Email, PagerDuty)
 - Authentication for `/metrics` endpoint
@@ -244,6 +252,7 @@ Created comprehensive documentation:
 - Backup and retention policies
 
 ### 📋 Future Enhancements
+
 - Additional custom dashboards
 - SLA/SLO tracking
 - Distributed tracing integration

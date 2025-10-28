@@ -1,10 +1,11 @@
 # External Security Audit Preparation Package
+
 ## USDX/Wexel Platform
 
 **Prepared for:** External Security Auditors  
 **Date:** 2025-10-28  
 **Version:** 1.0  
-**Contact:** security@wexel.io  
+**Contact:** security@wexel.io
 
 ---
 
@@ -30,6 +31,7 @@
 ### 1.1 Platform Description
 
 USDX/Wexel is a decentralized liquidity platform that:
+
 - Accepts USDT deposits on **Solana** and **Tron** blockchains
 - Issues **NFT-backed promissory notes (Wexels)** representing deposits
 - Provides **18-36% APY** with optional boost mechanism (up to +5%)
@@ -60,6 +62,7 @@ USDX/Wexel is a decentralized liquidity platform that:
 ### 2.1 In-Scope Components
 
 #### Smart Contracts (Critical Priority)
+
 - ✅ `contracts/solana/solana-contracts/programs/solana-contracts/src/lib.rs`
   - All instruction handlers (deposit, apply_boost, accrue, claim, collateralize, repay_loan, redeem)
   - Account structures (Pool, Wexel, CollateralPosition, RewardsVault)
@@ -67,6 +70,7 @@ USDX/Wexel is a decentralized liquidity platform that:
   - Math operations and overflow protection
 
 #### Backend API (High Priority)
+
 - ✅ Authentication system (`apps/indexer/src/modules/auth/`)
   - Wallet signature verification (Solana & Tron)
   - JWT token generation and validation
@@ -81,6 +85,7 @@ USDX/Wexel is a decentralized liquidity platform that:
   - Manual price setting
 
 #### Critical Business Logic (High Priority)
+
 - ✅ Reward calculation algorithms
 - ✅ Boost value computation
 - ✅ Collateral LTV calculations
@@ -96,18 +101,14 @@ USDX/Wexel is a decentralized liquidity platform that:
 ### 2.3 Focus Areas
 
 **Top Priority:**
+
 1. Reentrancy vulnerabilities in smart contracts
 2. Integer overflow/underflow in financial calculations
 3. Access control bypasses
 4. Oracle manipulation attacks
 5. Replay attacks in authentication
 
-**Secondary Priority:**
-6. Denial of Service vectors
-7. Front-running opportunities
-8. Economic attack vectors
-9. Admin privilege escalation
-10. Data integrity issues
+**Secondary Priority:** 6. Denial of Service vectors 7. Front-running opportunities 8. Economic attack vectors 9. Admin privilege escalation 10. Data integrity issues
 
 ---
 
@@ -144,6 +145,7 @@ USDX/Wexel is a decentralized liquidity platform that:
 ### 3.2 Data Flow
 
 #### Deposit Flow:
+
 ```
 User → Frontend → Backend API → Smart Contract
                               → Emit WexelCreated Event
@@ -153,6 +155,7 @@ User → Frontend → Backend API → Smart Contract
 ```
 
 #### Boost Application Flow:
+
 ```
 User → Frontend → Backend API → Price Oracle Service
                               → Fetch Pyth + DEX prices
@@ -163,6 +166,7 @@ User → Frontend → Backend API → Price Oracle Service
 ```
 
 #### Reward Accrual Flow:
+
 ```
 Cron Job → Backend → accrue() on each Wexel
                    → Calculate daily reward
@@ -239,81 +243,98 @@ const SECONDS_PER_MONTH: u64 = 2592000;
 ### 4.3 Critical Functions
 
 #### deposit()
+
 **Purpose:** Create new wexel with USDT deposit  
 **Access:** Public (any user)  
 **Parameters:** `pool_id: u64, principal_usd: u64`  
 **Validation:**
+
 - ✅ `principal_usd > 0`
 - ✅ Overflow protection on `pool.total_deposits`
 - ❓ **Missing:** Maximum deposit limit
 - ❓ **Missing:** Pool capacity check
 
 **Security Concerns:**
+
 1. No reentrancy guard (H-1 from internal audit)
 2. No maximum principal limit (M-2)
 
 #### apply_boost()
+
 **Purpose:** Add boost to existing wexel  
 **Access:** Public (should be owner-only)  
 **Parameters:** `wexel_id: u64, amount: u64`  
 **Validation:**
+
 - ✅ Boost value calculation
 - ❌ **CRITICAL:** Missing owner check (H-2)
 - ❌ **CRITICAL:** No finalization check
 
 **Security Concerns:**
+
 1. **UNAUTHORIZED BOOST APPLICATION** - Anyone can boost any wexel
 2. Missing boost cap enforcement
 3. No time-based restrictions
 
 #### accrue()
+
 **Purpose:** Calculate and add daily rewards  
 **Access:** Public (should be time-restricted)  
 **Parameters:** `wexel_id: u64`  
 **Validation:**
+
 - ✅ Math overflow protection
 - ❌ **CRITICAL:** No time-based validation (H-3)
 - ❌ Can be called multiple times per day
 
 **Security Concerns:**
+
 1. **REWARD INFLATION** - Multiple accruals possible
 2. No last_accrued_at tracking
 3. Griefing vector (excess compute)
 
 #### collateralize()
+
 **Purpose:** Put wexel as collateral, get 60% loan  
 **Access:** Owner only  
 **Parameters:** `wexel_id: u64`  
 **Validation:**
+
 - ✅ Owner check present
 - ✅ Not already collateralized
 - ✅ LTV calculation
 
 **Security Concerns:**
+
 1. Moderate - proper access control
 2. Missing reentrancy guard on loan transfer
 
 #### claim()
+
 **Purpose:** Claim accumulated rewards  
 **Access:** Owner (or platform if collateralized)  
 **Parameters:** `wexel_id: u64`  
 **Validation:**
+
 - ✅ Ownership verification
 - ✅ Reward split if collateralized
 - ❌ Missing reentrancy guard
 
 **Security Concerns:**
+
 1. Reentrancy risk during token transfer
 2. Potential for double-claiming
 
 ### 4.4 Event Log
 
 All events include:
+
 - Event type (WexelCreated, BoostApplied, Accrued, Claimed, Collateralized, LoanRepaid, Redeemed)
 - Relevant data (IDs, amounts, addresses)
 - Timestamp (where applicable)
 
 **Events are critical for:**
+
 - Backend indexing
 - Audit trails
 - Fraud detection
@@ -353,23 +374,22 @@ All events include:
 ### 5.2 Authentication Security
 
 **Solana Signature Verification:**
+
 ```typescript
 const publicKeyBytes = bs58.decode(walletAddress);
 const signatureBytes = bs58.decode(signature);
 const messageBytes = new TextEncoder().encode(message);
 
-const verified = nacl.sign.detached.verify(
-  messageBytes,
-  signatureBytes,
-  publicKeyBytes
-);
+const verified = nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
 ```
 
 **Known Issues:**
+
 - ❌ **H-4:** Nonce not tracked (replay attack possible)
 - ❌ **M-5:** Tron verification not implemented
 
 **Mitigations Required:**
+
 1. Add nonce tracking (Redis set with TTL)
 2. Implement Tron signature verification
 3. Add rate limiting on auth endpoints
@@ -377,8 +397,9 @@ const verified = nacl.sign.detached.verify(
 ### 5.3 Admin Access Control
 
 **Guard Stack:**
+
 ```typescript
-@Controller('api/v1/admin')
+@Controller("api/v1/admin")
 @UseGuards(JwtAuthGuard, AdminGuard)
 export class AdminController {
   // All methods protected
@@ -386,13 +407,15 @@ export class AdminController {
 ```
 
 **Admin Guard Logic:**
+
 ```typescript
-if (user.role !== 'ADMIN') {
-  throw new ForbiddenException('Insufficient permissions');
+if (user.role !== "ADMIN") {
+  throw new ForbiddenException("Insufficient permissions");
 }
 ```
 
 **Known Issues:**
+
 - ❌ **M-10:** No audit logging
 - ❌ **M-11:** Manual oracle price without multisig
 - ❌ **M-12:** No IP whitelisting
@@ -404,18 +427,19 @@ if (user.role !== 'ADMIN') {
 ### 6.1 Role-Based Access Control (RBAC)
 
 **Roles:**
+
 - `USER` - Default role, access to own resources
 - `ADMIN` - Full platform access, can modify settings
 
 **Permission Matrix:**
 
-| Endpoint | USER | ADMIN |
-|----------|------|-------|
-| GET /api/v1/user/profile | ✅ (own) | ✅ (all) |
-| POST /api/v1/deposits | ✅ | ✅ |
-| GET /api/v1/admin/users | ❌ | ✅ |
-| PATCH /api/v1/admin/settings | ❌ | ✅ |
-| POST /api/v1/admin/oracles/:token/manual-price | ❌ | ✅ |
+| Endpoint                                       | USER     | ADMIN    |
+| ---------------------------------------------- | -------- | -------- |
+| GET /api/v1/user/profile                       | ✅ (own) | ✅ (all) |
+| POST /api/v1/deposits                          | ✅       | ✅       |
+| GET /api/v1/admin/users                        | ❌       | ✅       |
+| PATCH /api/v1/admin/settings                   | ❌       | ✅       |
+| POST /api/v1/admin/oracles/:token/manual-price | ❌       | ✅       |
 
 ### 6.2 JWT Payload Structure
 
@@ -447,6 +471,7 @@ if (user.role !== 'ADMIN') {
 ### 7.1 Reward Calculation
 
 **Formula:**
+
 ```
 Daily Reward = Principal × (APY_base + APY_boost) / 100 / 365
 
@@ -457,6 +482,7 @@ Where:
 ```
 
 **Example:**
+
 ```
 Principal = $10,000 = 10,000,000,000 micro-USD
 APY_base = 18% = 1800 bp
@@ -471,6 +497,7 @@ Daily Reward = 10,000,000,000 × 0.21 / 365
 ### 7.2 Boost Calculation
 
 **Formula:**
+
 ```
 Boost Target = 0.30 × Principal (30% of deposit)
 APY_boost = 5% × min(Boost Value / Boost Target, 1)
@@ -481,6 +508,7 @@ Where:
 ```
 
 **Example:**
+
 ```
 Principal = $10,000
 Boost Target = $3,000
@@ -495,6 +523,7 @@ APY_boost = 5% × min(4,000 / 3,000, 1) = 5% (capped)
 ### 7.3 Collateral LTV Calculation
 
 **Formula:**
+
 ```
 Loan Amount = 0.60 × Principal (60% LTV)
 
@@ -504,6 +533,7 @@ Reward Split (when collateralized):
 ```
 
 **Example:**
+
 ```
 Principal = $10,000
 Loan Amount = $6,000
@@ -516,6 +546,7 @@ Daily Reward = $5.75
 ### 7.4 Oracle Price Aggregation
 
 **Algorithm:**
+
 ```typescript
 1. Fetch prices from multiple sources:
    - Pyth (highest priority)
@@ -537,6 +568,7 @@ Daily Reward = $5.75
 ```
 
 **Safety Thresholds:**
+
 - MAX_DEVIATION_BP = 150 (1.5%)
 - Cache staleness = 5 minutes
 - Confidence levels: 0.5 (single source), 0.7 (two sources), 0.9 (three sources)
@@ -547,22 +579,22 @@ Daily Reward = $5.75
 
 ### 8.1 High Priority Issues (From Internal Audit)
 
-| ID | Issue | Status | Mitigation Plan |
-|----|-------|--------|-----------------|
-| H-1 | Missing reentrancy guards | 🔴 Not Fixed | Add ReentrancyGuard pattern in all token transfer functions |
-| H-2 | Unauthorized boost application | 🔴 Not Fixed | Add `require!(wexel.owner == user.key())` check |
-| H-3 | No time validation in accrue | 🔴 Not Fixed | Add `last_accrued_at` field, enforce 24h minimum gap |
-| H-4 | Replay attack in auth | 🔴 Not Fixed | Implement Redis-based nonce tracking |
+| ID  | Issue                          | Status       | Mitigation Plan                                             |
+| --- | ------------------------------ | ------------ | ----------------------------------------------------------- |
+| H-1 | Missing reentrancy guards      | 🔴 Not Fixed | Add ReentrancyGuard pattern in all token transfer functions |
+| H-2 | Unauthorized boost application | 🔴 Not Fixed | Add `require!(wexel.owner == user.key())` check             |
+| H-3 | No time validation in accrue   | 🔴 Not Fixed | Add `last_accrued_at` field, enforce 24h minimum gap        |
+| H-4 | Replay attack in auth          | 🔴 Not Fixed | Implement Redis-based nonce tracking                        |
 
 ### 8.2 Medium Priority Issues
 
-| ID | Issue | Status | Mitigation Plan |
-|----|-------|--------|-----------------|
-| M-1 | Hardcoded constants | 🟡 Accepted | Move to configurable Pool parameters in v2 |
-| M-2 | No max deposit limit | 🟡 Accepted | Add MAX_PRINCIPAL constant (e.g., $1M) |
-| M-5 | Tron verification missing | 🔴 Not Fixed | Implement TronWeb signature verification |
-| M-10 | No admin audit logging | 🟡 Partial | Add AuditLogInterceptor for all admin actions |
-| M-11 | Oracle price without multisig | 🔴 Not Fixed | Integrate Gnosis Safe for price updates |
+| ID   | Issue                         | Status       | Mitigation Plan                               |
+| ---- | ----------------------------- | ------------ | --------------------------------------------- |
+| M-1  | Hardcoded constants           | 🟡 Accepted  | Move to configurable Pool parameters in v2    |
+| M-2  | No max deposit limit          | 🟡 Accepted  | Add MAX_PRINCIPAL constant (e.g., $1M)        |
+| M-5  | Tron verification missing     | 🔴 Not Fixed | Implement TronWeb signature verification      |
+| M-10 | No admin audit logging        | 🟡 Partial   | Add AuditLogInterceptor for all admin actions |
+| M-11 | Oracle price without multisig | 🔴 Not Fixed | Integrate Gnosis Safe for price updates       |
 
 ### 8.3 Accepted Risks
 
@@ -580,6 +612,7 @@ Daily Reward = $5.75
 **Location:** `contracts/solana/solana-contracts/tests/`
 
 **Test Files:**
+
 - `deposit_boost.ts` - Deposit and boost functionality (18 tests)
 - `accrue_claim_tests.ts` - Reward accrual and claiming (12 tests)
 - `collateral_tests.ts` - Collateral operations (8 tests)
@@ -589,6 +622,7 @@ Daily Reward = $5.75
 **Coverage:** ~75% (estimated)
 
 **Key Test Scenarios:**
+
 - ✅ Deposit validation (amount, overflow)
 - ✅ Boost calculation (partial, max, overflow)
 - ✅ Reward accrual (single, multiple days)
@@ -605,6 +639,7 @@ Daily Reward = $5.75
 **Test Coverage:** Limited (mostly unit tests for services)
 
 **Missing Critical Tests:**
+
 - ❌ Authentication replay attack tests
 - ❌ Admin authorization bypass tests
 - ❌ Oracle manipulation tests
@@ -616,6 +651,7 @@ Daily Reward = $5.75
 **Status:** ❌ Not implemented
 
 **Recommended:**
+
 - End-to-end flows (deposit → boost → accrue → claim)
 - Cross-service integration (backend ↔ smart contract)
 - Oracle failure scenarios
@@ -628,12 +664,14 @@ Daily Reward = $5.75
 ### 10.1 Network Configuration
 
 **Testnet (Staging):**
+
 - Solana: Devnet
 - Tron: Nile Testnet
 - Backend: staging.wexel.io
 - Database: Staging PostgreSQL (encrypted)
 
 **Mainnet (Production):**
+
 - Solana: Mainnet-beta
 - Tron: Mainnet
 - Backend: api.wexel.io
@@ -642,6 +680,7 @@ Daily Reward = $5.75
 ### 10.2 Security Configurations
 
 **Rate Limiting:**
+
 ```typescript
 // Global rate limit
 {
@@ -657,6 +696,7 @@ Daily Reward = $5.75
 ```
 
 **CORS:**
+
 ```typescript
 {
   origin: ['https://wexel.io', 'https://app.wexel.io'],
@@ -666,6 +706,7 @@ Daily Reward = $5.75
 ```
 
 **JWT:**
+
 ```typescript
 {
   secret: process.env.JWT_SECRET,  // 64+ character random string
@@ -677,6 +718,7 @@ Daily Reward = $5.75
 ### 10.3 Monitoring & Alerts
 
 **Prometheus Metrics:**
+
 - API response times
 - Error rates
 - Database connection pool
@@ -684,6 +726,7 @@ Daily Reward = $5.75
 - Smart contract events indexed
 
 **Critical Alerts:**
+
 - Oracle price deviation > 1.5%
 - Failed authentication spike (>10/min)
 - Database connection failures
@@ -696,33 +739,39 @@ Daily Reward = $5.75
 ### 11.1 Smart Contract Audit Checklist
 
 #### Reentrancy Attacks
+
 - [ ] Test reentrancy in `deposit()`
 - [ ] Test reentrancy in `claim()`
 - [ ] Test reentrancy in `collateralize()`
 - [ ] Test reentrancy in `repay_loan()`
 
 #### Access Control
+
 - [ ] Verify owner checks in all state-changing functions
 - [ ] Test privilege escalation vectors
 - [ ] Verify admin-only functions are protected
 
 #### Integer Arithmetic
+
 - [ ] Audit all math operations for overflow/underflow
 - [ ] Verify proper use of `checked_add()`, `checked_sub()`, `checked_mul()`
 - [ ] Test edge cases (max values, zero values)
 
 #### Time Manipulation
+
 - [ ] Test multiple `accrue()` calls in short timeframe
 - [ ] Verify timestamp validation in auth flows
 - [ ] Test maturity checks with manipulated clock
 
 #### Economic Attacks
+
 - [ ] Test flash loan attacks (if applicable)
 - [ ] Verify APY calculation correctness
 - [ ] Test boost manipulation via price oracle
 - [ ] Verify collateral LTV is enforced
 
 #### Event Integrity
+
 - [ ] Ensure all state changes emit events
 - [ ] Verify event data accuracy
 - [ ] Test event emission in error cases
@@ -730,30 +779,35 @@ Daily Reward = $5.75
 ### 11.2 Backend API Audit Checklist
 
 #### Authentication
+
 - [ ] Test signature verification (Solana & Tron)
 - [ ] Test replay attack prevention
 - [ ] Test JWT expiration and refresh
 - [ ] Test brute force protection
 
 #### Authorization
+
 - [ ] Test horizontal privilege escalation (user accessing other user's data)
 - [ ] Test vertical privilege escalation (user → admin)
 - [ ] Test admin panel access controls
 - [ ] Test API endpoint permissions
 
 #### Input Validation
+
 - [ ] Test all DTOs for validation
 - [ ] Test SQL injection vectors (if raw queries used)
 - [ ] Test XSS in API responses
 - [ ] Test command injection in admin functions
 
 #### Oracle Security
+
 - [ ] Test price manipulation via single source
 - [ ] Test deviation threshold enforcement
 - [ ] Test cache poisoning
 - [ ] Test manual price setting authorization
 
 #### Rate Limiting
+
 - [ ] Test global rate limits
 - [ ] Test per-endpoint rate limits
 - [ ] Test rate limit bypass techniques
@@ -776,22 +830,26 @@ Daily Reward = $5.75
 **Estimated Duration:** 3-4 weeks
 
 **Phase 1: Preparation (1 week)**
+
 - Auditors review documentation
 - Setup audit environment (testnet access)
 - Initial questions and clarifications
 
 **Phase 2: Code Review (1-2 weeks)**
+
 - Manual code review
 - Automated scanning (Slither, MythX for contracts)
 - Test case execution
 - Vulnerability identification
 
 **Phase 3: Exploitation & Validation (3-5 days)**
+
 - Attempt to exploit found vulnerabilities
 - Validate severity ratings
 - Document proof-of-concepts
 
 **Phase 4: Reporting (3-5 days)**
+
 - Draft audit report
 - Review with team
 - Final report delivery
@@ -818,6 +876,7 @@ Daily Reward = $5.75
 ### 12.3 Audit Methodology
 
 **Tools Expected to be Used:**
+
 - **Solana:** Anchor CLI, Solana Test Validator
 - **Static Analysis:** Slither, Semgrep, Anchor security checks
 - **Dynamic Analysis:** Fuzzing, property-based testing
@@ -841,6 +900,7 @@ Daily Reward = $5.75
 **Available in:** `tests/reports/security/internal_vulnerability_test_report.md`
 
 **Key Findings:**
+
 - 0 Critical issues
 - 4 High priority issues (must fix before audit)
 - 12 Medium priority issues
@@ -851,6 +911,7 @@ Daily Reward = $5.75
 **Repository:** [Provide Git repository URL]
 
 **Branches:**
+
 - `main` - Production code
 - `develop` - Development branch
 - `audit-prep` - Code prepared for audit (with H-1 to H-4 fixes)
@@ -864,16 +925,19 @@ Daily Reward = $5.75
 ### 14.1 Primary Contacts
 
 **Security Lead:**
+
 - Name: [Your Name]
 - Email: security@wexel.io
 - Telegram: @wexel_security
 
 **Technical Lead:**
+
 - Name: [Your Name]
 - Email: dev@wexel.io
 - Available: Mon-Fri, 9 AM - 6 PM UTC
 
 **Project Manager:**
+
 - Name: [Your Name]
 - Email: pm@wexel.io
 
@@ -939,26 +1003,31 @@ Daily Reward = $5.75
 ### Appendix B: Code Statistics
 
 **Smart Contract (Rust):**
+
 - Lines of Code: ~540
 - Functions: 8 instructions + helpers
 - Complexity: Medium
 
 **Backend API (TypeScript):**
+
 - Lines of Code: ~12,000
 - Modules: 12 (auth, pools, wexels, oracles, admin, etc.)
 - Endpoints: ~40
 
 **Database Schema:**
+
 - Tables: 10 (users, pools, wexels, collateral, listings, token_prices, etc.)
 - Indexes: 15
 
 ### Appendix C: Dependencies
 
 **Smart Contract:**
+
 - anchor-lang = "0.29.0"
 - anchor-spl = "0.29.0"
 
 **Backend:**
+
 - @nestjs/core = "^10.0.0"
 - prisma = "^5.0.0"
 - @nestjs/jwt = "^10.0.0"

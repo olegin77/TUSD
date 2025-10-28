@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
@@ -15,7 +20,9 @@ export class AdminGuard implements CanActivate {
 
     // Check if user has admin role
     if (user.role !== 'ADMIN') {
-      throw new ForbiddenException('Insufficient permissions. Admin role required.');
+      throw new ForbiddenException(
+        'Insufficient permissions. Admin role required.',
+      );
     }
 
     return true;

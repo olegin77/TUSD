@@ -357,31 +357,37 @@ This document provides a comprehensive checklist for deploying the USDX/Wexel pl
 ## 📅 Timeline
 
 ### Sprint 1: Final Development (Week 1-2)
+
 - Complete remaining features
 - Fix all critical bugs
 - Comprehensive testing
 
 ### Sprint 2: Security & Audit (Week 3-4)
+
 - Internal security review
 - External audit
 - Fix audit findings
 
 ### Sprint 3: Staging Deployment (Week 5)
+
 - Deploy to staging
 - Full system testing
 - Performance tuning
 
 ### Sprint 4: Production Prep (Week 6)
+
 - Provision production infrastructure
 - Documentation finalization
 - Team training
 
 ### Sprint 5: Launch (Week 7)
+
 - Mainnet contract deployment
 - Application deployment
 - Go-live
 
 ### Sprint 6: Stabilization (Week 8)
+
 - Monitor and support
 - Bug fixes
 - Performance optimization

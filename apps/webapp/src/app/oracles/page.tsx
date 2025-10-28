@@ -18,9 +18,11 @@ const TOKEN_MAP: Record<string, { name: string; symbol: string }> = {
   EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: {
     name: "USD Coin",
     symbol: "USDC",
+  },
   Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB: {
     name: "Tether USD",
     symbol: "USDT",
+  },
 };
 export default function OraclesPage() {
   const [customTokenMint, setCustomTokenMint] = useState("");

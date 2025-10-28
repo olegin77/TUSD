@@ -36,6 +36,7 @@ export default function MarketplacePage() {
       isCollateralized: false,
       createdAt: "2024-01-15",
     },
+    {
       id: 2,
       wexelId: 1235,
       seller: "0x2345...6789",
@@ -45,7 +46,11 @@ export default function MarketplacePage() {
       principal: 25000,
       askPrice: 28000,
       daysLeft: 450,
+      status: "active",
+      isCollateralized: false,
       createdAt: "2024-01-20",
+    },
+    {
       id: 3,
       wexelId: 1236,
       seller: "0x3456...7890",

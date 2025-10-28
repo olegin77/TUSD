@@ -165,6 +165,10 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
                         </Button>
                         <Button variant="outline" size="sm">
                           <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
               </TabsContent>
               <TabsContent value="rewards" className="space-y-6">
                 {/* Rewards Summary */}

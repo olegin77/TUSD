@@ -49,10 +49,13 @@ export default function AdminPoolsPage() {
           apy_base_bp: 2400,
           lock_months: 24,
           total_liquidity: 3450000,
+        },
+        {
           id: 3,
           apy_base_bp: 3600,
           lock_months: 36,
           total_liquidity: 7750000,
+        },
       ]);
     } finally {
       setLoading(false);

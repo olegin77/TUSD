@@ -11,10 +11,12 @@ This document describes the management of administrative keys for the USDX/Wexel
 **Purpose**: Require multiple signers to approve critical administrative actions
 
 **Implementation**:
+
 - **Solana**: Squads Protocol or Realms DAO
 - **Tron**: Gnosis Safe equivalent or native multi-signature
 
 **Configuration**:
+
 - **Signers**: 5 total (3 of 5 required for execution)
 - **Threshold**: 3/5 (60% consensus)
 - **Key holders**:
@@ -29,25 +31,29 @@ This document describes the management of administrative keys for the USDX/Wexel
 **Purpose**: Delay execution of approved transactions to allow for monitoring and emergency cancellation
 
 **Configuration**:
+
 - **Delay Period**: 48 hours (2 days)
 - **Grace Period**: 7 days (time window to execute after delay)
 - **Minimum Delay**: 12 hours (cannot be shorter)
 - **Maximum Delay**: 30 days (cannot be longer)
 
 **Exceptions** (immediate execution, no timelock):
+
 - Emergency pause functions
 - Unpause functions (still require multisig)
 
 ## Administrative Functions Requiring Multisig + Timelock
 
 ### High Risk Operations
+
 - Update program/contract code (upgrade)
 - Change admin addresses
 - Modify multisig configuration
 - Transfer program authority
 - Drain contract funds (emergency only)
 
-### Medium Risk Operations  
+### Medium Risk Operations
+
 - Update APY rates
 - Add/remove supported tokens
 - Modify fee structures
@@ -55,6 +61,7 @@ This document describes the management of administrative keys for the USDX/Wexel
 - Update boost parameters
 
 ### Low Risk Operations (Multisig only, no timelock)
+
 - Update oracle price feeds
 - Pause/unpause system components
 - Update metadata URIs
@@ -166,6 +173,7 @@ anchor run set-pause-authority \
    - Test on devnet first
 
 3. **Create Transaction**
+
    ```bash
    # Create proposal in Squads
    squads create-transaction \
@@ -180,6 +188,7 @@ anchor run set-pause-authority \
    - Minimum 3/5 signers approve
 
 5. **Execute Transaction**
+
    ```bash
    # After 3 signatures, execute
    squads execute-transaction \
@@ -205,11 +214,14 @@ anchor run set-pause-authority \
 **Trigger**: Critical bug, exploit, or security incident detected
 
 **Process**:
+
 1. **Immediate Action** (any pause guardian signer)
+
    ```bash
    anchor run emergency-pause \
      --guardian-key <guardian-keypair>
    ```
+
    - No timelock required
    - Can be executed by 1/3 guardians individually
    - Immediately halts all sensitive operations
@@ -235,12 +247,15 @@ anchor run set-pause-authority \
 **Trigger**: Compromised key, personnel change, or routine rotation (annually)
 
 **Process**:
+
 1. **Generate New Key**
+
    ```bash
    solana-keygen new --outfile new-signer.json
    ```
 
 2. **Propose Signer Change**
+
    ```bash
    squads create-transaction \
      --squad <squad-address> \
@@ -251,6 +266,7 @@ anchor run set-pause-authority \
 3. **Execute Change** (requires 3/5 signatures + timelock)
 
 4. **Verify Update**
+
    ```bash
    squads get-squad <squad-address>
    # Confirm new signer is listed
@@ -263,12 +279,14 @@ anchor run set-pause-authority \
 ## Key Storage Best Practices
 
 ### Hot Wallets (Signers 1-4)
+
 - **Hardware Wallets**: Ledger Nano X or Trezor Model T
 - **Location**: Physically secured, distributed geographically
 - **Access**: Individual key holders only, with 2FA backup
 - **Backup**: Seed phrase in secure offline storage (e.g., safety deposit box)
 
 ### Cold Wallet (Signer 5)
+
 - **Air-Gapped Computer**: Never connected to internet
 - **Location**: Bank vault or equivalent
 - **Access**: Dual control (require 2 people to access)
@@ -276,6 +294,7 @@ anchor run set-pause-authority \
 - **Usage**: Emergency recovery only
 
 ### Key Backup Procedures
+
 1. Write seed phrase on metal plates (fire/water resistant)
 2. Store in multiple secure locations
 3. Use Shamir Secret Sharing (optional, advanced)
@@ -284,16 +303,19 @@ anchor run set-pause-authority \
 ## Monitoring and Auditing
 
 ### On-Chain Monitoring
+
 - Monitor multisig address for all transactions
 - Alert on any proposed transactions
 - Dashboard showing pending proposals and timelock status
 
 ### Audit Logs
+
 - Maintain off-chain log of all proposals
 - Record: timestamp, proposer, action, signers, execution time
 - Review quarterly for anomalies
 
 ### Metrics to Track
+
 - Time between proposal and execution
 - Number of rejected proposals
 - Signer participation rates
@@ -302,18 +324,21 @@ anchor run set-pause-authority \
 ## Incident Response Plan
 
 ### Compromised Signer Key
+
 1. **Immediate**: Other signers propose removal of compromised key
 2. **Within 4 hours**: Execute removal (if possible before attacker can act)
 3. **Within 24 hours**: Add new signer key
 4. **Post-incident**: Investigate how compromise occurred, update procedures
 
 ### Compromised Multisig
+
 1. **Immediate**: Activate pause guardian, halt all operations
 2. **Within 1 hour**: Assess damage, determine if funds at risk
 3. **Within 6 hours**: If possible, use cold wallet to create new multisig and transfer authority
 4. **Post-incident**: Full security audit, public disclosure
 
 ### Lost Keys (Cannot Reach Threshold)
+
 1. **Immediate**: Attempt to contact all signers
 2. **Within 12 hours**: If <3 signers available, activate contingency multisig (requires cold wallet signer)
 3. **Within 48 hours**: Restore access or create new multisig
@@ -322,11 +347,13 @@ anchor run set-pause-authority \
 ## Testing and Drills
 
 ### Quarterly Tests
+
 - Test multisig proposal and execution flow
 - Verify timelock delays are working correctly
 - Practice emergency pause and unpause
 
 ### Annual Exercises
+
 - Full key rotation drill
 - Cold wallet recovery exercise
 - Incident response tabletop exercise
@@ -334,14 +361,18 @@ anchor run set-pause-authority \
 ## Compliance and Governance
 
 ### Change Log
+
 All changes to admin key configuration must be logged:
+
 - Date/time
 - Change made
 - Reason
 - Approved by (all signers)
 
 ### Governance Proposals
+
 For major changes (e.g., modifying threshold), require:
+
 1. Community governance proposal
 2. 7-day discussion period
 3. On-chain vote (if DAO implemented)
@@ -350,6 +381,7 @@ For major changes (e.g., modifying threshold), require:
 ## Documentation Maintenance
 
 This document should be reviewed and updated:
+
 - **Quarterly**: Verify all addresses and procedures current
 - **After Any Incident**: Update lessons learned
 - **Annually**: Full review with security audit

@@ -26,6 +26,8 @@ interface OracleData {
   sources: OraclePrice[];
   lastUpdate: number;
   maxDeviation: number;
+}
+
 export default function AdminOraclesPage() {
   const [oracles, setOracles] = useState<OracleData[]>([]);
   const [loading, setLoading] = useState(true);

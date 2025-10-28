@@ -49,6 +49,7 @@ export default function AdminLoginPage() {
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
             <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-red-800">{error}</p>
+          </div>
         )}
         <form onSubmit={handleLogin} className="space-y-6">
           <div>

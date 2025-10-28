@@ -51,6 +51,10 @@ export default function AdminDashboard() {
         totalRewardsPaid: "$2,340,000",
         averageAPY: 21.5,
         systemHealth: "healthy",
+      });
+    } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+      // Fallback mock data already set above
     } finally {
       setLoading(false);
     }

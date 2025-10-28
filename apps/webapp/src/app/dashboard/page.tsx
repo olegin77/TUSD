@@ -252,8 +252,6 @@ export default function DashboardPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-      </div>
     </PageTransition>
   );
 }

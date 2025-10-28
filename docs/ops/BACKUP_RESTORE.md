@@ -48,6 +48,7 @@ nano backup.conf
 - **Development**: Weekly or manual
 
 **Restore testing:**
+
 - Weekly restore test (Sundays at 3:00 AM)
 - After major deployments
 - Before mainnet upgrades
@@ -66,6 +67,7 @@ nano backup.conf
 Main backup script that creates timestamped backups of PostgreSQL and Redis.
 
 **Features:**
+
 - Parallel backup of PostgreSQL and Redis
 - Multiple PostgreSQL formats (SQL and custom)
 - Compression (gzip)
@@ -106,6 +108,7 @@ NOTIFICATION_ENABLED=true NOTIFICATION_URL=https://hooks.slack.com/... ./backup_
 Restore testing script that verifies backup integrity without affecting production.
 
 **Features:**
+
 - Creates temporary test database
 - Restores from latest backup
 - Verifies data integrity
@@ -191,6 +194,7 @@ export NOTIFICATION_URL=https://...
 ⚠️ **CAUTION**: Only perform production restore after thorough testing and with team coordination.
 
 **Pre-restore checklist:**
+
 1. ✅ Stop application servers
 2. ✅ Notify team and stakeholders
 3. ✅ Create backup of current state
@@ -318,12 +322,14 @@ Add to monitoring stack:
 ### Backup Security
 
 1. **Encryption at Rest**
+
    ```bash
    # Encrypt backups with GPG
    gpg --symmetric --cipher-algo AES256 backup.sql.gz
    ```
 
 2. **Access Control**
+
    ```bash
    # Restrict backup directory permissions
    chmod 700 /var/backups/usdx-wexel
@@ -336,11 +342,12 @@ Add to monitoring stack:
    - Use separate backup user with read-only access
 
 4. **Off-site Backups**
+
    ```bash
    # Sync to S3 (with encryption)
    aws s3 sync /var/backups/usdx-wexel s3://usdx-backups/ \
      --sse AES256 --delete
-   
+
    # Sync to DigitalOcean Spaces
    s3cmd sync /var/backups/usdx-wexel/ s3://usdx-backups/ \
      --encrypt
@@ -418,7 +425,6 @@ pg_dump --format=directory --jobs=4 ...
 1. **Incident Detection** (T+0)
    - Monitor alerts
    - Assess data loss severity
-   
 2. **Decision** (T+15min)
    - Determine if restore is needed
    - Identify restore point

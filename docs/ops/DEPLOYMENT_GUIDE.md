@@ -5,6 +5,7 @@
 This guide provides step-by-step instructions for deploying the USDX/Wexel platform to production.
 
 **Prerequisites:**
+
 - Production infrastructure provisioned
 - Domain names configured
 - SSL certificates obtained

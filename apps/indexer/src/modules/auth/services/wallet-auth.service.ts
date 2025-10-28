@@ -4,6 +4,8 @@ import { PrismaService } from '../../../database/prisma.service';
 import * as nacl from 'tweetnacl';
 import * as bs58 from 'bs58';
 import { WalletLoginDto, WalletType } from '../dto/wallet-login.dto';
+// M-5 fix: Import TronWeb for Tron signature verification
+import TronWeb from 'tronweb';
 
 @Injectable()
 export class WalletAuthService {
@@ -90,17 +92,58 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
   }
 
   /**
-   * Verify Tron wallet signature
-   * TODO: Implement Tron signature verification
+   * M-5 fix: Verify Tron wallet signature using TronWeb
    */
   private verifyTronSignature(
     walletAddress: string,
     message: string,
     signature: string,
   ): boolean {
-    // For now, return false - will implement when Tron integration is ready
-    this.logger.warn('Tron signature verification not yet implemented');
-    return false;
+    try {
+      // Initialize TronWeb (no need for full nodes for signature verification)
+      const tronWeb = new TronWeb({
+        fullHost: 'https://api.trongrid.io', // Mainnet (can be changed to testnet)
+      });
+
+      // Convert hex address to base58 format if needed
+      let base58Address = walletAddress;
+      if (walletAddress.startsWith('0x') || walletAddress.startsWith('41')) {
+        try {
+          base58Address = tronWeb.address.fromHex(walletAddress);
+        } catch (e) {
+          // Already in base58 format
+          this.logger.debug('Address already in base58 format');
+        }
+      }
+
+      // Tron uses Ethereum-compatible signatures (v, r, s format)
+      // Remove '0x' prefix if present
+      const cleanSignature = signature.startsWith('0x')
+        ? signature.slice(2)
+        : signature;
+
+      // Verify signature
+      // TronWeb.Trx.verifyMessage(message, signature) returns the address that signed
+      const recoveredAddress = tronWeb.trx.verifyMessageV2(
+        message,
+        cleanSignature,
+      );
+
+      // Compare recovered address with provided wallet address
+      const isValid =
+        recoveredAddress.toLowerCase() === base58Address.toLowerCase();
+
+      if (!isValid) {
+        this.logger.warn(
+          `Tron signature mismatch. Expected: ${base58Address}, Got: ${recoveredAddress}`,
+        );
+      }
+
+      return isValid;
+    } catch (error) {
+      this.logger.error('Failed to verify Tron signature', error);
+      return false;
+    }
   }
 
   /**
@@ -134,13 +177,17 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
       this.logger.warn(
         `Replay attack detected: nonce ${nonce} already used for wallet ${walletAddress}`,
       );
-      throw new UnauthorizedException('Replay attack detected: nonce already used');
+      throw new UnauthorizedException(
+        'Replay attack detected: nonce already used',
+      );
     }
 
     // Check if message is recent (within 5 minutes)
     const timestampMatch = message.match(/Timestamp: (\d+)/);
     if (!timestampMatch) {
-      throw new UnauthorizedException('Invalid message format: timestamp missing');
+      throw new UnauthorizedException(
+        'Invalid message format: timestamp missing',
+      );
     }
 
     const messageTimestamp = parseInt(timestampMatch[1]);
@@ -152,7 +199,9 @@ This request will not trigger a blockchain transaction or cost any gas fees.`;
 
     // H-4 fix: Mark nonce as used
     this.usedNonces.set(nonce, now);
-    this.logger.debug(`Nonce ${nonce} marked as used for wallet ${walletAddress}`);
+    this.logger.debug(
+      `Nonce ${nonce} marked as used for wallet ${walletAddress}`,
+    );
 
     // Find or create user
     let user = await this.prisma.user.findFirst({
