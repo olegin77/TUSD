@@ -58,10 +58,7 @@ export class TronIndexerService implements OnModuleInit {
       'TRON_BRIDGE_PROXY_ADDRESS',
       '',
     );
-    this.wexel721Address = this.configService.get(
-      'TRON_WEXEL721_ADDRESS',
-      '',
-    );
+    this.wexel721Address = this.configService.get('TRON_WEXEL721_ADDRESS', '');
   }
 
   async onModuleInit() {

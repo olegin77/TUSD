@@ -117,14 +117,8 @@ export class TronEventProcessor {
    * Handle DepositCreated event
    */
   private async handleDepositCreated(event: any) {
-    const {
-      depositId,
-      depositor,
-      poolId,
-      amount,
-      solanaOwner,
-      timestamp,
-    } = event.result;
+    const { depositId, depositor, poolId, amount, solanaOwner, timestamp } =
+      event.result;
 
     this.logger.log(
       `Deposit created: ${depositId} by ${depositor} (${amount} USDT)`,
@@ -175,9 +169,7 @@ export class TronEventProcessor {
   private async handleDepositProcessed(event: any) {
     const { depositId, wexelId } = event.result;
 
-    this.logger.log(
-      `Deposit ${depositId} processed with Wexel ID ${wexelId}`,
-    );
+    this.logger.log(`Deposit ${depositId} processed with Wexel ID ${wexelId}`);
 
     try {
       await this.prisma.$executeRaw`
@@ -208,7 +200,9 @@ export class TronEventProcessor {
    */
   private async handlePoolUpdated(event: any) {
     const { poolId, isActive } = event.result;
-    this.logger.log(`Pool ${poolId} updated: ${isActive ? 'active' : 'inactive'}`);
+    this.logger.log(
+      `Pool ${poolId} updated: ${isActive ? 'active' : 'inactive'}`,
+    );
   }
 
   /**
@@ -217,7 +211,9 @@ export class TronEventProcessor {
   private async handlePriceUpdated(event: any) {
     const { token, price, confidence, timestamp } = event.result;
 
-    this.logger.log(`Price updated for ${token}: $${price} (confidence: ${confidence})`);
+    this.logger.log(
+      `Price updated for ${token}: $${price} (confidence: ${confidence})`,
+    );
 
     // Store price update for oracle tracking
   }

@@ -50,6 +50,7 @@ The staging environment provides a production-like setup for testing and validat
 ### 1. Configuration
 
 1. Copy environment template:
+
 ```bash
 cp ../../.env.staging.example ../../.env.staging
 ```
@@ -82,11 +83,13 @@ docker-compose up -d
 ### 3. Verify Deployment
 
 Check all services are running:
+
 ```bash
 docker-compose ps
 ```
 
 Expected output:
+
 ```
 NAME                      STATUS
 usdx-postgres-staging     Up (healthy)
@@ -97,6 +100,7 @@ usdx-nginx-staging        Up (healthy)
 ```
 
 Health checks:
+
 ```bash
 # Backend
 curl http://localhost:3001/health
@@ -117,12 +121,14 @@ curl http://localhost/health
 **Volume:** `postgres_data`
 
 **Features:**
+
 - Persistent data storage
 - Performance tuning for staging workload
 - Read-only monitoring user
 - Automatic initialization script
 
 **Access:**
+
 ```bash
 docker exec -it usdx-postgres-staging psql -U usdx_user -d usdx_staging
 ```
@@ -134,12 +140,14 @@ docker exec -it usdx-postgres-staging psql -U usdx_user -d usdx_staging
 **Volume:** `redis_data`
 
 **Features:**
+
 - Session storage
 - Rate limiting
 - Caching layer
 - 512MB memory limit with LRU eviction
 
 **Access:**
+
 ```bash
 docker exec -it usdx-redis-staging redis-cli -a $REDIS_PASSWORD
 ```
@@ -151,6 +159,7 @@ docker exec -it usdx-redis-staging redis-cli -a $REDIS_PASSWORD
 **Build:** `../../apps/indexer/Dockerfile`
 
 **Features:**
+
 - REST API endpoints
 - GraphQL API
 - Solana indexer
@@ -158,6 +167,7 @@ docker exec -it usdx-redis-staging redis-cli -a $REDIS_PASSWORD
 - Cross-chain bridge service
 
 **Logs:**
+
 ```bash
 docker logs -f usdx-indexer-staging
 ```
@@ -169,12 +179,14 @@ docker logs -f usdx-indexer-staging
 **Build:** `../../apps/webapp/Dockerfile`
 
 **Features:**
+
 - Next.js SSR/SSG
 - Wallet integrations (Solana, Tron)
 - Real-time updates
 - Responsive UI
 
 **Logs:**
+
 ```bash
 docker logs -f usdx-webapp-staging
 ```
@@ -186,6 +198,7 @@ docker logs -f usdx-webapp-staging
 **Config:** `nginx/nginx.conf`
 
 **Features:**
+
 - SSL termination (optional)
 - Rate limiting (API: 100 req/s, App: 50 req/s)
 - Load balancing
@@ -194,6 +207,7 @@ docker logs -f usdx-webapp-staging
 - Security headers
 
 **Logs:**
+
 ```bash
 docker logs -f usdx-nginx-staging
 ```
@@ -311,12 +325,14 @@ docker exec usdx-redis-staging redis-cli -a $REDIS_PASSWORD INFO stats
 ### Secrets Management
 
 **Never commit:**
+
 - `.env.staging` file
 - SSL private keys
 - Database passwords
 - API keys
 
 **Use environment variables for:**
+
 - All secrets and credentials
 - Service configuration
 - Feature flags
@@ -340,16 +356,19 @@ docker exec usdx-redis-staging redis-cli -a $REDIS_PASSWORD INFO stats
 ### Service Won't Start
 
 1. Check logs:
+
 ```bash
 docker-compose logs service_name
 ```
 
 2. Check health:
+
 ```bash
 docker inspect --format='{{json .State.Health}}' container_name
 ```
 
 3. Verify configuration:
+
 ```bash
 docker-compose config
 ```
@@ -357,6 +376,7 @@ docker-compose config
 ### Database Connection Errors
 
 1. Check database is healthy:
+
 ```bash
 docker exec usdx-postgres-staging pg_isready
 ```
@@ -364,6 +384,7 @@ docker exec usdx-postgres-staging pg_isready
 2. Verify credentials in `.env.staging`
 
 3. Check network connectivity:
+
 ```bash
 docker exec usdx-indexer-staging ping postgres
 ```
@@ -371,6 +392,7 @@ docker exec usdx-indexer-staging ping postgres
 ### High CPU/Memory Usage
 
 1. Check resource limits:
+
 ```bash
 docker stats --no-stream
 ```
@@ -382,9 +404,10 @@ docker stats --no-stream
 ### Port Conflicts
 
 If ports are already in use, edit `docker-compose.yml` to use different ports:
+
 ```yaml
 ports:
-  - "8001:3001"  # Changed from 3001:3001
+  - "8001:3001" # Changed from 3001:3001
 ```
 
 ## 📚 Additional Resources
@@ -397,6 +420,7 @@ ports:
 ## 🆘 Support
 
 For issues or questions:
+
 1. Check logs first
 2. Review this README
 3. Consult main project documentation

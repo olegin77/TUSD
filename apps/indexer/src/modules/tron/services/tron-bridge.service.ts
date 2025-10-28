@@ -49,9 +49,7 @@ export class TronBridgeService {
     amount: string;
     poolId: number;
   }) {
-    this.logger.log(
-      `Bridging deposit ${params.depositId} from Tron to Solana`,
-    );
+    this.logger.log(`Bridging deposit ${params.depositId} from Tron to Solana`);
 
     try {
       // 1. Validate deposit exists on Tron
@@ -84,9 +82,7 @@ export class TronBridgeService {
       //    - Cross-chain transaction submission
       //    - For now, we log the intent
 
-      this.logger.log(
-        `Bridge message created for deposit ${params.depositId}`,
-      );
+      this.logger.log(`Bridge message created for deposit ${params.depositId}`);
 
       // 5. Simulate immediate processing for development
       if (this.configService.get('NODE_ENV') === 'development') {
@@ -140,7 +136,7 @@ export class TronBridgeService {
     try {
       // Store in database for tracking
       this.logger.debug(`Storing bridge message: ${JSON.stringify(message)}`);
-      
+
       // Implementation would store in a cross_chain_messages table
       // For now, just log
     } catch (error) {
