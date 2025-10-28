@@ -6,20 +6,6 @@ import { TronProvider, useTron } from "./TronProvider";
 // Check if we're on the client side
 const isClient = typeof window !== "undefined";
 
-// Dynamic imports to avoid SSR issues
-let WalletContextProvider: any;
-let useWallet: any;
-
-if (isClient) {
-  // Only import on client side
-  import("./WalletProvider").then((mod) => {
-    WalletContextProvider = mod.WalletContextProvider;
-  });
-  import("@solana/wallet-adapter-react").then((mod) => {
-    useWallet = mod.useWallet;
-  });
-}
-
 export type WalletType = "solana" | "tron";
 
 interface MultiWalletContextType {
@@ -39,23 +25,31 @@ interface MultiWalletProviderProps {
 const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-
-  // Dynamically import useWallet hook after mount
-  const [solanaHook, setSolanaHook] = useState<any>(null);
+  const [solanaWallet, setSolanaWallet] = useState<{
+    connected: boolean;
+    publicKey: any;
+    disconnect: () => void;
+  }>({
+    connected: false,
+    publicKey: null,
+    disconnect: () => {}
+  });
 
   useEffect(() => {
     setIsMounted(true);
     if (typeof window !== "undefined") {
+      // Dynamically import and setup Solana wallet
       import("@solana/wallet-adapter-react").then((mod) => {
-        setSolanaHook(() => mod.useWallet);
+        // This will be handled by the WalletProvider when it's loaded
+        setSolanaWallet({
+          connected: false,
+          publicKey: null,
+          disconnect: () => {}
+        });
       });
     }
   }, []);
 
-  // Use the hook only if available
-  const solanaWallet = solanaHook
-    ? solanaHook()
-    : { connected: false, publicKey: null, disconnect: () => {} };
   const tronWallet = useTron();
 
   const isConnected =
@@ -91,20 +85,19 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
 
 export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
+  const [WalletProvider, setWalletProvider] = useState<any>(null);
 
   useEffect(() => {
-    // Wait for client-side imports to complete
-    const checkReady = setInterval(() => {
-      if (WalletContextProvider) {
+    if (typeof window !== "undefined") {
+      // Dynamically import WalletProvider only on client side
+      import("./WalletProvider").then((mod) => {
+        setWalletProvider(() => mod.WalletContextProvider);
         setIsReady(true);
-        clearInterval(checkReady);
-      }
-    }, 100);
-
-    return () => clearInterval(checkReady);
+      });
+    }
   }, []);
 
-  if (!isClient || !isReady) {
+  if (!isClient || !isReady || !WalletProvider) {
     return (
       <TronProvider>
         <div className="min-h-screen flex items-center justify-center">
@@ -114,14 +107,12 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
     );
   }
 
-  const Provider = WalletContextProvider;
-
   return (
-    <Provider>
+    <WalletProvider>
       <TronProvider>
         <MultiWalletContent>{children}</MultiWalletContent>
       </TronProvider>
-    </Provider>
+    </WalletProvider>
   );
 };
 
