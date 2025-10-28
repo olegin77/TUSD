@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, ExternalLink, User, Wallet } from "lucide-react";
+
 interface UserData {
   id: string;
   solana_address?: string;
@@ -14,11 +15,13 @@ interface UserData {
   total_wexels: number;
   kyc_status?: "pending" | "approved" | "rejected";
 }
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -38,6 +41,7 @@ export default function AdminUsersPage() {
       )
     );
   }, [searchQuery, users]);
+
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("admin_token");
@@ -66,7 +70,9 @@ export default function AdminUsersPage() {
       setFilteredUsers(mockUsers);
     } finally {
       setLoading(false);
+    }
   };
+
   const getKycBadge = (status?: string) => {
     switch (status) {
       case "approved":
@@ -77,34 +83,51 @@ export default function AdminUsersPage() {
         return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Отклонено</span>;
       default:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">Не указано</span>;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
+    );
   }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Управление пользователями</h1>
         <p className="text-gray-600 mt-2">Просмотр и управление пользователями платформы</p>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Всего пользователей</p>
           <p className="text-2xl font-bold text-gray-900">{users.length}</p>
         </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">KYC одобрено</p>
           <p className="text-2xl font-bold text-green-600">
             {users.filter((u) => u.kyc_status === "approved").length}
           </p>
+        </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">KYC ожидает</p>
           <p className="text-2xl font-bold text-yellow-600">
             {users.filter((u) => u.kyc_status === "pending").length}
+          </p>
+        </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Активные депозиты</p>
           <p className="text-2xl font-bold text-blue-600">
             ${users.reduce((sum, u) => sum + u.total_deposited, 0).toLocaleString()}
+          </p>
+        </Card>
+      </div>
+
       {/* Search */}
       <Card className="p-4">
         <div className="relative">
@@ -118,6 +141,7 @@ export default function AdminUsersPage() {
           />
         </div>
       </Card>
+
       {/* Users Table */}
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
@@ -127,14 +151,27 @@ export default function AdminUsersPage() {
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Пользователь
                 </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Адрес Solana
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Адрес Tron
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Дата регистрации
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Всего внесено
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Векселей
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   KYC
+                </th>
                 <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Действия
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -147,35 +184,50 @@ export default function AdminUsersPage() {
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-900">{user.id}</p>
+                      </div>
                     </div>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {user.solana_address ? (
                       <div className="flex items-center space-x-2">
                         <Wallet className="h-4 w-4 text-gray-400" />
                         <code className="text-xs text-gray-600">{user.solana_address}</code>
+                      </div>
                     ) : (
                       <span className="text-sm text-gray-400">—</span>
                     )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {user.tron_address ? (
-                        <code className="text-xs text-gray-600">{user.tron_address}</code>
+                      <code className="text-xs text-gray-600">{user.tron_address}</code>
+                    ) : (
+                      <span className="text-sm text-gray-400">—</span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(user.created_at).toLocaleDateString("ru-RU")}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${user.total_deposited.toLocaleString()}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.total_wexels}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{getKycBadge(user.kyc_status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Button size="sm" variant="ghost">
                       <ExternalLink className="h-4 w-4" />
                     </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
         {filteredUsers.length === 0 && (
           <div className="py-12 text-center">
             <p className="text-gray-600">Пользователи не найдены</p>
           </div>
         )}
+      </Card>
     </div>
   );
+}
