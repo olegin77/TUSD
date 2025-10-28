@@ -11,7 +11,9 @@ import { WalletAuthService } from './services/wallet-auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { WalletLoginDto, WalletVerifyDto } from './dto/wallet-login.dto';
+import { AdminLoginDto } from './dto/admin-login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 @Controller('api/v1/auth')
 export class AuthController {
@@ -81,5 +83,25 @@ export class AuthController {
   @Post('verify')
   async verify(@Body('token') token: string) {
     return this.authService.verifyToken(token);
+  }
+
+  /**
+   * POST /api/v1/auth/admin/login
+   * Admin login with username and password
+   */
+  @Post('admin/login')
+  async adminLogin(@Body() adminLoginDto: AdminLoginDto) {
+    return this.authService.adminLogin(adminLoginDto);
+  }
+
+  /**
+   * GET /api/v1/auth/admin/profile
+   * Get admin profile (requires admin role)
+   */
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @Get('admin/profile')
+  async getAdminProfile(@Request() req: any) {
+    const userId = req.user.sub;
+    return this.authService.getAdminProfile(userId);
   }
 }

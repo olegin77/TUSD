@@ -15,6 +15,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
 import { MarketplaceModule } from './modules/marketplace/marketplace.module';
 import { IndexerModule } from './modules/indexer/indexer.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { AdminModule } from './modules/admin/admin.module';
 import { SentryModule } from './common/sentry/sentry.module';
 import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -46,6 +47,7 @@ import { validationSchema } from './common/config/validation.schema';
     MarketplaceModule,
     IndexerModule,
     NotificationsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
