@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import TronWeb from "tronweb";
+import type TronWeb from "tronweb";
 
 interface TronContextType {
   tronWeb: any | null;

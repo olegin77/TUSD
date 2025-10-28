@@ -24,7 +24,6 @@ interface MultiWalletProviderProps {
 
 const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
   const [solanaWallet, setSolanaWallet] = useState<{
     connected: boolean;
     publicKey: any;
@@ -36,10 +35,9 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   useEffect(() => {
-    setIsMounted(true);
     if (typeof window !== "undefined") {
       // Dynamically import and setup Solana wallet
-      import("@solana/wallet-adapter-react").then((mod) => {
+      import("@solana/wallet-adapter-react").then((_mod) => {
         // This will be handled by the WalletProvider when it's loaded
         setSolanaWallet({
           connected: false,
