@@ -29,6 +29,9 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
   // Initialize TronWeb
   useEffect(() => {
     const initTronWeb = async () => {
+      // Only run on client side
+      if (typeof window === "undefined") return;
+
       try {
         // Check if TronLink is available
         if (window.tronWeb && window.tronWeb.ready) {
@@ -49,6 +52,9 @@ export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
   }, []);
 
   const connect = async () => {
+    // Only run on client side
+    if (typeof window === "undefined") return;
+
     setIsLoading(true);
     setError(null);
 

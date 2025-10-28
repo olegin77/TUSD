@@ -1,9 +1,25 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { WalletContextProvider } from "./WalletProvider";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { TronProvider, useTron } from "./TronProvider";
-import { useWallet } from "@solana/wallet-adapter-react";
+
+// Import wallet hook conditionally to avoid SSR issues
+let useWallet: any;
+if (typeof window !== "undefined") {
+  import("@solana/wallet-adapter-react").then((mod) => {
+    useWallet = mod.useWallet;
+  });
+}
+
+// Dynamic import of WalletContextProvider to avoid SSR issues with Solana wallet adapters
+const WalletContextProvider = dynamic(
+  () => import("./WalletProvider").then((mod) => mod.WalletContextProvider),
+  {
+    ssr: false,
+    loading: () => <div>Loading wallet...</div>,
+  }
+);
 
 export type WalletType = "solana" | "tron";
 
@@ -23,7 +39,22 @@ interface MultiWalletProviderProps {
 
 const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType | null>(null);
-  const solanaWallet = useWallet();
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Dynamically import useWallet hook after mount
+  const [solanaHook, setSolanaHook] = useState<any>(null);
+  
+  useEffect(() => {
+    setIsMounted(true);
+    if (typeof window !== "undefined") {
+      import("@solana/wallet-adapter-react").then((mod) => {
+        setSolanaHook(() => mod.useWallet);
+      });
+    }
+  }, []);
+  
+  // Use the hook only if available
+  const solanaWallet = solanaHook ? solanaHook() : { connected: false, publicKey: null, disconnect: () => {} };
   const tronWallet = useTron();
 
   const isConnected =
