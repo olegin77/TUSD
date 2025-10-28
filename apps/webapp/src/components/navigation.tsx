@@ -8,10 +8,16 @@ import { Menu, X, Home, TrendingUp, ShoppingCart, BarChart3, Wallet, User } from
 import dynamic from "next/dynamic";
 
 // Dynamic import to avoid SSR issues
-const WalletStatus = dynamic(() => import("@/components/wallet/WalletStatusWrapper").then(mod => ({ default: mod.WalletStatusWrapper })), {
-  ssr: false,
-  loading: () => <div className="w-24 h-8 bg-gray-200 rounded animate-pulse" />
-});
+const WalletStatus = dynamic(
+  () =>
+    import("@/components/wallet/WalletStatusWrapper").then((mod) => ({
+      default: mod.WalletStatusWrapper,
+    })),
+  {
+    ssr: false,
+    loading: () => <div className="w-24 h-8 bg-gray-200 rounded animate-pulse" />,
+  }
+);
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);

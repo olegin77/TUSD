@@ -32,7 +32,7 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
   }>({
     connected: false,
     publicKey: null,
-    disconnect: () => {}
+    disconnect: () => {},
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
         setSolanaWallet({
           connected: false,
           publicKey: null,
-          disconnect: () => {}
+          disconnect: () => {},
         });
       });
     }
