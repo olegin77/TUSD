@@ -12,13 +12,8 @@
 export DO_API_TOKEN="your_api_token_here"
 ./scripts/deploy-do.sh
 
-# Или с дополнительными параметрами (опционально)
-./scripts/deploy-do.sh \
-  --token "your_api_token_here" \
-  --size "s-4vcpu-8gb" \
-  --region "nyc3" \
-  --domain "app.usdx-wexel.com" \
-  --env "production"
+# Или с дополнительными параметрами
+./scripts/deploy-do.sh --token "your_api_token_here" --size "s-4vcpu-8gb"
 ```
 
 ## Что произойдет:
