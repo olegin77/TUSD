@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "./wallet-styles.css";
 import { Navigation } from "@/components/navigation";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/a11y/a11y-provider";
