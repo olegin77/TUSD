@@ -95,9 +95,6 @@ temp/
 *.sln
 *.sw?
 
-# Prisma generated files
-apps/indexer/src/generated/
-
 # Build artifacts
 apps/indexer/dist/
 apps/webapp/.next/
