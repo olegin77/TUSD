@@ -39,6 +39,9 @@ export class WexelsService {
         wexel_id: applyBoostDto.wexel_id,
         token_mint: applyBoostDto.token_mint,
         amount: applyBoostDto.amount,
+        value_usd: BigInt(Math.floor(applyBoostDto.valueUsd * 1_000_000)), // Convert to micro-units
+        apy_boost_bp: applyBoostDto.apyBoostBp,
+        price_usd: BigInt(Math.floor(applyBoostDto.priceUsd * 1_000_000)), // Convert to micro-units
       },
     });
   }

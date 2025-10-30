@@ -45,7 +45,7 @@ export class AuthService {
 
     return {
       user: {
-        id: user.id,
+        id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address,
         tronAddress: user.tron_address,
         email: user.email,
@@ -83,7 +83,7 @@ export class AuthService {
 
     return {
       user: {
-        id: user.id,
+        id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address,
         tronAddress: user.tron_address,
         email: user.email,
@@ -108,7 +108,7 @@ export class AuthService {
       }
 
       return {
-        id: user.id,
+        id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address,
         tronAddress: user.tron_address,
         email: user.email,
