@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { A11yProvider } from "@/components/a11y/a11y-provider";
+import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -20,10 +21,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <A11yProvider>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </A11yProvider>
+      <MultiWalletProvider>
+        <A11yProvider>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </A11yProvider>
+      </MultiWalletProvider>
     </QueryClientProvider>
   );
 }
