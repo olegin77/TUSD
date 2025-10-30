@@ -52,11 +52,14 @@ RUN pnpm prisma:generate
 # Build the application
 RUN pnpm build
 
-# Remove dev dependencies
-RUN pnpm prune --prod
+# Note: We do NOT use pnpm prune --prod here because it breaks symlinks in pnpm workspaces
+# Instead, we'll copy the full node_modules to the runtime stage
 
 # Stage 3: Runner
 FROM node:20-alpine AS runner
+
+# Install pnpm for prisma generate
+RUN corepack enable && corepack prepare pnpm@9.5.0 --activate
 
 # Install openssl for Prisma and dumb-init for proper signal handling
 RUN apk add --no-cache openssl dumb-init
@@ -70,12 +73,24 @@ WORKDIR /app
 # Set NODE_ENV
 ENV NODE_ENV=production
 
-# Copy built application from builder
-# Copy workspace root node_modules (contains pnpm store)
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/prisma ./prisma
-COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/package.json ./
+# Copy workspace configuration first
+COPY --from=builder /app/package.json /app/pnpm-workspace.yaml /app/pnpm-lock.yaml ./
+COPY --from=builder /app/tsconfig.base.json ./
+
+# Copy the entire workspace structure to preserve pnpm symlinks
+# Copy workspace root node_modules (contains .pnpm store)
+COPY --from=builder /app/node_modules ./node_modules
+# Copy indexer package with its node_modules (symlinks to workspace root)
+COPY --from=builder /app/apps/indexer ./apps/indexer
+
+# Set working directory to the indexer package
+WORKDIR /app/apps/indexer
+
+# Generate Prisma client in runtime stage (ensures files are in the correct location)
+RUN pnpm prisma:generate
+
+# Fix ownership after generating
+RUN chown -R nestjs:nodejs /app
 
 # Switch to non-root user
 USER nestjs
