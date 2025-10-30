@@ -48,7 +48,7 @@ export class AuthService {
         id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address || undefined,
         tronAddress: user.tron_address || undefined,
-        email: user.email,
+        email: user.email || undefined,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,
         createdAt: user.created_at,
@@ -86,7 +86,7 @@ export class AuthService {
         id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address || undefined,
         tronAddress: user.tron_address || undefined,
-        email: user.email,
+        email: user.email || undefined,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,
         createdAt: user.created_at,
@@ -111,7 +111,7 @@ export class AuthService {
         id: user.id.toString(), // Convert bigint to string for UserProfile
         solanaAddress: user.solana_address || undefined,
         tronAddress: user.tron_address || undefined,
-        email: user.email,
+        email: user.email || undefined,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,
         createdAt: user.created_at,

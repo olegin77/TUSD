@@ -42,7 +42,7 @@ export class BusinessMetricsService {
    * Calculate and update Total Value Locked (TVL)
    */
   private async updateTVL(): Promise<void> {
-    const result = await this.prisma.wexels.aggregate({
+    const result = await this.prisma.wexel.aggregate({
       _sum: {
         principal_usd: true,
       },
@@ -61,7 +61,7 @@ export class BusinessMetricsService {
    * Update active wexels count
    */
   private async updateWexelsCount(): Promise<void> {
-    const count = await this.prisma.wexels.count({
+    const count = await this.prisma.wexel.count({
       where: {
         end_ts: {
           gte: new Date(),
@@ -76,7 +76,7 @@ export class BusinessMetricsService {
    * Update total users count
    */
   private async updateUsersCount(): Promise<void> {
-    const count = await this.prisma.users.count();
+    const count = await this.prisma.user.count();
     this.metrics.setTotalUsersCount(count);
   }
 
