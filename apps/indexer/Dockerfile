@@ -71,8 +71,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Copy built application from builder
+# Copy workspace root node_modules (contains pnpm store)
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/prisma ./prisma
 COPY --from=builder --chown=nestjs:nodejs /app/apps/indexer/package.json ./
 
@@ -90,4 +91,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
