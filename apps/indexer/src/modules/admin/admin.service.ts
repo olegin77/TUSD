@@ -13,7 +13,7 @@ export class AdminService {
   async getDashboardStats() {
     try {
       // Get total value locked
-      const wexelsAgg = await this.prisma.wexels.aggregate({
+      const wexelsAgg = await this.prisma.wexel.aggregate({
         _sum: {
           principal_usd: true,
         },
@@ -21,7 +21,7 @@ export class AdminService {
       });
 
       // Get active wexels count
-      const activeWexels = await this.prisma.wexels.count({
+      const activeWexels = await this.prisma.wexel.count({
         where: {
           end_ts: {
             gt: new Date(),
@@ -30,7 +30,7 @@ export class AdminService {
       });
 
       // Get collateralized wexels count
-      const collateralizedWexels = await this.prisma.wexels.count({
+      const collateralizedWexels = await this.prisma.wexel.count({
         where: {
           is_collateralized: true,
         },
@@ -40,14 +40,14 @@ export class AdminService {
       const totalUsers = await this.prisma.user.count();
 
       // Get total rewards paid (sum of total_claimed_usd)
-      const rewardsAgg = await this.prisma.wexels.aggregate({
+      const rewardsAgg = await this.prisma.wexel.aggregate({
         _sum: {
           total_claimed_usd: true,
         },
       });
 
       // Calculate average APY across all pools
-      const pools = await this.prisma.pools.findMany();
+      const pools = await this.prisma.pool.findMany();
       const avgAPY =
         pools.length > 0
           ? pools.reduce((sum, p) => sum + p.apy_base_bp, 0) /
@@ -76,28 +76,39 @@ export class AdminService {
    */
   async getAllUsers() {
     try {
-      const users = await this.prisma.user.findMany({
-        include: {
-          wexels: {
+      const users = await this.prisma.user.findMany();
+
+      // Fetch wexel stats for each user separately
+      const usersWithStats = await Promise.all(
+        users.map(async (user) => {
+          const wexels = await this.prisma.wexel.findMany({
+            where: {
+              OR: [
+                { owner_solana: user.solana_address },
+                { owner_tron: user.tron_address },
+              ],
+            },
             select: {
               principal_usd: true,
             },
-          },
-        },
-      });
+          });
 
-      return users.map((user) => ({
-        id: user.id,
-        solana_address: user.solana_address,
-        tron_address: user.tron_address,
-        created_at: user.created_at,
-        total_deposited: user.wexels.reduce(
-          (sum, w) => sum + Number(w.principal_usd),
-          0,
-        ),
-        total_wexels: user.wexels.length,
-        kyc_status: 'approved', // TODO: Implement KYC status
-      }));
+          return {
+            id: user.id,
+            solana_address: user.solana_address,
+            tron_address: user.tron_address,
+            created_at: user.created_at,
+            total_deposited: wexels.reduce(
+              (sum, w) => sum + Number(w.principal_usd),
+              0,
+            ),
+            total_wexels: wexels.length,
+            kyc_status: 'approved', // TODO: Implement KYC status
+          };
+        }),
+      );
+
+      return usersWithStats;
     } catch (error) {
       this.logger.error('Error fetching users', error);
       throw error;
@@ -119,11 +130,10 @@ export class AdminService {
         where.is_collateralized = true;
       }
 
-      const wexels = await this.prisma.wexels.findMany({
+      const wexels = await this.prisma.wexel.findMany({
         where,
         include: {
           pool: true,
-          owner: true,
         },
         orderBy: {
           id: 'desc',
@@ -224,7 +234,7 @@ export class AdminService {
    */
   async updatePool(poolId: number, data: any) {
     try {
-      const pool = await this.prisma.pools.update({
+      const pool = await this.prisma.pool.update({
         where: { id: poolId },
         data: {
           apy_base_bp: data.apy_base_bp,

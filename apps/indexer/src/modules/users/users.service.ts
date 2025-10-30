@@ -30,7 +30,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: Partial<CreateUserDto>) {
+  async update(id: bigint, updateUserDto: Partial<CreateUserDto>) {
     await this.findOne(id);
 
     return this.prisma.user.update({
@@ -39,7 +39,7 @@ export class UsersService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: bigint) {
     await this.findOne(id);
 
     return this.prisma.user.delete({
