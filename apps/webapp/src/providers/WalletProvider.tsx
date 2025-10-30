@@ -1,14 +1,9 @@
 "use client";
 
-import React, { FC, ReactNode, useMemo } from "react";
+import React, { FC, ReactNode, useMemo, useState, useEffect } from "react";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-  // Removed: TorusWalletAdapter, LedgerWalletAdapter - cause SSR issues
-} from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 
 interface WalletContextProviderProps {
@@ -22,17 +17,14 @@ export const WalletContextProvider: FC<WalletContextProviderProps> = ({ children
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-      // Removed problematic adapters that cause SSR window errors:
-      // - TorusWalletAdapter (uses window at import)
-      // - LedgerWalletAdapter (USB access issues in SSR)
-      // - WalletConnectAdapter (pino logger issues)
-    ],
-    [network]
-  );
+  const [wallets, setWallets] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Dynamically import wallet adapters only on client side
+    import("./WalletAdapters").then((module) => {
+      setWallets(module.getWalletAdapters());
+    });
+  }, []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>

@@ -41,6 +41,8 @@ const nextConfig = {
     config.externals = config.externals || [];
     if (isServer) {
       config.externals.push("pino-pretty");
+      // Exclude wallet adapters from server bundle to avoid SSR window errors
+      config.externals.push("@solana/wallet-adapter-wallets");
     }
 
     return config;
