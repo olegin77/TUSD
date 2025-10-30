@@ -37,8 +37,8 @@ export class AuthService {
 
     const payload = {
       sub: user.id,
-      solanaAddress: user.solana_address,
-      tronAddress: user.tron_address,
+      solanaAddress: user.solana_address || undefined,
+      tronAddress: user.tron_address || undefined,
     };
 
     const token = this.jwtService.sign(payload);
@@ -46,8 +46,8 @@ export class AuthService {
     return {
       user: {
         id: user.id.toString(), // Convert bigint to string for UserProfile
-        solanaAddress: user.solana_address,
-        tronAddress: user.tron_address,
+        solanaAddress: user.solana_address || undefined,
+        tronAddress: user.tron_address || undefined,
         email: user.email,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,
@@ -75,8 +75,8 @@ export class AuthService {
 
     const payload = {
       sub: user.id,
-      solanaAddress: user.solana_address,
-      tronAddress: user.tron_address,
+      solanaAddress: user.solana_address || undefined,
+      tronAddress: user.tron_address || undefined,
     };
 
     const token = this.jwtService.sign(payload);
@@ -84,8 +84,8 @@ export class AuthService {
     return {
       user: {
         id: user.id.toString(), // Convert bigint to string for UserProfile
-        solanaAddress: user.solana_address,
-        tronAddress: user.tron_address,
+        solanaAddress: user.solana_address || undefined,
+        tronAddress: user.tron_address || undefined,
         email: user.email,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,
@@ -109,8 +109,8 @@ export class AuthService {
 
       return {
         id: user.id.toString(), // Convert bigint to string for UserProfile
-        solanaAddress: user.solana_address,
-        tronAddress: user.tron_address,
+        solanaAddress: user.solana_address || undefined,
+        tronAddress: user.tron_address || undefined,
         email: user.email,
         isKycVerified: user.is_kyc_verified,
         isActive: user.is_active,

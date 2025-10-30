@@ -85,7 +85,7 @@ export class BusinessMetricsService {
    */
   private async updateCollateralMetrics(): Promise<void> {
     // Count collateralized wexels
-    const collateralizedCount = await this.prisma.collateral.count({
+    const collateralizedCount = await this.prisma.collateralPosition.count({
       where: {
         repaid: false,
       },
@@ -93,7 +93,7 @@ export class BusinessMetricsService {
     this.metrics.setCollateralizedWexelsCount(collateralizedCount);
 
     // Calculate total outstanding loans
-    const result = await this.prisma.collateral.aggregate({
+    const result = await this.prisma.collateralPosition.aggregate({
       _sum: {
         loan_usd: true,
       },

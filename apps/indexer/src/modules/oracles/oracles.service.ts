@@ -8,8 +8,7 @@ export class OraclesService {
   async getPrice(tokenMint: string, source?: string) {
     const price = await this.prisma.tokenPrice.findFirst({
       where: {
-        token_mint: tokenMint
-        ...(source && { source }),
+        token_mint: tokenMint,
       },
       orderBy: { updated_at: 'desc' },
     });
@@ -29,18 +28,15 @@ export class OraclesService {
   async updatePrice(tokenMint: string, priceUsd: number, source: string) {
     return this.prisma.tokenPrice.upsert({
       where: {
-        where: {
-          token_mint: tokenMint
-          source,
-        },
+        token_mint: tokenMint,
       },
       update: {
-        price_usd: priceUsd,
+        price_usd: BigInt(Math.floor(priceUsd * 1_000_000)),
         updated_at: new Date(),
       },
       create: {
-        token_mint: tokenMint
-        price_usd: priceUsd,
+        token_mint: tokenMint,
+        price_usd: BigInt(Math.floor(priceUsd * 1_000_000)),
         source,
       },
     });

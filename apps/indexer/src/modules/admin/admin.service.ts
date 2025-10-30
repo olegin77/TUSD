@@ -56,12 +56,12 @@ export class AdminService {
           : 0;
 
       return {
-        totalValueLocked: `$${((wexelsAgg._sum.principal_usd || 0) / 1e6).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+        totalValueLocked: `$${((Number(wexelsAgg._sum.principal_usd || 0)) / 1e6).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
         totalUsers,
         totalWexels: wexelsAgg._count,
         activeWexels,
         collateralizedWexels,
-        totalRewardsPaid: `$${((rewardsAgg._sum.total_claimed_usd || 0) / 1e6).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+        totalRewardsPaid: `$${((Number(rewardsAgg._sum.total_claimed_usd || 0)) / 1e6).toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
         averageAPY: Number(avgAPY.toFixed(1)),
         systemHealth: 'healthy' as const,
       };

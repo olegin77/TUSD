@@ -20,7 +20,7 @@ export class UsersService {
 
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id },
+      where: { id: BigInt(id) },
     });
 
     if (!user) {
@@ -30,20 +30,20 @@ export class UsersService {
     return user;
   }
 
-  async update(id: bigint, updateUserDto: Partial<CreateUserDto>) {
+  async update(id: string, updateUserDto: Partial<CreateUserDto>) {
     await this.findOne(id);
 
     return this.prisma.user.update({
-      where: { id },
+      where: { id: BigInt(id) },
       data: updateUserDto,
     });
   }
 
-  async remove(id: bigint) {
+  async remove(id: string) {
     await this.findOne(id);
 
     return this.prisma.user.delete({
-      where: { id },
+      where: { id: BigInt(id) },
     });
   }
 }
