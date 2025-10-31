@@ -5,7 +5,6 @@ const nextConfig = {
 
   // Optimize for production
   reactStrictMode: true,
-  swcMinify: true,
 
   images: {
     domains: ["localhost"],
@@ -14,16 +13,15 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   },
 
-  // Experimental: Exclude packages from server components
-  experimental: {
-    serverComponentsExternalPackages: [
-      "@solana/wallet-adapter-wallets",
-      "@solana/wallet-adapter-react",
-      "@solana/wallet-adapter-react-ui",
-      "@solana/wallet-adapter-base",
-      "@solana/web3.js",
-    ],
-  },
+  // Exclude packages from server-side bundles (Next.js 15+)
+  serverExternalPackages: [
+    "@solana/wallet-adapter-wallets",
+    "@solana/wallet-adapter-react",
+    "@solana/wallet-adapter-react-ui",
+    "@solana/wallet-adapter-base",
+    "@solana/web3.js",
+    "tronweb",
+  ],
 
   // Webpack configuration
   webpack: (config, { isServer }) => {
