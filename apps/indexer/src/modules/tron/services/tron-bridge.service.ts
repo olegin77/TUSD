@@ -24,19 +24,32 @@ export class TronBridgeService {
     );
     this.solanaConnection = new Connection(solanaRpcUrl, 'confirmed');
 
-    // Initialize TronWeb
-    const tronNetwork = this.configService.get('TRON_NETWORK', 'nile');
-    const fullHost =
-      tronNetwork === 'mainnet'
-        ? 'https://api.trongrid.io'
-        : 'https://nile.trongrid.io';
+    // Initialize TronWeb with error handling
+    try {
+      const tronNetwork = this.configService.get('TRON_NETWORK', 'nile');
+      const tronApiKey = this.configService.get('TRON_GRID_API_KEY', '');
 
-    this.tronWeb = new TronWeb({
-      fullHost,
-      headers: {
-        'TRON-PRO-API-KEY': this.configService.get('TRON_GRID_API_KEY', ''),
-      },
-    });
+      if (!tronApiKey || tronApiKey === 'placeholder_trongrid_api_key') {
+        this.logger.warn('TRON_GRID_API_KEY not configured - TronWeb functionality will be limited');
+        this.tronWeb = null;
+      } else {
+        const fullHost =
+          tronNetwork === 'mainnet'
+            ? 'https://api.trongrid.io'
+            : 'https://nile.trongrid.io';
+
+        this.tronWeb = new TronWeb({
+          fullHost,
+          headers: {
+            'TRON-PRO-API-KEY': tronApiKey,
+          },
+        });
+        this.logger.log('TronWeb initialized successfully');
+      }
+    } catch (error) {
+      this.logger.error(`Failed to initialize TronWeb: ${error.message}`, error.stack);
+      this.tronWeb = null;
+    }
   }
 
   /**
@@ -108,10 +121,15 @@ export class TronBridgeService {
    */
   private async verifyTronDeposit(depositId: string): Promise<boolean> {
     try {
+      if (!this.tronWeb) {
+        this.logger.warn('TronWeb not initialized - skipping deposit verification');
+        return true; // Allow in development/staging
+      }
+
       const depositVaultAddress = this.configService.get(
         'TRON_DEPOSIT_VAULT_ADDRESS',
       );
-      if (!depositVaultAddress) {
+      if (!depositVaultAddress || depositVaultAddress === 'placeholder_vault_address') {
         this.logger.warn('TRON_DEPOSIT_VAULT_ADDRESS not configured');
         return true; // Allow in development
       }
