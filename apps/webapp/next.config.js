@@ -13,7 +13,18 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   },
-  // Disable static optimization to avoid SSR issues with wallet adapters
+
+  // Experimental: Exclude packages from server components
+  experimental: {
+    serverComponentsExternalPackages: [
+      "@solana/wallet-adapter-wallets",
+      "@solana/wallet-adapter-react",
+      "@solana/wallet-adapter-react-ui",
+      "@solana/wallet-adapter-base",
+      "@solana/web3.js",
+    ],
+  },
+
   // Webpack configuration
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -36,13 +47,37 @@ const nextConfig = {
     config.ignoreWarnings = [
       { module: /node_modules\/pino/ },
       { module: /node_modules\/@walletconnect/ },
+      { module: /node_modules\/@solana/ },
     ];
 
-    config.externals = config.externals || [];
     if (isServer) {
+      // Exclude all wallet-related packages from server bundle
+      const walletPackages = [
+        "@solana/wallet-adapter-wallets",
+        "@solana/wallet-adapter-react",
+        "@solana/wallet-adapter-react-ui",
+        "@solana/wallet-adapter-base",
+        "@solana/web3.js",
+        "tronweb",
+      ];
+
+      config.externals = config.externals || [];
       config.externals.push("pino-pretty");
-      // Exclude wallet adapters from server bundle to avoid SSR window errors
-      config.externals.push("@solana/wallet-adapter-wallets");
+
+      // Add each wallet package as external
+      walletPackages.forEach(pkg => {
+        if (typeof config.externals === 'function') {
+          const originalExternals = config.externals;
+          config.externals = async (context, request, callback) => {
+            if (request === pkg || request.startsWith(pkg + '/')) {
+              return callback(null, 'commonjs ' + request);
+            }
+            return originalExternals(context, request, callback);
+          };
+        } else if (Array.isArray(config.externals)) {
+          config.externals.push(pkg);
+        }
+      });
     }
 
     return config;
