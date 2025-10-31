@@ -3,8 +3,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { A11yProvider } from "@/components/a11y/a11y-provider";
-import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
+
+// Dynamically import wallet providers with no SSR
+const MultiWalletProvider = dynamic(
+  () => import("@/providers/MultiWalletProvider").then((mod) => mod.MultiWalletProvider),
+  { ssr: false }
+);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
