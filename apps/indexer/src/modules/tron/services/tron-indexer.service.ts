@@ -31,19 +31,32 @@ export class TronIndexerService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly eventProcessor: TronEventProcessor,
   ) {
-    // Initialize TronWeb
-    const tronNetwork = this.configService.get('TRON_NETWORK', 'nile');
-    const fullHost =
-      tronNetwork === 'mainnet'
-        ? 'https://api.trongrid.io'
-        : 'https://nile.trongrid.io';
+    // Initialize TronWeb with error handling
+    try {
+      const tronNetwork = this.configService.get('TRON_NETWORK', 'nile');
+      const tronApiKey = this.configService.get('TRON_GRID_API_KEY', '');
 
-    this.tronWeb = new TronWeb({
-      fullHost,
-      headers: {
-        'TRON-PRO-API-KEY': this.configService.get('TRON_GRID_API_KEY', ''),
-      },
-    });
+      if (!tronApiKey || tronApiKey === 'placeholder_trongrid_api_key') {
+        this.logger.warn('TRON_GRID_API_KEY not configured - Tron indexer will not start');
+        this.tronWeb = null;
+      } else {
+        const fullHost =
+          tronNetwork === 'mainnet'
+            ? 'https://api.trongrid.io'
+            : 'https://nile.trongrid.io';
+
+        this.tronWeb = new TronWeb({
+          fullHost,
+          headers: {
+            'TRON-PRO-API-KEY': tronApiKey,
+          },
+        });
+        this.logger.log('TronWeb initialized successfully for indexer');
+      }
+    } catch (error) {
+      this.logger.error(`Failed to initialize TronWeb: ${error.message}`, error.stack);
+      this.tronWeb = null;
+    }
 
     // Get contract addresses from config
     this.depositVaultAddress = this.configService.get(
@@ -72,6 +85,11 @@ export class TronIndexerService implements OnModuleInit {
    * Start the Tron indexer
    */
   async start() {
+    if (!this.tronWeb) {
+      this.logger.warn('TronWeb not initialized - cannot start indexer. Please configure TRON_GRID_API_KEY');
+      return;
+    }
+
     if (this.isRunning) {
       this.logger.warn('Tron indexer is already running');
       return;
@@ -297,6 +315,10 @@ export class TronIndexerService implements OnModuleInit {
    * Manually process a specific transaction
    */
   async processTransaction(txHash: string) {
+    if (!this.tronWeb) {
+      throw new Error('TronWeb not initialized - cannot process transaction');
+    }
+
     try {
       const tx = await this.tronWeb.trx.getTransaction(txHash);
       // Process transaction events
