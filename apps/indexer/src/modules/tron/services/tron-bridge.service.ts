@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Connection, PublicKey } from '@solana/web3.js';
-const TronWeb = require('tronweb');
+import TronWeb from 'tronweb';
 import { PrismaService } from '../../../database/prisma.service';
 
 /**
