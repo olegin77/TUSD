@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./wallet-styles.css";
@@ -10,12 +10,13 @@ import { AnnouncerProvider } from "@/components/a11y/announcer";
 const inter = Inter({ subsets: ["latin"] });
 
 // Force dynamic rendering since Navigation includes wallet status
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: 'Wexel - Децентрализованные векселя',
-  description: 'Инвестируйте в стабильные активы с высокой доходностью. Получайте NFT-векселя, торгуйте ими на маркетплейсе и используйте как залог.',
-}
+  title: "Wexel - Децентрализованные векселя",
+  description:
+    "Инвестируйте в стабильные активы с высокой доходностью. Получайте NFT-векселя, торгуйте ими на маркетплейсе и используйте как залог.",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

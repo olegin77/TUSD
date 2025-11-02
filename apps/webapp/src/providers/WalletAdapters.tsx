@@ -7,10 +7,9 @@ export async function getWalletAdapters() {
   }
 
   // Dynamically import the wallet adapters only on client side
-  const { PhantomWalletAdapter, SolflareWalletAdapter } = await import("@solana/wallet-adapter-wallets");
+  const { PhantomWalletAdapter, SolflareWalletAdapter } = await import(
+    "@solana/wallet-adapter-wallets"
+  );
 
-  return [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter(),
-  ];
+  return [new PhantomWalletAdapter(), new SolflareWalletAdapter()];
 }

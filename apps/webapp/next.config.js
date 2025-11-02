@@ -61,7 +61,7 @@ const nextConfig = {
       config.externals = config.externals || [];
 
       if (Array.isArray(config.externals)) {
-        externalPackages.forEach(pkg => {
+        externalPackages.forEach((pkg) => {
           if (!config.externals.includes(pkg)) {
             config.externals.push(pkg);
           }
@@ -69,7 +69,7 @@ const nextConfig = {
       }
 
       // Add regex-based externalization for wallet adapters
-      if (typeof config.externals === 'function') {
+      if (typeof config.externals === "function") {
         const originalExternals = config.externals;
         config.externals = async (context, request, callback) => {
           if (request.match(/@solana\/wallet-adapter/) || request.match(/@solana\/web3\.js/)) {
@@ -86,7 +86,9 @@ const nextConfig = {
             }
             callback();
           },
-          ...(Array.isArray(originalExternals) ? originalExternals : [originalExternals]).filter(Boolean),
+          ...(Array.isArray(originalExternals) ? originalExternals : [originalExternals]).filter(
+            Boolean
+          ),
         ];
       }
     }
