@@ -3,6 +3,7 @@
 ## 🚀 Быстрый запуск
 
 **ВАЖНО:** Сначала получите API токен DigitalOcean:
+
 - Откройте: https://cloud.digitalocean.com/account/api/tokens
 - Создайте токен с правами Read и Write
 - Скопируйте токен
@@ -27,11 +28,13 @@ export DO_API_TOKEN="your_api_token_here"
 ## После деплоя:
 
 1. **Подключитесь к серверу:**
+
    ```bash
    ssh root@YOUR_IP_ADDRESS
    ```
 
 2. **Настройте .env файл:**
+
    ```bash
    cd /opt/usdx-wexel
    nano .env.production
@@ -46,4 +49,3 @@ export DO_API_TOKEN="your_api_token_here"
 ## Полная документация:
 
 См. файл `DEPLOY_DIGITALOCEAN.md` для детальной информации.
-

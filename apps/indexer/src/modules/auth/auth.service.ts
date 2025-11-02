@@ -69,7 +69,8 @@ export class AuthService {
       },
     });
 
-    if (!user) { // TODO: Implement password verification
+    if (!user) {
+      // TODO: Implement password verification
       throw new UnauthorizedException('Invalid credentials');
     }
 

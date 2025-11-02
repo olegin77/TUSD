@@ -37,7 +37,9 @@ export class TronIndexerService implements OnModuleInit {
       const tronApiKey = this.configService.get('TRON_GRID_API_KEY', '');
 
       if (!tronApiKey || tronApiKey === 'placeholder_trongrid_api_key') {
-        this.logger.warn('TRON_GRID_API_KEY not configured - Tron indexer will not start');
+        this.logger.warn(
+          'TRON_GRID_API_KEY not configured - Tron indexer will not start',
+        );
         this.tronWeb = null;
       } else {
         const fullHost =
@@ -54,7 +56,10 @@ export class TronIndexerService implements OnModuleInit {
         this.logger.log('TronWeb initialized successfully for indexer');
       }
     } catch (error) {
-      this.logger.error(`Failed to initialize TronWeb: ${error.message}`, error.stack);
+      this.logger.error(
+        `Failed to initialize TronWeb: ${error.message}`,
+        error.stack,
+      );
       this.tronWeb = null;
     }
 
@@ -86,7 +91,9 @@ export class TronIndexerService implements OnModuleInit {
    */
   async start() {
     if (!this.tronWeb) {
-      this.logger.warn('TronWeb not initialized - cannot start indexer. Please configure TRON_GRID_API_KEY');
+      this.logger.warn(
+        'TronWeb not initialized - cannot start indexer. Please configure TRON_GRID_API_KEY',
+      );
       return;
     }
 

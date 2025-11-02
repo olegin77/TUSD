@@ -30,7 +30,9 @@ export class TronBridgeService {
       const tronApiKey = this.configService.get('TRON_GRID_API_KEY', '');
 
       if (!tronApiKey || tronApiKey === 'placeholder_trongrid_api_key') {
-        this.logger.warn('TRON_GRID_API_KEY not configured - TronWeb functionality will be limited');
+        this.logger.warn(
+          'TRON_GRID_API_KEY not configured - TronWeb functionality will be limited',
+        );
         this.tronWeb = null;
       } else {
         const fullHost =
@@ -47,7 +49,10 @@ export class TronBridgeService {
         this.logger.log('TronWeb initialized successfully');
       }
     } catch (error) {
-      this.logger.error(`Failed to initialize TronWeb: ${error.message}`, error.stack);
+      this.logger.error(
+        `Failed to initialize TronWeb: ${error.message}`,
+        error.stack,
+      );
       this.tronWeb = null;
     }
   }
@@ -122,14 +127,19 @@ export class TronBridgeService {
   private async verifyTronDeposit(depositId: string): Promise<boolean> {
     try {
       if (!this.tronWeb) {
-        this.logger.warn('TronWeb not initialized - skipping deposit verification');
+        this.logger.warn(
+          'TronWeb not initialized - skipping deposit verification',
+        );
         return true; // Allow in development/staging
       }
 
       const depositVaultAddress = this.configService.get(
         'TRON_DEPOSIT_VAULT_ADDRESS',
       );
-      if (!depositVaultAddress || depositVaultAddress === 'placeholder_vault_address') {
+      if (
+        !depositVaultAddress ||
+        depositVaultAddress === 'placeholder_vault_address'
+      ) {
         this.logger.warn('TRON_DEPOSIT_VAULT_ADDRESS not configured');
         return true; // Allow in development
       }

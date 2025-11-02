@@ -5,12 +5,14 @@
 ### Локальные файлы ключа
 
 **Приватный ключ:**
+
 - Путь: `/home/noda/.ssh/id_rsa_do_deploy_usdx-wexel`
 - Права доступа: `600` (rw-------)
 - Размер: 3401 байт
 - Дата создания: 29 октября 2025, 20:33
 
 **Публичный ключ:**
+
 - Путь: `/home/noda/.ssh/id_rsa_do_deploy_usdx-wexel.pub`
 - Права доступа: `644` (rw-r--r--)
 - Размер: 757 байт
@@ -21,11 +23,13 @@
 **Тип ключа:** RSA 4096 бит
 
 **Fingerprint (SHA256):**
+
 ```
 xlRffAf/mqUudjUAY+CsN50G5NPSwYm3IGbjfN0eAms
 ```
 
 **Комментарий:**
+
 ```
 do-deploy-usdx-wexel-1761752020
 ```
@@ -138,6 +142,7 @@ curl -X DELETE \
 ### Проблема: Connection refused
 
 **Решение:**
+
 ```bash
 # Проверить что ключ имеет правильные права
 chmod 600 ~/.ssh/id_rsa_do_deploy_usdx-wexel
@@ -150,6 +155,7 @@ curl -s -X GET -H "Authorization: Bearer $DO_API_TOKEN" \
 ### Проблема: Permission denied
 
 **Решение:**
+
 ```bash
 # Проверить права доступа
 ls -la ~/.ssh/
@@ -169,4 +175,3 @@ ssh-add ~/.ssh/id_rsa_do_deploy_usdx-wexel
 
 **Дата создания:** 2025-10-29  
 **Последнее обновление:** 2025-10-29
-

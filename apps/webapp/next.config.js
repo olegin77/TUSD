@@ -11,15 +11,33 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   },
 
-  // Exclude wallet adapters from server-side bundle
+  // Exclude wallet adapters from server-side bundle (Next.js 15)
   serverExternalPackages: [
     "@solana/wallet-adapter-wallets",
     "@solana/wallet-adapter-react",
     "@solana/wallet-adapter-react-ui",
     "@solana/wallet-adapter-base",
     "@solana/web3.js",
+    "@solana/spl-token",
+    "@noble/curves",
+    "@noble/hashes",
     "tronweb",
   ],
+
+  // EXPERIMENTAL: Additional server component externals for Next.js 15
+  experimental: {
+    serverComponentsExternalPackages: [
+      "@solana/wallet-adapter-wallets",
+      "@solana/wallet-adapter-react",
+      "@solana/wallet-adapter-react-ui",
+      "@solana/wallet-adapter-base",
+      "@solana/web3.js",
+      "@solana/spl-token",
+      "@noble/curves",
+      "@noble/hashes",
+      "tronweb",
+    ],
+  },
 
   // Webpack configuration
   webpack: (config, { isServer }) => {
