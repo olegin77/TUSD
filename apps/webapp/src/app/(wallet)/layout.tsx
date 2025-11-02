@@ -1,10 +1,8 @@
-"use client";
+import { WalletProviderWrapper } from "@/components/wallet-provider-wrapper";
 
-// Force dynamic rendering to avoid SSR issues
-export const dynamic = "force-dynamic";
-
-import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
+// Force dynamic rendering for wallet pages to prevent SSR/SSG
+export const dynamic = 'force-dynamic';
 
 export default function WalletLayout({ children }: { children: React.ReactNode }) {
-  return <MultiWalletProvider>{children}</MultiWalletProvider>;
+  return <WalletProviderWrapper>{children}</WalletProviderWrapper>;
 }

@@ -35,14 +35,7 @@ const MultiWalletContent: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
 
   // ESLint cleanup: Removed unused setSolanaWallet
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Dynamically import Solana wallet - handled by WalletProvider when loaded
-      import("@solana/wallet-adapter-react").catch((err) => {
-        console.error("Failed to load Solana wallet adapter:", err);
-      });
-    }
-  }, []);
+  // Note: Solana wallet adapter is loaded via WalletProvider below
 
   const tronWallet = useTron();
 

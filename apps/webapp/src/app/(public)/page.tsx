@@ -1,13 +1,10 @@
 "use client";
 
-// Force dynamic rendering to avoid SSR issues
-export const dynamic = "force-dynamic";
-
 import { useState } from "react";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageTransition } from "@/components/ui/page-transition";
 import {
   TrendingUp,
   Shield,
@@ -91,7 +88,6 @@ export default function HomePage() {
   };
 
   return (
-    <PageTransition>
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
@@ -389,6 +385,5 @@ export default function HomePage() {
           </div>
         </footer>
       </div>
-    </PageTransition>
   );
 }

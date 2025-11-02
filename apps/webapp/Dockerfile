@@ -1,7 +1,7 @@
 # ==========================================
 # USDX/Wexel Frontend WebApp - Dockerfile
+# Standalone Node.js Mode (with SSR fixes)
 # ==========================================
-# Simplified single-stage build to fix dependency resolution
 
 FROM node:20-alpine AS builder
 
@@ -32,33 +32,34 @@ ENV NEXT_PUBLIC_SOLANA_NETWORK=$NEXT_PUBLIC_SOLANA_NETWORK
 ENV NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=$NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build from workspace root (where node_modules with axios exists)
+# Build standalone server from workspace root
 RUN cd apps/webapp && pnpm build
 
-# Stage 2: Runtime
+# Stage 2: Runtime with Node.js
 FROM node:20-alpine AS runner
-
-RUN apk add --no-cache dumb-init
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy built application (public directory is optional)
+# Copy standalone server
 COPY --from=builder --chown=nextjs:nodejs /app/apps/webapp/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/webapp/.next/static ./apps/webapp/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/webapp/public ./apps/webapp/public
 
 USER nextjs
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-ENTRYPOINT ["dumb-init", "--"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
 CMD ["node", "apps/webapp/server.js"]

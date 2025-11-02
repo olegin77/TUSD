@@ -1,19 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable standalone output for Docker
+  // Standalone output for Node.js server (with SSR fixes)
   output: "standalone",
 
   // Optimize for production
   reactStrictMode: true,
 
-  images: {
-    domains: ["localhost"],
-  },
+  // API URL configuration
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   },
 
-  // Exclude packages from server-side bundles (Next.js 15+)
+  // Exclude wallet adapters from server-side bundle
   serverExternalPackages: [
     "@solana/wallet-adapter-wallets",
     "@solana/wallet-adapter-react",
@@ -49,8 +47,9 @@ const nextConfig = {
     ];
 
     if (isServer) {
-      // Exclude all wallet-related packages from server bundle
-      const walletPackages = [
+      // Aggressively externalize wallet adapters to prevent server bundling
+      const externalPackages = [
+        "pino-pretty",
         "@solana/wallet-adapter-wallets",
         "@solana/wallet-adapter-react",
         "@solana/wallet-adapter-react-ui",
@@ -60,22 +59,36 @@ const nextConfig = {
       ];
 
       config.externals = config.externals || [];
-      config.externals.push("pino-pretty");
 
-      // Add each wallet package as external
-      walletPackages.forEach(pkg => {
-        if (typeof config.externals === 'function') {
-          const originalExternals = config.externals;
-          config.externals = async (context, request, callback) => {
-            if (request === pkg || request.startsWith(pkg + '/')) {
-              return callback(null, 'commonjs ' + request);
+      if (Array.isArray(config.externals)) {
+        externalPackages.forEach(pkg => {
+          if (!config.externals.includes(pkg)) {
+            config.externals.push(pkg);
+          }
+        });
+      }
+
+      // Add regex-based externalization for wallet adapters
+      if (typeof config.externals === 'function') {
+        const originalExternals = config.externals;
+        config.externals = async (context, request, callback) => {
+          if (request.match(/@solana\/wallet-adapter/) || request.match(/@solana\/web3\.js/)) {
+            return callback(null, `commonjs ${request}`);
+          }
+          return originalExternals(context, request, callback);
+        };
+      } else {
+        const originalExternals = config.externals;
+        config.externals = [
+          (context, request, callback) => {
+            if (request.match(/@solana\/wallet-adapter/) || request.match(/@solana\/web3\.js/)) {
+              return callback(null, `commonjs ${request}`);
             }
-            return originalExternals(context, request, callback);
-          };
-        } else if (Array.isArray(config.externals)) {
-          config.externals.push(pkg);
-        }
-      });
+            callback();
+          },
+          ...(Array.isArray(originalExternals) ? originalExternals : [originalExternals]).filter(Boolean),
+        ];
+      }
     }
 
     return config;
