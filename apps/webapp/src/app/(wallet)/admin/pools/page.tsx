@@ -16,6 +16,9 @@ interface Pool {
   total_liquidity?: number;
 }
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function AdminPoolsPage() {
   const [pools, setPools] = useState<Pool[]>([]);
   const [loading, setLoading] = useState(true);

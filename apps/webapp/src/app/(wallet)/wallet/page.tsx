@@ -1,10 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import { PageTransition } from "@/components/ui/page-transition";
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 // Dynamically import WalletConnect with no SSR to prevent wallet adapter from being bundled in server chunks
-const WalletConnect = dynamic(
+const WalletConnect = dynamicImport(
   () => import("@/components/wallet/WalletConnect").then((mod) => mod.WalletConnect),
   {
     ssr: false,

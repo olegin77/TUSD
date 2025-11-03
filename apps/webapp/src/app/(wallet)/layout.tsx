@@ -1,6 +1,8 @@
+"use client";
+
 import { WalletProviderWrapper } from "@/components/wallet-provider-wrapper";
 
-// Force dynamic rendering for wallet pages to prevent SSR/SSG
+// Force dynamic rendering for this route group - disable static generation
 export const dynamic = "force-dynamic";
 
 export default function WalletLayout({ children }: { children: React.ReactNode }) {

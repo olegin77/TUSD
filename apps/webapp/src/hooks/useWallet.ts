@@ -1,6 +1,6 @@
 "use client";
 
-import { useMultiWallet } from "@/providers/MultiWalletProvider";
+import { useMultiWallet } from "@/contexts/multi-wallet-context";
 import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
 import { useTron } from "@/providers/TronProvider";
 

@@ -16,6 +16,9 @@ interface GlobalSettings {
   min_deposit_global: number;
 }
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<GlobalSettings | null>(null);
   const [loading, setLoading] = useState(true);

@@ -8,6 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Wallet, TrendingUp, DollarSign, Clock, Shield, BarChart3, Plus, Eye } from "lucide-react";
+
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
   // Mock data - в реальном приложении будет загружаться из API

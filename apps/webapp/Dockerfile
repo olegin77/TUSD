@@ -1,6 +1,6 @@
 # ==========================================
 # USDX/Wexel Frontend WebApp - Dockerfile
-# Standalone Node.js Mode (with SSR fixes)
+# Standalone Node.js Mode
 # ==========================================
 
 FROM node:20-alpine AS builder
@@ -56,7 +56,7 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+ENV HOSTNAME=
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \

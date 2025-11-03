@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useTron } from "@/providers/TronProvider";
-import { useMultiWallet } from "@/providers/MultiWalletProvider";
+import { useMultiWallet } from "@/contexts/multi-wallet-context";
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge"; // Currently unused
 import { Wallet, WalletIcon, ChevronDown } from "lucide-react";
@@ -17,20 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const WalletStatus: React.FC = () => {
-  const { activeWallet, disconnect } = useMultiWallet();
-  const solanaWallet = useWallet();
-  const tronWallet = useTron();
-
-  const isConnected =
-    (activeWallet === "solana" && solanaWallet.connected) ||
-    (activeWallet === "tron" && tronWallet.isConnected);
-
-  const address =
-    activeWallet === "solana"
-      ? solanaWallet.publicKey?.toString() || null
-      : activeWallet === "tron"
-        ? tronWallet.address
-        : null;
+  const { activeWallet, isConnected, address, disconnect } = useMultiWallet();
 
   const walletName = activeWallet === "solana" ? "Solana" : activeWallet === "tron" ? "Tron" : null;
 

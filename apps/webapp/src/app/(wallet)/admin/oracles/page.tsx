@@ -30,6 +30,9 @@ interface OracleData {
   maxDeviation: number;
 }
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function AdminOraclesPage() {
   const [oracles, setOracles] = useState<OracleData[]>([]);
   const [loading, setLoading] = useState(true);

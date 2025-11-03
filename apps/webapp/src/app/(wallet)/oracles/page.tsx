@@ -26,6 +26,9 @@ const TOKEN_MAP: Record<string, { name: string; symbol: string }> = {
   },
 };
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function OraclesPage() {
   const [customTokenMint, setCustomTokenMint] = useState("");
   const [customTokens, setCustomTokens] = useState<string[]>([]);

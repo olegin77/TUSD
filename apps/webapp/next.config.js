@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Standalone output for Node.js server (with SSR fixes)
+  // Standalone output for Node.js server
   output: "standalone",
 
   // Optimize for production
@@ -41,6 +41,23 @@ const nextConfig = {
 
   // Webpack configuration
   webpack: (config, { isServer }) => {
+    // Load server polyfills first
+    if (isServer) {
+      // Inject polyfills at the beginning of the server bundle
+      const originalEntry = config.entry;
+      config.entry = async () => {
+        const entries = await originalEntry();
+
+        for (const key of Object.keys(entries)) {
+          if (Array.isArray(entries[key]) && !entries[key].includes('./server-polyfills.js')) {
+            entries[key].unshift('./server-polyfills.js');
+          }
+        }
+
+        return entries;
+      };
+    }
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,

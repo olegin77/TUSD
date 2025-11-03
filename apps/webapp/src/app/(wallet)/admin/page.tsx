@@ -24,6 +24,9 @@ interface DashboardStats {
   systemHealth: "healthy" | "warning" | "error";
 }
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);

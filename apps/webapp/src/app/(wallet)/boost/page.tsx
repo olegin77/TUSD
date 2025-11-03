@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Zap, TrendingUp, Target, DollarSign, Info, AlertCircle } from "lucide-react";
 
 // Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
 
 // Dynamic imports to avoid SSR issues
 const BoostApplication = dynamicImport(

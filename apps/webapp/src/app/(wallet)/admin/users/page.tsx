@@ -16,6 +16,9 @@ interface UserData {
   kyc_status?: "pending" | "approved" | "rejected";
 }
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);

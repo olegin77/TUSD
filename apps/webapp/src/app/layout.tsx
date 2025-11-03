@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./wallet-styles.css";
-import { Navigation } from "@/components/navigation";
+import { ClientNavigation } from "@/components/client-navigation";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/a11y/a11y-provider";
 import { AnnouncerProvider } from "@/components/a11y/announcer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Force dynamic rendering since Navigation includes wallet status
+// Force dynamic rendering for entire application - disable static generation
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SkipToContent />
         <AnnouncerProvider>
           <Providers>
-            <Navigation />
+            <ClientNavigation />
             <main id="main-content">{children}</main>
           </Providers>
         </AnnouncerProvider>

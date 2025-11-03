@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+// Force dynamic rendering for this page - disable static generation
+export const dynamic = "force-dynamic";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
