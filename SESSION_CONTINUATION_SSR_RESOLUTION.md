@@ -19,6 +19,7 @@ Successfully resolved critical "window is not defined" SSR errors in Next.js 15.
 ### 1. Runtime SSR Errors - "window is not defined" ✅ RESOLVED
 
 **Problem:** Even with force-dynamic directives and dynamic imports, wallet adapter code was still executing on the server at runtime, causing:
+
 ```
 ⨯ ReferenceError: window is not defined
     at 19378 (.next/server/chunks/141.js:1:624195)
@@ -43,6 +44,7 @@ Successfully resolved critical "window is not defined" SSR errors in Next.js 15.
    - Modified: `apps/webapp/next.config.js` (webpack configuration)
 
 **Result:**
+
 - ✅ Docker build completes successfully - all pages marked as dynamic (ƒ)
 - ✅ Container starts without crashes: "✓ Ready in 240ms"
 - ✅ NO "window is not defined" errors in logs
@@ -51,6 +53,7 @@ Successfully resolved critical "window is not defined" SSR errors in Next.js 15.
 ### 2. Webpack Configuration TypeError ✅ RESOLVED
 
 **Error:**
+
 ```
 TypeError: entries[key].includes is not a function
     at config.entry (next.config.js:52:29)
@@ -59,28 +62,31 @@ TypeError: entries[key].includes is not a function
 **Root Cause:** Calling `.includes()` on entries[key] before verifying it was an array. Webpack entry values can be strings, arrays, or functions.
 
 **Fix:**
+
 ```javascript
 // BEFORE (buggy):
-if (!entries[key].includes('./server-polyfills.js')) {
+if (!entries[key].includes("./server-polyfills.js")) {
   if (Array.isArray(entries[key])) {
-    entries[key].unshift('./server-polyfills.js');
+    entries[key].unshift("./server-polyfills.js");
   }
 }
 
 // AFTER (fixed):
-if (Array.isArray(entries[key]) && !entries[key].includes('./server-polyfills.js')) {
-  entries[key].unshift('./server-polyfills.js');
+if (Array.isArray(entries[key]) && !entries[key].includes("./server-polyfills.js")) {
+  entries[key].unshift("./server-polyfills.js");
 }
 ```
 
 ### 3. Prisma Client Generation Error ✅ RESOLVED
 
 **Error:**
+
 ```
 Generating client into /app/apps/indexer/node_modules/@prisma/client is not allowed.
 ```
 
 **Fix:** Added explicit output path to Prisma schema:
+
 ```prisma
 generator client {
   provider = "prisma-client-js"
@@ -100,22 +106,26 @@ generator client {
 **Status:** Server stable, SSR functional, but returns HTTP 400 for all requests
 
 **Symptoms:**
+
 - Direct access to port 3000: HTTP 400
 - Through Nginx reverse proxy on port 80: HTTP 400
 - Error page shows `"hostname":"0.0.0.0"` in JSON
 
 **Analysis:**
+
 - Next.js 15.5.6 standalone mode has strict hostname validation
 - Setting `ENV HOSTNAME=` (empty) doesn't resolve the issue
 - Nginx proxy headers (`Host`, `X-Forwarded-*`) are passed correctly
 - Server logs show clean startup with no errors
 
 **Impact:**
+
 - SSR system is functional (successfully rendering error pages via SSR)
 - Server stability proven (no crashes, clean logs)
 - The polyfill solution works as intended
 
 **Workarounds to Explore:**
+
 1. Downgrade to Next.js 14.x (last known stable standalone version)
 2. Implement custom server.js with manual hostname handling
 3. Research Next.js 15.5.6 standalone mode configuration
@@ -130,6 +140,7 @@ generator client {
 ### Server: 159.203.114.210
 
 **Services Running:**
+
 - ✅ webapp (Next.js 15.5.6 standalone) - Port 3000
 - ✅ Nginx reverse proxy - Port 80
 - ⚠️ indexer (pending final deployment with Prisma fix)
@@ -137,6 +148,7 @@ generator client {
 - ⚠️ Redis (pending deployment)
 
 **Firewall Configuration:**
+
 ```
 22/tcp  - SSH (LIMIT)
 80/tcp  - HTTP (ALLOW)
@@ -145,6 +157,7 @@ generator client {
 ```
 
 **Nginx Configuration:**
+
 - Location: `/etc/nginx/sites-available/webapp`
 - Proxy pass to localhost:3000
 - Headers: Host, X-Real-IP, X-Forwarded-For, X-Forwarded-Proto
@@ -155,6 +168,7 @@ generator client {
 ## Files Created/Modified This Session
 
 ### Created:
+
 1. `apps/webapp/server-polyfills.js` (63 lines)
    - Browser globals polyfill for SSR
 
@@ -162,6 +176,7 @@ generator client {
    - Reverse proxy configuration
 
 ### Modified:
+
 1. `apps/webapp/next.config.js`
    - Lines 43-59: Webpack entry modification for polyfill injection
    - Fixed Array.isArray() type checking bug
@@ -177,6 +192,7 @@ generator client {
 ## Build & Deployment Verification
 
 ### Webapp Build Status: ✅ SUCCESS
+
 ```
 Route (app)                                 Size  First Load JS
 ┌ ƒ /                                    5.26 kB         151 kB
@@ -200,6 +216,7 @@ Route (app)                                 Size  First Load JS
 ```
 
 ### Webapp Runtime: ✅ STABLE
+
 ```
 ▲ Next.js 15.5.6
    - Local:        http://localhost:3000
@@ -210,6 +227,7 @@ Route (app)                                 Size  First Load JS
 ```
 
 ### Indexer Build Status: ✅ SUCCESS
+
 ```
 ✔ Generated Prisma Client (v6.18.0) to ./node_modules/.prisma/client in 224ms
 ```
@@ -219,6 +237,7 @@ Route (app)                                 Size  First Load JS
 ## Project Status According to tasks.md
 
 ### Completed Tasks:
+
 - ✅ T-0001 through T-0125: Infrastructure, contracts, backend, frontend, admin panel, monitoring, deployment
 - ✅ T-0114.1: UI/UX testing completed (84/100 score)
 - ✅ T-0116.1: Security audit completed (67/100 score, remediation plan documented)
@@ -231,6 +250,7 @@ Route (app)                                 Size  First Load JS
 - ✅ T-0125.1: Operational runbooks created
 
 ### Remaining Tasks:
+
 - ⚠️ T-0126: Final comprehensive staging testing
   - Blocked by: HTTP 400 issue resolution OR acceptance as known limitation
   - Can proceed with: API testing, backend testing, contract testing
@@ -246,24 +266,30 @@ Route (app)                                 Size  First Load JS
 ## Technical Decisions Made
 
 ### 1. Server-Side Polyfills vs Complete SSR Disabling
+
 **Decision:** Implement minimal polyfills for browser globals
 **Rationale:**
+
 - Maintains SSR benefits (SEO, initial page load)
 - Allows wallet adapter code to execute safely on server
 - More maintainable than disabling SSR completely
 - Preserves standalone output mode requirement
 
 ### 2. Webpack Entry Injection
+
 **Decision:** Inject polyfills via webpack entry modification
 **Rationale:**
+
 - Ensures polyfills load before ANY other server code
 - More reliable than import statements
 - Works with standalone output mode
 - Maintains build-time bundle optimization
 
 ### 3. Nginx Reverse Proxy
+
 **Decision:** Deploy Nginx as reverse proxy layer
 **Rationale:**
+
 - Production best practice for Node.js apps
 - Enables SSL termination (future)
 - Provides rate limiting and security headers
@@ -288,6 +314,7 @@ Client-side hydration (wallet adapters load)
 ```
 
 **Database/Backend Stack (Pending Full Deployment):**
+
 ```
 PostgreSQL:5432
 Redis:6379
@@ -312,6 +339,7 @@ Indexer API:3001
 ## Recommendations for Next Steps
 
 ### Immediate (To Complete Staging):
+
 1. **Resolve HTTP 400 Issue:**
    - Option A: Downgrade to Next.js 14.2.x (last stable standalone)
    - Option B: Implement custom server.js
@@ -332,6 +360,7 @@ Indexer API:3001
    - Admin panel functionality tests
 
 ### Medium-Term (Before Mainnet):
+
 1. Complete T-0126: Final staging tests
 2. Resolve all security vulnerabilities (currently 67/100 score, target: 85/100)
 3. External security audit
@@ -345,6 +374,7 @@ Indexer API:3001
 ## Current Project Health
 
 ### ✅ Strengths:
+
 - Complete monorepo structure with Solana contracts, Tron contracts, backend API, webapp, admin panel
 - Comprehensive monitoring and alerting (Prometheus/Grafana)
 - Full backup/restore procedures documented
@@ -354,6 +384,7 @@ Indexer API:3001
 - **SSR errors resolved** - core blocking issue fixed
 
 ### ⚠️ Areas for Improvement:
+
 - HTTP 400 issue requires resolution for full webapp functionality
 - Database deployment pending
 - Indexer deployment pending
@@ -376,6 +407,7 @@ Indexer API:3001
 **Server:** DigitalOcean Droplet (159.203.114.210)
 
 **Problem-Solving Approach:**
+
 1. Analyzed error logs and identified runtime SSR execution
 2. Researched Next.js 15.5.6 standalone mode behavior
 3. Implemented server-side polyfills solution
@@ -389,10 +421,12 @@ Indexer API:3001
 ## Technical Documentation References
 
 **Created Documentation:**
+
 - Server polyfills: `apps/webapp/server-polyfills.js` (inline comments)
 - This session report: `SESSION_CONTINUATION_SSR_RESOLUTION.md`
 
 **Existing Documentation:**
+
 - Deployment guide: `DEPLOY_DIGITALOCEAN.md`
 - Security audit: `tests/reports/security/internal_vulnerability_test_report.md`
 - UI/UX testing: `tests/reports/ui_ux_test_report.md`
@@ -425,6 +459,7 @@ Indexer API:3001
 ##Deployment Status
 
 ### ✅ Working:
+
 - Webapp Docker image builds successfully
 - Server-side rendering without "window is not defined" errors
 - Nginx reverse proxy configured
@@ -432,10 +467,12 @@ Indexer API:3001
 - Container orchestration (Docker)
 
 ### ⚠️ Partially Working:
+
 - Webapp accessible at port 3000 (returns HTTP 400)
 - Nginx proxying (returns HTTP 400 from upstream)
 
 ### ❌ Not Yet Deployed:
+
 - PostgreSQL database
 - Redis cache
 - Indexer/API service

@@ -18,14 +18,13 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Dynamically import both WalletProvider and SolanaWalletIntegration only on client side
-      Promise.all([
-        import("./WalletProvider"),
-        import("./SolanaWalletIntegration"),
-      ]).then(([walletProviderMod, solanaIntegrationMod]) => {
-        setWalletProvider(() => walletProviderMod.WalletContextProvider);
-        setSolanaIntegration(() => solanaIntegrationMod.SolanaWalletIntegration);
-        setIsReady(true);
-      });
+      Promise.all([import("./WalletProvider"), import("./SolanaWalletIntegration")]).then(
+        ([walletProviderMod, solanaIntegrationMod]) => {
+          setWalletProvider(() => walletProviderMod.WalletContextProvider);
+          setSolanaIntegration(() => solanaIntegrationMod.SolanaWalletIntegration);
+          setIsReady(true);
+        }
+      );
     }
   }, []);
 

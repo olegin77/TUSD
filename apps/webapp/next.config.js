@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Standalone output for Node.js server
-  output: "standalone",
-
   // Optimize for production
   reactStrictMode: true,
 
@@ -37,6 +34,7 @@ const nextConfig = {
       "@noble/hashes",
       "tronweb",
     ],
+    trustHostHeader: true,
   },
 
   // Webpack configuration
@@ -49,8 +47,8 @@ const nextConfig = {
         const entries = await originalEntry();
 
         for (const key of Object.keys(entries)) {
-          if (Array.isArray(entries[key]) && !entries[key].includes('./server-polyfills.js')) {
-            entries[key].unshift('./server-polyfills.js');
+          if (Array.isArray(entries[key]) && !entries[key].includes("./server-polyfills.js")) {
+            entries[key].unshift("./server-polyfills.js");
           }
         }
 

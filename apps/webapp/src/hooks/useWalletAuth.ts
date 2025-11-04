@@ -1,4 +1,6 @@
-import { useState, useCallback } from "react";
+"use client";
+
+import { useState, useCallback, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { authApi, WalletType, WalletLoginRequest } from "@/lib/api/auth";
 import bs58 from "bs58";
@@ -8,6 +10,7 @@ export const useWalletAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
+  const [isAuth, setIsAuth] = useState(false);
 
   /**
    * Sign in with Solana wallet
@@ -84,11 +87,18 @@ export const useWalletAuth = () => {
     }
   }, [logout]);
 
+  // Check auth status on mount (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsAuth(authApi.isAuthenticated());
+    }
+  }, []);
+
   return {
     user,
     isLoading,
     error,
-    isAuthenticated: authApi.isAuthenticated(),
+    isAuthenticated: isAuth,
     signInWithSolana,
     logout,
     loadProfile,

@@ -3,7 +3,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { useEffect } from "react";
-import useAxe from "@axe-core/react";
 
 interface A11yProviderProps {
   children: React.ReactNode;
@@ -11,8 +10,11 @@ interface A11yProviderProps {
 
 export function A11yProvider({ children }: A11yProviderProps) {
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      useAxe(React, ReactDOM, 1000);
+    if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+      // Dynamic import to avoid SSR issues
+      import("@axe-core/react").then(({ default: useAxe }) => {
+        useAxe(React, ReactDOM, 1000);
+      });
     }
   }, []);
 

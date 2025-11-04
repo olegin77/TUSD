@@ -40,8 +40,8 @@ export const authApi = {
   walletLogin: async (data: WalletLoginRequest): Promise<WalletLoginResponse> => {
     const response = await api.post("/api/v1/auth/wallet/login", data);
 
-    // Store token in localStorage
-    if (response.data.success && response.data.token) {
+    // Store token in localStorage (client-side only)
+    if (response.data.success && response.data.token && typeof window !== "undefined") {
       localStorage.setItem("access_token", response.data.token);
     }
 
@@ -74,13 +74,16 @@ export const authApi = {
    * Logout
    */
   logout: () => {
-    localStorage.removeItem("access_token");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("access_token");
+    }
   },
 
   /**
    * Check if user is authenticated
    */
   isAuthenticated: (): boolean => {
+    if (typeof window === "undefined") return false;
     return !!localStorage.getItem("access_token");
   },
 };
