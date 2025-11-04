@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-import ReactDOM from "react-dom";
 import { useEffect } from "react";
 
 interface A11yProviderProps {
@@ -11,9 +9,13 @@ interface A11yProviderProps {
 export function A11yProvider({ children }: A11yProviderProps) {
   useEffect(() => {
     if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
-      // Dynamic import to avoid SSR issues
-      import("@axe-core/react").then(({ default: useAxe }) => {
-        useAxe(React, ReactDOM, 1000);
+      // Dynamic import to avoid SSR issues - import React/ReactDOM here too
+      Promise.all([
+        import("react"),
+        import("react-dom"),
+        import("@axe-core/react")
+      ]).then(([React, ReactDOM, axeModule]) => {
+        axeModule.default(React.default, ReactDOM.default, 1000);
       });
     }
   }, []);
