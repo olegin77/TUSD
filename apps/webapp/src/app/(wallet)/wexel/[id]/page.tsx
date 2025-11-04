@@ -73,6 +73,7 @@ export default function WexelDetailPage({ params }: { params: Promise<{ id: stri
   };
 
   const copyToClipboard = (text: string) => {
+    if (typeof window === "undefined" || !navigator.clipboard) return;
     navigator.clipboard.writeText(text);
   };
 

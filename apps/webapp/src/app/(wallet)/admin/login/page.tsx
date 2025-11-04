@@ -31,7 +31,9 @@ export default function AdminLoginPage() {
         throw new Error(data.message || "Ошибка авторизации");
       }
       const data = await response.json();
-      localStorage.setItem("admin_token", data.access_token);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("admin_token", data.access_token);
+      }
       router.push("/admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Произошла ошибка");

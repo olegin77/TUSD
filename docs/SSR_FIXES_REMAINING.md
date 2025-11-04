@@ -35,11 +35,13 @@ All admin pages have the same pattern - `localStorage.getItem("admin_token")` in
 #### 1. `apps/webapp/src/app/(wallet)/admin/settings/page.tsx` (Line 34)
 
 **Current Code:**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -49,11 +51,13 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 2. `apps/webapp/src/app/(wallet)/admin/login/page.tsx` (Line 34)
 
 **Current Code:**
+
 ```typescript
 localStorage.setItem("admin_token", data.access_token);
 ```
 
 **Fix:**
+
 ```typescript
 if (typeof window !== "undefined") {
   localStorage.setItem("admin_token", data.access_token);
@@ -62,14 +66,16 @@ if (typeof window !== "undefined") {
 
 ---
 
-####  3. `apps/webapp/src/app/(wallet)/admin/layout.tsx` (Line 42)
+#### 3. `apps/webapp/src/app/(wallet)/admin/layout.tsx` (Line 42)
 
 **Current Code:**
+
 ```typescript
 localStorage.removeItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 if (typeof window !== "undefined") {
   localStorage.removeItem("admin_token");
@@ -81,11 +87,13 @@ if (typeof window !== "undefined") {
 #### 4. `apps/webapp/src/app/(wallet)/admin/page.tsx` (Line 40)
 
 **Current Code:**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -95,11 +103,13 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 5. `apps/webapp/src/app/(wallet)/admin/pools/page.tsx` (Line 34)
 
 **Current Code:**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -109,11 +119,13 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 6. `apps/webapp/src/app/(wallet)/admin/users/page.tsx` (Line 50)
 
 **Current Code:**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -123,11 +135,13 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 7. `apps/webapp/src/app/(wallet)/admin/wexels/page.tsx` (Line 60)
 
 **Current Code:**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix:**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -137,16 +151,19 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 8. `apps/webapp/src/app/(wallet)/admin/oracles/page.tsx` (Lines 50, 123)
 
 **Current Code (Line 50):**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Current Code (Line 123):**
+
 ```typescript
 const token = localStorage.getItem("admin_token");
 ```
 
 **Fix (both locations):**
+
 ```typescript
 const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 ```
@@ -158,6 +175,7 @@ const token = typeof window !== "undefined" ? localStorage.getItem("admin_token"
 #### 9. `apps/webapp/src/hooks/useNotifications.ts` (Lines 2, 20-24)
 
 **Current Code:**
+
 ```typescript
 import { io, Socket } from "socket.io-client";
 // ...
@@ -166,6 +184,7 @@ const newSocket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001")
 
 **Fix:**
 Add "use client" at top + add SSR guard in useEffect:
+
 ```typescript
 "use client";
 
@@ -195,6 +214,7 @@ useEffect(() => {
 #### 11. `apps/webapp/src/app/(wallet)/wexel/[id]/page.tsx` (Line 76)
 
 **Current Code:**
+
 ```typescript
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text);
@@ -203,6 +223,7 @@ const copyToClipboard = (text: string) => {
 ```
 
 **Fix:**
+
 ```typescript
 const copyToClipboard = (text: string) => {
   if (typeof window === "undefined" || !navigator.clipboard) return;
@@ -251,15 +272,17 @@ done
 
 ---
 
-##  Impact
+## Impact
 
 **Current State:**
+
 - Docker builds successfully
 - Server starts without crashes
 - Backend API 100% operational (PostgreSQL, Redis, Indexer healthy)
 - Webapp returns HTTP 400 due to SSR errors
 
 **After Fixes:**
+
 - All pages should render successfully
 - No "window is not defined" errors
 - Full SSR compatibility

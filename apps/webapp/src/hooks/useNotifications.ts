@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 
@@ -17,6 +19,8 @@ export function useNotifications(walletAddress?: string) {
 
   // Initialize socket connection
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const socketUrl = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:3001";
     const newSocket = io(`${socketUrl}/notifications`, {
       transports: ["websocket"],

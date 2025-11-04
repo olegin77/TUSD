@@ -1,19 +1,19 @@
-const { createServer } = require('http');
-const { parse } = require('url');
-const next = require('next');
+const { createServer } = require("http");
+const { parse } = require("url");
+const next = require("next");
 
-const dev = process.env.NODE_ENV !== 'production';
-const hostname = process.env.HOSTNAME || '0.0.0.0';
-const port = parseInt(process.env.PORT || '3000', 10);
+const dev = process.env.NODE_ENV !== "production";
+const hostname = process.env.HOSTNAME || "0.0.0.0";
+const port = parseInt(process.env.PORT || "3000", 10);
 
 // Load server polyfills first
-require('./server-polyfills');
+require("./server-polyfills");
 
 const app = next({ dev, hostname, port, dir: __dirname });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  console.log('Next.js app prepared successfully');
+  console.log("Next.js app prepared successfully");
   createServer(async (req, res) => {
     try {
       console.log(`Incoming request: ${req.method} ${req.url} from ${req.headers.host}`);
@@ -21,12 +21,12 @@ app.prepare().then(() => {
       await handle(req, res, parsedUrl);
       console.log(`Response sent: ${res.statusCode}`);
     } catch (err) {
-      console.error('Error occurred handling', req.url, err);
+      console.error("Error occurred handling", req.url, err);
       res.statusCode = 500;
-      res.end('internal server error');
+      res.end("internal server error");
     }
   })
-    .once('error', (err) => {
+    .once("error", (err) => {
       console.error(err);
       process.exit(1);
     })

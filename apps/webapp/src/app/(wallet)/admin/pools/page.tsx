@@ -31,7 +31,7 @@ export default function AdminPoolsPage() {
 
   const fetchPools = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
       const response = await fetch("/api/v1/pools", {
         headers: {
           Authorization: `Bearer ${token}`,

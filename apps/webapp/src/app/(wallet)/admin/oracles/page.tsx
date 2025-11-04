@@ -47,7 +47,7 @@ export default function AdminOraclesPage() {
 
   const fetchOracleData = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
       const response = await fetch("/api/v1/admin/oracles", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ export default function AdminOraclesPage() {
   const refreshOracle = async (token: string) => {
     setUpdating(token);
     try {
-      const adminToken = localStorage.getItem("admin_token");
+      const adminToken = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
       const response = await fetch(`/api/v1/admin/oracles/${token}/refresh`, {
         method: "POST",
         headers: {

@@ -57,7 +57,7 @@ export default function AdminWexelsPage() {
 
   const fetchWexels = async () => {
     try {
-      const token = localStorage.getItem("admin_token");
+      const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
       const response = await fetch("/api/v1/admin/wexels", {
         headers: {
           Authorization: `Bearer ${token}`,
