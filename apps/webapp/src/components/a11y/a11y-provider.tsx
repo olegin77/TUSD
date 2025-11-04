@@ -10,13 +10,11 @@ export function A11yProvider({ children }: A11yProviderProps) {
   useEffect(() => {
     if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
       // Dynamic import to avoid SSR issues - import React/ReactDOM here too
-      Promise.all([
-        import("react"),
-        import("react-dom"),
-        import("@axe-core/react")
-      ]).then(([React, ReactDOM, axeModule]) => {
-        axeModule.default(React.default, ReactDOM.default, 1000);
-      });
+      Promise.all([import("react"), import("react-dom"), import("@axe-core/react")]).then(
+        ([React, ReactDOM, axeModule]) => {
+          axeModule.default(React.default, ReactDOM.default, 1000);
+        }
+      );
     }
   }, []);
 
