@@ -72,9 +72,9 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+# Health check - disabled for development mode
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+#   CMD node -e "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start with custom server
-CMD ["node", "apps/webapp/server.js"]
+# Use Next.js built-in dev server for development mode
+CMD ["sh", "-c", "cd apps/webapp && pnpm dev"]
