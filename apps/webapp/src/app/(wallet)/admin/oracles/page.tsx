@@ -31,7 +31,6 @@ interface OracleData {
 }
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function AdminOraclesPage() {
   const [oracles, setOracles] = useState<OracleData[]>([]);

@@ -17,7 +17,6 @@ interface Pool {
 }
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function AdminPoolsPage() {
   const [pools, setPools] = useState<Pool[]>([]);

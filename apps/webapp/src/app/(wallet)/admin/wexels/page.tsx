@@ -21,7 +21,6 @@ interface WexelData {
 }
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function AdminWexelsPage() {
   const [wexels, setWexels] = useState<WexelData[]>([]);

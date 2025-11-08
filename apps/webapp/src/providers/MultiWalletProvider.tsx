@@ -2,6 +2,7 @@
 
 import React, { useState, ReactNode, useEffect } from "react";
 import { TronProvider } from "./TronProvider";
+import { MultiWalletContext } from "@/contexts/multi-wallet-context";
 
 // Check if we're on the client side
 const isClient = typeof window !== "undefined";
@@ -28,13 +29,19 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
     }
   }, []);
 
+  // Provide stub context during SSR/loading to prevent "useMultiWallet must be used within a MultiWalletProvider" errors
   if (!isClient || !isReady || !WalletProvider || !SolanaIntegration) {
+    const stubValue = {
+      activeWallet: null,
+      setActiveWallet: () => {},
+      isConnected: false,
+      address: null,
+      disconnect: () => {},
+    };
     return (
-      <TronProvider>
-        <div className="min-h-screen flex items-center justify-center">
-          <p>Initializing wallet providers...</p>
-        </div>
-      </TronProvider>
+      <MultiWalletContext.Provider value={stubValue}>
+        <TronProvider>{children}</TronProvider>
+      </MultiWalletContext.Provider>
     );
   }
 

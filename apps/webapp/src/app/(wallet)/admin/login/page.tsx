@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import { Shield, AlertCircle } from "lucide-react";
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");

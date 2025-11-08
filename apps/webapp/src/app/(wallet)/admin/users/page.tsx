@@ -17,7 +17,6 @@ interface UserData {
 }
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserData[]>([]);

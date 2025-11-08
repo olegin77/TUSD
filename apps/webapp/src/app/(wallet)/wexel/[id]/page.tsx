@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 
 // Force dynamic rendering for this page - disable static generation
-export const dynamic = "force-dynamic";
 
 export default function WexelDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const [wexelId, setWexelId] = useState<string>("");

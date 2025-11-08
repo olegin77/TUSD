@@ -41,9 +41,9 @@ export const WalletContextProvider: FC<WalletContextProviderProps> = ({ children
     });
   }, []);
 
-  // Show loading state until everything is loaded
+  // Render children during SSR/loading to prevent hydration mismatch
   if (!WalletComponents || !endpoint) {
-    return <div className="flex items-center justify-center p-4">Loading wallet providers...</div>;
+    return <>{children}</>;
   }
 
   const { ConnectionProvider, WalletProvider, WalletModalProvider } = WalletComponents;

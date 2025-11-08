@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { A11yProvider } from "@/components/a11y/a11y-provider";
 import { MultiWalletProvider } from "@/providers/MultiWalletProvider";
 
 // Dynamically import React Query Devtools with no SSR
@@ -28,10 +27,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <MultiWalletProvider>
-        <A11yProvider>
-          {children}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </A11yProvider>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
       </MultiWalletProvider>
     </QueryClientProvider>
   );

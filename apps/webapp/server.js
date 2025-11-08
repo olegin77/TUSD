@@ -16,19 +16,32 @@ app.prepare().then(() => {
   console.log("Next.js app prepared successfully");
   createServer(async (req, res) => {
     try {
+      console.log(`[REQUEST] ${req.method} ${req.url}`);
       const parsedUrl = parse(req.url, true);
       await handle(req, res, parsedUrl);
+      console.log(`[RESPONSE] ${req.url} - Status: ${res.statusCode}`);
     } catch (err) {
-      console.error("Error occurred handling", req.url, err);
+      console.error("=".repeat(80));
+      console.error(`[ERROR] Handling ${req.url}`);
+      console.error("Error name:", err.name);
+      console.error("Error message:", err.message);
+      console.error("Full error:", err);
+      console.error("Stack trace:");
+      console.error(err.stack);
+      console.error("=".repeat(80));
       res.statusCode = 500;
       res.end("internal server error");
     }
   })
     .once("error", (err) => {
-      console.error(err);
+      console.error("Server error:", err);
       process.exit(1);
     })
     .listen(port, hostname, () => {
       console.log(`> Ready on http://${hostname}:${port}`);
     });
+}).catch((err) => {
+  console.error("Failed to prepare Next.js app:");
+  console.error(err);
+  process.exit(1);
 });

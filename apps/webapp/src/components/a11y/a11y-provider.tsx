@@ -8,14 +8,16 @@ interface A11yProviderProps {
 
 export function A11yProvider({ children }: A11yProviderProps) {
   useEffect(() => {
-    if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
-      // Dynamic import to avoid SSR issues - import React/ReactDOM here too
-      Promise.all([import("react"), import("react-dom"), import("@axe-core/react")]).then(
-        ([React, ReactDOM, axeModule]) => {
-          axeModule.default(React.default, ReactDOM.default, 1000);
-        }
-      );
-    }
+    // Disabled axe-core for now to avoid SSR issues
+    // if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+    //   import("@axe-core/react").then((axeModule) => {
+    //     import("react").then((React) => {
+    //       import("react-dom").then((ReactDOM) => {
+    //         axeModule.default(React, ReactDOM, 1000);
+    //       });
+    //     });
+    //   });
+    // }
   }, []);
 
   return <>{children}</>;
