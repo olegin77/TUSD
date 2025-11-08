@@ -62,8 +62,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/indexer/package.json ./apps/
 # Copy webapp
 COPY --from=builder --chown=nextjs:nodejs /app/apps/webapp ./apps/webapp
 
-# Install production dependencies
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
+# Install all dependencies for development mode
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 USER nextjs
 
