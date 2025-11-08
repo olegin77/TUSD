@@ -3,6 +3,9 @@ const nextConfig = {
   // Optimize for production
   reactStrictMode: true,
 
+  // Skip trailing slash redirect to avoid URL parsing errors
+  skipTrailingSlashRedirect: true,
+
   // API URL configuration
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
@@ -21,7 +24,7 @@ const nextConfig = {
     "tronweb",
   ],
 
-  // EXPERIMENTAL: Additional server component externals for Next.js 15
+  // Server component externals for Next.js 14
   experimental: {
     serverComponentsExternalPackages: [
       "@solana/wallet-adapter-wallets",
@@ -34,7 +37,6 @@ const nextConfig = {
       "@noble/hashes",
       "tronweb",
     ],
-    trustHostHeader: true,
   },
 
   // Webpack configuration
