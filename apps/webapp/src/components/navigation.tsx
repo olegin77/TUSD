@@ -83,10 +83,12 @@ export function Navigation() {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <WalletStatus />
-            <Button size="sm">
-              <User className="h-4 w-4 mr-2" />
-              Войти
-            </Button>
+            <Link href="/wallet">
+              <Button size="sm">
+                <User className="h-4 w-4 mr-2" />
+                Войти
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -137,10 +139,12 @@ export function Navigation() {
                 <div className="w-full">
                   <WalletStatus />
                 </div>
-                <Button className="w-full">
-                  <User className="h-4 w-4 mr-2" />
-                  Войти
-                </Button>
+                <Link href="/wallet" className="w-full">
+                  <Button className="w-full">
+                    <User className="h-4 w-4 mr-2" />
+                    Войти
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
