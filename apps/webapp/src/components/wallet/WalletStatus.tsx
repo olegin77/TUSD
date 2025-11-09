@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useMultiWallet } from "@/contexts/multi-wallet-context";
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge"; // Currently unused
@@ -17,25 +17,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const WalletStatus: React.FC = () => {
-  const { setVisible } = useWalletModal();
-  const { connect } = useWallet();
+  const solanaWallet = useWallet();
   const { activeWallet, isConnected, address, disconnect, setActiveWallet } = useMultiWallet();
 
   const walletName = activeWallet === "solana" ? "Solana" : activeWallet === "tron" ? "Tron" : null;
 
-  const handleConnectClick = () => {
-    // Open Solana wallet modal
-    setActiveWallet("solana");
-    setVisible(true);
-  };
-
+  // Use Solana's built-in button if not connected
   if (!isConnected || !address) {
-    return (
-      <Button variant="outline" size="sm" onClick={handleConnectClick}>
-        <Wallet className="h-4 w-4 mr-2" />
-        Подключить кошелек
-      </Button>
-    );
+    return <WalletMultiButton />;
   }
 
   return (

@@ -21,9 +21,9 @@ app
         console.log(`[REQUEST] ${req.method} ${req.url}`);
 
         // Remove problematic X-Forwarded headers that might cause URL parsing issues
-        delete req.headers['x-forwarded-proto'];
-        delete req.headers['x-forwarded-host'];
-        delete req.headers['x-forwarded-for'];
+        delete req.headers["x-forwarded-proto"];
+        delete req.headers["x-forwarded-host"];
+        delete req.headers["x-forwarded-for"];
 
         // Ensure hostname is properly set
         if (!req.headers.host) {

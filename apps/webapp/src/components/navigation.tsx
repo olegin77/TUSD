@@ -5,19 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Home, TrendingUp, ShoppingCart, BarChart3, Wallet, User } from "lucide-react";
-import dynamic from "next/dynamic";
-
-// Dynamic import to avoid SSR issues
-const WalletStatus = dynamic(
-  () =>
-    import("@/components/wallet/WalletStatusWrapper").then((mod) => ({
-      default: mod.WalletStatusWrapper,
-    })),
-  {
-    ssr: false,
-    loading: () => <div className="w-24 h-8 bg-gray-200 rounded animate-pulse" />,
-  }
-);
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +70,7 @@ export function Navigation() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <WalletStatus />
+            <WalletMultiButton />
             <Link href="/wallet">
               <Button size="sm">
                 <User className="h-4 w-4 mr-2" />
@@ -137,7 +125,7 @@ export function Navigation() {
 
               <div className="pt-4 space-y-2">
                 <div className="w-full">
-                  <WalletStatus />
+                  <WalletMultiButton />
                 </div>
                 <Link href="/wallet" className="w-full">
                   <Button className="w-full">
