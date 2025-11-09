@@ -1,8 +1,2 @@
 /* Solana Wallet Adapter UI Styles */
-/* CSS import commented out to prevent SSR issues */
-/* @import "@solana/wallet-adapter-react-ui/styles.css"; */
-
-/* Placeholder styles - wallet adapter styles will be loaded client-side */
-.wallet-adapter-button {
-  /* Add minimal styling here if needed */
-}
+@import "@solana/wallet-adapter-react-ui/styles.css";
