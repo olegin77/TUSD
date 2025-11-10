@@ -1,180 +1,137 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useTron } from "@/providers/TronProvider";
 import { useMultiWallet } from "@/contexts/multi-wallet-context";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Wallet, WalletIcon, Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { Card, CardContent } from "@/components/ui/card";
+import { Wallet, ChevronRight, ExternalLink, AlertCircle } from "lucide-react";
+import Image from "next/image";
+import { toast } from "sonner";
 
-interface WalletOptionProps {
-  type: "solana" | "tron";
-  name: string;
-  description: string;
-  icon: React.ReactNode;
-  isConnected: boolean;
-  isLoading: boolean;
-  onConnect: () => void;
-  onDisconnect: () => void;
-  address?: string | null;
-}
-
-const WalletOption: React.FC<WalletOptionProps> = ({
-  type,
-  name,
-  description,
-  icon,
-  isConnected,
-  isLoading,
-  onConnect,
-  onDisconnect,
-  address,
-}) => {
-  return (
-    <Card className={`transition-all ${isConnected ? "ring-2 ring-green-500" : "hover:shadow-md"}`}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {icon}
-            <div>
-              <CardTitle className="text-lg">{name}</CardTitle>
-              <CardDescription>{description}</CardDescription>
-            </div>
-          </div>
-          {isConnected && <CheckCircle className="h-5 w-5 text-green-500" />}
-        </div>
-      </CardHeader>
-      <CardContent>
-        {isConnected ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-500">Адрес:</span>
-              <Badge variant="outline" className="font-mono text-xs">
-                {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "N/A"}
-              </Badge>
-            </div>
-            <Button
-              variant="outline"
-              onClick={onDisconnect}
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <WalletIcon className="h-4 w-4 mr-2" />
-              )}
-              Отключить
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={onConnect} className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            ) : (
-              <Wallet className="h-4 w-4 mr-2" />
-            )}
-            Подключить {name}
-          </Button>
-        )}
-      </CardContent>
-    </Card>
-  );
-};
-
-export const WalletConnect: React.FC = () => {
-  const { activeWallet, setActiveWallet, isConnected, disconnect } = useMultiWallet();
-  const solanaWallet = useWallet();
-  const tronWallet = useTron();
+export function WalletConnect() {
+  const { setActiveWallet } = useMultiWallet();
+  const { setVisible: setSolanaModalVisible } = useWalletModal();
+  const { connect: connectTron } = useTron();
   const [isConnecting, setIsConnecting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSolanaConnect = async () => {
+  const handleSolanaConnect = useCallback(async () => {
+    console.log("Opening Solana wallet modal...");
     setIsConnecting(true);
+    setError(null);
     try {
-      await solanaWallet.connect();
       setActiveWallet("solana");
+      setSolanaModalVisible(true);
     } catch (error) {
-      console.error("Failed to connect Solana wallet:", error);
+      console.error("Solana connection error:", error);
+      setError("Failed to open Solana wallet modal");
+      toast.error("Failed to open wallet modal");
     } finally {
       setIsConnecting(false);
     }
-  };
+  }, [setActiveWallet, setSolanaModalVisible]);
 
-  const handleTronConnect = async () => {
+  const handleTronConnect = useCallback(async () => {
+    console.log("Connecting to TronLink...");
     setIsConnecting(true);
+    setError(null);
     try {
-      await tronWallet.connect();
       setActiveWallet("tron");
-    } catch (error) {
-      console.error("Failed to connect Tron wallet:", error);
+      await connectTron();
+      toast.success("TronLink connected!");
+    } catch (error: any) {
+      console.error("TronLink connection error:", error);
+      setError(error.message || "Failed to connect TronLink");
+      toast.error(error.message || "Failed to connect TronLink");
+      
+      // Reset active wallet on error
+      setActiveWallet(null);
     } finally {
       setIsConnecting(false);
     }
-  };
-
-  const handleDisconnect = () => {
-    disconnect();
-  };
+  }, [setActiveWallet, connectTron]);
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Подключите кошелек</h2>
-        <p className="text-gray-600">Выберите кошелек для подключения к платформе Wexel</p>
+    <div className="w-full max-w-md mx-auto space-y-4">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold mb-2">Connect Wallet</h2>
+        <p className="text-muted-foreground">
+          Choose a wallet to connect to Wexel platform
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <WalletOption
-          type="solana"
-          name="Solana"
-          description="Phantom, Solflare и другие"
-          icon={
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
-              S
-            </div>
-          }
-          isConnected={solanaWallet.connected}
-          isLoading={isConnecting && activeWallet === "solana"}
-          onConnect={handleSolanaConnect}
-          onDisconnect={handleDisconnect}
-          address={solanaWallet.publicKey?.toString()}
-        />
-
-        <WalletOption
-          type="tron"
-          name="Tron"
-          description="TronLink и другие"
-          icon={
-            <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center text-white font-bold">
-              T
-            </div>
-          }
-          isConnected={tronWallet.isConnected}
-          isLoading={isConnecting && activeWallet === "tron"}
-          onConnect={handleTronConnect}
-          onDisconnect={handleDisconnect}
-          address={tronWallet.address}
-        />
-      </div>
-
-      {tronWallet.error && (
-        <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg">
-          <AlertCircle className="h-5 w-5" />
-          <span className="text-sm">{tronWallet.error}</span>
+      {error && (
+        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex items-start gap-2">
+          <AlertCircle className="w-5 h-5 text-destructive mt-0.5" />
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
-      {isConnected && (
-        <div className="text-center">
-          <Badge variant="outline" className="text-green-600 border-green-600">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            Кошелек подключен
-          </Badge>
+      <Card 
+        className="cursor-pointer hover:bg-accent/50 transition-colors"
+        onClick={handleSolanaConnect}
+      >
+        <CardContent className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold">S</span>
+            </div>
+            <div>
+              <h3 className="font-semibold">Solana</h3>
+              <p className="text-sm text-muted-foreground">Phantom, Solflare & more</p>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+        </CardContent>
+      </Card>
+
+      <Card 
+        className="cursor-pointer hover:bg-accent/50 transition-colors"
+        onClick={handleTronConnect}
+      >
+        <CardContent className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold">T</span>
+            </div>
+            <div>
+              <h3 className="font-semibold">Tron</h3>
+              <p className="text-sm text-muted-foreground">TronLink & more</p>
+            </div>
+          </div>
+          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+        </CardContent>
+      </Card>
+
+      {isConnecting && (
+        <div className="text-center text-sm text-muted-foreground">
+          Connecting...
         </div>
       )}
+
+      <div className="text-center text-xs text-muted-foreground mt-6">
+        Don't have a wallet?{" "}
+        <a 
+          href="https://phantom.app/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-primary hover:underline inline-flex items-center gap-1"
+        >
+          Get Phantom <ExternalLink className="w-3 h-3" />
+        </a>
+        {" or "}
+        <a 
+          href="https://www.tronlink.org/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-primary hover:underline inline-flex items-center gap-1"
+        >
+          Get TronLink <ExternalLink className="w-3 h-3" />
+        </a>
+      </div>
     </div>
   );
-};
+}

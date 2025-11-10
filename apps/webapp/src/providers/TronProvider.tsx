@@ -1,120 +1,116 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-// Type-only import for TronWeb interface
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type TronWeb from "tronweb";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface TronContextType {
-  tronWeb: any | null;
   isConnected: boolean;
   address: string | null;
   connect: () => Promise<void>;
   disconnect: () => void;
-  isLoading: boolean;
-  error: string | null;
+  tronWeb: any | null;
 }
 
-const TronContext = createContext<TronContextType | undefined>(undefined);
+const TronContext = createContext<TronContextType | null>(null);
 
-interface TronProviderProps {
-  children: ReactNode;
-}
-
-export const TronProvider: React.FC<TronProviderProps> = ({ children }) => {
-  const [tronWeb, setTronWeb] = useState<any | null>(null);
+export function TronProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [tronWeb, setTronWeb] = useState<any>(null);
 
-  // Initialize TronWeb
-  useEffect(() => {
-    const initTronWeb = async () => {
-      // Only run on client side
-      if (typeof window === "undefined") return;
+  const initTronWeb = async () => {
+    if (typeof window === 'undefined') return;
+    
+    // Wait for TronLink to inject
+    let attempts = 0;
+    while (!window.tronLink && !window.tronWeb && attempts < 10) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+    }
 
+    if (window.tronLink || window.tronWeb) {
       try {
-        // Check if TronLink is available
-        if (window.tronWeb && window.tronWeb.ready) {
-          setTronWeb(window.tronWeb);
-          setIsConnected(true);
-          setAddress(window.tronWeb.defaultAddress.base58);
-        } else {
-          // For now, just set a placeholder
-          setTronWeb(null);
+        // Use tronLink if available, fallback to tronWeb
+        const tron = window.tronLink || window.tronWeb;
+        setTronWeb(tron);
+        
+        // Check if already connected
+        if (tron.ready || (tron.defaultAddress && tron.defaultAddress.base58)) {
+          const addr = tron.defaultAddress?.base58 || tron.address;
+          if (addr) {
+            setAddress(addr);
+            setIsConnected(true);
+          }
         }
-      } catch (err) {
-        console.error("Failed to initialize TronWeb:", err);
-        setError("Failed to initialize TronWeb");
+      } catch (error) {
+        console.log("TronLink initialization pending...");
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     initTronWeb();
+    
+    // Listen for account changes
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('message', (e) => {
+        if (e.data?.message?.action === 'accountsChanged') {
+          initTronWeb();
+        }
+      });
+    }
   }, []);
 
   const connect = async () => {
-    // Only run on client side
-    if (typeof window === "undefined") return;
-
-    setIsLoading(true);
-    setError(null);
+    if (!tronWeb && !window.tronLink && !window.tronWeb) {
+      // Open TronLink installation page in new tab
+      window.open('https://www.tronlink.org/', '_blank');
+      throw new Error("Please install TronLink extension and refresh the page");
+    }
 
     try {
-      if (window.tronWeb && window.tronWeb.ready) {
-        // Request account access
-        const accounts = await window.tronWeb.request({
-          method: "tron_requestAccounts",
-        });
-
-        if (accounts && accounts.length > 0) {
-          setTronWeb(window.tronWeb);
-          setIsConnected(true);
-          setAddress(accounts[0]);
-        } else {
-          throw new Error("No accounts found");
+      // Request account access
+      const tron = window.tronLink || window.tronWeb;
+      
+      if (window.tronLink?.request) {
+        const result = await window.tronLink.request({ method: 'tron_requestAccounts' });
+        if (result?.code === 200) {
+          await initTronWeb();
         }
-      } else {
-        throw new Error("TronLink not found. Please install TronLink extension.");
+      } else if (tron) {
+        // Fallback for older versions
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await initTronWeb();
       }
-    } catch (err) {
-      console.error("Failed to connect to TronLink:", err);
-      setError(err instanceof Error ? err.message : "Failed to connect to TronLink");
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to connect to TronLink:", error);
+      throw error;
     }
   };
 
   const disconnect = () => {
     setIsConnected(false);
     setAddress(null);
-    setTronWeb(null);
   };
 
-  const value: TronContextType = {
-    tronWeb,
-    isConnected,
-    address,
-    connect,
-    disconnect,
-    isLoading,
-    error,
-  };
+  return (
+    <TronContext.Provider value={{ isConnected, address, connect, disconnect, tronWeb }}>
+      {children}
+    </TronContext.Provider>
+  );
+}
 
-  return <TronContext.Provider value={value}>{children}</TronContext.Provider>;
-};
-
-export const useTron = (): TronContextType => {
+export const useTron = () => {
   const context = useContext(TronContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useTron must be used within a TronProvider");
   }
   return context;
 };
 
-// Extend Window interface for TronLink
+// Add type declarations
 declare global {
   interface Window {
-    tronWeb: any;
+    tronWeb?: any;
+    tronLink?: any;
   }
 }
