@@ -19,7 +19,7 @@ export function TronProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Simple check, no waiting
-    if (typeof window !== 'undefined' && window.tronWeb) {
+    if (typeof window !== "undefined" && window.tronWeb) {
       setTronWeb(window.tronWeb);
     }
   }, []);

@@ -2,20 +2,13 @@
  * Centralized API client exports
  */
 
-// New API client and hooks
-export { apiClient, API_BASE_URL } from "./client";
-export * from "./hooks";
-
-// Legacy API exports
+// Export all API modules
 export { authApi, WalletType } from "./auth";
 export { depositsApi } from "./deposits";
 export { collateralApi } from "./collateral";
 export { marketplaceApi } from "./marketplace";
+export { oraclesApi } from "./oracles";
+export { boostApi } from "./boost";
 
-export type { WalletLoginRequest, WalletLoginResponse } from "./auth";
-
-export type { CreateDepositDto, ConfirmDepositDto, ApplyBoostToDepositDto } from "./deposits";
-
-export type { OpenCollateralDto, RepayLoanDto } from "./collateral";
-
-export type { CreateListingDto, BuyListingDto, MarketplaceFilterDto } from "./marketplace";
+// Export the API client if it exists
+export { apiClient } from "./client";
