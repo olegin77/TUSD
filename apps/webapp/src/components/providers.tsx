@@ -29,7 +29,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       })
   );
 
-  console.log('[Providers] Initializing application providers');
+  console.log("[Providers] Initializing application providers");
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useHealthCheck } from '@/lib/api';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { useHealthCheck } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
 /**
  * Компонент для тестирования связи с backend API
@@ -38,9 +38,7 @@ export function ApiTest() {
             <CheckCircle className="mr-2 h-4 w-4" />
             <div>
               <p className="font-medium">Connected</p>
-              <p className="text-xs text-muted-foreground">
-                {JSON.stringify(data)}
-              </p>
+              <p className="text-xs text-muted-foreground">{JSON.stringify(data)}</p>
             </div>
           </div>
         )}

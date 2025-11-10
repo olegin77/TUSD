@@ -3,8 +3,8 @@
  */
 
 // New API client and hooks
-export { apiClient, API_BASE_URL } from './client';
-export * from './hooks';
+export { apiClient, API_BASE_URL } from "./client";
+export * from "./hooks";
 
 // Legacy API exports
 export { authApi, WalletType } from "./auth";

@@ -1,15 +1,15 @@
 /**
  * React Query hooks для API вызовов
  */
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from './client';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "./client";
 
 /**
  * Hook для health check
  */
 export function useHealthCheck() {
   return useQuery({
-    queryKey: ['health'],
+    queryKey: ["health"],
     queryFn: () => apiClient.health(),
     refetchInterval: 30000, // Каждые 30 секунд
   });

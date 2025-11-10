@@ -6,26 +6,23 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  'http://localhost:3001';
+  "http://localhost:3001";
 
-console.log('[API Client] Base URL:', API_BASE_URL);
+console.log("[API Client] Base URL:", API_BASE_URL);
 
 /**
  * Базовая fetch функция с обработкой ошибок
  */
-async function apiFetch<T>(
-  endpoint: string,
-  options?: RequestInit
-): Promise<T> {
+async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  console.log(`[API] ${options?.method || 'GET'} ${url}`);
+  console.log(`[API] ${options?.method || "GET"} ${url}`);
 
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
     });
@@ -48,7 +45,7 @@ async function apiFetch<T>(
  */
 export const apiClient = {
   // Health check
-  health: () => apiFetch('/health'),
+  health: () => apiFetch("/health"),
 
   // Generic GET
   get: <T>(endpoint: string) => apiFetch<T>(endpoint),
@@ -56,21 +53,21 @@ export const apiClient = {
   // Generic POST
   post: <T>(endpoint: string, body: unknown) =>
     apiFetch<T>(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body),
     }),
 
   // Generic PUT
   put: <T>(endpoint: string, body: unknown) =>
     apiFetch<T>(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(body),
     }),
 
   // Generic DELETE
   delete: <T>(endpoint: string) =>
     apiFetch<T>(endpoint, {
-      method: 'DELETE',
+      method: "DELETE",
     }),
 };
 

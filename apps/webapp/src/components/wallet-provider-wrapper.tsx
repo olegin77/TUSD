@@ -10,9 +10,5 @@ const WalletProviders = dynamic(
 );
 
 export function WalletProviderWrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <WalletProviders>
-      {children}
-    </WalletProviders>
-  );
+  return <WalletProviders>{children}</WalletProviders>;
 }

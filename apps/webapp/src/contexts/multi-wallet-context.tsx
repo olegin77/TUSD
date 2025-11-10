@@ -33,7 +33,11 @@ export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ childr
 
   // Use wallet hooks directly inside the provider
   const { connected: solanaConnected, publicKey, disconnect: disconnectSolana } = useWallet();
-  const { isConnected: tronConnected, address: tronAddress, disconnect: disconnectTron } = useTron();
+  const {
+    isConnected: tronConnected,
+    address: tronAddress,
+    disconnect: disconnectTron,
+  } = useTron();
 
   // Get the Solana address as string
   const solanaAddress = publicKey?.toBase58() || null;
