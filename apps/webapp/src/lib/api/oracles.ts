@@ -120,3 +120,6 @@ export class OracleService {
 }
 
 export const oracleService = OracleService.getInstance();
+
+// Export with consistent naming for API client
+export const oraclesApi = oracleService;

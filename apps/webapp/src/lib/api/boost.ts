@@ -198,3 +198,6 @@ export class BoostService {
 }
 
 export const boostService = BoostService.getInstance();
+
+// Export with consistent naming for API client
+export const boostApi = boostService;
