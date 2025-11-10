@@ -35,8 +35,12 @@
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@solana/wallet-adapter-base": "^0.9.27",
+    "@solana/wallet-adapter-ledger": "^0.9.29",
+    "@solana/wallet-adapter-phantom": "^0.9.28",
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
+    "@solana/wallet-adapter-solflare": "^0.6.32",
+    "@solana/wallet-adapter-torus": "^0.11.32",
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.0.0",
@@ -48,6 +52,7 @@
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.0",
     "lucide-react": "^0.400.0",
+    "next": "^14.2.18",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-hook-form": "^7.48.0",
@@ -58,8 +63,7 @@
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "tronweb": "^6.0.4",
-    "zod": "^3.22.0",
-    "next": "^14.2.18"
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@axe-core/react": "^4.11.0",

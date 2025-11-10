@@ -1,10 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Shield, Zap, TrendingUp } from "lucide-react";
 
 export function CTA() {
+  const router = useRouter();
+
   return (
     <section className="py-20 bg-gradient-to-r from-primary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4">
@@ -20,11 +23,11 @@ export function CTA() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="text-lg px-8">
+                <Button size="lg" className="text-lg px-8" onClick={() => router.push('/wallet')}>
                   Создать аккаунт
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8">
+                <Button variant="outline" size="lg" className="text-lg px-8" onClick={() => window.location.href = 'mailto:support@wexel.com'}>
                   Связаться с нами
                 </Button>
               </div>
