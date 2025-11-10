@@ -46,7 +46,7 @@ export function WalletConnect() {
       console.error("TronLink connection error:", error);
       setError(error.message || "Failed to connect TronLink");
       toast.error(error.message || "Failed to connect TronLink");
-      
+
       // Reset active wallet on error
       setActiveWallet(null);
     } finally {
@@ -58,9 +58,7 @@ export function WalletConnect() {
     <div className="w-full max-w-md mx-auto space-y-4">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold mb-2">Connect Wallet</h2>
-        <p className="text-muted-foreground">
-          Choose a wallet to connect to Wexel platform
-        </p>
+        <p className="text-muted-foreground">Choose a wallet to connect to Wexel platform</p>
       </div>
 
       {error && (
@@ -70,7 +68,7 @@ export function WalletConnect() {
         </div>
       )}
 
-      <Card 
+      <Card
         className="cursor-pointer hover:bg-accent/50 transition-colors"
         onClick={handleSolanaConnect}
       >
@@ -88,7 +86,7 @@ export function WalletConnect() {
         </CardContent>
       </Card>
 
-      <Card 
+      <Card
         className="cursor-pointer hover:bg-accent/50 transition-colors"
         onClick={handleTronConnect}
       >
@@ -107,25 +105,23 @@ export function WalletConnect() {
       </Card>
 
       {isConnecting && (
-        <div className="text-center text-sm text-muted-foreground">
-          Connecting...
-        </div>
+        <div className="text-center text-sm text-muted-foreground">Connecting...</div>
       )}
 
       <div className="text-center text-xs text-muted-foreground mt-6">
         Don't have a wallet?{" "}
-        <a 
-          href="https://phantom.app/" 
-          target="_blank" 
+        <a
+          href="https://phantom.app/"
+          target="_blank"
           rel="noopener noreferrer"
           className="text-primary hover:underline inline-flex items-center gap-1"
         >
           Get Phantom <ExternalLink className="w-3 h-3" />
         </a>
         {" or "}
-        <a 
-          href="https://www.tronlink.org/" 
-          target="_blank" 
+        <a
+          href="https://www.tronlink.org/"
+          target="_blank"
           rel="noopener noreferrer"
           className="text-primary hover:underline inline-flex items-center gap-1"
         >
