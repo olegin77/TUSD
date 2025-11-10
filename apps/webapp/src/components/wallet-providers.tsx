@@ -10,9 +10,11 @@ import {
   LedgerWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
+import { TronProvider } from "@/providers/TronProvider";
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 export function WalletProviders({ children }: { children: React.ReactNode }) {
-  const endpoint = useMemo(() => clusterApiUrl('devnet'), []);
+  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
@@ -23,11 +25,15 @@ export function WalletProviders({ children }: { children: React.ReactNode }) {
     []
   );
 
+  console.log('[WalletProviders] Initializing Solana + Tron providers');
+
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect={false}>
         <WalletModalProvider>
-          {children}
+          <TronProvider>
+            {children}
+          </TronProvider>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

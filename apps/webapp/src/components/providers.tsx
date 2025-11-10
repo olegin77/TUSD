@@ -4,9 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-// Dynamically import wallet providers with no SSR
-const WalletProviders = dynamic(
-  () => import("./wallet-providers").then((mod) => ({ default: mod.WalletProviders })),
+// Dynamically import wallet provider wrapper with no SSR
+const WalletProviderWrapper = dynamic(
+  () => import("./wallet-provider-wrapper").then((mod) => ({ default: mod.WalletProviderWrapper })),
   { ssr: false }
 );
 
@@ -29,12 +29,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
       })
   );
 
+  console.log('[Providers] Initializing application providers');
+
   return (
     <QueryClientProvider client={queryClient}>
-      <WalletProviders>
+      <WalletProviderWrapper>
         {children}
         <ReactQueryDevtools initialIsOpen={false} />
-      </WalletProviders>
+      </WalletProviderWrapper>
     </QueryClientProvider>
   );
 }

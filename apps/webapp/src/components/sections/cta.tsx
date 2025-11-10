@@ -23,11 +23,16 @@ export function CTA() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="text-lg px-8" onClick={() => router.push('/wallet')}>
+                <Button size="lg" className="text-lg px-8" onClick={() => router.push("/wallet")}>
                   Создать аккаунт
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8" onClick={() => window.location.href = 'mailto:support@wexel.com'}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-lg px-8"
+                  onClick={() => (window.location.href = "mailto:support@wexel.com")}
+                >
                   Связаться с нами
                 </Button>
               </div>

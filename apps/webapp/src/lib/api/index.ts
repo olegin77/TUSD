@@ -2,6 +2,11 @@
  * Centralized API client exports
  */
 
+// New API client and hooks
+export { apiClient, API_BASE_URL } from './client';
+export * from './hooks';
+
+// Legacy API exports
 export { authApi, WalletType } from "./auth";
 export { depositsApi } from "./deposits";
 export { collateralApi } from "./collateral";
