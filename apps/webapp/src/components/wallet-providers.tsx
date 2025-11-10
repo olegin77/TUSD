@@ -11,6 +11,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 import { TronProvider } from "@/providers/TronProvider";
+import { MultiWalletProvider } from "@/contexts/multi-wallet-context";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 export function WalletProviders({ children }: { children: React.ReactNode }) {
@@ -25,14 +26,14 @@ export function WalletProviders({ children }: { children: React.ReactNode }) {
     []
   );
 
-  console.log('[WalletProviders] Initializing Solana + Tron providers');
+  console.log("[WalletProviders] Initializing Solana + Tron + MultiWallet providers");
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect={false}>
         <WalletModalProvider>
           <TronProvider>
-            {children}
+            <MultiWalletProvider>{children}</MultiWalletProvider>
           </TronProvider>
         </WalletModalProvider>
       </WalletProvider>

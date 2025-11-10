@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useTron } from "@/providers/TronProvider";
 
 export type WalletType = "solana" | "tron" | null;
 
@@ -24,35 +26,34 @@ export const useMultiWallet = (): MultiWalletContextType => {
 
 interface MultiWalletProviderProps {
   children: React.ReactNode;
-  solanaConnected?: boolean;
-  solanaAddress?: string | null;
-  tronConnected?: boolean;
-  tronAddress?: string | null;
-  onDisconnect?: () => void;
 }
 
-export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({
-  children,
-  solanaConnected = false,
-  solanaAddress = null,
-  tronConnected = false,
-  tronAddress = null,
-  onDisconnect,
-}) => {
+export const MultiWalletProvider: React.FC<MultiWalletProviderProps> = ({ children }) => {
   const [activeWallet, setActiveWallet] = useState<WalletType>(null);
 
+  // Use wallet hooks directly inside the provider
+  const { connected: solanaConnected, publicKey, disconnect: disconnectSolana } = useWallet();
+  const { isConnected: tronConnected, address: tronAddress, disconnect: disconnectTron } = useTron();
+
+  // Get the Solana address as string
+  const solanaAddress = publicKey?.toBase58() || null;
+
   // Determine if connected based on active wallet
-  const isConnected = activeWallet === "solana" ? solanaConnected : activeWallet === "tron" ? tronConnected : false;
+  const isConnected =
+    activeWallet === "solana" ? solanaConnected : activeWallet === "tron" ? tronConnected : false;
 
   // Get address based on active wallet
-  const address = activeWallet === "solana" ? solanaAddress : activeWallet === "tron" ? tronAddress : null;
+  const address =
+    activeWallet === "solana" ? solanaAddress : activeWallet === "tron" ? tronAddress : null;
 
   const disconnect = useCallback(() => {
-    setActiveWallet(null);
-    if (onDisconnect) {
-      onDisconnect();
+    if (activeWallet === "solana") {
+      disconnectSolana();
+    } else if (activeWallet === "tron") {
+      disconnectTron();
     }
-  }, [onDisconnect]);
+    setActiveWallet(null);
+  }, [activeWallet, disconnectSolana, disconnectTron]);
 
   const value: MultiWalletContextType = {
     activeWallet,
