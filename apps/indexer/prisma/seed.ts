@@ -67,10 +67,26 @@ async function main() {
   // Create system configurations
   console.log('⚙️ Creating system configurations...');
   const configs = [
-    { key: 'COLLATERAL_RATIO', value: '150', description: 'Minimum collateral ratio (%)' },
-    { key: 'LIQUIDATION_THRESHOLD', value: '120', description: 'Liquidation threshold (%)' },
-    { key: 'STABILITY_FEE', value: '0.02', description: 'Annual stability fee' },
-    { key: 'MIN_DEPOSIT', value: '100', description: 'Minimum deposit amount (USD)' },
+    {
+      key: 'COLLATERAL_RATIO',
+      value: '150',
+      description: 'Minimum collateral ratio (%)',
+    },
+    {
+      key: 'LIQUIDATION_THRESHOLD',
+      value: '120',
+      description: 'Liquidation threshold (%)',
+    },
+    {
+      key: 'STABILITY_FEE',
+      value: '0.02',
+      description: 'Annual stability fee',
+    },
+    {
+      key: 'MIN_DEPOSIT',
+      value: '100',
+      description: 'Minimum deposit amount (USD)',
+    },
   ];
 
   for (const config of configs) {
@@ -125,7 +141,7 @@ async function main() {
         chain_address: {
           chain: token.chain,
           address: token.address,
-        }
+        },
       },
       update: {},
       create: token,

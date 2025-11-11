@@ -2,56 +2,69 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: "usdx-wexel"
-    environment: "production"
+    cluster: 'usdx-wexel'
+    environment: 'production'
 
-# Alertmanager configuration
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-            - alertmanager:9093
+# Alertmanager configuration (optional)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
 
 # Load rules once and periodically evaluate them
-rule_files:
-  - "/etc/prometheus/alerts.yml"
+# rule_files:
+#   - "alerts/*.yml"
 
-# Scrape configurations
 scrape_configs:
   # Prometheus self-monitoring
-  - job_name: "prometheus"
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ['localhost:9090']
 
-  # USDX/Wexel Backend/Indexer
-  - job_name: "usdx-indexer"
-    metrics_path: "/metrics"
+  # Node Exporter - System metrics
+  - job_name: 'node-exporter'
     static_configs:
-      - targets: ["host.docker.internal:3001"] # Adjust host as needed
-        labels:
-          service: "indexer"
-          environment: "production"
-    # Optional: authentication if metrics endpoint is protected
-    # basic_auth:
-    #   username: 'metrics'
-    #   password: 'secure_password'
+      - targets: ['node-exporter:9100']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'production-server'
 
-  # Node Exporter (if monitoring host metrics)
-  # - job_name: 'node-exporter'
-  #   static_configs:
-  #     - targets: ['node-exporter:9100']
+  # NestJS Indexer API
+  - job_name: 'indexer-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:3001']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'indexer-api'
 
-  # PostgreSQL Exporter (if monitoring database)
-  # - job_name: 'postgres-exporter'
-  #   static_configs:
-  #     - targets: ['postgres-exporter:9187']
+  # Next.js Webapp (if metrics endpoint added)
+  - job_name: 'webapp'
+    metrics_path: '/api/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:3000']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'webapp'
 
-  # Redis Exporter (if monitoring Redis)
-  # - job_name: 'redis-exporter'
-  #   static_configs:
-  #     - targets: ['redis-exporter:9121']
+  # PostgreSQL Exporter (if deployed)
+  - job_name: 'postgresql'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'postgresql'
 
-  # Solana RPC Node (if using custom exporter)
-  # - job_name: 'solana-exporter'
-  #   static_configs:
-  #     - targets: ['solana-exporter:9700']
+  # Redis Exporter (if deployed)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'redis'

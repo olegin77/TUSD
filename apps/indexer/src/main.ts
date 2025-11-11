@@ -3,10 +3,12 @@ import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { initSentry } from './common/sentry/sentry.config';
 import helmet from 'helmet';
-import * as rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
+  const port = process.env.API_PORT || 3001;
+
   // Initialize Sentry first
   initSentry();
 
@@ -21,7 +23,11 @@ async function bootstrap() {
           styleSrc: ["'self'", "'unsafe-inline'"],
           scriptSrc: ["'self'", "'unsafe-inline'"],
           imgSrc: ["'self'", 'data:', 'https:'],
-          connectSrc: ["'self'", 'https://*.solana.com', 'https://*.trongrid.io'],
+          connectSrc: [
+            "'self'",
+            'https://*.solana.com',
+            'https://*.trongrid.io',
+          ],
           fontSrc: ["'self'", 'data:'],
           objectSrc: ["'none'"],
           mediaSrc: ["'self'"],
@@ -114,7 +120,6 @@ async function bootstrap() {
     console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
   }
 
-  const port = process.env.API_PORT || 3001;
   await app.listen(port);
   console.log(`🚀 Indexer running on port ${port}`);
   console.log(
