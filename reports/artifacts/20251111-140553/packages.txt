@@ -1,0 +1,4 @@
+./package.json
+./contracts/tron/package.json
+./apps/indexer/package.json
+./apps/webapp/package.json

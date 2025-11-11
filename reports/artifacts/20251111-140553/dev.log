@@ -1,0 +1,6 @@
+Scope: 3 of 4 workspace projects
+apps/webapp dev$ next dev
+apps/webapp dev:   ▲ Next.js 14.2.18
+apps/webapp dev:   - Local:        http://localhost:3000
+apps/webapp dev:  ✓ Starting...
+apps/webapp dev:  ✓ Ready in 1657ms

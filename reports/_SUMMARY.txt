@@ -1,0 +1,4 @@
+TIMESTAMP: 20251111-140553
+PROD_URL: http://159.203.114.210:3000
+PLAYWRIGHT: reports/artifacts/20251111-140553/pw-report.json
+BROKEN LINKS: reports/artifacts/20251111-140553/blc.txt

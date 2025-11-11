@@ -112,3 +112,9 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
+# Allow committed audit artifacts
+!reports/
+!reports/artifacts/
+!reports/artifacts/**
+# exclude binary blobs from committed reports
+reports/artifacts/**/*.png
