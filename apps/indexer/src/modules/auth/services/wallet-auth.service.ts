@@ -5,7 +5,7 @@ import * as nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import { WalletLoginDto, WalletType } from '../dto/wallet-login.dto';
 // M-5 fix: Import TronWeb for Tron signature verification
-import TronWeb from 'tronweb';
+const TronWeb = require('tronweb');
 
 @Injectable()
 export class WalletAuthService {

@@ -1,0 +1,9 @@
+{
+  "project": "TUSD/Wexel Platform",
+  "mode": "autonomous",
+  "priorities": ["P0", "P1", "P2", "P3"],
+  "auto_commit": true,
+  "auto_push": true,
+  "test_coverage_target": 80,
+  "parallel_tasks": 48
+}

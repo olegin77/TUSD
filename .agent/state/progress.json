@@ -1,0 +1,14 @@
+{
+  "status": "starting",
+  "user": "nod",
+  "project_dir": "/home/nod/tusd/TUSD",
+  "working_dir": "/mnt/ramdisk/TUSD",
+  "current_priority": "P0",
+  "current_task": null,
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "git_commits": [],
+  "start_time": "'$(date -Iseconds)'",
+  "cpu_threads": 48,
+  "ram_gb": 400
+}

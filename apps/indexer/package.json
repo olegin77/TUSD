@@ -109,6 +109,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^tronweb$": "<rootDir>/modules/tron/__mocks__/tronweb.mock.ts"
+    },
+    "testTimeout": 30000
   }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./wallet-styles.css";
 import { ClientNavigation } from "@/components/client-navigation";
@@ -7,7 +7,27 @@ import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/a11y/a11y-provider";
 import { AnnouncerProvider } from "@/components/a11y/announcer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = localFont({
+  src: [
+    {
+      path: "../../public/fonts/web/Inter-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/web/Inter-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/web/Inter-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 // Force dynamic rendering for entire application - disable static generation
 export const dynamic = "force-dynamic";
