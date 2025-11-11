@@ -64,11 +64,80 @@ async function main() {
     );
   }
 
+  // Create system configurations
+  console.log('⚙️ Creating system configurations...');
+  const configs = [
+    { key: 'COLLATERAL_RATIO', value: '150', description: 'Minimum collateral ratio (%)' },
+    { key: 'LIQUIDATION_THRESHOLD', value: '120', description: 'Liquidation threshold (%)' },
+    { key: 'STABILITY_FEE', value: '0.02', description: 'Annual stability fee' },
+    { key: 'MIN_DEPOSIT', value: '100', description: 'Minimum deposit amount (USD)' },
+  ];
+
+  for (const config of configs) {
+    await prisma.systemConfig.upsert({
+      where: { key: config.key },
+      update: { value: config.value },
+      create: config,
+    });
+    console.log(`✅ Config: ${config.key} = ${config.value}`);
+  }
+
+  // Create admin user
+  console.log('👤 Creating admin user...');
+  const adminAddress = '0x' + '0'.repeat(40);
+  const adminUser = await prisma.user.upsert({
+    where: { solana_address: adminAddress },
+    update: {},
+    create: {
+      solana_address: adminAddress,
+      tron_address: 'T' + '0'.repeat(33),
+      email: 'admin@wexel.io',
+      is_kyc_verified: true,
+      is_active: true,
+    },
+  });
+  console.log(`✅ Admin user created: ${adminUser.email}`);
+
+  // Create test tokens
+  console.log('🪙 Creating test tokens...');
+  const tokens = [
+    {
+      symbol: 'USDT',
+      name: 'Tether USD',
+      address: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+      decimals: 6,
+      chain: 'TRON',
+      is_active: true,
+    },
+    {
+      symbol: 'USDC',
+      name: 'USD Coin',
+      address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+      decimals: 6,
+      chain: 'SOLANA',
+      is_active: true,
+    },
+  ];
+
+  for (const token of tokens) {
+    await prisma.token.upsert({
+      where: {
+        chain_address: {
+          chain: token.chain,
+          address: token.address,
+        }
+      },
+      update: {},
+      create: token,
+    });
+    console.log(`✅ Token: ${token.symbol} on ${token.chain}`);
+  }
+
   // Create a test user (for development)
   if (process.env.NODE_ENV === 'development') {
     console.log('👤 Creating test user...');
     const testUser = await prisma.user.upsert({
-      where: { id: 1 },
+      where: { solana_address: 'TestSolanaAddress111111111111111111111111' },
       update: {},
       create: {
         solana_address: 'TestSolanaAddress111111111111111111111111',
