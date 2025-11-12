@@ -24,7 +24,9 @@
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "db:seed": "ts-node prisma/seed.ts"
+    "db:seed": "ts-node prisma/seed.ts",
+    "build:prod": "./scripts/build-production.sh",
+    "start:production": "./scripts/start-production.sh"
   },
   "dependencies": {
     "@nestjs/bull": "^11.0.4",
