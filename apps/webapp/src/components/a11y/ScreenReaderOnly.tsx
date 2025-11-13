@@ -9,10 +9,7 @@ interface ScreenReaderOnlyProps {
  * ScreenReaderOnly - Renders content that is only visible to screen readers
  * Improves accessibility by providing additional context without cluttering UI
  */
-export function ScreenReaderOnly({
-  children,
-  as: Component = "span",
-}: ScreenReaderOnlyProps) {
+export function ScreenReaderOnly({ children, as: Component = "span" }: ScreenReaderOnlyProps) {
   return (
     <Component
       style={{

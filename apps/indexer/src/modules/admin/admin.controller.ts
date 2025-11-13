@@ -55,7 +55,10 @@ export class AdminController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async getDashboard() {
     return this.adminService.getDashboardStats();
   }
@@ -84,7 +87,10 @@ export class AdminController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async getUsers() {
     return this.adminService.getAllUsers();
   }
@@ -120,7 +126,10 @@ export class AdminController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async getWexels(@Query('status') status?: string) {
     return this.adminService.getAllWexels({ status });
   }
@@ -151,7 +160,10 @@ export class AdminController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async getOracles() {
     return this.adminService.getOracleData();
   }
@@ -174,13 +186,20 @@ export class AdminController {
     schema: {
       example: {
         success: true,
-        message: 'Oracle for Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB refreshed',
+        message:
+          'Oracle for Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB refreshed',
       },
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
-  @ApiResponse({ status: 429, description: 'Too many requests - Rate limit 1/min' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests - Rate limit 1/min',
+  })
   async refreshOracle(@Param('token') token: string) {
     // TODO: Implement oracle refresh
     return { success: true, message: `Oracle for ${token} refreshed` };
@@ -195,7 +214,8 @@ export class AdminController {
   @Throttle({ default: { limit: 5, ttl: 300000 } })
   @ApiOperation({
     summary: 'Set manual price',
-    description: 'Set manual override price for a token (requires Multisig confirmation)',
+    description:
+      'Set manual override price for a token (requires Multisig confirmation)',
   })
   @ApiParam({ name: 'token', description: 'Token mint address', type: String })
   @ApiBody({ type: ManualPriceUpdateDto })
@@ -205,13 +225,20 @@ export class AdminController {
     schema: {
       example: {
         success: true,
-        message: 'Manual price 1.005 set for token. Reason: Oracle malfunction. Awaiting Multisig confirmation.',
+        message:
+          'Manual price 1.005 set for token. Reason: Oracle malfunction. Awaiting Multisig confirmation.',
       },
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
-  @ApiResponse({ status: 429, description: 'Too many requests - Rate limit 5/5min' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests - Rate limit 5/5min',
+  })
   async setManualPrice(
     @Param('token') token: string,
     @Body() dto: ManualPriceUpdateDto,
@@ -245,7 +272,10 @@ export class AdminController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async getSettings() {
     return this.adminService.getGlobalSettings();
   }
@@ -274,9 +304,15 @@ export class AdminController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Bad request - Invalid settings data' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid settings data',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async updateSettings(@Body() settings: UpdateSettingsDto) {
     return this.adminService.updateGlobalSettings(settings);
   }
@@ -311,7 +347,10 @@ export class AdminController {
   })
   @ApiResponse({ status: 400, description: 'Bad request - Invalid pool data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'Pool not found' })
   async updatePool(@Param('id') id: string, @Body() data: UpdatePoolDto) {
     return this.adminService.updatePool(parseInt(id), data);

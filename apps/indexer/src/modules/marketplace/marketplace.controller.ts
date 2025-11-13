@@ -191,7 +191,10 @@ export class MarketplaceController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Bad request - Insufficient funds or listing unavailable' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Insufficient funds or listing unavailable',
+  })
   async buyListing(@Body() buyListingDto: BuyListingDto) {
     try {
       const result = await this.marketplaceService.buy(buyListingDto);

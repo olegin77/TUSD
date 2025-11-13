@@ -5,15 +5,17 @@ This directory contains accessibility components and utilities for the USDX Wexe
 ## Components
 
 ### SkipToContent
+
 Allows keyboard users to skip navigation and jump directly to main content.
 
 ```tsx
 import { SkipToContent } from "@/components/a11y";
 
-<SkipToContent />
+<SkipToContent />;
 ```
 
 ### ScreenReaderOnly
+
 Renders content that is only visible to screen readers.
 
 ```tsx
@@ -21,23 +23,21 @@ import { ScreenReaderOnly } from "@/components/a11y";
 
 <ScreenReaderOnly>
   <span>Additional context for screen readers</span>
-</ScreenReaderOnly>
+</ScreenReaderOnly>;
 ```
 
 ### AriaLiveRegion
+
 Announces dynamic content changes to screen readers.
 
 ```tsx
 import { AriaLiveRegion } from "@/components/a11y";
 
-<AriaLiveRegion
-  message="Deposit successful!"
-  politeness="polite"
-  clearDelay={5000}
-/>
+<AriaLiveRegion message="Deposit successful!" politeness="polite" clearDelay={5000} />;
 ```
 
 ### FocusTrap
+
 Traps keyboard focus within a container (essential for modals).
 
 ```tsx
@@ -45,10 +45,11 @@ import { FocusTrap } from "@/components/a11y";
 
 <FocusTrap active={isOpen} onEscape={handleClose}>
   <div>Modal content</div>
-</FocusTrap>
+</FocusTrap>;
 ```
 
 ### useKeyboardNavigation Hook
+
 Hook for implementing keyboard navigation patterns.
 
 ```tsx
@@ -65,6 +66,7 @@ useKeyboardNavigation({
 ## Accessibility Checklist
 
 ### ✅ Keyboard Navigation
+
 - [x] All interactive elements are keyboard accessible
 - [x] Focus indicators are visible
 - [x] Tab order is logical
@@ -72,6 +74,7 @@ useKeyboardNavigation({
 - [x] Focus trap for modals
 
 ### ✅ Screen Reader Support
+
 - [x] Semantic HTML elements used
 - [x] ARIA labels and roles where needed
 - [x] Live regions for dynamic content
@@ -79,12 +82,14 @@ useKeyboardNavigation({
 - [x] Form labels properly associated
 
 ### ✅ Visual Accessibility
+
 - [ ] Color contrast meets WCAG AA standards (4.5:1 for text)
 - [x] Text can be resized up to 200%
 - [x] No information conveyed by color alone
 - [x] Focus indicators are visible
 
 ### ✅ Content Structure
+
 - [x] Proper heading hierarchy (h1 -> h2 -> h3)
 - [x] Landmark regions (header, nav, main, footer)
 - [x] Lists for list content
@@ -95,12 +100,14 @@ useKeyboardNavigation({
 Target Level: **AA**
 
 ### Perceivable
+
 - Text alternatives (1.1.1) ✅
 - Captions (1.2.2) N/A
 - Adaptable (1.3) ✅
 - Distinguishable (1.4) ⚠️ (needs color contrast audit)
 
 ### Operable
+
 - Keyboard Accessible (2.1) ✅
 - Enough Time (2.2) ✅
 - Seizures (2.3) ✅
@@ -108,16 +115,19 @@ Target Level: **AA**
 - Input Modalities (2.5) ✅
 
 ### Understandable
+
 - Readable (3.1) ✅
 - Predictable (3.2) ✅
 - Input Assistance (3.3) ✅
 
 ### Robust
+
 - Compatible (4.1) ✅
 
 ## Testing Tools
 
 ### Automated Testing
+
 ```bash
 # Run accessibility tests with Jest
 pnpm test:a11y
@@ -130,6 +140,7 @@ pnpm add -D @axe-core/react
 ```
 
 ### Manual Testing
+
 1. **Keyboard Only Navigation**
    - Tab through all interactive elements
    - Use Enter/Space to activate
@@ -149,18 +160,16 @@ pnpm add -D @axe-core/react
 ## Common Patterns
 
 ### Accessible Button
+
 ```tsx
-<button
-  type="button"
-  aria-label="Close dialog"
-  onClick={handleClose}
->
+<button type="button" aria-label="Close dialog" onClick={handleClose}>
   <ScreenReaderOnly>Close</ScreenReaderOnly>
   <span aria-hidden="true">×</span>
 </button>
 ```
 
 ### Accessible Form
+
 ```tsx
 <form onSubmit={handleSubmit}>
   <label htmlFor="amount">
@@ -183,6 +192,7 @@ pnpm add -D @axe-core/react
 ```
 
 ### Accessible Modal
+
 ```tsx
 <div
   role="dialog"
@@ -192,9 +202,7 @@ pnpm add -D @axe-core/react
 >
   <FocusTrap active onEscape={handleClose}>
     <h2 id="dialog-title">Confirm Deposit</h2>
-    <p id="dialog-description">
-      You are about to deposit $1,000 into Pool 1
-    </p>
+    <p id="dialog-description">You are about to deposit $1,000 into Pool 1</p>
     <button onClick={handleConfirm}>Confirm</button>
     <button onClick={handleClose}>Cancel</button>
   </FocusTrap>
@@ -212,6 +220,7 @@ pnpm add -D @axe-core/react
 ## Browser Support
 
 Accessibility features are tested and supported in:
+
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
@@ -220,6 +229,7 @@ Accessibility features are tested and supported in:
 ## Reporting Issues
 
 If you encounter accessibility issues:
+
 1. Check this documentation first
 2. Test with keyboard and screen reader
 3. Report with specific steps to reproduce

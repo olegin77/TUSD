@@ -24,11 +24,11 @@ echo "✓ Prisma Client generated"
 echo "3. Building TypeScript (excluding tests)..."
 npx nest build
 
-# Проверка результата
-if [ ! -f "dist/main.js" ]; then
+# Проверка результата (NestJS компилирует в dist/src/)
+if [ ! -f "dist/src/main.js" ]; then
   echo "❌ ERROR: Build failed - no main.js!"
   exit 1
 fi
 
 echo "✅ Build successful!"
-ls -lh dist/main.js
+ls -lh dist/src/main.js

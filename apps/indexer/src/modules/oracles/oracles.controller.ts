@@ -5,12 +5,7 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { PriceOracleService } from './services/price-oracle.service';
 
@@ -30,7 +25,8 @@ export class OraclesController {
   @Throttle({ default: { limit: 100, ttl: 60000 } })
   @ApiOperation({
     summary: 'Get token price',
-    description: 'Retrieve current USD price for a token from oracle aggregator',
+    description:
+      'Retrieve current USD price for a token from oracle aggregator',
   })
   @ApiQuery({
     name: 'mint',
@@ -55,8 +51,14 @@ export class OraclesController {
     },
   })
   @ApiResponse({ status: 400, description: 'Token mint address is required' })
-  @ApiResponse({ status: 404, description: 'Price not available for this token' })
-  @ApiResponse({ status: 429, description: 'Too many requests - Rate limit exceeded' })
+  @ApiResponse({
+    status: 404,
+    description: 'Price not available for this token',
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests - Rate limit exceeded',
+  })
   async getPrice(@Query('mint') mint: string) {
     if (!mint) {
       throw new HttpException(
@@ -124,7 +126,10 @@ export class OraclesController {
       },
     },
   })
-  @ApiResponse({ status: 429, description: 'Too many requests - Rate limit exceeded' })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests - Rate limit exceeded',
+  })
   async getSupportedTokens() {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();
@@ -169,7 +174,10 @@ export class OraclesController {
       },
     },
   })
-  @ApiResponse({ status: 429, description: 'Too many requests - Rate limit exceeded' })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests - Rate limit exceeded',
+  })
   async getHealth() {
     try {
       const tokens = await this.priceOracleService.getSupportedTokens();

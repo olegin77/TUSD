@@ -28,7 +28,6 @@ docker-compose -f docker-compose.monitoring.yml logs -f
 - **Grafana**: http://localhost:3002
   - Username: `admin`
   - Password: `admin123` (configure via GRAFANA_PASSWORD env var)
-  
 - **Prometheus**: http://localhost:9090
 
 - **Node Exporter**: http://localhost:9100/metrics
@@ -38,12 +37,14 @@ docker-compose -f docker-compose.monitoring.yml logs -f
 ## Metrics Collected
 
 ### Application Metrics
+
 - HTTP request rate and duration
 - Response status codes
 - Database query performance
 - Active connections
 
 ### Business Metrics
+
 - Total Value Locked (TVL)
 - Active Wexels count
 - Deposit volume
@@ -51,6 +52,7 @@ docker-compose -f docker-compose.monitoring.yml logs -f
 - User count
 
 ### Blockchain Metrics
+
 - Indexer last block
 - Events processed
 - Indexer lag
@@ -58,6 +60,7 @@ docker-compose -f docker-compose.monitoring.yml logs -f
 - Oracle update frequency
 
 ### System Metrics
+
 - CPU usage
 - Memory usage
 - Disk I/O
@@ -68,6 +71,7 @@ docker-compose -f docker-compose.monitoring.yml logs -f
 Pre-configured dashboard: **USDX Wexel Platform**
 
 Includes:
+
 - HTTP request rate
 - Response time (p95)
 - CPU and memory usage
@@ -79,9 +83,11 @@ Includes:
 ## Configuration
 
 ### Prometheus
+
 Edit `prometheus/prometheus.yml` to add/modify scrape targets.
 
 ### Grafana
+
 - Datasource: Auto-provisioned from `grafana/provisioning/datasources/`
 - Dashboards: Auto-loaded from `grafana/dashboards/`
 
@@ -125,6 +131,7 @@ groups:
 ## Troubleshooting
 
 ### Metrics not showing
+
 ```bash
 # Check if metrics endpoint is accessible
 curl http://localhost:3001/metrics
@@ -134,6 +141,7 @@ curl http://localhost:3001/metrics
 ```
 
 ### Dashboard issues
+
 ```bash
 # Restart Grafana
 docker-compose -f docker-compose.monitoring.yml restart grafana

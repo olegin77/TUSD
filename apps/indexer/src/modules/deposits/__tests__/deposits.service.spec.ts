@@ -55,7 +55,9 @@ describe('DepositsService', () => {
         created_at: new Date(),
       };
 
-      jest.spyOn(prisma.deposit, 'create').mockResolvedValue(expectedDeposit as any);
+      jest
+        .spyOn(prisma.deposit, 'create')
+        .mockResolvedValue(expectedDeposit as any);
 
       const result = await service.create(depositDto as any);
 
@@ -90,7 +92,9 @@ describe('DepositsService', () => {
         },
       ];
 
-      jest.spyOn(prisma.deposit, 'findMany').mockResolvedValue(mockDeposits as any);
+      jest
+        .spyOn(prisma.deposit, 'findMany')
+        .mockResolvedValue(mockDeposits as any);
       jest.spyOn(prisma.deposit, 'count').mockResolvedValue(2);
 
       const result = await service.findAll({ page: 1, limit: 10 });
@@ -112,7 +116,9 @@ describe('DepositsService', () => {
         },
       ];
 
-      jest.spyOn(prisma.deposit, 'findMany').mockResolvedValue(mockDeposits as any);
+      jest
+        .spyOn(prisma.deposit, 'findMany')
+        .mockResolvedValue(mockDeposits as any);
       jest.spyOn(prisma.deposit, 'count').mockResolvedValue(1);
 
       const result = await service.findAll({
@@ -143,7 +149,9 @@ describe('DepositsService', () => {
         created_at: new Date(),
       };
 
-      jest.spyOn(prisma.deposit, 'findUnique').mockResolvedValue(mockDeposit as any);
+      jest
+        .spyOn(prisma.deposit, 'findUnique')
+        .mockResolvedValue(mockDeposit as any);
 
       const result = await service.findOne(1);
 
@@ -174,7 +182,9 @@ describe('DepositsService', () => {
         created_at: new Date(),
       };
 
-      jest.spyOn(prisma.deposit, 'update').mockResolvedValue(updatedDeposit as any);
+      jest
+        .spyOn(prisma.deposit, 'update')
+        .mockResolvedValue(updatedDeposit as any);
 
       const result = await service.update(1, { status: 'CONFIRMED' } as any);
 
@@ -199,7 +209,9 @@ describe('DepositsService', () => {
         },
       ];
 
-      jest.spyOn(prisma.deposit, 'findMany').mockResolvedValue(mockDeposits as any);
+      jest
+        .spyOn(prisma.deposit, 'findMany')
+        .mockResolvedValue(mockDeposits as any);
 
       const result = await service.getUserDeposits(1);
 

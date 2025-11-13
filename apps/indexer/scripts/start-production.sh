@@ -3,8 +3,8 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-# Проверка что собрано
-if [ ! -f "dist/main.js" ]; then
+# Проверка что собрано (NestJS компилирует в dist/src/)
+if [ ! -f "dist/src/main.js" ]; then
   echo "❌ Build not found, building first..."
   ./scripts/build-production.sh
 fi
@@ -15,4 +15,4 @@ npx prisma migrate deploy || echo "⚠️  Migration skipped (may need manual in
 
 # Запуск в production
 echo "Starting Indexer in PRODUCTION mode..."
-NODE_ENV=production node dist/main.js
+NODE_ENV=production node dist/src/main.js

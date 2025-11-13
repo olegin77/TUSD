@@ -34,7 +34,8 @@ export class DepositsController {
   @Post()
   @ApiOperation({
     summary: 'Create new deposit',
-    description: 'Initialize a new deposit and reserve ID before blockchain transaction',
+    description:
+      'Initialize a new deposit and reserve ID before blockchain transaction',
   })
   @ApiBody({ type: CreateDepositDto })
   @ApiResponse({
@@ -96,7 +97,10 @@ export class DepositsController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Bad request - Invalid transaction' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid transaction',
+  })
   @ApiResponse({ status: 404, description: 'Deposit not found' })
   async confirm(
     @Param('id', ParseIntPipe) id: number,
@@ -142,7 +146,10 @@ export class DepositsController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Bad request - Boost requirements not met' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Boost requirements not met',
+  })
   @ApiResponse({ status: 404, description: 'Deposit not found' })
   async applyBoost(
     @Param('id', ParseIntPipe) id: number,

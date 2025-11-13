@@ -2,8 +2,8 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'usdx-wexel'
-    environment: 'production'
+    cluster: "usdx-wexel"
+    environment: "production"
 
 # Alertmanager configuration (optional)
 # alerting:
@@ -18,53 +18,53 @@ global:
 
 scrape_configs:
   # Prometheus self-monitoring
-  - job_name: 'prometheus'
+  - job_name: "prometheus"
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
 
   # Node Exporter - System metrics
-  - job_name: 'node-exporter'
+  - job_name: "node-exporter"
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ["node-exporter:9100"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        replacement: 'production-server'
+        replacement: "production-server"
 
   # NestJS Indexer API
-  - job_name: 'indexer-api'
-    metrics_path: '/metrics'
+  - job_name: "indexer-api"
+    metrics_path: "/metrics"
     static_configs:
-      - targets: ['host.docker.internal:3001']
+      - targets: ["host.docker.internal:3001"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        replacement: 'indexer-api'
+        replacement: "indexer-api"
 
   # Next.js Webapp (if metrics endpoint added)
-  - job_name: 'webapp'
-    metrics_path: '/api/metrics'
+  - job_name: "webapp"
+    metrics_path: "/api/metrics"
     static_configs:
-      - targets: ['host.docker.internal:3000']
+      - targets: ["host.docker.internal:3000"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        replacement: 'webapp'
+        replacement: "webapp"
 
   # PostgreSQL Exporter (if deployed)
-  - job_name: 'postgresql'
+  - job_name: "postgresql"
     static_configs:
-      - targets: ['postgres-exporter:9187']
+      - targets: ["postgres-exporter:9187"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        replacement: 'postgresql'
+        replacement: "postgresql"
 
   # Redis Exporter (if deployed)
-  - job_name: 'redis'
+  - job_name: "redis"
     static_configs:
-      - targets: ['redis-exporter:9121']
+      - targets: ["redis-exporter:9121"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        replacement: 'redis'
+        replacement: "redis"
