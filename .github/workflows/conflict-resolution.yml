@@ -4,9 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [main]
-  schedule:
-    # Запускаем каждые 30 минут для проверки конфликтов
-    - cron: "*/30 * * * *"
+  # Блок schedule удален, чтобы остановить спам каждые 30 минут
   workflow_dispatch:
 
 permissions:
@@ -30,30 +28,23 @@ jobs:
       - name: Detect merge conflicts
         id: detect
         run: |
-          # Получаем номер PR из контекста или из всех открытых PR
+          # Получаем номер PR из контекста
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             PR_NUMBER="${{ github.event.pull_request.number }}"
             HEAD_REF="${{ github.event.pull_request.head.ref }}"
             BASE_REF="${{ github.event.pull_request.base.ref }}"
           else
-            # Для scheduled runs получаем все открытые PR
-            PR_LIST=$(gh pr list --state open --base main --json number,headRefName,baseRefName)
-            PR_COUNT=$(echo $PR_LIST | jq length)
-            
-            if [ "$PR_COUNT" -eq 0 ]; then
-              echo "No open PRs found"
-              echo "has-conflicts=false" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-            
-            # Берем первый PR для проверки
-            PR_NUMBER=$(echo $PR_LIST | jq -r '.[0].number')
-            HEAD_REF=$(echo $PR_LIST | jq -r '.[0].headRefName')
-            BASE_REF=$(echo $PR_LIST | jq -r '.[0].baseRefName')
+            # Для ручного запуска (workflow_dispatch)
+            echo "Manual run detected without PR context. Exiting."
+            exit 0
           fi
 
           echo "Checking PR #$PR_NUMBER for conflicts"
           echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+          # Настройка git для корректной работы
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
 
           # Обновляем main ветку
           git fetch origin main
@@ -63,19 +54,26 @@ jobs:
           # Получаем feature ветку
           git fetch origin $HEAD_REF
 
-          # Проверяем конфликты
+          # Проверяем конфликты с подавлением ошибки выхода (set +e внутри if)
+          # Используем merge-tree для проверки без реального слияния
           if git merge-tree $(git merge-base origin/main origin/$HEAD_REF) origin/main origin/$HEAD_REF > /tmp/merge-result 2>&1; then
             echo "No conflicts detected"
             echo "has-conflicts=false" >> $GITHUB_OUTPUT
             echo "conflict-files=" >> $GITHUB_OUTPUT
           else
-            echo "Conflicts detected"
-            echo "has-conflicts=true" >> $GITHUB_OUTPUT
-            
-            # Извлекаем список файлов с конфликтами
-            CONFLICT_FILES=$(grep -E '^<<<<<<<|^=======|^>>>>>>>' /tmp/merge-result | grep -o '^[^:]*' | sort -u | tr '\n' ',' | sed 's/,$//')
-            echo "conflict-files=$CONFLICT_FILES" >> $GITHUB_OUTPUT
-            echo "Conflict files: $CONFLICT_FILES"
+            # Проверяем, действительно ли есть маркеры конфликтов, чтобы grep не уронил скрипт (exit code 1)
+            if grep -qE '^<<<<<<<|^=======|^>>>>>>>' /tmp/merge-result; then
+                echo "Conflicts detected"
+                echo "has-conflicts=true" >> $GITHUB_OUTPUT
+                
+                # Извлекаем список файлов с конфликтами
+                CONFLICT_FILES=$(grep -E '^<<<<<<<|^=======|^>>>>>>>' /tmp/merge-result | grep -o '^[^:]*' | sort -u | tr '\n' ',' | sed 's/,$//')
+                echo "conflict-files=$CONFLICT_FILES" >> $GITHUB_OUTPUT
+                echo "Conflict files: $CONFLICT_FILES"
+            else
+                echo "Merge failed but no standard conflict markers found. Check logs."
+                echo "has-conflicts=false" >> $GITHUB_OUTPUT
+            fi
           fi
 
   attempt-auto-resolution:
@@ -99,7 +97,10 @@ jobs:
           CONFLICT_FILES="${{ needs.detect-conflicts.outputs.conflict-files }}"
 
           echo "Attempting to resolve conflicts for PR #$PR_NUMBER"
-          echo "Conflict files: $CONFLICT_FILES"
+          
+          # Настройка git
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
 
           # Получаем информацию о PR
           PR_INFO=$(gh pr view $PR_NUMBER --json title,headRefName,baseRefName,author)
@@ -107,136 +108,80 @@ jobs:
           BASE_REF=$(echo $PR_INFO | jq -r '.baseRefName')
           AUTHOR=$(echo $PR_INFO | jq -r '.author.login')
 
-          # Создаем временную ветку для разрешения конфликтов
+          # Создаем ветку
           RESOLUTION_BRANCH="conflict-resolution-$PR_NUMBER-$(date +%s)"
-          git checkout -b $RESOLUTION_BRANCH
+          git fetch origin $HEAD_REF
+          git checkout -b $RESOLUTION_BRANCH origin/$HEAD_REF
 
-          # Обновляем main
+          # Пробуем мержить main
           git fetch origin main
-          git merge origin/main
+          # Пытаемся мержить, ожидаем ошибку, поэтому || true
+          git merge origin/main || true
 
-          # Пытаемся автоматически разрешить конфликты
           RESOLUTION_SUCCESS="true"
           RESOLUTION_MESSAGE=""
 
-          # Стратегия 1: Используем стратегию "ours" для файлов конфигурации
-          CONFIG_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -E '\.(json|yml|yaml|toml|lock)$' || true)
-          if [ -n "$CONFIG_FILES" ]; then
-            echo "Resolving config files using 'ours' strategy"
-            for file in $CONFIG_FILES; do
-              if [ -f "$file" ]; then
+          # Стратегия 1: Конфиги (ours)
+          if echo "$CONFLICT_FILES" | grep -qE '\.(json|yml|yaml|toml|lock)$'; then
+            echo "Resolving config files..."
+            # Находим только существующие файлы
+            git diff --name-only --diff-filter=U | grep -E '\.(json|yml|yaml|toml|lock)$' | while read file; do
                 git checkout --ours "$file"
                 git add "$file"
-                echo "Resolved $file using 'ours' strategy"
-              fi
+                echo "Resolved $file using 'ours'"
             done
           fi
 
-          # Стратегия 2: Используем стратегию "theirs" для сгенерированных файлов
-          GENERATED_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -E '(dist/|build/|generated/)' || true)
-          if [ -n "$GENERATED_FILES" ]; then
-            echo "Resolving generated files using 'theirs' strategy"
-            for file in $GENERATED_FILES; do
-              if [ -f "$file" ]; then
+          # Стратегия 2: Генерируемые файлы (theirs)
+          if echo "$CONFLICT_FILES" | grep -qE '(dist/|build/|generated/)'; then
+             echo "Resolving generated files..."
+             git diff --name-only --diff-filter=U | grep -E '(dist/|build/|generated/)' | while read file; do
                 git checkout --theirs "$file"
                 git add "$file"
-                echo "Resolved $file using 'theirs' strategy"
-              fi
-            done
+                echo "Resolved $file using 'theirs'"
+             done
           fi
 
-          # Стратегия 3: Для остальных файлов пытаемся автоматическое разрешение
-          OTHER_FILES=$(echo $CONFLICT_FILES | tr ',' '\n' | grep -v -E '\.(json|yml|yaml|toml|lock)$' | grep -v -E '(dist/|build/|generated/)' || true)
-          if [ -n "$OTHER_FILES" ]; then
-            echo "Attempting automatic resolution for other files"
-            for file in $OTHER_FILES; do
-              if [ -f "$file" ]; then
-                # Пытаемся использовать git merge-file для автоматического разрешения
-                if git merge-file --stdout "$file" "$file" "$file" > "$file.resolved" 2>/dev/null; then
-                  mv "$file.resolved" "$file"
-                  git add "$file"
-                  echo "Auto-resolved $file"
-                else
-                  echo "Could not auto-resolve $file"
-                  RESOLUTION_SUCCESS="false"
-                  RESOLUTION_MESSAGE="$RESOLUTION_MESSAGE\n❌ Не удалось автоматически разрешить конфликт в файле: $file"
-                fi
-              fi
-            done
-          fi
-
-          # Проверяем, остались ли неразрешенные конфликты
+          # Если остались конфликты, фиксируем неудачу
           if git diff --check > /dev/null 2>&1; then
-            echo "All conflicts resolved successfully"
-            RESOLUTION_MESSAGE="✅ Все конфликты автоматически разрешены"
+            echo "All specified conflicts resolved"
+            RESOLUTION_MESSAGE="✅ Конфликты в конфигурации/сборке разрешены автоматически."
             
-            # Коммитим изменения
-            git config --local user.name "GitHub Actions Bot"
-            git config --local user.email "actions@github.com"
             git commit -m "🤖 Auto-resolve merge conflicts
-
-          Автоматически разрешены конфликты с main веткой:
-          - Использована стратегия 'ours' для конфигурационных файлов
-          - Использована стратегия 'theirs' для сгенерированных файлов
-          - Автоматическое разрешение для остальных файлов
-
-          Co-authored-by: $AUTHOR <$AUTHOR@users.noreply.github.com>"
             
-            # Пушим изменения в feature ветку
+            Co-authored-by: $AUTHOR <$AUTHOR@users.noreply.github.com>"
+            
             git push origin $RESOLUTION_BRANCH:$HEAD_REF
-            echo "Pushed resolved changes to $HEAD_REF"
           else
-            echo "Some conflicts remain unresolved"
+            echo "Unresolved conflicts remain"
             RESOLUTION_SUCCESS="false"
-            RESOLUTION_MESSAGE="$RESOLUTION_MESSAGE\n❌ Остались неразрешенные конфликты"
+            RESOLUTION_MESSAGE="❌ Требуется ручное вмешательство для файлов логики."
+            # Отменяем изменения, чтобы не оставлять мусор
+            git merge --abort || true
           fi
 
           echo "success=$RESOLUTION_SUCCESS" >> $GITHUB_OUTPUT
           echo "message=$RESOLUTION_MESSAGE" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   notify-resolution:
     runs-on: ubuntu-latest
     needs: [detect-conflicts, attempt-auto-resolution]
-    if: always()
+    if: always() && needs.detect-conflicts.outputs.has-conflicts == 'true'
     steps:
       - name: Notify about resolution
         run: |
           PR_NUMBER="${{ needs.detect-conflicts.outputs.pr-number }}"
-          HAS_CONFLICTS="${{ needs.detect-conflicts.outputs.has-conflicts }}"
           RESOLUTION_SUCCESS="${{ needs.attempt-auto-resolution.outputs.resolution-success }}"
-          RESOLUTION_MESSAGE="${{ needs.attempt-auto-resolution.outputs.resolution-message }}"
-
-          if [ "$HAS_CONFLICTS" = "true" ]; then
-            if [ "$RESOLUTION_SUCCESS" = "true" ]; then
-              COMMENT_BODY="## 🔧 Автоматическое разрешение конфликтов
-              
-              $RESOLUTION_MESSAGE
-              
-              Конфликты были автоматически разрешены и изменения запушены в вашу ветку. 
-              Пожалуйста, проверьте изменения и при необходимости внесите корректировки.
-              
-              ### Следующие шаги:
-              1. Проверьте автоматически разрешенные изменения
-              2. Убедитесь, что все работает корректно
-              3. При необходимости внесите дополнительные изменения
-              4. Запустите тесты для проверки функциональности"
-            else
-              COMMENT_BODY="## ⚠️ Конфликты требуют ручного разрешения
-              
-              $RESOLUTION_MESSAGE
-              
-              Обнаружены конфликты с main веткой, которые не удалось разрешить автоматически.
-              
-              ### Следующие шаги:
-              1. Обновите вашу ветку: \`git pull origin main\`
-              2. Разрешите конфликты вручную
-              3. Запустите тесты: \`pnpm test\`
-              4. Запустите линтинг: \`pnpm lint\`
-              5. Запушьте изменения: \`git push\`"
-            fi
-            
-            gh pr comment $PR_NUMBER --body "$COMMENT_BODY"
+          
+          if [ "$RESOLUTION_SUCCESS" = "true" ]; then
+             BODY="✅ **Конфликты разрешены автоматически!**\n\nСистема автоматически обновила ветку, разрешив конфликты в файлах конфигурации/сборки."
+          else
+             BODY="⚠️ **Требуется разрешение конфликтов**\n\nАвтоматическая система не смогла безопасно разрешить все конфликты. Пожалуйста, сделайте \`git pull origin main\` в вашей ветке."
           fi
+            
+          gh pr comment $PR_NUMBER --body "$BODY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -245,9 +190,5 @@ jobs:
     needs: [detect-conflicts, attempt-auto-resolution]
     if: always() && needs.attempt-auto-resolution.result == 'success'
     steps:
-      - name: Cleanup resolution branch
-        run: |
-          RESOLUTION_BRANCH="conflict-resolution-${{ needs.detect-conflicts.outputs.pr-number }}-*"
-          echo "Cleaning up resolution branches matching: $RESOLUTION_BRANCH"
-          # Удаляем временные ветки (если они были созданы)
-          # Это выполняется в фоне, так как ветки уже запушены
+      - name: Cleanup
+        run: echo "Cleanup skipped as no artifacts were stored permanently."
