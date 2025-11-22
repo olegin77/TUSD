@@ -1,0 +1,69 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit"
+  },
+  "navigation": {
+    "home": "Home",
+    "pools": "Pools",
+    "marketplace": "Marketplace",
+    "wallet": "Wallet",
+    "dashboard": "Dashboard",
+    "admin": "Admin"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "notConnected": "Not Connected",
+    "selectWallet": "Select Wallet",
+    "balance": "Balance",
+    "address": "Address"
+  },
+  "pools": {
+    "title": "Staking Pools",
+    "apy": "Annual Percentage Yield",
+    "lockPeriod": "Lock Period",
+    "minDeposit": "Minimum Deposit",
+    "totalDeposited": "Total Deposited",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "viewDetails": "View Details"
+  },
+  "marketplace": {
+    "title": "NFT Marketplace",
+    "buy": "Buy",
+    "sell": "Sell",
+    "price": "Price",
+    "seller": "Seller",
+    "buyer": "Buyer",
+    "listed": "Listed",
+    "sold": "Sold"
+  },
+  "deposit": {
+    "createDeposit": "Create Deposit",
+    "amount": "Amount",
+    "selectPool": "Select Pool",
+    "confirmDeposit": "Confirm Deposit",
+    "depositSuccess": "Deposit created successfully",
+    "depositError": "Deposit creation failed"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "networkError": "Network error",
+    "walletNotConnected": "Wallet not connected",
+    "insufficientFunds": "Insufficient funds",
+    "transactionFailed": "Transaction failed"
+  }
+}

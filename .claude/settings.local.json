@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(docker compose:*)",
+      "Bash(sudo docker compose:*)",
+      "Bash(chmod:*)",
+      "Bash(NODE_ENV=production pnpm build:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm --filter webapp build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(rsync:*)",
+      "Bash(bash:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

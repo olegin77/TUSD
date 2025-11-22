@@ -1,0 +1,28 @@
+{
+  "name": "@usdx-wexel/tron-contracts",
+  "version": "1.0.0",
+  "description": "Tron smart contracts for USDX/Wexel platform",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tronbox compile",
+    "migrate": "tronbox migrate --network nile",
+    "migrate:mainnet": "tronbox migrate --network mainnet",
+    "test": "tronbox test",
+    "console": "tronbox console",
+    "verify": "tronbox verify"
+  },
+  "keywords": [
+    "tron",
+    "smart-contracts",
+    "trc20",
+    "trc721",
+    "defi"
+  ],
+  "author": "USDX/Wexel Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
+    "tronbox": "^3.2.7",
+    "tronweb": "^6.0.4"
+  }
+}

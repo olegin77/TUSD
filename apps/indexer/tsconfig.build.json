@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "prisma",
+    "**/*spec.ts",
+    "**/*.spec.ts",
+    "**/__tests__/**",
+    "**/*.test.ts"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": false
+  }
+}

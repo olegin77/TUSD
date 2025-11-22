@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Next.js build outputs
+.next
+out
+
+# Development files
+*.md
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# CI/CD
+.github
+
+# Tests
+**/__tests__
+**/*.spec.ts
+**/*.test.ts
+**/*.spec.tsx
+**/*.test.tsx
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db
+coverage

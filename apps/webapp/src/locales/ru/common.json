@@ -1,0 +1,69 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успешно",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "close": "Закрыть",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "view": "Просмотр",
+    "back": "Назад",
+    "next": "Далее",
+    "submit": "Отправить"
+  },
+  "navigation": {
+    "home": "Главная",
+    "pools": "Пулы",
+    "marketplace": "Маркетплейс",
+    "wallet": "Кошелек",
+    "dashboard": "Панель управления",
+    "admin": "Администратор"
+  },
+  "wallet": {
+    "connect": "Подключить кошелек",
+    "disconnect": "Отключить",
+    "connected": "Подключено",
+    "notConnected": "Не подключено",
+    "selectWallet": "Выберите кошелек",
+    "balance": "Баланс",
+    "address": "Адрес"
+  },
+  "pools": {
+    "title": "Пулы стейкинга",
+    "apy": "Годовая доходность",
+    "lockPeriod": "Период блокировки",
+    "minDeposit": "Минимальный депозит",
+    "totalDeposited": "Всего внесено",
+    "deposit": "Внести депозит",
+    "withdraw": "Вывести",
+    "viewDetails": "Подробнее"
+  },
+  "marketplace": {
+    "title": "Маркетплейс NFT",
+    "buy": "Купить",
+    "sell": "Продать",
+    "price": "Цена",
+    "seller": "Продавец",
+    "buyer": "Покупатель",
+    "listed": "Выставлено",
+    "sold": "Продано"
+  },
+  "deposit": {
+    "createDeposit": "Создать депозит",
+    "amount": "Сумма",
+    "selectPool": "Выберите пул",
+    "confirmDeposit": "Подтвердите депозит",
+    "depositSuccess": "Депозит успешно создан",
+    "depositError": "Ошибка создания депозита"
+  },
+  "errors": {
+    "generic": "Произошла ошибка",
+    "networkError": "Ошибка сети",
+    "walletNotConnected": "Кошелек не подключен",
+    "insufficientFunds": "Недостаточно средств",
+    "transactionFailed": "Транзакция не удалась"
+  }
+}
