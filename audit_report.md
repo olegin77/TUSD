@@ -10,7 +10,7 @@
   - **Blockchain:** Solana Web3.js 1.98.4, TronWeb 6.0.4
   - **Infrastructure:** Docker, Prometheus/Grafana, Sentry
 - **Дата проверки:** 11 ноября 2025
-- **URL приложения:** http://159.203.114.210:3000/
+- **URL приложения:** http://143.198.17.162:3000/
 - **Версия кода:** Development
 
 ---
@@ -80,11 +80,11 @@
 
 #### 1. Backend API не запущен в production
 
-**Где обнаружено:** Remote server http://159.203.114.210:3001/
+**Где обнаружено:** Remote server http://143.198.17.162:3001/
 **Как воспроизвести:**
 
 ```bash
-curl http://159.203.114.210:3001/api/v1/pools
+curl http://143.198.17.162:3001/api/v1/pools
 # Connection refused
 ```
 
@@ -221,7 +221,7 @@ pnpm update
 **Проверка:**
 
 ```bash
-ssh root@159.203.114.210 "docker ps"
+ssh root@143.198.17.162 "docker ps"
 # Только webapp-prod, нет postgres, redis
 ```
 
@@ -246,7 +246,7 @@ ssh root@159.203.114.210 "docker ps"
 
 #### 6. Отсутствие HTTPS и SSL сертификатов
 
-**Где обнаружено:** http://159.203.114.210:3000/
+**Где обнаружено:** http://143.198.17.162:3000/
 **Проблема:** Приложение доступно только по HTTP
 
 **Риски:**
@@ -309,8 +309,8 @@ ssh root@159.203.114.210 "docker ps"
 **Проверка:**
 
 ```bash
-curl http://159.203.114.210:9090 # Prometheus - connection refused
-curl http://159.203.114.210:3002 # Grafana - connection refused
+curl http://143.198.17.162:9090 # Prometheus - connection refused
+curl http://143.198.17.162:3002 # Grafana - connection refused
 ```
 
 **Последствия:**
@@ -866,7 +866,7 @@ docker run -d --name webapp-prod -p 3000:3000 webapp-prod
 
 ```bash
 # 1. Получить домен (например, wexel.io)
-# 2. Настроить DNS A record -> 159.203.114.210
+# 2. Настроить DNS A record -> 143.198.17.162
 
 # 3. Установить Certbot
 apt-get update
@@ -977,7 +977,7 @@ pm2 restart indexer
   - Создать `deployment/backend-deploy.sh` - скрипт развёртывания
 
 - **Ожидаемый результат:**
-  - Backend отвечает на http://159.203.114.210:3001/health
+  - Backend отвечает на http://143.198.17.162:3001/health
   - Все API endpoints возвращают корректные ответы
   - PostgreSQL и Redis работают стабильно
   - Индексеры синхронизируют события блокчейна
@@ -986,9 +986,9 @@ pm2 restart indexer
 - **Критерии проверки:**
 
   ```bash
-  curl http://159.203.114.210:3001/health # {"status": "ok"}
-  curl http://159.203.114.210:3001/api/v1/pools # [...]
-  curl http://159.203.114.210:3001/metrics # prometheus metrics
+  curl http://143.198.17.162:3001/health # {"status": "ok"}
+  curl http://143.198.17.162:3001/api/v1/pools # [...]
+  curl http://143.198.17.162:3001/metrics # prometheus metrics
   ```
 
 - **Приоритет:** P0 - КРИТИЧЕСКИЙ
@@ -1021,8 +1021,8 @@ pm2 restart indexer
 - **Критерии проверки:**
 
   ```bash
-  time curl http://159.203.114.210:3000/ # <1s
-  curl http://159.203.114.210:3000/ | grep "webpack-internal" # no match
+  time curl http://143.198.17.162:3000/ # <1s
+  curl http://143.198.17.162:3000/ | grep "webpack-internal" # no match
   ```
 
 - **Приоритет:** P0 - КРИТИЧЕСКИЙ
@@ -1163,8 +1163,8 @@ pm2 restart indexer
 - **Критерии проверки:**
 
   ```bash
-  curl http://159.203.114.210:9090/-/healthy # Healthy
-  curl http://159.203.114.210:3002/api/health # {"database": "ok"}
+  curl http://143.198.17.162:9090/-/healthy # Healthy
+  curl http://143.198.17.162:3002/api/health # {"database": "ok"}
   ```
 
 - **Приоритет:** P1 - ВЫСОКИЙ

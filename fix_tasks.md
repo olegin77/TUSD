@@ -17,14 +17,14 @@
 
 #### Проблема:
 
-Backend API не запущен на production сервере (159.203.114.210:3001). Connection refused на все API endpoints. Приложение полностью нефункционально.
+Backend API не запущен на production сервере (143.198.17.162:3001). Connection refused на все API endpoints. Приложение полностью нефункционально.
 
 #### Шаги выполнения:
 
 **1.1. Подготовить инфраструктуру (1 час)**
 
 ```bash
-# На сервере 159.203.114.210
+# На сервере 143.198.17.162
 cd /root/TUSD
 
 # Создать docker-compose для production
@@ -73,7 +73,7 @@ cat > apps/indexer/.env.production <<'EOF'
 # Application
 NODE_ENV=production
 API_PORT=3001
-CORS_ORIGIN=http://159.203.114.210:3000,https://wexel.io
+CORS_ORIGIN=http://143.198.17.162:3000,https://wexel.io
 
 # Database
 DATABASE_URL=postgresql://usdx:CHANGE_ME_PASSWORD@localhost:5432/usdx_wexel
@@ -232,7 +232,7 @@ curl http://localhost:3001/api/v1/pools
 # Ожидается: [] или массив пулов
 
 # Проверить внешний доступ
-curl http://159.203.114.210:3001/health
+curl http://143.198.17.162:3001/health
 
 # Проверить логи
 journalctl -u usdx-backend -f
@@ -248,7 +248,7 @@ netstat -tlnp | grep 3001
 
 #### Ожидаемый результат:
 
-- ✅ Backend отвечает на http://159.203.114.210:3001/health
+- ✅ Backend отвечает на http://143.198.17.162:3001/health
 - ✅ PostgreSQL и Redis работают
 - ✅ Все API endpoints возвращают корректные ответы (пустые массивы OK)
 - ✅ Backend автоматически запускается при перезагрузке сервера
@@ -265,8 +265,8 @@ netstat -tlnp | grep 3001
 
 ```bash
 # Все команды должны вернуть успех:
-curl http://159.203.114.210:3001/health # HTTP 200
-curl http://159.203.114.210:3001/api/v1/pools # HTTP 200
+curl http://143.198.17.162:3001/health # HTTP 200
+curl http://143.198.17.162:3001/api/v1/pools # HTTP 200
 systemctl status usdx-backend # active (running)
 docker ps | grep postgres-prod # Up
 docker ps | grep redis-prod # Up
@@ -295,8 +295,8 @@ cd apps/webapp
 # Создать production environment
 cat > .env.production <<'EOF'
 NODE_ENV=production
-NEXT_PUBLIC_API_URL=http://159.203.114.210:3001
-NEXT_PUBLIC_WS_URL=ws://159.203.114.210:3001/notifications
+NEXT_PUBLIC_API_URL=http://143.198.17.162:3001
+NEXT_PUBLIC_WS_URL=ws://143.198.17.162:3001/notifications
 
 # После настройки HTTPS (Задача #3), изменить на:
 # NEXT_PUBLIC_API_URL=https://api.wexel.io
@@ -474,8 +474,8 @@ docker run -d \
   --name webapp-prod \
   --restart unless-stopped \
   -p 3000:3000 \
-  -e NEXT_PUBLIC_API_URL=http://159.203.114.210:3001 \
-  -e NEXT_PUBLIC_WS_URL=ws://159.203.114.210:3001/notifications \
+  -e NEXT_PUBLIC_API_URL=http://143.198.17.162:3001 \
+  -e NEXT_PUBLIC_WS_URL=ws://143.198.17.162:3001/notifications \
   webapp-prod:latest
 
 # Проверить логи
@@ -489,26 +489,26 @@ docker ps | grep webapp-prod
 
 ```bash
 # Тест загрузки главной страницы
-time curl -o /dev/null -s -w "Time: %{time_total}s\nHTTP Code: %{http_code}\n" http://159.203.114.210:3000/
+time curl -o /dev/null -s -w "Time: %{time_total}s\nHTTP Code: %{http_code}\n" http://143.198.17.162:3000/
 
 # Должно быть < 1 секунды
 
 # Тест всех страниц
 for page in "/" "/dashboard" "/pools" "/wallet" "/marketplace"; do
   echo "Testing: $page"
-  time curl -o /dev/null -s -w "Time: %{time_total}s\n" "http://159.203.114.210:3000$page"
+  time curl -o /dev/null -s -w "Time: %{time_total}s\n" "http://143.198.17.162:3000$page"
 done
 
 # Проверить что нет webpack-internal
-curl http://159.203.114.210:3000/ | grep -i "webpack-internal"
+curl http://143.198.17.162:3000/ | grep -i "webpack-internal"
 # Не должно быть совпадений
 
 # Проверить что нет dev режима
-curl http://159.203.114.210:3000/ | grep -i "development"
+curl http://143.198.17.162:3000/ | grep -i "development"
 # Не должно быть
 
 # Проверить minification
-curl http://159.203.114.210:3000/_next/static/chunks/main-*.js | head -c 100
+curl http://143.198.17.162:3000/_next/static/chunks/main-*.js | head -c 100
 # Должен быть минифицированный код (без пробелов)
 ```
 
@@ -531,11 +531,11 @@ curl http://159.203.114.210:3000/_next/static/chunks/main-*.js | head -c 100
 
 ```bash
 # Производительность
-curl -w "@curl-format.txt" -o /dev/null -s http://159.203.114.210:3000/
+curl -w "@curl-format.txt" -o /dev/null -s http://143.198.17.162:3000/
 # time_total < 1.0s
 
 # Нет dev артефактов
-curl -s http://159.203.114.210:3000/ | grep -E "(webpack-internal|ErrorBoundary)" | wc -l
+curl -s http://143.198.17.162:3000/ | grep -E "(webpack-internal|ErrorBoundary)" | wc -l
 # Должно быть 0
 
 # Production mode
@@ -563,12 +563,12 @@ docker exec webapp-prod env | grep NODE_ENV
 ```bash
 # Вариант A: Если есть домен (например, wexel.io)
 # Настроить DNS A records:
-# @ (root)          A    159.203.114.210
-# www               A    159.203.114.210
-# api               A    159.203.114.210
+# @ (root)          A    143.198.17.162
+# www               A    143.198.17.162
+# api               A    143.198.17.162
 
 # Вариант B: Использовать nip.io для тестирования (бесплатно)
-# wexel.159.203.114.210.nip.io автоматически резолвится в 159.203.114.210
+# wexel.143.198.17.162.nip.io автоматически резолвится в 143.198.17.162
 
 # Вариант C: Использовать DuckDNS (бесплатно)
 # Зарегистрироваться на https://www.duckdns.org/
@@ -1298,7 +1298,7 @@ docker-compose up -d
 # 2. Проверить
 docker ps | grep -E "(prometheus|grafana|alertmanager)"
 
-# 3. Открыть Grafana http://159.203.114.210:3002
+# 3. Открыть Grafana http://143.198.17.162:3002
 # Login: admin / admin (изменить пароль!)
 
 # 4. Импортировать dashboards из infra/monitoring/grafana/dashboards/

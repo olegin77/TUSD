@@ -2,7 +2,7 @@
 
 ## P0 — критичные
 
-- Восстановить доступ к продакшну: устранить 403 Forbidden на `http://159.203.114.210:3000/` и статику (`reports/artifacts/20251111-140553/prod-headers.txt`).
+- Восстановить доступ к продакшну: устранить 403 Forbidden на `http://143.198.17.162:3000/` и статику (`reports/artifacts/20251111-140553/prod-headers.txt`).
 - Исправить инициализацию `TronWeb` в `apps/indexer` и поднять юнит-тесты `TronIndexerService`/`TronBridgeService` до зелёного состояния (`chunks b3a3be`, `78e6b4`).
 - Сделать сборку `apps/webapp` воспроизводимой без доступа к Google Fonts (локальный шрифт), добиться успешного `pnpm --filter webapp build` (`chunks 8bb34e`, `63e939`).
 

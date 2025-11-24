@@ -47,7 +47,7 @@ All standard SSR mitigation strategies were attempted and documented:
 
 ### Current State
 
-- **Backend:** 100% operational at http://159.203.114.210:3001
+- **Backend:** 100% operational at http://143.198.17.162:3001
 - **Webapp:** Returns HTTP 500 on all routes
 - **Container:** Running but non-functional (ID: `6e4ae99ddc8d`)
 

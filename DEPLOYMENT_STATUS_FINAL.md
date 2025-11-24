@@ -1,7 +1,7 @@
 # USDX/Wexel Platform - Deployment Status Report
 
 **Date:** October 30, 2025
-**Server:** 159.203.114.210 (DigitalOcean)
+**Server:** 143.198.17.162 (DigitalOcean)
 **Session:** TypeScript Fixes & Docker Build Completion
 
 ---
@@ -242,7 +242,7 @@ All changes pushed to GitHub repository.
 
 ## 📍 Current Server State
 
-**IP Address:** 159.203.114.210
+**IP Address:** 143.198.17.162
 **Docker Images:**
 
 - ✅ `usdx-wexel-indexer:latest` (1.29GB)

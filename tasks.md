@@ -803,7 +803,7 @@ _(Задачи T-0120 - T-0122 остаются)_
 
 - [x] T-0126.2 | Исправить HTTP 400 проблему в production mode и завершить деплой
   - depends: [T-0125]
-  - ✅ Completed: Webapp успешно задеплоен на DigitalOcean (159.203.114.210:3000)
+  - ✅ Completed: Webapp успешно задеплоен на DigitalOcean (143.198.17.162:3000)
   - Root Cause: Next.js 14.2.18 custom server с hostname validation вызывал HTTP 400
   - Solution Approach:
     1. Попытка исправления production mode: skipTrailingSlashRedirect, удаление X-Forwarded headers

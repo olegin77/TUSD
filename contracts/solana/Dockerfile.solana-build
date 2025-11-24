@@ -1,0 +1,29 @@
+FROM ubuntu:24.04
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    libudev-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust 1.82+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup default stable && rustup update
+
+# Install Solana CLI 1.18.22
+RUN sh -c "$(curl -sSfL https://release.solana.com/v1.18.22/install)"
+ENV PATH="/root/.local/share/solana/install/active_release/bin:${PATH}"
+
+# Install Anchor CLI 0.32.1
+RUN cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+RUN avm install 0.32.1
+RUN avm use 0.32.1
+
+# Set working directory
+WORKDIR /workspace
+
+CMD ["/bin/bash"]

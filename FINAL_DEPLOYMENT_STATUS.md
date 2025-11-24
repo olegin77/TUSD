@@ -11,7 +11,7 @@
 - Branch: `main`
 - Files Changed: 31 files (+774, -144)
 
-### DigitalOcean Server: 159.203.114.210
+### DigitalOcean Server: 143.198.17.162
 
 **All Backend Services Running:**
 
@@ -163,14 +163,14 @@
 
 ## Server Access
 
-**SSH:** `ssh root@159.203.114.210`
+**SSH:** `ssh root@143.198.17.162`
 **Services:**
 
-- API: http://159.203.114.210:3001
-- Webapp: http://159.203.114.210:3000 (HTTP 400)
-- Nginx: http://159.203.114.210:80 (HTTP 400 from upstream)
-- PostgreSQL: 159.203.114.210:5432
-- Redis: 159.203.114.210:6379
+- API: http://143.198.17.162:3001
+- Webapp: http://143.198.17.162:3000 (HTTP 400)
+- Nginx: http://143.198.17.162:80 (HTTP 400 from upstream)
+- PostgreSQL: 143.198.17.162:5432
+- Redis: 143.198.17.162:6379
 
 ## Documentation
 
@@ -208,6 +208,6 @@ For full webapp access, implement one of the documented HTTP 400 solutions. The 
 ---
 
 **Generated:** November 3, 2025
-**Server:** DigitalOcean 159.203.114.210
+**Server:** DigitalOcean 143.198.17.162
 **Repository:** https://github.com/olegin77/TUSD
 **Commit:** 40e3d34

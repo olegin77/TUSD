@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-Successfully resolved critical "window is not defined" SSR errors in Next.js 15.5.6 application with Solana wallet adapters while maintaining standalone output mode. The application now builds, deploys, and runs without crashes on production server at http://159.203.114.210.
+Successfully resolved critical "window is not defined" SSR errors in Next.js 15.5.6 application with Solana wallet adapters while maintaining standalone output mode. The application now builds, deploys, and runs without crashes on production server at http://143.198.17.162.
 
 **Key Achievement:** Progressed from HTTP 500 (server crashes) to HTTP 400 (server stable) - the webapp container runs successfully with "✓ Ready in 240ms" and NO runtime errors.
 
@@ -137,7 +137,7 @@ generator client {
 
 ## Infrastructure Deployed
 
-### Server: 159.203.114.210
+### Server: 143.198.17.162
 
 **Services Running:**
 
@@ -404,7 +404,7 @@ Indexer API:3001
 **Files Modified:** 4 files
 **Files Created:** 2 files
 **Docker Builds:** 20+ builds
-**Server:** DigitalOcean Droplet (159.203.114.210)
+**Server:** DigitalOcean Droplet (143.198.17.162)
 
 **Problem-Solving Approach:**
 
@@ -499,7 +499,7 @@ The primary objective of resolving "window is not defined" SSR errors has been *
 ---
 
 **Prepared by:** Claude Code
-**Server:** DigitalOcean Droplet 159.203.114.210
+**Server:** DigitalOcean Droplet 143.198.17.162
 **Branch:** tusd
 **Next.js Version:** 15.5.6
 **Node Version:** 20-alpine
