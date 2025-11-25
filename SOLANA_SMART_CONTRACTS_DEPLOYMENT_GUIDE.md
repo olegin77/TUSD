@@ -1,4 +1,5 @@
 # SOLANA SMART CONTRACTS - LOCAL DEPLOYMENT GUIDE
+
 ## TUSD Platform - Wexel NFT & Pool Management
 
 **Date**: November 24, 2025
@@ -25,6 +26,7 @@
 ## CURRENT SITUATION
 
 ### Problem
+
 The local development machine has a **GLIBC version mismatch** preventing Anchor compilation:
 
 ```
@@ -34,11 +36,13 @@ Anchor 0.30.1: Compatible but not installed properly
 ```
 
 ### Contract Location
+
 ```
 /home/nod/tusd/TUSD/contracts/solana/solana-contracts/
 ```
 
 ### Current Status
+
 - ✅ Smart contract code written (lib.rs)
 - ✅ Anchor project configured
 - ✅ Dependencies defined
@@ -51,6 +55,7 @@ Anchor 0.30.1: Compatible but not installed properly
 ## PREREQUISITES
 
 ### Required Software
+
 - Rust 1.75+
 - Solana CLI 1.18+
 - Anchor 0.30.1
@@ -58,7 +63,9 @@ Anchor 0.30.1: Compatible but not installed properly
 - pnpm or yarn
 
 ### Required Keys
+
 You'll need a Solana wallet with devnet SOL for deployment:
+
 ```bash
 # Generate deployment keypair if not exists
 solana-keygen new --outfile ~/.config/solana/deployer-devnet.json
@@ -73,11 +80,11 @@ solana airdrop 2 --url devnet
 
 ### Comparison Matrix
 
-| Option | Pros | Cons | Time | Difficulty |
-|--------|------|------|------|------------|
-| **1. Production Server** | ✅ No local changes<br>✅ Quick setup<br>✅ Production-ready | ⚠️ Uses production resources | 30 min | Easy |
-| **2. Docker Build** | ✅ Isolated environment<br>✅ Reproducible | ⚠️ Requires Docker permissions<br>⚠️ Large image size | 45 min | Medium |
-| **3. Upgrade System** | ✅ Permanent fix<br>✅ Latest tools | ❌ OS upgrade required<br>❌ Potential breaking changes | 2-3 hrs | Hard |
+| Option                   | Pros                                                         | Cons                                                    | Time    | Difficulty |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------- | ------- | ---------- |
+| **1. Production Server** | ✅ No local changes<br>✅ Quick setup<br>✅ Production-ready | ⚠️ Uses production resources                            | 30 min  | Easy       |
+| **2. Docker Build**      | ✅ Isolated environment<br>✅ Reproducible                   | ⚠️ Requires Docker permissions<br>⚠️ Large image size   | 45 min  | Medium     |
+| **3. Upgrade System**    | ✅ Permanent fix<br>✅ Latest tools                          | ❌ OS upgrade required<br>❌ Potential breaking changes | 2-3 hrs | Hard       |
 
 **Recommended**: **Option 1** (Production Server) for fastest deployment.
 
@@ -86,6 +93,7 @@ solana airdrop 2 --url devnet
 ## OPTION 1: BUILD ON PRODUCTION SERVER (Recommended)
 
 ### Why This Option?
+
 - ✅ Fastest solution (30 minutes)
 - ✅ Production server has newer GLIBC
 - ✅ All tools available
@@ -143,6 +151,7 @@ ls -lh target/deploy/
 ```
 
 **Expected Output:**
+
 ```
 Compiling solana-contracts v0.1.0
     Finished release [optimized] target(s) in 2m 34s
@@ -253,6 +262,7 @@ solana program deploy \
 ```
 
 **Expected Output:**
+
 ```
 Deploying workspace: https://api.devnet.solana.com
 Upgrade authority: <YOUR_WALLET_ADDRESS>
@@ -389,9 +399,11 @@ docker run --rm \
 ## OPTION 3: UPGRADE LOCAL SYSTEM
 
 ### ⚠️ Warning
+
 This option requires upgrading your Ubuntu system from 22.04 to 24.04. This is a major upgrade and may cause issues.
 
 ### Backup First!
+
 ```bash
 # Backup important data
 sudo tar czf /backup/home-$(date +%Y%m%d).tar.gz /home/nod/
@@ -616,6 +628,7 @@ curl -s http://localhost:3001/api/v1/indexer/status
 ### Issue: "insufficient funds for rent"
 
 **Solution:**
+
 ```bash
 # Check wallet balance
 solana balance --url devnet
@@ -630,6 +643,7 @@ solana airdrop 2 --url devnet
 ### Issue: "program account does not exist"
 
 **Solution:**
+
 ```bash
 # Ensure program keypair exists
 ls -la target/deploy/solana_contracts-keypair.json
@@ -644,6 +658,7 @@ anchor build
 ### Issue: "Anchor version mismatch"
 
 **Solution:**
+
 ```bash
 # Check Anchor version in Cargo.toml
 grep anchor-lang programs/solana-contracts/Cargo.toml
@@ -656,6 +671,7 @@ avm use 0.30.1
 ### Issue: "Error: Account allocation failed"
 
 **Solution:**
+
 ```bash
 # Program deployment needs more SOL
 # Request 5 SOL instead
@@ -671,6 +687,7 @@ done
 ### Issue: Docker "permission denied"
 
 **Solution:**
+
 ```bash
 # Add user to docker group
 sudo usermod -aG docker $USER
@@ -685,6 +702,7 @@ docker ps
 ### Issue: "GLIBC version not found"
 
 **Solution:**
+
 - Use Option 1 (Production Server) instead
 - Or use Option 2 (Docker)
 - Or upgrade to Ubuntu 24.04 (Option 3)
@@ -778,6 +796,7 @@ https://faucet.solana.com/
 ## ESTIMATED TIMELINES
 
 ### Option 1: Production Server
+
 - Setup tools: 15 minutes
 - Build contracts: 5 minutes
 - Deploy to devnet: 5 minutes
@@ -785,6 +804,7 @@ https://faucet.solana.com/
 - **Total: ~30 minutes**
 
 ### Option 2: Docker
+
 - Fix permissions: 5 minutes
 - Build Docker image: 15 minutes
 - Build contracts: 5 minutes
@@ -793,6 +813,7 @@ https://faucet.solana.com/
 - **Total: ~35 minutes**
 
 ### Option 3: System Upgrade
+
 - Backup: 30 minutes
 - Ubuntu upgrade: 60-120 minutes
 - Reinstall tools: 20 minutes
@@ -804,16 +825,19 @@ https://faucet.solana.com/
 ## SUPPORT & RESOURCES
 
 ### Documentation
+
 - Anchor Documentation: https://www.anchor-lang.com/
 - Solana Documentation: https://docs.solana.com/
 - Solana Cookbook: https://solanacookbook.com/
 
 ### Tools
+
 - Solana Explorer: https://explorer.solana.com/
 - Solana Faucet: https://faucet.solana.com/
 - Anchor Playground: https://beta.solpg.io/
 
 ### Community
+
 - Solana Discord: https://discord.gg/solana
 - Anchor GitHub: https://github.com/coral-xyz/anchor
 - Stack Exchange: https://solana.stackexchange.com/

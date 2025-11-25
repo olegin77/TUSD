@@ -97,7 +97,7 @@ jobs:
           CONFLICT_FILES="${{ needs.detect-conflicts.outputs.conflict-files }}"
 
           echo "Attempting to resolve conflicts for PR #$PR_NUMBER"
-          
+
           # Настройка git
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions Bot"
@@ -174,7 +174,7 @@ jobs:
         run: |
           PR_NUMBER="${{ needs.detect-conflicts.outputs.pr-number }}"
           RESOLUTION_SUCCESS="${{ needs.attempt-auto-resolution.outputs.resolution-success }}"
-          
+
           if [ "$RESOLUTION_SUCCESS" = "true" ]; then
              BODY="✅ **Конфликты разрешены автоматически!**\n\nСистема автоматически обновила ветку, разрешив конфликты в файлах конфигурации/сборки."
           else

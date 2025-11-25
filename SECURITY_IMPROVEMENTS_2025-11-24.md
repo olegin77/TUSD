@@ -1,4 +1,5 @@
 # TUSD PLATFORM - SECURITY & MONITORING IMPROVEMENTS
+
 ## Date: November 24, 2025
 
 ---
@@ -14,11 +15,13 @@ Successfully completed **7 critical security and infrastructure improvements** o
 ## 1. ✅ UFW FIREWALL - ENABLED
 
 ### What Was Done:
+
 - Configured UFW firewall rules
 - Allowed only necessary ports: 22 (SSH), 80 (HTTP), 443 (HTTPS)
 - Enabled firewall and set to start on boot
 
 ### Status:
+
 ```bash
 Status: active
 
@@ -30,6 +33,7 @@ To                         Action      From
 ```
 
 ### Security Impact:
+
 - ✅ All unnecessary ports now blocked
 - ✅ Attack surface significantly reduced
 - ✅ Firewall rules persistent across reboots
@@ -39,11 +43,13 @@ To                         Action      From
 ## 2. ✅ FAIL2BAN - INSTALLED & ACTIVE
 
 ### What Was Done:
+
 - Installed fail2ban package
 - Configured SSH brute-force protection
 - Service enabled and running
 
 ### Status:
+
 ```bash
 Number of jails: 1
 Jail: sshd
@@ -53,6 +59,7 @@ Jail: sshd
 ```
 
 ### Security Impact:
+
 - ✅ Automatic IP blocking after failed SSH attempts
 - ✅ Already blocked 1 attacker (104.131.190.105)
 - ✅ SSH brute-force attacks mitigated
@@ -62,12 +69,14 @@ Jail: sshd
 ## 3. ✅ AUTOMATED DATABASE BACKUPS
 
 ### What Was Done:
+
 - Created backup script: `/root/backup-database.sh`
 - Scheduled daily backups at 2 AM UTC via cron
 - 14-day retention policy configured
 - Backup storage: `/root/backups/postgresql/`
 
 ### Backup Details:
+
 ```bash
 # Cron job
 0 2 * * * /root/backup-database.sh >> /var/log/backup-database.log 2>&1
@@ -80,11 +89,13 @@ usdx_wexel_YYYYMMDD_HHMMSS.sql.gz
 ```
 
 ### Tested:
+
 - ✅ Manual backup successful
 - ✅ Database dump verified (3.7KB compressed)
 - ✅ Cleanup script working
 
 ### Security Impact:
+
 - ✅ Data loss risk reduced from HIGH to LOW
 - ✅ Recovery point objective: 24 hours
 - ⚠️ Off-site backup storage (pending)
@@ -94,6 +105,7 @@ usdx_wexel_YYYYMMDD_HHMMSS.sql.gz
 ## 4. ✅ PROMETHEUS MONITORING - DEPLOYED
 
 ### What Was Done:
+
 - Installed Prometheus 2.45.3
 - Installed Node Exporter for system metrics
 - Configured scraping for:
@@ -103,11 +115,13 @@ usdx_wexel_YYYYMMDD_HHMMSS.sql.gz
   - TUSD Webapp (configured, endpoint pending)
 
 ### Access:
+
 - **URL**: https://143.198.17.162/monitoring/
 - **Authentication**: Basic Auth (tusdadmin / tusd_monitoring_2024)
 - **Local**: http://localhost:9090
 
 ### Metrics Collected:
+
 - ✅ CPU usage
 - ✅ Memory usage
 - ✅ Disk I/O
@@ -116,18 +130,20 @@ usdx_wexel_YYYYMMDD_HHMMSS.sql.gz
 - ✅ Application metrics (indexer)
 
 ### Current Status:
+
 ```json
 {
   "targets": [
-    {"job": "prometheus", "health": "up"},
-    {"job": "node", "health": "up"},
-    {"job": "tusd-indexer", "health": "up"},
-    {"job": "tusd-webapp", "health": "down", "reason": "metrics endpoint not implemented"}
+    { "job": "prometheus", "health": "up" },
+    { "job": "node", "health": "up" },
+    { "job": "tusd-indexer", "health": "up" },
+    { "job": "tusd-webapp", "health": "down", "reason": "metrics endpoint not implemented" }
   ]
 }
 ```
 
 ### Security Impact:
+
 - ✅ Real-time monitoring of system resources
 - ✅ Early detection of anomalies
 - ✅ Performance bottleneck identification
@@ -138,6 +154,7 @@ usdx_wexel_YYYYMMDD_HHMMSS.sql.gz
 ## 5. ✅ ENHANCED SECURITY HEADERS
 
 ### What Was Done:
+
 Updated Nginx configuration with comprehensive security headers:
 
 ```nginx
@@ -149,6 +166,7 @@ Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-s
 ```
 
 ### Security Impact:
+
 - ✅ Clickjacking protection
 - ✅ MIME-type sniffing prevention
 - ✅ XSS attack mitigation
@@ -160,16 +178,19 @@ Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-s
 ## 6. ✅ /tmp DIRECTORY PERMISSIONS - FIXED
 
 ### Issue Found:
+
 - `/tmp` had incorrect ownership: `1001:docker`
 - Prevented apt-get updates and system operations
 
 ### What Was Done:
+
 ```bash
 chmod 1777 /tmp
 chown root:root /tmp
 ```
 
 ### Security Impact:
+
 - ✅ System updates working properly
 - ✅ Proper temp file handling
 - ✅ Standard Unix permissions restored
@@ -179,12 +200,14 @@ chown root:root /tmp
 ## 7. ✅ BLOCKCHAIN INDEXING SERVICE - VERIFIED
 
 ### Status:
+
 - Service: `tusd-indexer.service`
 - State: Active (running)
 - Health: OK
 - Metrics: Enabled
 
 ### Configuration:
+
 ```json
 {
   "solana": {
@@ -197,6 +220,7 @@ chown root:root /tmp
 ```
 
 ### Pending:
+
 - ⚠️ Program IDs need to be configured after smart contract deployment
 
 ---
@@ -205,24 +229,26 @@ chown root:root /tmp
 
 ### Security Posture
 
-| Component | Before | After | Improvement |
-|-----------|--------|-------|-------------|
-| Firewall | ❌ None | ✅ UFW Active | 🟢 HIGH |
-| Intrusion Prevention | ❌ None | ✅ Fail2ban | 🟢 HIGH |
-| Database Backups | ❌ Manual | ✅ Automated | 🟢 HIGH |
-| Monitoring | ❌ None | ✅ Prometheus | 🟢 MEDIUM |
-| Security Headers | ⚠️ Basic | ✅ Comprehensive | 🟢 MEDIUM |
-| Overall Risk | 🔴 HIGH | 🟢 LOW-MEDIUM | 🟢 Significant |
+| Component            | Before    | After            | Improvement    |
+| -------------------- | --------- | ---------------- | -------------- |
+| Firewall             | ❌ None   | ✅ UFW Active    | 🟢 HIGH        |
+| Intrusion Prevention | ❌ None   | ✅ Fail2ban      | 🟢 HIGH        |
+| Database Backups     | ❌ Manual | ✅ Automated     | 🟢 HIGH        |
+| Monitoring           | ❌ None   | ✅ Prometheus    | 🟢 MEDIUM      |
+| Security Headers     | ⚠️ Basic  | ✅ Comprehensive | 🟢 MEDIUM      |
+| Overall Risk         | 🔴 HIGH   | 🟢 LOW-MEDIUM    | 🟢 Significant |
 
 ### System Security Score
 
 **Before**: 2/10
+
 - No firewall
 - No fail2ban
 - No backups
 - No monitoring
 
 **After**: 8/10
+
 - ✅ Firewall configured
 - ✅ Fail2ban active
 - ✅ Automated backups
@@ -235,11 +261,13 @@ chown root:root /tmp
 ## MONITORING ACCESS
 
 ### Prometheus Dashboard
+
 - **URL**: https://143.198.17.162/monitoring/
 - **Username**: tusdadmin
 - **Password**: tusd_monitoring_2024
 
 ### Available Metrics:
+
 1. **System Metrics** (Node Exporter)
    - CPU usage, load average
    - Memory usage and swap
@@ -262,6 +290,7 @@ chown root:root /tmp
 ## NEXT STEPS (PRIORITY ORDER)
 
 ### High Priority
+
 1. **Deploy Solana Smart Contracts**
    - Requires compatible build environment
    - Blocked by GLIBC version mismatch locally
@@ -282,6 +311,7 @@ chown root:root /tmp
      - Service down
 
 ### Medium Priority
+
 4. **Implement Rate Limiting**
    - Add nginx rate limiting module
    - Configure per-endpoint limits
@@ -298,6 +328,7 @@ chown root:root /tmp
    - Set up notifications
 
 ### Low Priority
+
 7. **Get Real SSL Certificate**
    - Register domain or use IP
    - Install Let's Encrypt certificate
@@ -314,6 +345,7 @@ chown root:root /tmp
 ## FILES MODIFIED
 
 ### Configuration Files
+
 - `/etc/ufw/` - Firewall rules
 - `/etc/fail2ban/jail.d/` - Fail2ban config
 - `/etc/prometheus/prometheus.yml` - Prometheus configuration
@@ -322,9 +354,11 @@ chown root:root /tmp
 - `/etc/crontab` - Backup schedule
 
 ### Scripts Created
+
 - `/root/backup-database.sh` - Database backup script
 
 ### Log Files
+
 - `/var/log/backup-database.log` - Backup execution logs
 - `/var/log/ufw.log` - Firewall logs
 - `/var/log/fail2ban.log` - Ban activity logs
@@ -334,6 +368,7 @@ chown root:root /tmp
 ## AUDIT FILE UPDATED
 
 Updated `PLATFORM_AUDIT_2025-11-24.md` with:
+
 - ✅ Marked completed security tasks
 - ✅ Updated risk assessment
 - ✅ Updated technical debt section
@@ -344,10 +379,12 @@ Updated `PLATFORM_AUDIT_2025-11-24.md` with:
 ## COST IMPACT
 
 ### Monthly Costs (No Change)
+
 - **Before**: $24/month (DigitalOcean droplet)
 - **After**: $24/month (same)
 
 ### Resource Usage:
+
 - **CPU**: +2% (monitoring overhead)
 - **Memory**: +30MB (Prometheus + Node Exporter)
 - **Disk**: +50MB (installed packages)
@@ -362,6 +399,7 @@ All improvements implemented using free, open-source software.
 Successfully hardened the TUSD production server with **zero downtime** and **zero cost increase**. The platform is now significantly more secure and observable.
 
 **Key Achievements:**
+
 - 🔒 Attack surface reduced by 90%
 - 📊 Full system monitoring deployed
 - 💾 Data loss risk mitigated
@@ -369,6 +407,7 @@ Successfully hardened the TUSD production server with **zero downtime** and **ze
 - 📈 Security score improved from 2/10 to 8/10
 
 **Remaining Critical Tasks:**
+
 1. Deploy Solana smart contracts (blocked by GLIBC issue)
 2. Set up alerting
 3. Configure off-site backups

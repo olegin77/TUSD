@@ -1,4 +1,5 @@
 # 🚀 SOLANA SMART CONTRACTS - QUICK START
+
 ## 30-Minute Deployment Guide
 
 **Target**: Deploy TUSD smart contracts to Solana Devnet
@@ -165,12 +166,14 @@ echo "https://explorer.solana.com/address/$PROGRAM_ID?cluster=devnet"
 ## 🆘 TROUBLESHOOTING
 
 ### Problem: "insufficient funds"
+
 ```bash
 # Get more SOL (multiple times if needed)
 for i in {1..3}; do solana airdrop 2; sleep 30; done
 ```
 
 ### Problem: "airdrop failed"
+
 ```bash
 # Use web faucet instead
 echo "Get SOL at: https://faucet.solana.com/"
@@ -178,6 +181,7 @@ echo "Your address: $(solana address)"
 ```
 
 ### Problem: "Anchor version mismatch"
+
 ```bash
 # Ensure using Anchor 0.30.1
 avm use 0.30.1
@@ -186,6 +190,7 @@ anchor --version
 ```
 
 ### Problem: Build fails
+
 ```bash
 # Clean and rebuild
 rm -rf target/
@@ -320,6 +325,7 @@ chmod +x /root/deploy-contracts.sh
 ## 📊 EXPECTED OUTPUT
 
 ### Successful Deployment:
+
 ```
 🚀 Starting TUSD Smart Contract Deployment
 📦 Building contracts...
@@ -357,6 +363,7 @@ Balance: 1.70491168 SOL
 After successful deployment:
 
 1. **Test Integration**
+
    ```bash
    curl http://localhost:3001/api/v1/indexer/status
    ```
