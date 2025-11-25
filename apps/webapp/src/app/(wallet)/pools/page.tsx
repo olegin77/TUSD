@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageTransition } from "@/components/ui/page-transition";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Clock, Info, Calculator, Zap } from "lucide-react";
+import { Clock, Info, Calculator, Zap, Coins, Sparkles, TrendingUp } from "lucide-react";
+import { takaraApi, PoolYield } from "@/lib/api/takara";
+import Link from "next/link";
 
 // Force dynamic rendering for this page - disable static generation
 
@@ -16,37 +18,80 @@ export default function PoolsPage() {
   const [selectedPool, setSelectedPool] = useState<number | null>(null);
   const [depositAmount, setDepositAmount] = useState(1000);
   const [boostPercentage, setBoostPercentage] = useState(0);
+  const [poolYields, setPoolYields] = useState<PoolYield[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const pools = [
+  // Fetch pool yields from API
+  useEffect(() => {
+    const fetchYields = async () => {
+      try {
+        const yields = await takaraApi.getPoolYields();
+        setPoolYields(yields);
+      } catch (error) {
+        console.error("Failed to fetch pool yields:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchYields();
+  }, []);
+
+  // Build pools from API data or fallback to defaults
+  const pools = poolYields.length > 0 ? poolYields.map((py) => ({
+    id: py.poolId,
+    name: `${py.lockMonths} месяцев`,
+    apy: py.usdtYield.baseApy,
+    maxApy: py.usdtYield.maxApyMonthly,
+    laikaBoost: py.usdtYield.maxLaikaBoost,
+    takaraApr: py.takaraYield.apr,
+    lockMonths: py.lockMonths,
+    minDeposit: py.minEntryAmount,
+    maxDeposit: py.minEntryAmount * 1000,
+    description: py.lockMonths === 12
+      ? "Краткосрочные инвестиции с умеренной доходностью"
+      : py.lockMonths === 24
+        ? "Среднесрочные инвестиции с повышенной доходностью"
+        : "Долгосрочные инвестиции с максимальной доходностью",
+    features: ["USDT награды", "Takara майнинг", "Laika буст"],
+  })) : [
     {
       id: 1,
       name: "12 месяцев",
       apy: 18,
+      maxApy: 23,
+      laikaBoost: 5,
+      takaraApr: 30,
       lockMonths: 12,
       minDeposit: 100,
       maxDeposit: 100000,
       description: "Краткосрочные инвестиции с умеренной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Низкий риск"],
+      features: ["USDT награды", "Takara майнинг", "Laika буст"],
     },
     {
       id: 2,
       name: "24 месяца",
       apy: 24,
+      maxApy: 31,
+      laikaBoost: 7,
+      takaraApr: 50,
       lockMonths: 24,
       minDeposit: 500,
       maxDeposit: 500000,
       description: "Среднесрочные инвестиции с повышенной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Средний риск"],
+      features: ["USDT награды", "Takara майнинг", "Laika буст"],
     },
     {
       id: 3,
       name: "36 месяцев",
       apy: 30,
+      maxApy: 40,
+      laikaBoost: 10,
+      takaraApr: 75,
       lockMonths: 36,
       minDeposit: 1000,
       maxDeposit: 1000000,
       description: "Долгосрочные инвестиции с максимальной доходностью",
-      features: ["Ежедневные выплаты", "Возможность залога", "Высокий риск"],
+      features: ["USDT награды", "Takara майнинг", "Laika буст"],
     },
   ];
 
@@ -98,7 +143,11 @@ export default function PoolsPage() {
             {/* Pools List */}
             <div className="lg:col-span-2 space-y-6">
               <h2 className="text-xl font-semibold">Доступные пулы</h2>
-              {pools.map((pool) => (
+              {loading ? (
+                <div className="flex items-center justify-center h-48">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+                </div>
+              ) : pools.map((pool) => (
                 <Card
                   key={pool.id}
                   className={`cursor-pointer transition-all hover:shadow-lg ${
@@ -112,32 +161,61 @@ export default function PoolsPage() {
                         <CardTitle className="text-xl">{pool.name}</CardTitle>
                         <CardDescription>{pool.description}</CardDescription>
                       </div>
-                      <Badge variant="outline" className="text-lg font-bold">
-                        {pool.apy}% APY
-                      </Badge>
+                      <div className="flex flex-col items-end gap-1">
+                        <Badge variant="outline" className="text-lg font-bold bg-green-50 border-green-300 text-green-700">
+                          <TrendingUp className="h-4 w-4 mr-1" />
+                          {pool.apy}% APY
+                        </Badge>
+                        <Badge variant="outline" className="text-sm font-medium bg-amber-50 border-amber-300 text-amber-700">
+                          <Coins className="h-3 w-3 mr-1" />
+                          +{pool.takaraApr}% Takara
+                        </Badge>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
+                    {/* Yield Summary */}
+                    <div className="grid grid-cols-3 gap-3 mb-4 p-3 bg-gradient-to-r from-green-50 to-amber-50 rounded-lg">
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">Базовый APY</p>
+                        <p className="font-bold text-green-600">{pool.apy}%</p>
+                      </div>
+                      <div className="text-center border-x border-gray-200">
+                        <p className="text-xs text-gray-500">Laika буст</p>
+                        <p className="font-bold text-purple-600">+{pool.laikaBoost}%</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">Макс. APY</p>
+                        <p className="font-bold text-blue-600">{pool.maxApy}%</p>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div>
                         <p className="text-sm text-gray-500">Минимальный депозит</p>
                         <p className="font-semibold">{formatCurrency(pool.minDeposit)}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Максимальный депозит</p>
-                        <p className="font-semibold">{formatCurrency(pool.maxDeposit)}</p>
+                        <p className="text-sm text-gray-500">Takara APR</p>
+                        <p className="font-semibold text-amber-600">{pool.takaraApr}%</p>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-sm font-medium">Особенности:</p>
-                      <ul className="space-y-1">
-                        {pool.features.map((feature, index) => (
-                          <li key={index} className="flex items-center text-sm text-gray-600">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
+                      <p className="text-sm font-medium">Награды:</p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary" className="bg-green-100 text-green-700">
+                          <TrendingUp className="h-3 w-3 mr-1" />
+                          USDT
+                        </Badge>
+                        <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+                          <Coins className="h-3 w-3 mr-1" />
+                          Takara
+                        </Badge>
+                        <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+                          <Sparkles className="h-3 w-3 mr-1" />
+                          Laika буст
+                        </Badge>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -253,12 +331,20 @@ export default function PoolsPage() {
                       <div className="flex items-start space-x-2">
                         <Info className="h-4 w-4 text-blue-500 mt-0.5" />
                         <div className="text-xs text-gray-600">
-                          <p>• Награды начисляются ежедневно</p>
-                          <p>• Возможность залога под 60% стоимости</p>
-                          <p>• Досрочное погашение недоступно</p>
+                          <p>• USDT награды (TRC20 на TRON)</p>
+                          <p>• Takara майнинг (SPL на Solana)</p>
+                          <p>• Laika буст: +APY за холд токенов</p>
                         </div>
                       </div>
                     </div>
+
+                    {/* Link to Calculator */}
+                    <Link href="/calculator">
+                      <Button variant="outline" className="w-full mt-4 border-amber-300 text-amber-700 hover:bg-amber-50">
+                        <Calculator className="h-4 w-4 mr-2" />
+                        Детальный калькулятор доходности
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ) : (

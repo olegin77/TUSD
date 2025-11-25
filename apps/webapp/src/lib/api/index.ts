@@ -9,6 +9,8 @@ export { collateralApi } from "./collateral";
 export { marketplaceApi } from "./marketplace";
 export { oraclesApi } from "./oracles";
 export { boostApi } from "./boost";
+export { takaraApi } from "./takara";
+export type { TakaraMiningStats, LaikaPrice, PoolYield, YieldSimulation, PayoutFrequency } from "./takara";
 
 // Export the API client if it exists
 export { apiClient } from "./client";

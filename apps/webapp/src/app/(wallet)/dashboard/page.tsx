@@ -1,18 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageTransition } from "@/components/ui/page-transition";
-import { Wallet, TrendingUp, DollarSign, Clock, Shield, BarChart3, Plus, Eye } from "lucide-react";
+import { Wallet, TrendingUp, DollarSign, Clock, Shield, BarChart3, Plus, Eye, Coins, Pickaxe, Sparkles } from "lucide-react";
+import { takaraApi, TakaraMiningStats, LaikaPrice } from "@/lib/api/takara";
 
 // Force dynamic rendering for this page - disable static generation
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [miningStats, setMiningStats] = useState<TakaraMiningStats | null>(null);
+  const [laikaPrice, setLaikaPrice] = useState<LaikaPrice | null>(null);
+  const [takaraLoading, setTakaraLoading] = useState(true);
+
+  // Fetch Takara data
+  useEffect(() => {
+    const fetchTakaraData = async () => {
+      try {
+        const [stats, price] = await Promise.all([
+          takaraApi.getMiningStats(),
+          takaraApi.getLaikaPrice(),
+        ]);
+        setMiningStats(stats);
+        setLaikaPrice(price);
+      } catch (error) {
+        console.error("Failed to fetch Takara data:", error);
+      } finally {
+        setTakaraLoading(false);
+      }
+    };
+    fetchTakaraData();
+  }, []);
+
   // Mock data - в реальном приложении будет загружаться из API
   const portfolioData = {
     totalDeposits: 50000,
@@ -185,6 +209,130 @@ export default function DashboardPage() {
                       <span className="text-sm text-gray-500">1 день назад</span>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Takara Mining Section */}
+              <Card className="border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Pickaxe className="h-5 w-5 text-amber-600" />
+                    Takara Mining
+                  </CardTitle>
+                  <CardDescription>
+                    Майнинг токенов Takara за ваши депозиты
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {takaraLoading ? (
+                    <div className="flex items-center justify-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+                    </div>
+                  ) : miningStats ? (
+                    <div className="space-y-6">
+                      {/* Mining Status */}
+                      <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-3 h-3 rounded-full ${miningStats.isMiningActive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                          <span className="font-medium">
+                            {miningStats.isMiningActive ? 'Майнинг активен' : 'Майнинг завершен'}
+                          </span>
+                        </div>
+                        <Badge variant={miningStats.isMiningActive ? "default" : "secondary"}>
+                          {miningStats.percentDistributed}% распределено
+                        </Badge>
+                      </div>
+
+                      {/* Mining Stats Grid */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="p-4 bg-white rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                            <Coins className="h-4 w-4" />
+                            Всего Takara
+                          </div>
+                          <p className="text-xl font-bold text-gray-900">
+                            {miningStats.totalSupply.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="p-4 bg-white rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                            <Pickaxe className="h-4 w-4" />
+                            Пул майнинга
+                          </div>
+                          <p className="text-xl font-bold text-amber-600">
+                            {miningStats.miningPoolTotal.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="p-4 bg-white rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                            <TrendingUp className="h-4 w-4" />
+                            Распределено
+                          </div>
+                          <p className="text-xl font-bold text-green-600">
+                            {miningStats.miningPoolDistributed.toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="p-4 bg-white rounded-lg shadow-sm">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                            <DollarSign className="h-4 w-4" />
+                            Цена Takara
+                          </div>
+                          <p className="text-xl font-bold text-blue-600">
+                            ${miningStats.internalPriceUsd.toFixed(4)}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Laika Boost Info */}
+                      {laikaPrice && (
+                        <div className="p-4 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-lg">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Sparkles className="h-5 w-5 text-purple-600" />
+                              <span className="font-medium text-purple-900">Laika Boost</span>
+                            </div>
+                            <Badge className="bg-purple-600">-{laikaPrice.discountPercent}% скидка</Badge>
+                          </div>
+                          <div className="mt-3 grid grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm text-purple-700">Рыночная цена</p>
+                              <p className="text-lg font-bold text-purple-900">
+                                ${laikaPrice.marketPrice.toFixed(6)}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-purple-700">Со скидкой</p>
+                              <p className="text-lg font-bold text-green-600">
+                                ${laikaPrice.discountedPrice.toFixed(6)}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-purple-600">
+                            Держите Laika токены на 40% от депозита для получения бонуса к APY
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Progress Bar */}
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">Прогресс майнинга</span>
+                          <span className="font-medium">{miningStats.miningPoolRemaining.toLocaleString()} осталось</span>
+                        </div>
+                        <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500"
+                            style={{ width: `${parseFloat(miningStats.percentDistributed)}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <Pickaxe className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+                      <p>Данные о майнинге недоступны</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
