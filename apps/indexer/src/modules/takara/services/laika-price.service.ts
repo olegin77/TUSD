@@ -13,7 +13,8 @@ export class LaikaPriceService {
   private readonly logger = new Logger(LaikaPriceService.name);
 
   // Laika token contract address on Solana (placeholder - replace with actual)
-  private readonly LAIKA_MINT_ADDRESS = 'LAIKAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+  private readonly LAIKA_MINT_ADDRESS =
+    'LAIKAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
   private readonly COINGECKO_API_URL = 'https://api.coingecko.com/api/v3';
   private readonly DISCOUNT_PERCENT = 15; // 15% discount for boost calculations
 
@@ -37,8 +38,10 @@ export class LaikaPriceService {
     updatedAt: Date;
   }> {
     // Return cached price if still valid
-    if (this.cachedPrice &&
-        Date.now() - this.cachedPrice.updatedAt.getTime() < this.CACHE_TTL_MS) {
+    if (
+      this.cachedPrice &&
+      Date.now() - this.cachedPrice.updatedAt.getTime() < this.CACHE_TTL_MS
+    ) {
       return this.cachedPrice;
     }
 
@@ -47,9 +50,9 @@ export class LaikaPriceService {
         `${this.COINGECKO_API_URL}/simple/price?ids=laika&vs_currencies=usd`,
         {
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -76,7 +79,7 @@ export class LaikaPriceService {
       await this.updatePriceInDb(marketPrice, discountedPrice);
 
       this.logger.log(
-        `Laika price updated: $${marketPrice.toFixed(6)} (discounted: $${discountedPrice.toFixed(6)})`
+        `Laika price updated: $${marketPrice.toFixed(6)} (discounted: $${discountedPrice.toFixed(6)})`,
       );
 
       return this.cachedPrice;
@@ -106,9 +109,9 @@ export class LaikaPriceService {
         `${this.COINGECKO_API_URL}/simple/token_price/solana?contract_addresses=${this.LAIKA_MINT_ADDRESS}&vs_currencies=usd`,
         {
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -202,7 +205,7 @@ export class LaikaPriceService {
   }> {
     const priceData = await this.getLaikaPrice();
     const laikaValueUsd = laikaBalance * priceData.discountedPrice;
-    const requiredValueUsd = depositAmountUsd * 0.40; // 40% of deposit
+    const requiredValueUsd = depositAmountUsd * 0.4; // 40% of deposit
     const isEligible = laikaValueUsd >= requiredValueUsd;
     const shortfallUsd = isEligible ? 0 : requiredValueUsd - laikaValueUsd;
 
@@ -225,7 +228,7 @@ export class LaikaPriceService {
   ): Promise<any> {
     const priceData = await this.getLaikaPrice();
     const laikaValueUsd = laikaBalance * priceData.discountedPrice;
-    const threshold40Pct = depositAmountUsd * 0.40;
+    const threshold40Pct = depositAmountUsd * 0.4;
     const isEligible = laikaValueUsd >= threshold40Pct;
 
     return this.prisma.laikaBoostSnapshot.upsert({

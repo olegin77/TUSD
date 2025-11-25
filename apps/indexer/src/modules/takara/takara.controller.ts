@@ -96,7 +96,8 @@ export class TakaraController {
   @ApiOperation({ summary: 'Initialize Takara configuration (admin only)' })
   @ApiResponse({ status: 200, description: 'Configuration initialized' })
   async initializeConfig(
-    @Body() body: {
+    @Body()
+    body: {
       internalPriceUsd: number;
       totalSupply: number;
       tokenMintAddress?: string;
@@ -133,7 +134,8 @@ export class TakaraController {
   @ApiOperation({ summary: 'Process Takara claim for deposit' })
   @ApiResponse({ status: 200, description: 'Claim processed' })
   async processClaim(
-    @Body() body: {
+    @Body()
+    body: {
       depositId: string;
       userSolanaAddress: string;
       claimAmount?: number;
@@ -178,7 +180,7 @@ export class TakaraController {
     const claims = await this.takaraMiningService.getClaimHistory(userAddress);
     return {
       success: true,
-      data: claims.map(c => ({
+      data: claims.map((c) => ({
         ...c,
         id: c.id.toString(),
         deposit_id: c.deposit_id.toString(),
@@ -197,7 +199,8 @@ export class TakaraController {
   @ApiOperation({ summary: 'Calculate total yield for deposit' })
   @ApiResponse({ status: 200, description: 'Yield calculation' })
   async calculateYield(
-    @Body() body: {
+    @Body()
+    body: {
       depositId: string;
       depositAmountUsd: number;
       poolId: number;
@@ -225,7 +228,8 @@ export class TakaraController {
   @ApiOperation({ summary: 'Simulate yield for potential deposit' })
   @ApiResponse({ status: 200, description: 'Yield simulation' })
   async simulateYield(
-    @Body() body: {
+    @Body()
+    body: {
       depositAmountUsd: number;
       poolId: number;
       payoutFrequency: PayoutFrequency;
@@ -260,7 +264,8 @@ export class TakaraController {
   @ApiOperation({ summary: 'Calculate rewards for specific period' })
   @ApiResponse({ status: 200, description: 'Period rewards' })
   async calculatePeriodRewards(
-    @Body() body: {
+    @Body()
+    body: {
       depositId: string;
       depositAmountUsd: number;
       poolId: number;

@@ -117,7 +117,9 @@ export class FeedsController {
    * Get global activity feed
    */
   @Get('global')
-  async getGlobalFeed(@Query('limit') limit?: string): Promise<{ success: boolean; data: any[] }> {
+  async getGlobalFeed(
+    @Query('limit') limit?: string,
+  ): Promise<{ success: boolean; data: any[] }> {
     try {
       const limitNum = limit ? parseInt(limit, 10) : 100;
 

@@ -15,10 +15,6 @@ import { PrismaService } from '../../database/prisma.service';
     TakaraMiningService,
     YieldCalculatorService,
   ],
-  exports: [
-    LaikaPriceService,
-    TakaraMiningService,
-    YieldCalculatorService,
-  ],
+  exports: [LaikaPriceService, TakaraMiningService, YieldCalculatorService],
 })
 export class TakaraModule {}

@@ -41,7 +41,9 @@ export class TakaraMiningService implements OnModuleInit {
           miningPoolRemaining: Number(config.mining_pool_remaining),
           tokenMintAddress: config.token_mint_address,
         };
-        this.logger.log(`Takara config loaded: ${this.takaraConfig.miningPoolRemaining} remaining in pool`);
+        this.logger.log(
+          `Takara config loaded: ${this.takaraConfig.miningPoolRemaining} remaining in pool`,
+        );
       } else {
         this.logger.warn('Takara config not found - please initialize');
       }
@@ -60,7 +62,7 @@ export class TakaraMiningService implements OnModuleInit {
     miningVaultAddress?: string;
     adminWalletAddress?: string;
   }): Promise<any> {
-    const miningPoolTotal = params.totalSupply * 0.60; // 60% for mining
+    const miningPoolTotal = params.totalSupply * 0.6; // 60% for mining
 
     const config = await this.prisma.takaraConfig.upsert({
       where: { id: 1 },
@@ -134,7 +136,8 @@ export class TakaraMiningService implements OnModuleInit {
     }
 
     // Calculate daily reward in USD value
-    const dailyRewardUsdValue = (depositAmountUsd * (poolTakaraApr / 100)) / 365;
+    const dailyRewardUsdValue =
+      (depositAmountUsd * (poolTakaraApr / 100)) / 365;
 
     // Convert to Takara tokens using internal price
     const dailyRewardTakara = dailyRewardUsdValue / config.internalPriceUsd;
@@ -313,7 +316,9 @@ export class TakaraMiningService implements OnModuleInit {
       // Reload config
       await this.loadConfig();
     } catch (error) {
-      this.logger.error(`Failed to update global distribution: ${error.message}`);
+      this.logger.error(
+        `Failed to update global distribution: ${error.message}`,
+      );
     }
   }
 
@@ -328,7 +333,9 @@ export class TakaraMiningService implements OnModuleInit {
     }
 
     const percentDistributed =
-      (Number(config.mining_pool_distributed) / Number(config.mining_pool_total)) * 100;
+      (Number(config.mining_pool_distributed) /
+        Number(config.mining_pool_total)) *
+      100;
 
     return {
       totalSupply: Number(config.total_supply),

@@ -30,7 +30,7 @@ export class YieldCalculatorService {
   private readonly FREQUENCY_MULTIPLIERS = {
     [PayoutFrequency.MONTHLY]: 1.0,
     [PayoutFrequency.QUARTERLY]: 1.15,
-    [PayoutFrequency.YEARLY]: 1.30,
+    [PayoutFrequency.YEARLY]: 1.3,
   };
 
   constructor(
@@ -84,7 +84,8 @@ export class YieldCalculatorService {
     // Calculate USDT APY
     const baseUsdtApy = pool.base_usdt_apy;
     const laikaBoostApy = isLaikaBoostActive ? pool.laika_boost_max : 0;
-    const frequencyMultiplier = this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
+    const frequencyMultiplier =
+      this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
 
     const totalUsdtApy = (baseUsdtApy + laikaBoostApy) * frequencyMultiplier;
 
@@ -94,18 +95,21 @@ export class YieldCalculatorService {
     const dailyUsdtReward = annualUsdtReward / 365;
 
     // Calculate Takara rewards
-    const takaraReward = await this.takaraMiningService.calculateDailyTakaraReward(
-      params.depositAmountUsd,
-      pool.takara_apr,
-    );
+    const takaraReward =
+      await this.takaraMiningService.calculateDailyTakaraReward(
+        params.depositAmountUsd,
+        pool.takara_apr,
+      );
 
     // Get Takara USD value for total calculation
     const takaraConfig = await this.takaraMiningService.getConfig();
-    const takaraAnnualUsdValue = takaraReward.annualRewardTakara * (takaraConfig?.internalPriceUsd || 0);
+    const takaraAnnualUsdValue =
+      takaraReward.annualRewardTakara * (takaraConfig?.internalPriceUsd || 0);
 
     // Combined effective APY (USDT + Takara value)
     const combinedAnnualUsdValue = annualUsdtReward + takaraAnnualUsdValue;
-    const effectiveCombinedApy = (combinedAnnualUsdValue / params.depositAmountUsd) * 100;
+    const effectiveCombinedApy =
+      (combinedAnnualUsdValue / params.depositAmountUsd) * 100;
 
     return {
       depositId: params.depositId.toString(),
@@ -172,23 +176,26 @@ export class YieldCalculatorService {
     }
 
     const daysInPeriod = Math.ceil(
-      (params.endDate.getTime() - params.startDate.getTime()) / (1000 * 60 * 60 * 24)
+      (params.endDate.getTime() - params.startDate.getTime()) /
+        (1000 * 60 * 60 * 24),
     );
 
     // USDT calculation
     const baseUsdtApy = pool.base_usdt_apy;
     const laikaBoostApy = params.isLaikaBoostActive ? pool.laika_boost_max : 0;
-    const frequencyMultiplier = this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
+    const frequencyMultiplier =
+      this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
     const totalUsdtApy = (baseUsdtApy + laikaBoostApy) * frequencyMultiplier;
 
     const dailyUsdtRate = totalUsdtApy / 365 / 100;
     const usdtReward = params.depositAmountUsd * dailyUsdtRate * daysInPeriod;
 
     // Takara calculation
-    const takaraReward = await this.takaraMiningService.calculateDailyTakaraReward(
-      params.depositAmountUsd,
-      pool.takara_apr,
-    );
+    const takaraReward =
+      await this.takaraMiningService.calculateDailyTakaraReward(
+        params.depositAmountUsd,
+        pool.takara_apr,
+      );
     const periodTakaraReward = takaraReward.dailyRewardTakara * daysInPeriod;
 
     return {
@@ -210,7 +217,7 @@ export class YieldCalculatorService {
       where: { is_active: true },
     });
 
-    return pools.map(pool => ({
+    return pools.map((pool) => ({
       poolId: pool.id,
       minEntryAmount: Number(pool.min_entry_amount),
       lockMonths: pool.lock_months,
@@ -220,7 +227,7 @@ export class YieldCalculatorService {
         maxLaikaBoost: pool.laika_boost_max,
         maxApyMonthly: pool.base_usdt_apy + pool.laika_boost_max,
         maxApyQuarterly: (pool.base_usdt_apy + pool.laika_boost_max) * 1.15,
-        maxApyYearly: (pool.base_usdt_apy + pool.laika_boost_max) * 1.30,
+        maxApyYearly: (pool.base_usdt_apy + pool.laika_boost_max) * 1.3,
       },
 
       takaraYield: {
@@ -281,7 +288,7 @@ export class YieldCalculatorService {
     // Calculate Laika needed for boost
     const laikaPrice = await this.laikaPriceService.getLaikaPrice();
     if (laikaPrice.discountedPrice > 0) {
-      const requiredUsdValue = params.depositAmountUsd * 0.40;
+      const requiredUsdValue = params.depositAmountUsd * 0.4;
       laikaRequired = requiredUsdValue / laikaPrice.discountedPrice;
     }
 
@@ -300,21 +307,27 @@ export class YieldCalculatorService {
         totalAnnualValue: baseYield.combined.annualRewardUsdValue,
       },
 
-      withBoost: boostedYield !== null ? {
-        usdtApy: boostedYield.usdt.totalApy,
-        takaraApr: boostedYield.takara.apr,
-        monthlyUsdtReward: boostedYield.usdt.monthlyReward,
-        monthlyTakaraReward: boostedYield.takara.dailyRewardTokens * 30,
-        totalAnnualValue: boostedYield.combined.annualRewardUsdValue,
-        additionalAnnualValue: boostedYield.combined.annualRewardUsdValue - baseYield.combined.annualRewardUsdValue,
-      } : null,
+      withBoost:
+        boostedYield !== null
+          ? {
+              usdtApy: boostedYield.usdt.totalApy,
+              takaraApr: boostedYield.takara.apr,
+              monthlyUsdtReward: boostedYield.usdt.monthlyReward,
+              monthlyTakaraReward: boostedYield.takara.dailyRewardTokens * 30,
+              totalAnnualValue: boostedYield.combined.annualRewardUsdValue,
+              additionalAnnualValue:
+                boostedYield.combined.annualRewardUsdValue -
+                baseYield.combined.annualRewardUsdValue,
+            }
+          : null,
 
       laikaBoostInfo: {
         currentBalance: params.laikaBalance || 0,
         requiredForBoost: laikaRequired,
         currentPrice: laikaPrice.marketPrice,
         discountedPrice: laikaPrice.discountedPrice,
-        isEligible: boostedYield !== null ? boostedYield.laikaBoost.isActive : false,
+        isEligible:
+          boostedYield !== null ? boostedYield.laikaBoost.isActive : false,
       },
     };
   }
@@ -322,10 +335,7 @@ export class YieldCalculatorService {
   /**
    * Update deposit with Laika boost status
    */
-  async updateDepositBoostStatus(
-    depositId: bigint,
-    laikaBalance: number,
-  ) {
+  async updateDepositBoostStatus(depositId: bigint, laikaBalance: number) {
     const deposit = await this.prisma.deposit.findUnique({
       where: { id: depositId },
       include: { pool: true },
