@@ -17,6 +17,7 @@ import { IndexerModule } from './modules/indexer/indexer.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { TronModule } from './modules/tron/tron.module';
+import { TakaraModule } from './modules/takara/takara.module';
 import { SentryModule } from './common/sentry/sentry.module';
 import { MetricsModule } from './common/monitoring/metrics.module';
 import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
@@ -53,6 +54,7 @@ import { validationSchema } from './common/config/validation.schema';
     NotificationsModule,
     AdminModule,
     TronModule,
+    TakaraModule,
   ],
   controllers: [AppController],
   providers: [

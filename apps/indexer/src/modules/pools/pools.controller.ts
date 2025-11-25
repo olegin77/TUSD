@@ -48,7 +48,7 @@ export class PoolsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  create(@Body() createPoolDto: CreatePoolDto) {
+  create(@Body() createPoolDto: CreatePoolDto): Promise<any> {
     return this.poolsService.create(createPoolDto);
   }
 
@@ -79,7 +79,7 @@ export class PoolsController {
       ],
     },
   })
-  findAll() {
+  findAll(): Promise<any[]> {
     return this.poolsService.findAll();
   }
 
@@ -106,7 +106,7 @@ export class PoolsController {
     },
   })
   @ApiResponse({ status: 404, description: 'Pool not found' })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<any> {
     return this.poolsService.findOne(id.toString());
   }
 
@@ -136,7 +136,7 @@ export class PoolsController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePoolDto: UpdatePoolDto,
-  ) {
+  ): Promise<any> {
     return this.poolsService.update(id.toString(), updatePoolDto);
   }
 
@@ -153,7 +153,7 @@ export class PoolsController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Pool not found' })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<any> {
     return this.poolsService.remove(id.toString());
   }
 }

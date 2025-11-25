@@ -12,6 +12,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Payout frequency enum
+enum PayoutFrequency {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
 // Pool configuration
 model Pool {
   id              Int      @id @default(autoincrement())
@@ -25,6 +32,13 @@ model Pool {
   is_active       Boolean  @default(true)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  // NEW: Takara/Laika integration fields
+  min_entry_amount  Decimal  @default(100) @db.Decimal(18, 6) // Min entry: $100, $1500, $5000
+  takara_apr        Float    @default(30) // APR в Takara: 30%, 50%, 75%
+  base_usdt_apy     Float    @default(4) // Базовая ставка USDT: 4%
+  laika_boost_max   Float    @default(2) // Макс буст от Laika: 2%, 3%, 4%
+  mining_allocation Decimal  @default(0) @db.Decimal(18, 6) // Добыто Takara из 60% пула
 
   // Relations
   wexels   Wexel[]
@@ -137,6 +151,13 @@ model Deposit {
   status       String   @default("pending") // pending, confirmed, failed
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+
+  // NEW: Cross-chain and Takara fields
+  network               String           @default("TRON") // Сеть депозита: TRON
+  payout_frequency      PayoutFrequency  @default(MONTHLY) // Частота выплат
+  takara_pending_reward Decimal          @default(0) @db.Decimal(18, 6) // Накопленная Takara
+  is_laika_boost_active Boolean          @default(false) // Статус Laika буста
+  solana_wallet         String?          // Привязанный Solana кошелек для наград
 
   // Relations
   pool Pool @relation(fields: [pool_id], references: [id])
@@ -255,4 +276,58 @@ model TronIndexerState {
   last_updated DateTime @default(now()) @updatedAt
 
   @@map("tron_indexer_state")
+}
+
+// ========================================
+// TAKARA TOKEN CONFIGURATION
+// ========================================
+
+// Takara token global configuration
+model TakaraConfig {
+  id                     Int      @id @default(1)
+  internal_price_usd     Decimal  @db.Decimal(18, 8) // Внутренний курс Takara для расчетов
+  total_supply           Decimal  @db.Decimal(18, 6) // Общий саплай токена
+  mining_pool_total      Decimal  @db.Decimal(18, 6) // 60% от саплая для майнинга
+  mining_pool_remaining  Decimal  @db.Decimal(18, 6) // Остаток в пуле майнинга
+  mining_pool_distributed Decimal @default(0) @db.Decimal(18, 6) // Распределено из пула
+  token_mint_address     String?  // Адрес Takara mint на Solana
+  mining_vault_address   String?  // Адрес MiningVault PDA на Solana
+  admin_wallet_address   String?  // Адрес админ кошелька (40% саплая)
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  @@map("takara_config")
+}
+
+// Takara reward claims history
+model TakaraClaimHistory {
+  id              BigInt   @id @default(autoincrement())
+  deposit_id      BigInt   // ID депозита
+  user_address    String   // Solana адрес пользователя
+  amount          Decimal  @db.Decimal(18, 6) // Количество Takara
+  price_at_claim  Decimal  @db.Decimal(18, 8) // Курс на момент клейма
+  tx_hash         String?  // Хэш транзакции на Solana
+  status          String   @default("pending") // pending, confirmed, failed
+  created_at      DateTime @default(now())
+
+  @@index([deposit_id])
+  @@index([user_address])
+  @@map("takara_claim_history")
+}
+
+// Laika boost snapshots for deposits
+model LaikaBoostSnapshot {
+  id                  BigInt   @id @default(autoincrement())
+  deposit_id          BigInt   @unique // ID депозита
+  laika_balance       Decimal  @db.Decimal(18, 6) // Баланс Laika на момент проверки
+  laika_price_usd     Decimal  @db.Decimal(18, 8) // Цена Laika (рыночная)
+  laika_price_discounted Decimal @db.Decimal(18, 8) // Цена с -15% дисконтом
+  laika_value_usd     Decimal  @db.Decimal(18, 6) // Стоимость в USD
+  deposit_amount_usd  Decimal  @db.Decimal(18, 6) // Сумма депозита
+  threshold_40_pct    Decimal  @db.Decimal(18, 6) // 40% от депозита (порог)
+  is_boost_eligible   Boolean  @default(false) // Проходит ли проверку
+  checked_at          DateTime @default(now())
+
+  @@index([deposit_id])
+  @@map("laika_boost_snapshots")
 }

@@ -72,6 +72,12 @@ contract TronDepositVault is ReentrancyGuard, AccessControl, Pausable {
     event PoolUpdated(uint8 indexed poolId, bool isActive);
     event MinDepositUpdated(uint256 oldAmount, uint256 newAmount);
     event EmergencyWithdraw(address indexed token, address indexed to, uint256 amount);
+    event RewardPayout(
+        uint256 indexed depositId,
+        address indexed recipient,
+        uint256 amount,
+        uint256 timestamp
+    );
 
     /**
      * @dev Constructor
@@ -244,10 +250,83 @@ contract TronDepositVault is ReentrancyGuard, AccessControl, Pausable {
         uint256 amount
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(to != address(0), "Invalid recipient");
-        
+
         IERC20(token).safeTransfer(to, amount);
-        
+
         emit EmergencyWithdraw(token, to, amount);
+    }
+
+    /**
+     * @notice Payout USDT rewards to depositor
+     * @dev Called by backend after calculating rewards (with Laika boost, frequency multiplier)
+     * @param depositId The deposit ID
+     * @param recipient The recipient address
+     * @param amount The calculated reward amount (6 decimals)
+     */
+    function payoutReward(
+        uint256 depositId,
+        address recipient,
+        uint256 amount
+    ) external nonReentrant onlyRole(BRIDGE_ROLE) {
+        require(recipient != address(0), "Invalid recipient");
+        require(amount > 0, "Amount must be positive");
+        require(deposits[depositId].id != 0, "Deposit does not exist");
+        require(deposits[depositId].processed, "Deposit not processed");
+
+        // Check vault has sufficient balance
+        uint256 vaultBalance = usdtToken.balanceOf(address(this));
+        require(vaultBalance >= amount, "Insufficient vault balance");
+
+        // Transfer reward to recipient
+        usdtToken.safeTransfer(recipient, amount);
+
+        emit RewardPayout(depositId, recipient, amount, block.timestamp);
+    }
+
+    /**
+     * @notice Batch payout rewards to multiple depositors
+     * @dev More gas efficient for multiple payouts
+     * @param depositIds Array of deposit IDs
+     * @param recipients Array of recipient addresses
+     * @param amounts Array of reward amounts
+     */
+    function batchPayoutRewards(
+        uint256[] calldata depositIds,
+        address[] calldata recipients,
+        uint256[] calldata amounts
+    ) external nonReentrant onlyRole(BRIDGE_ROLE) {
+        require(
+            depositIds.length == recipients.length &&
+            recipients.length == amounts.length,
+            "Array length mismatch"
+        );
+        require(depositIds.length <= 50, "Too many payouts");
+
+        uint256 totalAmount = 0;
+        for (uint256 i = 0; i < amounts.length; i++) {
+            totalAmount += amounts[i];
+        }
+
+        uint256 vaultBalance = usdtToken.balanceOf(address(this));
+        require(vaultBalance >= totalAmount, "Insufficient vault balance");
+
+        for (uint256 i = 0; i < depositIds.length; i++) {
+            require(recipients[i] != address(0), "Invalid recipient");
+            require(amounts[i] > 0, "Amount must be positive");
+            require(deposits[depositIds[i]].id != 0, "Deposit does not exist");
+
+            usdtToken.safeTransfer(recipients[i], amounts[i]);
+
+            emit RewardPayout(depositIds[i], recipients[i], amounts[i], block.timestamp);
+        }
+    }
+
+    /**
+     * @notice Get vault USDT balance
+     * @return Current USDT balance of the vault
+     */
+    function getVaultBalance() external view returns (uint256) {
+        return usdtToken.balanceOf(address(this));
     }
 
     /**

@@ -1,6 +1,7 @@
 [workspace]
 members = [
-    "programs/*"
+    "programs/solana-contracts",
+    "programs/takara-token"
 ]
 resolver = "2"
 

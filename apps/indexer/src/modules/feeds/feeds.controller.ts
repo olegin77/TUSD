@@ -21,7 +21,7 @@ export class FeedsController {
   async getWexelFeed(
     @Param('id', ParseIntPipe) id: number,
     @Query('limit') limit?: string,
-  ) {
+  ): Promise<{ success: boolean; data: any[] }> {
     try {
       const limitNum = limit ? parseInt(limit, 10) : 50;
 
@@ -117,7 +117,7 @@ export class FeedsController {
    * Get global activity feed
    */
   @Get('global')
-  async getGlobalFeed(@Query('limit') limit?: string) {
+  async getGlobalFeed(@Query('limit') limit?: string): Promise<{ success: boolean; data: any[] }> {
     try {
       const limitNum = limit ? parseInt(limit, 10) : 100;
 

@@ -7,13 +7,13 @@ import { UpdatePoolDto } from './dto/update-pool.dto';
 export class PoolsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(): Promise<any[]> {
     return this.prisma.pool.findMany({
       orderBy: { created_at: 'desc' },
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<any> {
     const pool = await this.prisma.pool.findUnique({
       where: { id: parseInt(id) },
     });
@@ -25,7 +25,7 @@ export class PoolsService {
     return pool;
   }
 
-  async create(createPoolDto: CreatePoolDto) {
+  async create(createPoolDto: CreatePoolDto): Promise<any> {
     return this.prisma.pool.create({
       data: {
         apy_base_bp: createPoolDto.apy_base_bp,
@@ -38,7 +38,7 @@ export class PoolsService {
     });
   }
 
-  async update(id: string, updatePoolDto: UpdatePoolDto) {
+  async update(id: string, updatePoolDto: UpdatePoolDto): Promise<any> {
     const pool = await this.findOne(id);
 
     return this.prisma.pool.update({
@@ -66,7 +66,7 @@ export class PoolsService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<any> {
     await this.findOne(id);
     return this.prisma.pool.delete({
       where: { id: parseInt(id) },
