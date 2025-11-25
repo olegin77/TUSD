@@ -1,8 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 // Simple in-memory metrics storage
 let requestCount = 0;
-let errorCount = 0;
 const startTime = Date.now();
 
 // Increment request counter on each call
@@ -16,10 +15,6 @@ export async function GET() {
   const metrics = `# HELP tusd_webapp_requests_total Total number of requests to webapp
 # TYPE tusd_webapp_requests_total counter
 tusd_webapp_requests_total ${requestCount}
-
-# HELP tusd_webapp_errors_total Total number of errors in webapp
-# TYPE tusd_webapp_errors_total counter
-tusd_webapp_errors_total ${errorCount}
 
 # HELP tusd_webapp_uptime_seconds Webapp uptime in seconds
 # TYPE tusd_webapp_uptime_seconds gauge
@@ -45,12 +40,7 @@ tusd_webapp_info{version="1.0.0",framework="nextjs"} 1
   return new NextResponse(metrics, {
     status: 200,
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
+      "Content-Type": "text/plain; charset=utf-8",
     },
   });
-}
-
-// Helper to track errors (can be called from error handlers)
-export function incrementErrors() {
-  errorCount++;
 }
