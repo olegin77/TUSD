@@ -95,30 +95,34 @@ async function bootstrap() {
     maxAge: 86400, // 24 hours
   });
 
-  // Swagger API documentation
-  if (process.env.NODE_ENV !== 'production') {
-    const config = new DocumentBuilder()
-      .setTitle('USDX Wexel API')
-      .setDescription('USDX Wexel Platform API Documentation')
-      .setVersion('1.0')
-      .addBearerAuth()
-      .addTag('auth', 'Authentication endpoints')
-      .addTag('deposits', 'Deposit management')
-      .addTag('pools', 'Pool operations')
-      .addTag('marketplace', 'NFT marketplace')
-      .addTag('oracles', 'Price oracle data')
-      .addTag('admin', 'Admin operations')
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
-        tagsSorter: 'alpha',
-        operationsSorter: 'alpha',
-      },
-    });
-    console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
-  }
+  // Swagger API documentation (available in all environments)
+  const config = new DocumentBuilder()
+    .setTitle('TUSD Platform API')
+    .setDescription(
+      'TUSD Platform API - Decentralized Promissory Notes on Solana',
+    )
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .addTag('auth', 'Authentication endpoints')
+    .addTag('deposits', 'Deposit management')
+    .addTag('pools', 'Pool operations')
+    .addTag('wexels', 'Wexel NFT operations')
+    .addTag('marketplace', 'NFT marketplace')
+    .addTag('oracles', 'Price oracle data')
+    .addTag('tron', 'TRON bridge operations')
+    .addTag('admin', 'Admin operations')
+    .addServer('https://143.198.17.162', 'Production Server')
+    .addServer('http://localhost:3001', 'Local Development')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+  });
+  console.log(`📚 Swagger docs: http://localhost:${port}/docs`);
 
   await app.listen(port);
   console.log(`🚀 Indexer running on port ${port}`);
