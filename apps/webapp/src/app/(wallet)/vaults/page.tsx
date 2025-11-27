@@ -91,7 +91,9 @@ export default function VaultsPage() {
           name: VAULT_LABELS[`VAULT_${vy.id || vy.poolId}`] || `Vault ${vy.id || vy.poolId}`,
           type: `VAULT_${vy.id || vy.poolId}`,
           baseApy: vy.base_usdt_apy || vy.usdtYield?.baseApy,
-          boostedApy: vy.boosted_usdt_apy ? (vy.boosted_usdt_apy - (vy.base_usdt_apy || 7)) : vy.usdtYield?.maxLaikaBoost + vy.base_usdt_apy || vy.usdtYield?.baseApy,
+          boostedApy: vy.boosted_usdt_apy
+            ? vy.boosted_usdt_apy - (vy.base_usdt_apy || 7)
+            : vy.usdtYield?.maxLaikaBoost + vy.base_usdt_apy || vy.usdtYield?.baseApy,
           takaraApr: vy.takara_apr || vy.takaraYield?.apr,
           durationMonths: vy.duration_months || vy.lockMonths,
           minDeposit: vy.min_entry_amount || vy.minEntryAmount,
@@ -105,13 +107,13 @@ export default function VaultsPage() {
           targetLiquidity: 100000,
         }))
       : [
-          // TZ specification defaults
+          // fix.md specification defaults
           {
             id: 1,
             name: "Starter",
             type: "VAULT_1",
-            baseApy: 7,
-            boostedApy: 8.4,
+            baseApy: 4.5,
+            boostedApy: 8.5,
             takaraApr: 30,
             durationMonths: 12,
             minDeposit: 100,

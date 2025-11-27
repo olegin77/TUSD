@@ -10,7 +10,7 @@ import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { TrendingUp, Lock, Coins, Vault, Zap } from "lucide-react";
 import Link from "next/link";
 
-// Vault configuration per master.md v6 (FINAL VALUES!)
+// Vault configuration per fix.md (FINAL VALUES!)
 // These are the CORRECT APY values - DO NOT CHANGE!
 const VAULT_CONFIG: Record<
   number,
@@ -26,9 +26,9 @@ const VAULT_CONFIG: Record<
   1: {
     name: "Starter",
     boostToken: "LAIKA",
-    baseApy: 7.0, // 7% base
-    boostApy: 1.4, // +1.4% with LAIKA boost
-    maxApy: 8.4, // 8.4% max monthly
+    baseApy: 4.5, // 4.5% base
+    boostApy: 4.0, // +4% with LAIKA boost
+    maxApy: 8.5, // 8.5% max monthly
     takaraApr: 30, // 30% Takara mining
   },
   2: {
@@ -97,7 +97,7 @@ export function Vaults() {
     );
   }
 
-  // Default vaults with correct APY values per master.md v6
+  // Default vaults with correct APY values per fix.md
   const displayVaults = vaults?.length
     ? vaults
     : [
@@ -106,7 +106,7 @@ export function Vaults() {
           durationMonths: 12,
           minEntryAmount: 100,
           boostToken: "LAIKA",
-          usdtYield: { baseApy: 7.0, boostApy: 1.4, maxApy: 8.4, maxApyYearly: 10.92 },
+          usdtYield: { baseApy: 4.5, boostApy: 4.0, maxApy: 8.5, maxApyYearly: 11.05 },
           takaraYield: { apr: 30 },
           batchInfo: {
             currentBatch: 1,

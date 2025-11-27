@@ -8,8 +8,8 @@ async function main() {
 
   // Create TAKARA Vaults (Master v6 - CORRECTED APY VALUES!)
   //
-  // IMPORTANT: These APY values are FINAL per master.md:
-  // - Vault 1 (Starter): 7% base + 1.4% boost = 8.4% max (LAIKA boost)
+  // IMPORTANT: These APY values are FINAL per fix.md:
+  // - Vault 1 (Starter): 4.5% base + 4% boost = 8.5% max (LAIKA boost)
   // - Vault 2 (Advanced): 7% base + 6% boost = 13% max (TAKARA boost)
   // - Vault 3 (Whale): 8% base + 7% boost = 15% max (TAKARA boost)
   //
@@ -24,9 +24,9 @@ async function main() {
       type: VaultType.VAULT_1,
       duration_months: 12,
       min_entry_amount: new Decimal(100),
-      // CORRECTED: 7% base + 1.4% boost = 8.4% max
-      base_usdt_apy: 7.0,
-      boosted_usdt_apy: 8.4,
+      // CORRECTED per fix.md: 4.5% base + 4% boost = 8.5% max
+      base_usdt_apy: 4.5,
+      boosted_usdt_apy: 8.5,
       takara_apr: 30,
       boost_token_symbol: 'LAIKA',
       boost_ratio: 0.4, // 40% of deposit in Laika
@@ -37,16 +37,16 @@ async function main() {
       current_liquidity: new Decimal(0),
       target_liquidity: new Decimal(100000),
       is_active: true,
-      // APY in basis points (Master v6)
-      base_apy_bps: 700, // 7.00% base
-      boost_apy_bps: 140, // +1.40% boost
-      max_apy_bps: 840, // 8.40% max
+      // APY in basis points (fix.md)
+      base_apy_bps: 450, // 4.50% base
+      boost_apy_bps: 400, // +4.00% boost
+      max_apy_bps: 850, // 8.50% max
       takara_apr_bps: 3000, // 30% Takara mining APR
       // Legacy fields
-      apy_base_bp: 700,
+      apy_base_bp: 450,
       lock_months: 12,
       min_deposit_usd: BigInt(100_000000),
-      laika_boost_max: 1.4,
+      laika_boost_max: 4.0,
     },
     {
       name: 'Advanced',

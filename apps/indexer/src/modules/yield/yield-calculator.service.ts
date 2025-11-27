@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PayoutFrequency } from '@prisma/client';
 
 /**
- * YieldCalculatorService - Master v6 Compliant
+ * YieldCalculatorService - fix.md Compliant
  *
  * Handles all yield calculations with precision using basis points (bps)
  *
- * APY Values per Master v6:
- * - Vault 1 (Starter): 7% base + 1.4% boost = 8.4% max (LAIKA boost, 40% of deposit)
+ * APY Values per fix.md:
+ * - Vault 1 (Starter): 4.5% base + 4% boost = 8.5% max (LAIKA boost, 40% of deposit)
  * - Vault 2 (Advanced): 7% base + 6% boost = 13% max (TAKARA boost, 1:1)
  * - Vault 3 (Whale): 8% base + 7% boost = 15% max (TAKARA boost, 1:1)
  *
@@ -25,7 +25,7 @@ export class YieldCalculatorService {
     YEARLY: 1.3,
   };
 
-  // Vault APY configurations per master.md v6
+  // Vault APY configurations per fix.md
   private readonly VAULT_APY_CONFIG: Record<
     string,
     {
@@ -40,9 +40,9 @@ export class YieldCalculatorService {
     }
   > = {
     VAULT_1: {
-      baseApyBps: 700, // 7.00%
-      boostApyBps: 140, // 1.40%
-      maxApyBps: 840, // 8.40%
+      baseApyBps: 450, // 4.50%
+      boostApyBps: 400, // 4.00%
+      maxApyBps: 850, // 8.50%
       takaraAprBps: 3000, // 30%
       boostToken: 'LAIKA',
       boostRatio: 0.4, // 40% of deposit
