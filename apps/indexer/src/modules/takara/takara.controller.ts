@@ -231,14 +231,23 @@ export class TakaraController {
     @Body()
     body: {
       depositAmountUsd: number;
-      vaultId: number;
+      vaultId?: number;
+      poolId?: number; // Legacy support for frontend
       payoutFrequency: PayoutFrequency;
       laikaBalance?: number;
     },
   ) {
+    // Support both vaultId and poolId (legacy)
+    const vaultId = body.vaultId ?? body.poolId;
+    if (!vaultId) {
+      return {
+        success: false,
+        error: 'vaultId or poolId is required',
+      };
+    }
     const result = await this.yieldCalculatorService.simulateYield({
       depositAmountUsd: body.depositAmountUsd,
-      vaultId: body.vaultId,
+      vaultId,
       payoutFrequency: body.payoutFrequency,
       laikaBalance: body.laikaBalance,
     });
