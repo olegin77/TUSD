@@ -72,7 +72,7 @@ export class WexelsService {
     const wexel = await this.prisma.wexel.findUnique({
       where: { id: BigInt(id) },
       include: {
-        pool: true,
+        vault: true,
         collateral_position: true,
         claims: true,
       },

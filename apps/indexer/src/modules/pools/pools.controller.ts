@@ -1,11 +1,7 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import {
@@ -13,67 +9,72 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
-  ApiBody,
-  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { PoolsService } from './pools.service';
-import { CreatePoolDto } from './dto/create-pool.dto';
-import { UpdatePoolDto } from './dto/update-pool.dto';
 
-@ApiTags('pools')
-@Controller('pools')
+/**
+ * Vaults (formerly Pools) Controller
+ * Read-only API for vault information
+ * Admin operations are handled in /api/v1/admin/vaults
+ */
+@ApiTags('vaults')
+@Controller('api/v1/vaults')
 export class PoolsController {
   constructor(private readonly poolsService: PoolsService) {}
 
-  @Post()
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Create new pool',
-    description: 'Create a new staking pool (admin only)',
-  })
-  @ApiBody({ type: CreatePoolDto })
-  @ApiResponse({
-    status: 201,
-    description: 'Pool created successfully',
-    schema: {
-      example: {
-        id: 1,
-        apy_base_bp: 1800,
-        lock_months: 12,
-        min_deposit_usd: '100000000',
-        boost_target_bp: 3000,
-        boost_max_bp: 500,
-        is_active: true,
-      },
-    },
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  create(@Body() createPoolDto: CreatePoolDto): Promise<any> {
-    return this.poolsService.create(createPoolDto);
-  }
-
   @Get()
   @ApiOperation({
-    summary: 'Get all pools',
-    description: 'Retrieve all active staking pools',
+    summary: 'Get all vaults',
+    description: 'Retrieve all active staking vaults',
   })
   @ApiResponse({
     status: 200,
-    description: 'Pools retrieved successfully',
+    description: 'Vaults retrieved successfully',
     schema: {
       example: [
         {
           id: 1,
-          apy_base_bp: 1800,
-          lock_months: 12,
-          min_deposit_usd: '100000000',
+          name: 'Starter',
+          type: 'VAULT_1',
+          duration_months: 12,
+          min_entry_amount: 100,
+          base_usdt_apy: 7.0,
+          boosted_usdt_apy: 8.4,
+          takara_apr: 30.0,
+          boost_token_symbol: 'LAIKA',
+          base_apy_bps: 700,
+          boost_apy_bps: 140,
+          max_apy_bps: 840,
           is_active: true,
         },
         {
           id: 2,
-          apy_base_bp: 2400,
-          lock_months: 18,
-          min_deposit_usd: '500000000',
+          name: 'Advanced',
+          type: 'VAULT_2',
+          duration_months: 30,
+          min_entry_amount: 1500,
+          base_usdt_apy: 7.0,
+          boosted_usdt_apy: 13.0,
+          takara_apr: 30.0,
+          boost_token_symbol: 'TAKARA',
+          base_apy_bps: 700,
+          boost_apy_bps: 600,
+          max_apy_bps: 1300,
+          is_active: true,
+        },
+        {
+          id: 3,
+          name: 'Whale',
+          type: 'VAULT_3',
+          duration_months: 36,
+          min_entry_amount: 5000,
+          base_usdt_apy: 8.0,
+          boosted_usdt_apy: 15.0,
+          takara_apr: 40.0,
+          boost_token_symbol: 'TAKARA',
+          base_apy_bps: 800,
+          boost_apy_bps: 700,
+          max_apy_bps: 1500,
           is_active: true,
         },
       ],
@@ -83,77 +84,137 @@ export class PoolsController {
     return this.poolsService.findAll();
   }
 
-  @Get(':id')
+  @Get('active')
   @ApiOperation({
-    summary: 'Get pool by ID',
-    description: 'Retrieve detailed information about a specific pool',
+    summary: 'Get active vaults',
+    description: 'Retrieve only active staking vaults',
   })
-  @ApiParam({ name: 'id', description: 'Pool ID', type: Number })
   @ApiResponse({
     status: 200,
-    description: 'Pool found',
+    description: 'Active vaults retrieved successfully',
+  })
+  findActive(): Promise<any[]> {
+    return this.poolsService.findActive();
+  }
+
+  @Get('yields')
+  @ApiOperation({
+    summary: 'Get vault yield summary',
+    description: 'Retrieve yield information for all vaults including USDT APY and Takara APR',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Vault yields retrieved successfully',
+    schema: {
+      example: [
+        {
+          vaultId: 1,
+          name: 'Starter',
+          type: 'VAULT_1',
+          minEntryAmount: 100,
+          durationMonths: 12,
+          boostToken: 'LAIKA',
+          boostRatio: 0.4,
+          boostDiscount: 0.15,
+          usdtYield: {
+            baseApy: 7.0,
+            boostApy: 1.4,
+            maxApy: 8.4,
+            baseApyBps: 700,
+            boostApyBps: 140,
+            maxApyBps: 840,
+            maxApyMonthly: 8.4,
+            maxApyQuarterly: 9.66,
+            maxApyYearly: 10.92,
+          },
+          takaraYield: {
+            apr: 30.0,
+            aprBps: 3000,
+            miningAllocation: 0,
+          },
+          batchInfo: {
+            currentBatch: 1,
+            status: 'COLLECTING',
+            currentLiquidity: 0,
+            targetLiquidity: 100000,
+          },
+        },
+        {
+          vaultId: 2,
+          name: 'Advanced',
+          type: 'VAULT_2',
+          minEntryAmount: 1500,
+          durationMonths: 30,
+          boostToken: 'TAKARA',
+          boostRatio: 1.0,
+          boostFixedPrice: 0.10,
+          usdtYield: {
+            baseApy: 7.0,
+            boostApy: 6.0,
+            maxApy: 13.0,
+            baseApyBps: 700,
+            boostApyBps: 600,
+            maxApyBps: 1300,
+            maxApyMonthly: 13.0,
+            maxApyQuarterly: 14.95,
+            maxApyYearly: 16.9,
+          },
+          takaraYield: {
+            apr: 30.0,
+            aprBps: 3000,
+            miningAllocation: 0,
+          },
+          batchInfo: {
+            currentBatch: 1,
+            status: 'COLLECTING',
+            currentLiquidity: 0,
+            targetLiquidity: 100000,
+          },
+        },
+      ],
+    },
+  })
+  getYieldSummary(): Promise<any[]> {
+    return this.poolsService.getYieldSummary();
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get vault by ID',
+    description: 'Retrieve detailed information about a specific vault',
+  })
+  @ApiParam({ name: 'id', description: 'Vault ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Vault found',
     schema: {
       example: {
         id: 1,
-        apy_base_bp: 1800,
-        lock_months: 12,
-        min_deposit_usd: '100000000',
-        boost_target_bp: 3000,
-        boost_max_bp: 500,
+        name: 'Starter',
+        type: 'VAULT_1',
+        duration_months: 12,
+        min_entry_amount: 100,
+        base_usdt_apy: 7.0,
+        boosted_usdt_apy: 8.4,
+        takara_apr: 30.0,
+        boost_token_symbol: 'LAIKA',
+        boost_ratio: 0.4,
+        boost_discount: 0.15,
+        base_apy_bps: 700,
+        boost_apy_bps: 140,
+        max_apy_bps: 840,
+        takara_apr_bps: 3000,
+        batch_number: 1,
+        batch_status: 'COLLECTING',
+        current_liquidity: 0,
+        target_liquidity: 100000,
         is_active: true,
         created_at: '2025-01-15T10:00:00.000Z',
       },
     },
   })
-  @ApiResponse({ status: 404, description: 'Pool not found' })
+  @ApiResponse({ status: 404, description: 'Vault not found' })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<any> {
     return this.poolsService.findOne(id.toString());
-  }
-
-  @Patch(':id')
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update pool',
-    description: 'Update pool parameters (admin only)',
-  })
-  @ApiParam({ name: 'id', description: 'Pool ID', type: Number })
-  @ApiBody({ type: UpdatePoolDto })
-  @ApiResponse({
-    status: 200,
-    description: 'Pool updated successfully',
-    schema: {
-      example: {
-        id: 1,
-        apy_base_bp: 2000,
-        lock_months: 12,
-        min_deposit_usd: '100000000',
-        is_active: true,
-      },
-    },
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Pool not found' })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePoolDto: UpdatePoolDto,
-  ): Promise<any> {
-    return this.poolsService.update(id.toString(), updatePoolDto);
-  }
-
-  @Delete(':id')
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Delete pool',
-    description: 'Soft delete a pool (admin only)',
-  })
-  @ApiParam({ name: 'id', description: 'Pool ID', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Pool deleted successfully',
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'Pool not found' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<any> {
-    return this.poolsService.remove(id.toString());
   }
 }

@@ -46,13 +46,12 @@ export class AdminService {
         },
       });
 
-      // Calculate average APY across all pools
-      const pools = await this.prisma.pool.findMany();
+      // Calculate average APY across all vaults
+      const vaults = await this.prisma.vault.findMany();
       const avgAPY =
-        pools.length > 0
-          ? pools.reduce((sum, p) => sum + p.apy_base_bp, 0) /
-            pools.length /
-            100
+        vaults.length > 0
+          ? vaults.reduce((sum, v) => sum + v.base_usdt_apy, 0) /
+            vaults.length
           : 0;
 
       return {
@@ -133,7 +132,7 @@ export class AdminService {
       const wexels = await this.prisma.wexel.findMany({
         where,
         include: {
-          pool: true,
+          vault: true,
         },
         orderBy: {
           id: 'desc',
@@ -144,7 +143,7 @@ export class AdminService {
       return wexels.map((wexel) => ({
         id: Number(wexel.id),
         owner_address: wexel.owner_solana || wexel.owner_tron || 'unknown',
-        pool_id: wexel.pool_id,
+        vault_id: wexel.vault_id,
         principal_usd: Number(wexel.principal_usd),
         apy_base_bp: wexel.apy_base_bp,
         apy_boost_bp: wexel.apy_boost_bp,
@@ -230,22 +229,23 @@ export class AdminService {
   }
 
   /**
-   * Update pool (admin only)
+   * Update vault (admin only)
    */
-  async updatePool(poolId: number, data: any) {
+  async updateVault(vaultId: number, data: any) {
     try {
-      const pool = await this.prisma.pool.update({
-        where: { id: poolId },
+      const vault = await this.prisma.vault.update({
+        where: { id: vaultId },
         data: {
-          apy_base_bp: data.apy_base_bp,
-          lock_months: data.lock_months,
-          boost_target_bp: data.boost_target_bp,
-          boost_max_bp: data.boost_max_bp,
+          base_usdt_apy: data.base_usdt_apy,
+          boosted_usdt_apy: data.boosted_usdt_apy,
+          takara_apr: data.takara_apr,
+          duration_months: data.duration_months,
+          is_active: data.is_active,
         },
       });
-      return pool;
+      return vault;
     } catch (error) {
-      this.logger.error(`Error updating pool ${poolId}`, error);
+      this.logger.error(`Error updating vault ${vaultId}`, error);
       throw error;
     }
   }

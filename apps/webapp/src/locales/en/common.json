@@ -16,11 +16,13 @@
   },
   "navigation": {
     "home": "Home",
-    "pools": "Pools",
+    "vaults": "Vaults",
+    "pools": "Vaults",
     "marketplace": "Marketplace",
     "wallet": "Wallet",
     "dashboard": "Dashboard",
-    "admin": "Admin"
+    "admin": "Admin",
+    "calculator": "Calculator"
   },
   "wallet": {
     "connect": "Connect Wallet",
@@ -31,8 +33,30 @@
     "balance": "Balance",
     "address": "Address"
   },
+  "vaults": {
+    "title": "TAKARA Vaults",
+    "subtitle": "Select a vault for USDT deposit",
+    "starter": "Starter",
+    "advanced": "Advanced",
+    "whale": "Whale",
+    "duration": "Duration",
+    "months": "mo",
+    "minDeposit": "Minimum Deposit",
+    "baseApy": "Base APY",
+    "boostedApy": "Boosted APY",
+    "takaraApr": "Takara APR",
+    "boostCondition": "Boost Condition",
+    "laikaBoost": "Laika tokens at 40% of deposit (-15% from market)",
+    "takaraBoost": "Takara tokens 1:1 @ $0.10",
+    "batchProgress": "Batch Progress",
+    "collecting": "Collecting",
+    "filled": "Filled",
+    "completed": "Completed",
+    "deposit": "Deposit",
+    "viewDetails": "View Details"
+  },
   "pools": {
-    "title": "Staking Pools",
+    "title": "TAKARA Vaults",
     "apy": "Annual Percentage Yield",
     "lockPeriod": "Lock Period",
     "minDeposit": "Minimum Deposit",
@@ -54,10 +78,24 @@
   "deposit": {
     "createDeposit": "Create Deposit",
     "amount": "Amount",
-    "selectPool": "Select Pool",
+    "selectVault": "Select Vault",
+    "selectPool": "Select Vault",
     "confirmDeposit": "Confirm Deposit",
     "depositSuccess": "Deposit created successfully",
-    "depositError": "Deposit creation failed"
+    "depositError": "Deposit creation failed",
+    "frequency": "Payout Frequency",
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "yearly": "Yearly"
+  },
+  "takara": {
+    "title": "Takara Mining",
+    "miningPool": "Mining Pool",
+    "distributed": "Distributed",
+    "remaining": "Remaining",
+    "internalPrice": "Internal Price",
+    "claimRewards": "Claim Rewards",
+    "pendingRewards": "Pending Rewards"
   },
   "errors": {
     "generic": "An error occurred",

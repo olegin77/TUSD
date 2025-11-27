@@ -42,7 +42,7 @@ export class MarketplaceService {
       include: {
         wexel: {
           include: {
-            pool: true,
+            vault: true,
             collateral_position: true,
           },
         },
@@ -64,7 +64,7 @@ export class MarketplaceService {
       include: {
         wexel: {
           include: {
-            pool: true,
+            vault: true,
             collateral_position: true,
             boosts: true,
           },
@@ -126,7 +126,7 @@ export class MarketplaceService {
       include: {
         wexel: {
           include: {
-            pool: true,
+            vault: true,
           },
         },
       },

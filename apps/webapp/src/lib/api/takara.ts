@@ -23,6 +23,7 @@ export interface LaikaPrice {
   updatedAt: string;
 }
 
+// Legacy PoolYield - use VaultYield instead
 export interface PoolYield {
   poolId: number;
   minEntryAmount: number;
@@ -37,6 +38,41 @@ export interface PoolYield {
   takaraYield: {
     apr: number;
     miningAllocation: number;
+  };
+}
+
+// TAKARA Vault Yield (TZ v4)
+export interface VaultYield {
+  vaultId: number;
+  name: string;
+  type: 'VAULT_1' | 'VAULT_2' | 'VAULT_3';
+  durationMonths: number;
+  minEntryAmount: number;
+  usdtYield: {
+    baseApy: number;
+    boostedApy: number;
+    frequencyMultipliers: {
+      MONTHLY: number;
+      QUARTERLY: number;
+      YEARLY: number;
+    };
+  };
+  takaraYield: {
+    apr: number;
+    internalPrice: number;
+  };
+  boostCondition: {
+    tokenSymbol: string;
+    ratio: number;
+    discount: number;
+    fixedPrice: number | null;
+  };
+  batch: {
+    number: number;
+    status: 'COLLECTING' | 'FILLED' | 'COMPLETED';
+    currentLiquidity: number;
+    targetLiquidity: number;
+    progress: number;
   };
 }
 
@@ -84,9 +120,7 @@ interface ApiResponse<T> {
 export const takaraApi = {
   // Get Laika token price
   getLaikaPrice: async (): Promise<LaikaPrice> => {
-    const res = await apiClient.get<ApiResponse<LaikaPrice>>(
-      "/api/v1/takara/laika/price"
-    );
+    const res = await apiClient.get<ApiResponse<LaikaPrice>>("/api/v1/takara/laika/price");
     return res.data;
   },
 
@@ -98,11 +132,15 @@ export const takaraApi = {
     return res.data;
   },
 
-  // Get pool yield summary
+  // Get pool yield summary (legacy)
   getPoolYields: async (): Promise<PoolYield[]> => {
-    const res = await apiClient.get<ApiResponse<PoolYield[]>>(
-      "/api/v1/takara/yield/pools"
-    );
+    const res = await apiClient.get<ApiResponse<PoolYield[]>>("/api/v1/takara/yield/pools");
+    return res.data;
+  },
+
+  // Get vault yields (TZ v4)
+  getVaultYields: async (): Promise<VaultYield[]> => {
+    const res = await apiClient.get<ApiResponse<VaultYield[]>>("/api/v1/vaults/yields");
     return res.data;
   },
 

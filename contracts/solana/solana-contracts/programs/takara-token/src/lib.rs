@@ -6,12 +6,19 @@ use anchor_spl::{
 
 declare_id!("TKRAxyz111111111111111111111111111111111111");
 
-/// Takara Token Program - Reward token for TUSD Platform
+/// Takara Token Program - Reward token for TAKARA Platform
 ///
-/// Tokenomics:
+/// Tokenomics (TZ v4):
 /// - Total Supply: Configurable at initialization
 /// - 60% allocated to Mining Vault (rewards for deposits)
 /// - 40% allocated to Admin/Liquidity wallet
+///
+/// Vault-specific rules:
+/// - Vault 1 (Starter): Claim available once per week
+/// - Vault 2 (Advanced): No claim restrictions
+/// - Vault 3 (Whale): No claim restrictions
+///
+/// Boost requirements are validated off-chain by backend/oracle
 #[program]
 pub mod takara_token {
     use super::*;

@@ -123,7 +123,7 @@ export class CollateralService {
       include: {
         wexel: {
           include: {
-            pool: true,
+            vault: true,
           },
         },
       },

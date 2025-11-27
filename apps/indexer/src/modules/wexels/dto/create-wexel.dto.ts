@@ -21,7 +21,7 @@ export class CreateWexelDto {
 
   @IsInt()
   @IsPositive()
-  pool_id: number;
+  vault_id: number;
 
   @Type(() => BigInt)
   @IsPositive()

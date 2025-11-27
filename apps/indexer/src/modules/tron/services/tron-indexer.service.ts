@@ -1,6 +1,8 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-const TronWeb = require('tronweb');
+// TronWeb 6.x uses default export
+const TronWebModule = require('tronweb');
+const TronWeb = TronWebModule.default || TronWebModule;
 import { PrismaService } from '../../../database/prisma.service';
 import { TronEventProcessor } from './tron-event-processor.service';
 

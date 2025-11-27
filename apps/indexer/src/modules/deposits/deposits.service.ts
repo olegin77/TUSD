@@ -20,13 +20,16 @@ export class DepositsService {
 
     const deposit = await this.prisma.deposit.create({
       data: {
-        pool_id: createDepositDto.poolId,
+        vault_id: createDepositDto.vaultId,
         user_address: createDepositDto.userAddress,
-        amount_usd: BigInt(createDepositDto.amountUsd),
+        user_tron_address: createDepositDto.userAddress,
+        user_solana_address: createDepositDto.userAddress,
+        current_owner_solana: createDepositDto.userAddress,
+        amount_usd: createDepositDto.amountUsd,
         status: 'pending',
       },
       include: {
-        pool: true,
+        vault: true,
       },
     });
 
@@ -54,7 +57,7 @@ export class DepositsService {
         updated_at: new Date(),
       },
       include: {
-        pool: true,
+        vault: true,
       },
     });
 
@@ -115,7 +118,7 @@ export class DepositsService {
     return this.prisma.deposit.findMany({
       where,
       include: {
-        pool: true,
+        vault: true,
       },
       orderBy: {
         created_at: 'desc',
@@ -130,7 +133,7 @@ export class DepositsService {
     return this.prisma.deposit.findUnique({
       where: { id: BigInt(id) },
       include: {
-        pool: true,
+        vault: true,
       },
     });
   }

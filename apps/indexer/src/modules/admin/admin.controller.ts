@@ -21,7 +21,7 @@ import { Throttle } from '@nestjs/throttler';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
-import { UpdatePoolDto } from './dto/update-pool.dto';
+import { UpdateVaultDto } from './dto/update-vault.dto';
 import { ManualPriceUpdateDto } from './dto/manual-price-update.dto';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 
@@ -318,41 +318,42 @@ export class AdminController {
   }
 
   /**
-   * PATCH /api/v1/admin/pools/:id
-   * Update pool configuration
-   * MEDIUM-01 FIX: Uses validated UpdatePoolDto
+   * PATCH /api/v1/admin/vaults/:id
+   * Update vault configuration
    */
-  @Patch('pools/:id')
+  @Patch('vaults/:id')
   @ApiOperation({
-    summary: 'Update pool configuration',
-    description: 'Modify parameters for a specific staking pool',
+    summary: 'Update vault configuration',
+    description: 'Modify parameters for a specific staking vault',
   })
-  @ApiParam({ name: 'id', description: 'Pool ID', type: String })
-  @ApiBody({ type: UpdatePoolDto })
+  @ApiParam({ name: 'id', description: 'Vault ID', type: String })
+  @ApiBody({ type: UpdateVaultDto })
   @ApiResponse({
     status: 200,
-    description: 'Pool updated successfully',
+    description: 'Vault updated successfully',
     schema: {
       example: {
         success: true,
         data: {
           id: 1,
-          apy_base_bp: 2000,
-          lock_months: 12,
+          base_usdt_apy: 6.0,
+          boosted_usdt_apy: 8.4,
+          takara_apr: 30.0,
+          duration_months: 12,
           is_active: true,
           updated_at: '2025-01-15T10:20:00.000Z',
         },
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Bad request - Invalid pool data' })
+  @ApiResponse({ status: 400, description: 'Bad request - Invalid vault data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({
     status: 403,
     description: 'Forbidden - Admin access required',
   })
-  @ApiResponse({ status: 404, description: 'Pool not found' })
-  async updatePool(@Param('id') id: string, @Body() data: UpdatePoolDto) {
-    return this.adminService.updatePool(parseInt(id), data);
+  @ApiResponse({ status: 404, description: 'Vault not found' })
+  async updateVault(@Param('id') id: string, @Body() data: UpdateVaultDto) {
+    return this.adminService.updateVault(parseInt(id), data);
   }
 }

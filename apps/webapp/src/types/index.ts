@@ -10,6 +10,7 @@ export interface User {
   updatedAt: string;
 }
 
+// Legacy Pool type - use Vault instead
 export interface Pool {
   id: number;
   apyBaseBp: number;
@@ -22,6 +23,67 @@ export interface Pool {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+// TAKARA Vault types (TZ v4)
+export type VaultType = 'VAULT_1' | 'VAULT_2' | 'VAULT_3';
+export type BatchStatus = 'COLLECTING' | 'FILLED' | 'COMPLETED';
+export type PayoutFrequency = 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+
+export interface Vault {
+  id: number;
+  name: string;
+  type: VaultType;
+  durationMonths: number;
+  minEntryAmount: number;
+  baseUsdtApy: number;
+  boostedUsdtApy: number;
+  takaraApr: number;
+  boostTokenSymbol: string;
+  boostRatio: number;
+  boostDiscount: number;
+  boostFixedPrice: number | null;
+  batchNumber: number;
+  batchStatus: BatchStatus;
+  currentLiquidity: number;
+  targetLiquidity: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface VaultYield {
+  vaultId: number;
+  name: string;
+  type: VaultType;
+  durationMonths: number;
+  minEntryAmount: number;
+  usdtYield: {
+    baseApy: number;
+    boostedApy: number;
+    frequencyMultipliers: {
+      MONTHLY: number;
+      QUARTERLY: number;
+      YEARLY: number;
+    };
+  };
+  takaraYield: {
+    apr: number;
+    internalPrice: number;
+  };
+  boostCondition: {
+    tokenSymbol: string;
+    ratio: number;
+    discount: number;
+    fixedPrice: number | null;
+  };
+  batch: {
+    number: number;
+    status: BatchStatus;
+    currentLiquidity: number;
+    targetLiquidity: number;
+    progress: number;
+  };
 }
 
 export interface Wexel {
@@ -106,6 +168,7 @@ export interface LoginRequest {
   signature: string;
 }
 
+// Legacy Pool request types - use Vault instead
 export interface CreatePoolRequest {
   apy_base_bp: number;
   lock_months: number;
@@ -121,6 +184,35 @@ export interface UpdatePoolRequest {
   boost_target_bp?: number;
   boost_max_bp?: number;
   is_active?: boolean;
+}
+
+// TAKARA Vault request types
+export interface CreateVaultRequest {
+  name: string;
+  type: VaultType;
+  durationMonths: number;
+  minEntryAmount: number;
+  baseUsdtApy: number;
+  boostedUsdtApy: number;
+  takaraApr: number;
+  boostTokenSymbol: string;
+  boostRatio: number;
+  boostDiscount?: number;
+  boostFixedPrice?: number;
+  targetLiquidity?: number;
+}
+
+export interface UpdateVaultRequest {
+  name?: string;
+  minEntryAmount?: number;
+  baseUsdtApy?: number;
+  boostedUsdtApy?: number;
+  takaraApr?: number;
+  boostRatio?: number;
+  boostDiscount?: number;
+  boostFixedPrice?: number;
+  targetLiquidity?: number;
+  isActive?: boolean;
 }
 
 export interface ClaimRewardsRequest {
@@ -163,7 +255,8 @@ export interface PaginatedResponse<T = any> {
 }
 
 export interface Stats {
-  totalPools: number;
+  totalPools: number;  // Legacy
+  totalVaults: number;
   totalLiquidity: string;
   totalWexels: string;
   totalUsers?: number;

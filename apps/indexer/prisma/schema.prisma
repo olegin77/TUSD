@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  output = "../../../node_modules/.prisma/client"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -19,32 +19,96 @@ enum PayoutFrequency {
   YEARLY
 }
 
-// Pool configuration
-model Pool {
-  id              Int      @id @default(autoincrement())
-  apy_base_bp     Int // APY в базисных пунктах, напр. 1800 = 18%
-  lock_months     Int // 12..36
-  min_deposit_usd BigInt // Минимальный депозит в USDT (в микро-единицах)
-  total_liquidity BigInt   @default(0) // Общая ликвидность
-  total_wexels    BigInt   @default(0) // Общее количество векселей
-  boost_target_bp Int      @default(3000) // 3000 = 30% от Principal
-  boost_max_bp    Int      @default(500) // 500 = +5% APY максимум
-  is_active       Boolean  @default(true)
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+// Vault type enum (TAKARA rebrand: Pool → Vault)
+enum VaultType {
+  VAULT_1 // Starter (Laika Boost) - 12 months, $100 min
+  VAULT_2 // Advanced (Takara Boost) - 30 months, $1500 min
+  VAULT_3 // Whale (Takara Boost) - 36 months, $5000 min
+}
 
-  // NEW: Takara/Laika integration fields
-  min_entry_amount  Decimal  @default(100) @db.Decimal(18, 6) // Min entry: $100, $1500, $5000
-  takara_apr        Float    @default(30) // APR в Takara: 30%, 50%, 75%
-  base_usdt_apy     Float    @default(4) // Базовая ставка USDT: 4%
-  laika_boost_max   Float    @default(2) // Макс буст от Laika: 2%, 3%, 4%
-  mining_allocation Decimal  @default(0) @db.Decimal(18, 6) // Добыто Takara из 60% пула
+// Batch status enum
+enum BatchStatus {
+  COLLECTING // Активный сбор средств
+  FILLED     // Заполнен, начисление наград запущено
+  COMPLETED  // Завершен
+}
+
+// Deposit status enum (Master v6 - Multi-chain flow)
+enum DepositStatus {
+  INITIAL          // Initial state - waiting for USDT deposit
+  PENDING_BOOST    // USDT confirmed, waiting for boost token lock
+  PENDING_MINT     // Ready to mint Wexel NFT
+  ACTIVE           // Wexel minted, rewards accruing
+  MATURED          // Lock period ended, can redeem
+  REDEEMED         // NFT burned, principal returned
+  USDT_TX_FAILED   // USDT transaction verification failed
+  BOOST_TX_FAILED  // Boost token lock failed
+  MINT_FAILED      // Wexel mint failed
+  EXPIRED          // Timeout waiting for next step
+}
+
+// Boost token enum
+enum BoostToken {
+  LAIKA   // Vault 1: Laika boost (40% of deposit, market price - 15%)
+  TAKARA  // Vault 2 & 3: Takara boost (1:1, fixed $0.10)
+  NONE    // No boost selected
+}
+
+// Vault configuration (ex-Pool) - TAKARA rebrand
+model Vault {
+  id               Int         @id @default(autoincrement())
+  name             String      // "Starter", "Advanced", "Whale"
+  type             VaultType   // VAULT_1, VAULT_2, VAULT_3
+
+  // Batch Logic
+  batch_number     Int         @default(1) // Текущий активный номер батча (1-1, 1-2...)
+  batch_status     BatchStatus @default(COLLECTING)
+  current_liquidity Decimal    @default(0) @db.Decimal(18, 6)
+  target_liquidity  Decimal    @default(100000) @db.Decimal(18, 6) // Лимит $100k для закрытия батча
+
+  // Finance Params
+  duration_months   Int        // 12, 30, 36
+  min_entry_amount  Decimal    @db.Decimal(18, 6) // $100, $1500, $5000
+
+  // Yield Params - USDT (Master v6 CORRECTED VALUES)
+  base_usdt_apy     Float      // Base APY %: 7%, 7%, 8%
+  boosted_usdt_apy  Float      // Max APY with boost: 8.4%, 13%, 15%
+
+  // APY in basis points (for precision)
+  base_apy_bps      Int        @default(0) // Base APY in bps: 700, 700, 800
+  boost_apy_bps     Int        @default(0) // Boost APY in bps: 140, 600, 700
+  max_apy_bps       Int        @default(0) // Max APY in bps: 840, 1300, 1500
+
+  // Yield Params - Takara Mining
+  takara_apr        Float      // APR: 30%, 30%, 40%
+  takara_apr_bps    Int        @default(0) // APR in bps: 3000, 3000, 4000
+
+  // Boost Conditions
+  boost_token_symbol String    // "LAIKA" or "TAKARA"
+  boost_ratio        Float     // 0.4 (40% для Laika) или 1.0 (1:1 для Takara)
+  boost_discount     Float     @default(0) // 0.15 (15% скидка) для Laika, 0 для Takara
+  boost_fixed_price  Decimal?  @db.Decimal(18, 8) // Фикс. цена $0.10 для Takara буста
+
+  // Legacy fields for compatibility
+  apy_base_bp      Int        @default(0) // Deprecated: use base_usdt_apy
+  lock_months      Int        @default(12) // Deprecated: use duration_months
+  min_deposit_usd  BigInt     @default(0) // Deprecated: use min_entry_amount
+  total_liquidity  BigInt     @default(0) // Deprecated: use current_liquidity
+  total_wexels     BigInt     @default(0) // Общее количество векселей
+  boost_target_bp  Int        @default(3000) // Deprecated
+  boost_max_bp     Int        @default(500) // Deprecated
+  laika_boost_max  Float      @default(2) // Deprecated
+  mining_allocation Decimal   @default(0) @db.Decimal(18, 6) // Добыто Takara
+
+  is_active        Boolean    @default(true)
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
 
   // Relations
   wexels   Wexel[]
   deposits Deposit[]
 
-  @@map("pools")
+  @@map("vaults")
 }
 
 // Wexel (NFT-вексель)
@@ -52,7 +116,8 @@ model Wexel {
   id                BigInt   @id @default(autoincrement())
   owner_solana      String? // Solana адрес владельца
   owner_tron        String? // Tron адрес владельца
-  pool_id           Int
+  vault_id          Int      // TAKARA: renamed from pool_id
+  vault_batch_number Int     @default(1) // Номер батча в который попал вексель
   principal_usd     BigInt // Основная сумма в USDT (в микро-единицах)
   apy_base_bp       Int // Базовый APY в базисных пунктах
   apy_boost_bp      Int      @default(0) // Буст APY в базисных пунктах
@@ -66,7 +131,7 @@ model Wexel {
   updated_at        DateTime @updatedAt
 
   // Relations
-  pool                Pool                @relation(fields: [pool_id], references: [id])
+  vault               Vault               @relation(fields: [vault_id], references: [id])
   collateral_position CollateralPosition?
   listings            Listing[]
   claims              Claim[]
@@ -140,28 +205,91 @@ model Boost {
   @@map("boosts")
 }
 
-// Депозиты
+// Депозиты (Master v6 - Multi-chain deposit flow)
 model Deposit {
-  id           BigInt   @id @default(autoincrement())
-  pool_id      Int
-  user_address String // Адрес пользователя (Solana или Tron)
-  amount_usd   BigInt // Сумма депозита в USDT (в микро-единицах)
-  wexel_id     BigInt? // ID созданного векселя
-  tx_hash      String? // Хэш транзакции
-  status       String   @default("pending") // pending, confirmed, failed
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id                    BigInt        @id @default(autoincrement())
+  vault_id              Int           // Vault ID
+  vault_batch_number    Int           @default(1) // Batch number at deposit time
 
-  // NEW: Cross-chain and Takara fields
-  network               String           @default("TRON") // Сеть депозита: TRON
-  payout_frequency      PayoutFrequency  @default(MONTHLY) // Частота выплат
-  takara_pending_reward Decimal          @default(0) @db.Decimal(18, 6) // Накопленная Takara
-  is_laika_boost_active Boolean          @default(false) // Статус Laika буста
-  solana_wallet         String?          // Привязанный Solana кошелек для наград
+  // User Wallets (Multi-chain)
+  user_tron_address     String        @db.VarChar(42)  // TRC20 address for USDT deposit
+  user_solana_address   String        @db.VarChar(44)  // Solana pubkey for rewards/NFT
+  current_owner_solana  String        @db.VarChar(44)  // Can change if NFT transferred!
+
+  // Deposit Amount
+  amount_usd            Decimal       @db.Decimal(18, 6)  // Amount in USDT
+
+  // Status (Multi-chain flow states)
+  deposit_status        DepositStatus @default(INITIAL)
+
+  // Transaction Hashes (Multi-chain)
+  tron_tx_hash          String?       @db.VarChar(64)  // USDT deposit tx on TRON
+  tron_tx_confirmed     Boolean       @default(false)
+  boost_tx_signature    String?       @db.VarChar(88)  // Boost lock tx on Solana
+  boost_tx_confirmed    Boolean       @default(false)
+  mint_tx_signature     String?       @db.VarChar(88)  // Wexel mint tx on Solana
+
+  // Wexel NFT
+  wexel_mint_address    String?       @db.VarChar(44)  // Solana NFT mint address
+  wexel_metadata_uri    String?       // Arweave/IPFS URI
+
+  // APY Configuration (frozen at deposit time)
+  base_apy_bps          Int           @default(0)      // Base APY in basis points
+  boost_apy_bps         Int           @default(0)      // Boost APY in basis points
+  total_apy_bps         Int           @default(0)      // base + boost
+  frequency_multiplier  Decimal       @default(1.0) @db.Decimal(4, 2)  // 1.0, 1.15, 1.30
+  effective_apy_bps     Int           @default(0)      // total * multiplier
+  payout_frequency      PayoutFrequency @default(MONTHLY)
+
+  // Boost Details
+  boost_token           BoostToken    @default(NONE)
+  boost_token_mint      String?       @db.VarChar(44)  // Laika or Takara mint
+  boost_token_amount    Decimal?      @db.Decimal(18, 9)
+  boost_token_locked    Boolean       @default(false)
+  boost_price_at_deposit Decimal?     @db.Decimal(18, 8)  // Price used for calculation
+
+  // Takara Mining Rewards
+  takara_mining_apr_bps Int           @default(0)      // APR for Takara mining
+  takara_pending        Decimal       @default(0) @db.Decimal(18, 9)
+  takara_claimed_total  Decimal       @default(0) @db.Decimal(18, 9)
+  last_takara_claim_at  DateTime?
+
+  // USDT Rewards
+  usdt_claimed_total    Decimal       @default(0) @db.Decimal(18, 6)
+  last_usdt_claim_at    DateTime?
+
+  // Timing
+  lock_start_at         DateTime?
+  lock_end_at           DateTime?
+  is_matured            Boolean       @default(false)
+  is_redeemed           Boolean       @default(false)
+  redeemed_at           DateTime?
+
+  // Security (anti-replay)
+  claim_nonce           Int           @default(0)
+
+  // Legacy compatibility fields
+  user_address          String?       // Deprecated: use user_tron_address
+  wexel_id              BigInt?       // Legacy wexel reference
+  tx_hash               String?       // Deprecated: use tron_tx_hash
+  status                String        @default("pending") // Legacy: use deposit_status
+  is_takara_boosted     Boolean       @default(false)
+  is_laika_boosted      Boolean       @default(false)
+  network               String        @default("TRON")
+  solana_wallet         String?       // Deprecated: use user_solana_address
+
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @updatedAt
 
   // Relations
-  pool Pool @relation(fields: [pool_id], references: [id])
+  vault                 Vault         @relation(fields: [vault_id], references: [id])
 
+  @@index([user_tron_address])
+  @@index([user_solana_address])
+  @@index([current_owner_solana])
+  @@index([wexel_mint_address])
+  @@index([deposit_status])
+  @@index([vault_id, deposit_status])
   @@map("deposits")
 }
 
@@ -227,7 +355,8 @@ model TronDeposit {
   id           BigInt   @id @default(autoincrement())
   deposit_id   String   @unique
   depositor    String // Tron address
-  pool_id      Int
+  vault_id     Int      // TAKARA: renamed from pool_id
+  vault_batch  Int      @default(1) // Номер батча
   amount       String // USDT amount in string (handles large numbers)
   solana_owner String // Target Solana address
   timestamp    DateTime
@@ -241,6 +370,7 @@ model TronDeposit {
   @@index([solana_owner])
   @@index([processed])
   @@index([timestamp])
+  @@index([vault_id])
   @@map("tron_deposits")
 }
 

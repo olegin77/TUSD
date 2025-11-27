@@ -7,7 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageTransition } from "@/components/ui/page-transition";
-import { Wallet, TrendingUp, DollarSign, Clock, Shield, BarChart3, Plus, Eye, Coins, Pickaxe, Sparkles } from "lucide-react";
+import {
+  Wallet,
+  TrendingUp,
+  DollarSign,
+  Clock,
+  Shield,
+  BarChart3,
+  Plus,
+  Eye,
+  Coins,
+  Pickaxe,
+  Sparkles,
+} from "lucide-react";
 import { takaraApi, TakaraMiningStats, LaikaPrice } from "@/lib/api/takara";
 
 // Force dynamic rendering for this page - disable static generation
@@ -48,9 +60,9 @@ export default function DashboardPage() {
   const wexels = [
     {
       id: 1,
-      pool: "12 месяцев",
-      apy: 18,
-      boost: 5,
+      vault: "Starter (12 мес)",
+      apy: 8.4,
+      boost: "Laika",
       principal: 20000,
       rewards: 1200,
       status: "active",
@@ -58,9 +70,9 @@ export default function DashboardPage() {
     },
     {
       id: 2,
-      pool: "24 месяца",
-      apy: 24,
-      boost: 3,
+      vault: "Advanced (30 мес)",
+      apy: 8,
+      boost: "Takara",
       principal: 15000,
       rewards: 800,
       status: "collateralized",
@@ -68,9 +80,9 @@ export default function DashboardPage() {
     },
     {
       id: 3,
-      pool: "36 месяцев",
-      apy: 30,
-      boost: 0,
+      vault: "Whale (36 мес)",
+      apy: 10,
+      boost: null,
       principal: 15000,
       rewards: 500,
       status: "active",
@@ -219,9 +231,7 @@ export default function DashboardPage() {
                     <Pickaxe className="h-5 w-5 text-amber-600" />
                     Takara Mining
                   </CardTitle>
-                  <CardDescription>
-                    Майнинг токенов Takara за ваши депозиты
-                  </CardDescription>
+                  <CardDescription>Майнинг токенов Takara за ваши депозиты</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {takaraLoading ? (
@@ -233,9 +243,11 @@ export default function DashboardPage() {
                       {/* Mining Status */}
                       <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
                         <div className="flex items-center gap-3">
-                          <div className={`w-3 h-3 rounded-full ${miningStats.isMiningActive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                          <div
+                            className={`w-3 h-3 rounded-full ${miningStats.isMiningActive ? "bg-green-500 animate-pulse" : "bg-red-500"}`}
+                          ></div>
                           <span className="font-medium">
-                            {miningStats.isMiningActive ? 'Майнинг активен' : 'Майнинг завершен'}
+                            {miningStats.isMiningActive ? "Майнинг активен" : "Майнинг завершен"}
                           </span>
                         </div>
                         <Badge variant={miningStats.isMiningActive ? "default" : "secondary"}>
@@ -291,7 +303,9 @@ export default function DashboardPage() {
                               <Sparkles className="h-5 w-5 text-purple-600" />
                               <span className="font-medium text-purple-900">Laika Boost</span>
                             </div>
-                            <Badge className="bg-purple-600">-{laikaPrice.discountPercent}% скидка</Badge>
+                            <Badge className="bg-purple-600">
+                              -{laikaPrice.discountPercent}% скидка
+                            </Badge>
                           </div>
                           <div className="mt-3 grid grid-cols-2 gap-4">
                             <div>
@@ -317,7 +331,9 @@ export default function DashboardPage() {
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Прогресс майнинга</span>
-                          <span className="font-medium">{miningStats.miningPoolRemaining.toLocaleString()} осталось</span>
+                          <span className="font-medium">
+                            {miningStats.miningPoolRemaining.toLocaleString()} осталось
+                          </span>
                         </div>
                         <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                           <div
@@ -348,7 +364,7 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <h3 className="font-semibold">Вексель #{wexel.id}</h3>
-                            <p className="text-sm text-gray-500">Пул: {wexel.pool}</p>
+                            <p className="text-sm text-gray-500">Хранилище: {wexel.vault}</p>
                           </div>
                           <Badge variant={wexel.status === "active" ? "default" : "secondary"}>
                             {wexel.status === "active" ? "Активен" : "В залоге"}
@@ -362,7 +378,7 @@ export default function DashboardPage() {
                           <div>
                             <p className="text-sm text-gray-500">APY</p>
                             <p className="font-semibold">
-                              {wexel.apy}% + {wexel.boost}%
+                              {wexel.apy}% {wexel.boost && `(${wexel.boost} Boost)`}
                             </p>
                           </div>
                           <div>

@@ -6,9 +6,23 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageTransition } from "@/components/ui/page-transition";
-import { Calculator, TrendingUp, DollarSign, Coins, Sparkles, Clock, ArrowRight } from "lucide-react";
+import {
+  Calculator,
+  TrendingUp,
+  DollarSign,
+  Coins,
+  Sparkles,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 import { takaraApi, PoolYield, YieldSimulation, PayoutFrequency } from "@/lib/api/takara";
 
 export default function YieldCalculatorPage() {
@@ -74,7 +88,7 @@ export default function YieldCalculatorPage() {
     return `${value.toFixed(2)}%`;
   };
 
-  const selectedPool = poolYields.find(p => String(p.poolId) === selectedPoolId);
+  const selectedPool = poolYields.find((p) => String(p.poolId) === selectedPoolId);
 
   return (
     <PageTransition>
@@ -131,15 +145,16 @@ export default function YieldCalculatorPage() {
                       <SelectContent>
                         {poolYields.map((pool) => (
                           <SelectItem key={pool.poolId} value={String(pool.poolId)}>
-                            Пул {pool.lockMonths} мес. - до {formatPercent(pool.usdtYield.maxApyYearly)} APY
+                            Пул {pool.lockMonths} мес. - до{" "}
+                            {formatPercent(pool.usdtYield.maxApyYearly)} APY
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                     {selectedPool && (
                       <p className="text-sm text-gray-500">
-                        Мин. вход: {formatCurrency(selectedPool.minEntryAmount)} |
-                        Takara APR: {formatPercent(selectedPool.takaraYield.apr)}
+                        Мин. вход: {formatCurrency(selectedPool.minEntryAmount)} | Takara APR:{" "}
+                        {formatPercent(selectedPool.takaraYield.apr)}
                       </p>
                     )}
                   </div>
@@ -147,7 +162,10 @@ export default function YieldCalculatorPage() {
                   {/* Payout Frequency */}
                   <div className="space-y-2">
                     <Label>Частота выплат</Label>
-                    <Select value={payoutFrequency} onValueChange={(v) => setPayoutFrequency(v as PayoutFrequency)}>
+                    <Select
+                      value={payoutFrequency}
+                      onValueChange={(v) => setPayoutFrequency(v as PayoutFrequency)}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -202,12 +220,17 @@ export default function YieldCalculatorPage() {
                       <CardHeader>
                         <CardTitle className="flex items-center justify-between">
                           <span>Результаты расчета</span>
-                          <Badge className={simulation.laikaBoostInfo.isEligible ? "bg-green-600" : "bg-gray-500"}>
+                          <Badge
+                            className={
+                              simulation.laikaBoostInfo.isEligible ? "bg-green-600" : "bg-gray-500"
+                            }
+                          >
                             {simulation.laikaBoostInfo.isEligible ? "Буст активен" : "Без буста"}
                           </Badge>
                         </CardTitle>
                         <CardDescription>
-                          Пул {simulation.lockPeriodMonths} мес. | {formatCurrency(simulation.depositAmount)}
+                          Пул {simulation.lockPeriodMonths} мес. |{" "}
+                          {formatCurrency(simulation.depositAmount)}
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
@@ -218,7 +241,9 @@ export default function YieldCalculatorPage() {
                               USDT APY
                             </div>
                             <p className="text-2xl font-bold text-green-600">
-                              {formatPercent(simulation.withBoost?.usdtApy || simulation.withoutBoost.usdtApy)}
+                              {formatPercent(
+                                simulation.withBoost?.usdtApy || simulation.withoutBoost.usdtApy
+                              )}
                             </p>
                           </div>
                           <div className="p-4 bg-white rounded-lg shadow-sm">
@@ -250,7 +275,10 @@ export default function YieldCalculatorPage() {
                               <span className="font-medium">USDT</span>
                             </div>
                             <span className="text-xl font-bold text-green-600">
-                              {formatCurrency(simulation.withBoost?.monthlyUsdtReward || simulation.withoutBoost.monthlyUsdtReward)}
+                              {formatCurrency(
+                                simulation.withBoost?.monthlyUsdtReward ||
+                                  simulation.withoutBoost.monthlyUsdtReward
+                              )}
                             </span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
@@ -259,7 +287,10 @@ export default function YieldCalculatorPage() {
                               <span className="font-medium">Takara</span>
                             </div>
                             <span className="text-xl font-bold text-amber-600">
-                              {(simulation.withBoost?.monthlyTakaraReward || simulation.withoutBoost.monthlyTakaraReward).toFixed(2)}
+                              {(
+                                simulation.withBoost?.monthlyTakaraReward ||
+                                simulation.withoutBoost.monthlyTakaraReward
+                              ).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -275,13 +306,18 @@ export default function YieldCalculatorPage() {
                         <div className="text-center p-6 bg-gradient-to-r from-green-100 to-emerald-100 rounded-lg">
                           <p className="text-sm text-gray-600 mb-2">Общий годовой доход (USD)</p>
                           <p className="text-4xl font-bold text-green-700">
-                            {formatCurrency(simulation.withBoost?.totalAnnualValue || simulation.withoutBoost.totalAnnualValue)}
+                            {formatCurrency(
+                              simulation.withBoost?.totalAnnualValue ||
+                                simulation.withoutBoost.totalAnnualValue
+                            )}
                           </p>
-                          {simulation.withBoost && simulation.withBoost.additionalAnnualValue > 0 && (
-                            <p className="text-sm text-green-600 mt-2">
-                              +{formatCurrency(simulation.withBoost.additionalAnnualValue)} благодаря Laika бусту
-                            </p>
-                          )}
+                          {simulation.withBoost &&
+                            simulation.withBoost.additionalAnnualValue > 0 && (
+                              <p className="text-sm text-green-600 mt-2">
+                                +{formatCurrency(simulation.withBoost.additionalAnnualValue)}{" "}
+                                благодаря Laika бусту
+                              </p>
+                            )}
                         </div>
                       </CardContent>
                     </Card>
@@ -298,17 +334,26 @@ export default function YieldCalculatorPage() {
                         <CardContent>
                           <div className="space-y-3">
                             <p className="text-sm text-purple-700">
-                              Для активации буста нужно: <strong>{simulation.laikaBoostInfo.requiredForBoost.toLocaleString()}</strong> Laika
+                              Для активации буста нужно:{" "}
+                              <strong>
+                                {simulation.laikaBoostInfo.requiredForBoost.toLocaleString()}
+                              </strong>{" "}
+                              Laika
                             </p>
                             <div className="flex items-center gap-2 text-sm">
                               <span className="text-purple-600">Текущий баланс:</span>
-                              <span className="font-bold">{simulation.laikaBoostInfo.currentBalance.toLocaleString()}</span>
+                              <span className="font-bold">
+                                {simulation.laikaBoostInfo.currentBalance.toLocaleString()}
+                              </span>
                               <ArrowRight className="h-4 w-4 text-purple-400" />
                               <span className="text-purple-600">Нужно:</span>
-                              <span className="font-bold">{simulation.laikaBoostInfo.requiredForBoost.toLocaleString()}</span>
+                              <span className="font-bold">
+                                {simulation.laikaBoostInfo.requiredForBoost.toLocaleString()}
+                              </span>
                             </div>
                             <p className="text-xs text-purple-600">
-                              Цена Laika со скидкой: {formatCurrency(simulation.laikaBoostInfo.discountedPrice)}
+                              Цена Laika со скидкой:{" "}
+                              {formatCurrency(simulation.laikaBoostInfo.discountedPrice)}
                             </p>
                           </div>
                         </CardContent>
@@ -355,20 +400,28 @@ export default function YieldCalculatorPage() {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Макс. Laika буст</span>
-                        <span className="font-medium text-purple-600">+{formatPercent(pool.usdtYield.maxLaikaBoost)}</span>
+                        <span className="font-medium text-purple-600">
+                          +{formatPercent(pool.usdtYield.maxLaikaBoost)}
+                        </span>
                       </div>
                       <div className="h-px bg-gray-200"></div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Макс. APY (месячно)</span>
-                        <span className="font-bold text-green-600">{formatPercent(pool.usdtYield.maxApyMonthly)}</span>
+                        <span className="font-bold text-green-600">
+                          {formatPercent(pool.usdtYield.maxApyMonthly)}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Макс. APY (квартал)</span>
-                        <span className="font-bold text-green-600">{formatPercent(pool.usdtYield.maxApyQuarterly)}</span>
+                        <span className="font-bold text-green-600">
+                          {formatPercent(pool.usdtYield.maxApyQuarterly)}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Макс. APY (год)</span>
-                        <span className="font-bold text-green-600">{formatPercent(pool.usdtYield.maxApyYearly)}</span>
+                        <span className="font-bold text-green-600">
+                          {formatPercent(pool.usdtYield.maxApyYearly)}
+                        </span>
                       </div>
                     </div>
                   </CardContent>

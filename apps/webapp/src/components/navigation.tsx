@@ -13,7 +13,7 @@ export function Navigation() {
 
   const navigation = [
     { name: "Главная", href: "/", icon: Home },
-    { name: "Пулы", href: "/pools", icon: TrendingUp },
+    { name: "Хранилища", href: "/vaults", icon: TrendingUp },
     { name: "Маркетплейс", href: "/marketplace", icon: ShoppingCart },
     { name: "Буст", href: "/boost", icon: TrendingUp },
     { name: "Оракулы", href: "/oracles", icon: BarChart3 },
@@ -35,14 +35,14 @@ export function Navigation() {
           <Link
             href="/"
             className="flex items-center space-x-2"
-            aria-label="Wexel - Главная страница"
+            aria-label="TAKARA - Главная страница"
           >
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm" aria-hidden="true">
-                W
+                T
               </span>
             </div>
-            <span className="text-xl font-bold text-gray-900">Wexel</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">TAKARA</span>
           </Link>
 
           {/* Desktop Navigation */}

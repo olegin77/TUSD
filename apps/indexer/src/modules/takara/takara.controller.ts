@@ -203,7 +203,7 @@ export class TakaraController {
     body: {
       depositId: string;
       depositAmountUsd: number;
-      poolId: number;
+      vaultId: number;
       payoutFrequency: PayoutFrequency;
       laikaBalance?: number;
       solanaWallet?: string;
@@ -212,7 +212,7 @@ export class TakaraController {
     const result = await this.yieldCalculatorService.calculateTotalYield({
       depositId: BigInt(body.depositId),
       depositAmountUsd: body.depositAmountUsd,
-      poolId: body.poolId,
+      vaultId: body.vaultId,
       payoutFrequency: body.payoutFrequency,
       laikaBalance: body.laikaBalance,
       solanaWallet: body.solanaWallet,
@@ -231,14 +231,14 @@ export class TakaraController {
     @Body()
     body: {
       depositAmountUsd: number;
-      poolId: number;
+      vaultId: number;
       payoutFrequency: PayoutFrequency;
       laikaBalance?: number;
     },
   ) {
     const result = await this.yieldCalculatorService.simulateYield({
       depositAmountUsd: body.depositAmountUsd,
-      poolId: body.poolId,
+      vaultId: body.vaultId,
       payoutFrequency: body.payoutFrequency,
       laikaBalance: body.laikaBalance,
     });
@@ -248,11 +248,11 @@ export class TakaraController {
     };
   }
 
-  @Get('yield/pools')
-  @ApiOperation({ summary: 'Get yield summary for all pools' })
-  @ApiResponse({ status: 200, description: 'Pool yield summary' })
-  async getPoolYieldSummary() {
-    const summary = await this.yieldCalculatorService.getPoolYieldSummary();
+  @Get('yield/vaults')
+  @ApiOperation({ summary: 'Get yield summary for all vaults' })
+  @ApiResponse({ status: 200, description: 'Vault yield summary' })
+  async getVaultYieldSummary() {
+    const summary = await this.yieldCalculatorService.getVaultYieldSummary();
     return {
       success: true,
       data: summary,
@@ -268,7 +268,7 @@ export class TakaraController {
     body: {
       depositId: string;
       depositAmountUsd: number;
-      poolId: number;
+      vaultId: number;
       payoutFrequency: PayoutFrequency;
       startDate: string;
       endDate: string;
@@ -278,7 +278,7 @@ export class TakaraController {
     const result = await this.yieldCalculatorService.calculatePeriodRewards({
       depositId: BigInt(body.depositId),
       depositAmountUsd: body.depositAmountUsd,
-      poolId: body.poolId,
+      vaultId: body.vaultId,
       payoutFrequency: body.payoutFrequency,
       startDate: new Date(body.startDate),
       endDate: new Date(body.endDate),

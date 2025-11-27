@@ -17,9 +17,9 @@ const inter = Inter({
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Wexel - Децентрализованные векселя",
+  title: "TAKARA - Cross-Chain Investment Platform",
   description:
-    "Инвестируйте в стабильные активы с высокой доходностью. Получайте NFT-векселя, торгуйте ими на маркетплейсе и используйте как залог.",
+    "Инвестируйте в кросс-чейн хранилища с высокой доходностью. USDT депозиты на TRON, награды в USDT + Takara токены на Solana.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

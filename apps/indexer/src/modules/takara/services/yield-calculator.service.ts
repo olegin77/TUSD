@@ -48,18 +48,18 @@ export class YieldCalculatorService {
   async calculateTotalYield(params: {
     depositId: bigint;
     depositAmountUsd: number;
-    poolId: number;
+    vaultId: number;
     payoutFrequency: PayoutFrequency;
     laikaBalance?: number;
     solanaWallet?: string;
   }): Promise<YieldCalculation> {
-    // Get pool configuration
-    const pool = await this.prisma.pool.findUnique({
-      where: { id: params.poolId },
+    // Get vault configuration
+    const vault = await this.prisma.vault.findUnique({
+      where: { id: params.vaultId },
     });
 
-    if (!pool) {
-      throw new Error('Pool not found');
+    if (!vault) {
+      throw new Error('Vault not found');
     }
 
     // Check Laika boost eligibility
@@ -82,8 +82,8 @@ export class YieldCalculatorService {
     }
 
     // Calculate USDT APY
-    const baseUsdtApy = pool.base_usdt_apy;
-    const laikaBoostApy = isLaikaBoostActive ? pool.laika_boost_max : 0;
+    const baseUsdtApy = vault.base_usdt_apy;
+    const laikaBoostApy = isLaikaBoostActive ? vault.laika_boost_max : 0;
     const frequencyMultiplier =
       this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
 
@@ -98,7 +98,7 @@ export class YieldCalculatorService {
     const takaraReward =
       await this.takaraMiningService.calculateDailyTakaraReward(
         params.depositAmountUsd,
-        pool.takara_apr,
+        vault.takara_apr,
       );
 
     // Get Takara USD value for total calculation
@@ -114,7 +114,7 @@ export class YieldCalculatorService {
     return {
       depositId: params.depositId.toString(),
       depositAmountUsd: params.depositAmountUsd,
-      poolId: params.poolId,
+      vaultId: params.vaultId,
       payoutFrequency: params.payoutFrequency,
 
       // USDT Rewards (TRC20)
@@ -130,7 +130,7 @@ export class YieldCalculatorService {
 
       // Takara Rewards (SPL)
       takara: {
-        apr: pool.takara_apr,
+        apr: vault.takara_apr,
         dailyRewardTokens: takaraReward.dailyRewardTakara,
         annualRewardTokens: takaraReward.annualRewardTakara,
         dailyRewardUsdValue: takaraReward.dailyRewardUsdValue,
@@ -161,18 +161,18 @@ export class YieldCalculatorService {
   async calculatePeriodRewards(params: {
     depositId: bigint;
     depositAmountUsd: number;
-    poolId: number;
+    vaultId: number;
     payoutFrequency: PayoutFrequency;
     startDate: Date;
     endDate: Date;
     isLaikaBoostActive: boolean;
   }): Promise<PeriodRewards> {
-    const pool = await this.prisma.pool.findUnique({
-      where: { id: params.poolId },
+    const vault = await this.prisma.vault.findUnique({
+      where: { id: params.vaultId },
     });
 
-    if (!pool) {
-      throw new Error('Pool not found');
+    if (!vault) {
+      throw new Error('Vault not found');
     }
 
     const daysInPeriod = Math.ceil(
@@ -181,8 +181,8 @@ export class YieldCalculatorService {
     );
 
     // USDT calculation
-    const baseUsdtApy = pool.base_usdt_apy;
-    const laikaBoostApy = params.isLaikaBoostActive ? pool.laika_boost_max : 0;
+    const baseUsdtApy = vault.base_usdt_apy;
+    const laikaBoostApy = params.isLaikaBoostActive ? vault.laika_boost_max : 0;
     const frequencyMultiplier =
       this.FREQUENCY_MULTIPLIERS[params.payoutFrequency];
     const totalUsdtApy = (baseUsdtApy + laikaBoostApy) * frequencyMultiplier;
@@ -194,7 +194,7 @@ export class YieldCalculatorService {
     const takaraReward =
       await this.takaraMiningService.calculateDailyTakaraReward(
         params.depositAmountUsd,
-        pool.takara_apr,
+        vault.takara_apr,
       );
     const periodTakaraReward = takaraReward.dailyRewardTakara * daysInPeriod;
 
@@ -210,29 +210,29 @@ export class YieldCalculatorService {
   }
 
   /**
-   * Get yield summary for all pools
+   * Get yield summary for all vaults
    */
-  async getPoolYieldSummary() {
-    const pools = await this.prisma.pool.findMany({
+  async getVaultYieldSummary() {
+    const vaults = await this.prisma.vault.findMany({
       where: { is_active: true },
     });
 
-    return pools.map((pool) => ({
-      poolId: pool.id,
-      minEntryAmount: Number(pool.min_entry_amount),
-      lockMonths: pool.lock_months,
+    return vaults.map((vault) => ({
+      vaultId: vault.id,
+      minEntryAmount: Number(vault.min_entry_amount),
+      durationMonths: vault.duration_months,
 
       usdtYield: {
-        baseApy: pool.base_usdt_apy,
-        maxLaikaBoost: pool.laika_boost_max,
-        maxApyMonthly: pool.base_usdt_apy + pool.laika_boost_max,
-        maxApyQuarterly: (pool.base_usdt_apy + pool.laika_boost_max) * 1.15,
-        maxApyYearly: (pool.base_usdt_apy + pool.laika_boost_max) * 1.3,
+        baseApy: vault.base_usdt_apy,
+        maxLaikaBoost: vault.laika_boost_max,
+        maxApyMonthly: vault.base_usdt_apy + vault.laika_boost_max,
+        maxApyQuarterly: (vault.base_usdt_apy + vault.laika_boost_max) * 1.15,
+        maxApyYearly: (vault.base_usdt_apy + vault.laika_boost_max) * 1.3,
       },
 
       takaraYield: {
-        apr: pool.takara_apr,
-        miningAllocation: Number(pool.mining_allocation),
+        apr: vault.takara_apr,
+        miningAllocation: Number(vault.mining_allocation),
       },
     }));
   }
@@ -242,24 +242,24 @@ export class YieldCalculatorService {
    */
   async simulateYield(params: {
     depositAmountUsd: number;
-    poolId: number;
+    vaultId: number;
     payoutFrequency: PayoutFrequency;
     laikaBalance?: number;
   }): Promise<YieldSimulation> {
-    const pool = await this.prisma.pool.findUnique({
-      where: { id: params.poolId },
+    const vault = await this.prisma.vault.findUnique({
+      where: { id: params.vaultId },
     });
 
-    if (!pool) {
-      throw new Error('Pool not found');
+    if (!vault) {
+      throw new Error('Vault not found');
     }
 
     // Check minimum entry
-    if (params.depositAmountUsd < Number(pool.min_entry_amount)) {
+    if (params.depositAmountUsd < Number(vault.min_entry_amount)) {
       return {
         isEligible: false,
-        error: `Minimum deposit is $${pool.min_entry_amount}`,
-        minRequired: Number(pool.min_entry_amount),
+        error: `Minimum deposit is $${vault.min_entry_amount}`,
+        minRequired: Number(vault.min_entry_amount),
       } as any;
     }
 
@@ -267,7 +267,7 @@ export class YieldCalculatorService {
     const baseYield = await this.calculateTotalYield({
       depositId: BigInt(0),
       depositAmountUsd: params.depositAmountUsd,
-      poolId: params.poolId,
+      vaultId: params.vaultId,
       payoutFrequency: params.payoutFrequency,
       laikaBalance: 0,
     });
@@ -279,7 +279,7 @@ export class YieldCalculatorService {
       boostedYield = await this.calculateTotalYield({
         depositId: BigInt(0),
         depositAmountUsd: params.depositAmountUsd,
-        poolId: params.poolId,
+        vaultId: params.vaultId,
         payoutFrequency: params.payoutFrequency,
         laikaBalance: params.laikaBalance,
       });
@@ -295,8 +295,8 @@ export class YieldCalculatorService {
     return {
       isEligible: true,
       depositAmount: params.depositAmountUsd,
-      poolId: params.poolId,
-      lockPeriodMonths: pool.lock_months,
+      vaultId: params.vaultId,
+      durationMonths: vault.duration_months,
       payoutFrequency: params.payoutFrequency,
 
       withoutBoost: {
@@ -338,7 +338,7 @@ export class YieldCalculatorService {
   async updateDepositBoostStatus(depositId: bigint, laikaBalance: number) {
     const deposit = await this.prisma.deposit.findUnique({
       where: { id: depositId },
-      include: { pool: true },
+      include: { vault: true },
     });
 
     if (!deposit) {
@@ -363,7 +363,7 @@ export class YieldCalculatorService {
     await this.prisma.deposit.update({
       where: { id: depositId },
       data: {
-        is_laika_boost_active: boostCheck.isEligible,
+        is_laika_boosted: boostCheck.isEligible,
       },
     });
 
@@ -379,7 +379,7 @@ export class YieldCalculatorService {
 export interface YieldCalculation {
   depositId: string;
   depositAmountUsd: number;
-  poolId: number;
+  vaultId: number;
   payoutFrequency: PayoutFrequency;
   usdt: {
     baseApy: number;
@@ -423,8 +423,8 @@ export interface PeriodRewards {
 export interface YieldSimulation {
   isEligible: boolean;
   depositAmount: number;
-  poolId: number;
-  lockPeriodMonths: number;
+  vaultId: number;
+  durationMonths: number;
   payoutFrequency: PayoutFrequency;
   withoutBoost: {
     usdtApy: number;

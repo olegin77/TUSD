@@ -44,7 +44,7 @@ export class BoostService {
       // Get wexel information
       const wexel = await this.prisma.wexel.findUnique({
         where: { id: wexelId },
-        include: { pool: true },
+        include: { vault: true },
       });
 
       if (!wexel) {
@@ -242,7 +242,7 @@ export class BoostService {
   async getBoostStats(wexelId: bigint) {
     const wexel = await this.prisma.wexel.findUnique({
       where: { id: wexelId },
-      include: { pool: true },
+      include: { vault: true },
     });
 
     if (!wexel) {

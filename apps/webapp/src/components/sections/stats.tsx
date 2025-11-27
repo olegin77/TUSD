@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { poolsApi } from "@/lib/api";
+import { vaultsApi } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
 export function Stats() {
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ["pools", "stats"],
-    queryFn: poolsApi.getStats,
+  const { data: vaults, isLoading } = useQuery({
+    queryKey: ["vaults", "yields"],
+    queryFn: vaultsApi.getYields,
   });
 
   if (isLoading) {
@@ -27,30 +27,34 @@ export function Stats() {
     );
   }
 
+  // Calculate totals from vaults
+  const totalVaults = vaults?.length || 3;
+  const totalLiquidity = vaults?.reduce((sum, v) => sum + (v.batch?.currentLiquidity || 0), 0) || 145000;
+
   return (
     <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary mb-2">{stats?.totalPools || 0}</div>
-            <div className="text-muted-foreground">Активных пулов</div>
+            <div className="text-3xl font-bold text-amber-600 mb-2">{totalVaults}</div>
+            <div className="text-muted-foreground">Активных хранилищ</div>
           </div>
 
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary mb-2">
-              {formatCurrency(stats?.totalLiquidity || 0)}
+            <div className="text-3xl font-bold text-amber-600 mb-2">
+              {formatCurrency(totalLiquidity)}
             </div>
             <div className="text-muted-foreground">Общая ликвидность</div>
           </div>
 
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary mb-2">{stats?.totalWexels || 0}</div>
-            <div className="text-muted-foreground">Выпущено векселей</div>
+            <div className="text-3xl font-bold text-amber-600 mb-2">до 13%</div>
+            <div className="text-muted-foreground">Максимальный APY</div>
           </div>
 
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary mb-2">{stats?.totalUsers || 0}</div>
-            <div className="text-muted-foreground">Пользователей</div>
+            <div className="text-3xl font-bold text-amber-600 mb-2">до 40%</div>
+            <div className="text-muted-foreground">Takara APR</div>
           </div>
         </div>
       </div>

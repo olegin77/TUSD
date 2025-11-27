@@ -4,7 +4,7 @@ export class CreateDepositDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  poolId: number;
+  vaultId: number;
 
   @IsString()
   @IsNotEmpty()

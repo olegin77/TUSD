@@ -88,7 +88,7 @@ export class EventProcessorService {
       create: {
         id: BigInt(id),
         owner_solana: owner,
-        pool_id: 1, // TODO: Get from event or map
+        vault_id: 1, // TODO: Get from event or map
         principal_usd: BigInt(principal_usd),
         apy_base_bp: apy_bp,
         apy_boost_bp: 0,

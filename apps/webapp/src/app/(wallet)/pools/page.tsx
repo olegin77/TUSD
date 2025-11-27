@@ -14,7 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Clock, Info, Calculator, Zap, Coins, Sparkles, TrendingUp, Lock, Wallet } from "lucide-react";
+import {
+  Clock,
+  Info,
+  Calculator,
+  Zap,
+  Coins,
+  Sparkles,
+  TrendingUp,
+  Lock,
+  Wallet,
+} from "lucide-react";
 import { takaraApi, PoolYield } from "@/lib/api/takara";
 import Link from "next/link";
 
@@ -22,16 +32,18 @@ import Link from "next/link";
 const FREQUENCY_MULTIPLIERS = {
   MONTHLY: 1.0,
   QUARTERLY: 1.15,
-  YEARLY: 1.30,
+  YEARLY: 1.3,
 };
 
 // Laika boost requirement: 40% of deposit value
-const LAIKA_BOOST_REQUIREMENT = 0.40;
+const LAIKA_BOOST_REQUIREMENT = 0.4;
 
 export default function PoolsPage() {
   const [selectedPool, setSelectedPool] = useState<number | null>(null);
   const [depositAmount, setDepositAmount] = useState(100);
-  const [payoutFrequency, setPayoutFrequency] = useState<"MONTHLY" | "QUARTERLY" | "YEARLY">("MONTHLY");
+  const [payoutFrequency, setPayoutFrequency] = useState<"MONTHLY" | "QUARTERLY" | "YEARLY">(
+    "MONTHLY"
+  );
   const [laikaBalance, setLaikaBalance] = useState(0);
   const [laikaPrice, setLaikaPrice] = useState(0.05); // Default price
   const [poolYields, setPoolYields] = useState<PoolYield[]>([]);
@@ -136,7 +148,11 @@ export default function PoolsPage() {
     return depositUsd * LAIKA_BOOST_REQUIREMENT;
   };
 
-  const isLaikaBoostEligible = (depositUsd: number, userLaikaBalance: number, discountedPrice: number) => {
+  const isLaikaBoostEligible = (
+    depositUsd: number,
+    userLaikaBalance: number,
+    discountedPrice: number
+  ) => {
     const laikaValueUsd = userLaikaBalance * discountedPrice;
     const requiredUsd = calculateLaikaRequirement(depositUsd);
     return laikaValueUsd >= requiredUsd;
@@ -169,12 +185,12 @@ export default function PoolsPage() {
     : 0;
 
   // USDT daily reward
-  const dailyUsdtReward = selectedPoolData ? (depositAmount * effectiveApy / 100) / 365 : 0;
+  const dailyUsdtReward = selectedPoolData ? (depositAmount * effectiveApy) / 100 / 365 : 0;
 
   // Takara daily reward (in tokens, based on internal price)
-  const takaraInternalPrice = 0.10; // Example internal price
+  const takaraInternalPrice = 0.1; // Example internal price
   const dailyTakaraReward = selectedPoolData
-    ? (depositAmount * selectedPoolData.takaraApr / 100 / 365) / takaraInternalPrice
+    ? (depositAmount * selectedPoolData.takaraApr) / 100 / 365 / takaraInternalPrice
     : 0;
 
   return (
@@ -183,9 +199,12 @@ export default function PoolsPage() {
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Cross-Chain Инвестиционные Пулы</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Cross-Chain Инвестиционные Пулы
+            </h1>
             <p className="text-gray-600">
-              Гибридная система доходности: депозиты в USDT (TRC20 на TRON), награды в USDT + Takara (SPL на Solana)
+              Гибридная система доходности: депозиты в USDT (TRC20 на TRON), награды в USDT + Takara
+              (SPL на Solana)
             </p>
           </div>
 
@@ -195,12 +214,25 @@ export default function PoolsPage() {
               <div className="flex items-start gap-3">
                 <Info className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-medium text-blue-900 mb-1">Как работает Cross-Chain доходность:</p>
+                  <p className="font-medium text-blue-900 mb-1">
+                    Как работает Cross-Chain доходность:
+                  </p>
                   <ul className="text-blue-800 space-y-1">
-                    <li>• <strong>Депозит:</strong> USDT TRC20 на блокчейне TRON</li>
-                    <li>• <strong>Награды USDT:</strong> Базовый APY 4% + до {pools[2]?.laikaBoostMax || 4}% буст от Laika</li>
-                    <li>• <strong>Награды Takara:</strong> Майнинг токенов на Solana (60% от Total Supply в пуле)</li>
-                    <li>• <strong>Laika Boost:</strong> Требуется 40% от суммы депозита в токенах Laika (цена со скидкой -15%)</li>
+                    <li>
+                      • <strong>Депозит:</strong> USDT TRC20 на блокчейне TRON
+                    </li>
+                    <li>
+                      • <strong>Награды USDT:</strong> Базовый APY 4% + до{" "}
+                      {pools[2]?.laikaBoostMax || 4}% буст от Laika
+                    </li>
+                    <li>
+                      • <strong>Награды Takara:</strong> Майнинг токенов на Solana (60% от Total
+                      Supply в пуле)
+                    </li>
+                    <li>
+                      • <strong>Laika Boost:</strong> Требуется 40% от суммы депозита в токенах
+                      Laika (цена со скидкой -15%)
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -271,7 +303,7 @@ export default function PoolsPage() {
                         <div className="text-center border-r border-gray-200">
                           <p className="text-xs text-gray-500">Макс. USDT APY</p>
                           <p className="font-bold text-blue-600">
-                            {((pool.baseApy + pool.laikaBoostMax) * 1.30).toFixed(1)}%
+                            {((pool.baseApy + pool.laikaBoostMax) * 1.3).toFixed(1)}%
                           </p>
                         </div>
                         <div className="text-center">
@@ -339,7 +371,11 @@ export default function PoolsPage() {
                         id="deposit-amount"
                         type="number"
                         value={depositAmount}
-                        onChange={(e) => setDepositAmount(Math.max(selectedPoolData.minDeposit, Number(e.target.value)))}
+                        onChange={(e) =>
+                          setDepositAmount(
+                            Math.max(selectedPoolData.minDeposit, Number(e.target.value))
+                          )
+                        }
                         min={selectedPoolData.minDeposit}
                       />
                       <p className="text-xs text-gray-500">
@@ -380,7 +416,9 @@ export default function PoolsPage() {
                           placeholder="0"
                         />
                       </div>
-                      <div className={`p-3 rounded-lg ${hasLaikaBoost ? "bg-green-50 border border-green-200" : "bg-yellow-50 border border-yellow-200"}`}>
+                      <div
+                        className={`p-3 rounded-lg ${hasLaikaBoost ? "bg-green-50 border border-green-200" : "bg-yellow-50 border border-yellow-200"}`}
+                      >
                         <p className="text-sm font-medium mb-2">
                           {hasLaikaBoost ? "✅ Буст активен!" : "⚠️ Условие буста:"}
                         </p>
@@ -406,13 +444,17 @@ export default function PoolsPage() {
                         </div>
                         <div className="flex justify-between text-sm">
                           <span>Laika Boost:</span>
-                          <span className={`font-semibold ${hasLaikaBoost ? "text-green-600" : "text-gray-400"}`}>
+                          <span
+                            className={`font-semibold ${hasLaikaBoost ? "text-green-600" : "text-gray-400"}`}
+                          >
                             {hasLaikaBoost ? `+${selectedPoolData.laikaBoostMax}%` : "0%"}
                           </span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span>Множитель ({payoutFrequency}):</span>
-                          <span className="font-semibold">×{FREQUENCY_MULTIPLIERS[payoutFrequency]}</span>
+                          <span className="font-semibold">
+                            ×{FREQUENCY_MULTIPLIERS[payoutFrequency]}
+                          </span>
                         </div>
                       </div>
                       <div className="flex justify-between text-lg font-bold border-t border-green-300 pt-2">
@@ -465,7 +507,10 @@ export default function PoolsPage() {
 
                     {/* Action Buttons */}
                     <div className="space-y-2">
-                      <Button className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700" size="lg">
+                      <Button
+                        className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                        size="lg"
+                      >
                         Создать депозит в USDT
                       </Button>
                       <Button variant="outline" className="w-full">
@@ -478,10 +523,18 @@ export default function PoolsPage() {
                       <div className="flex items-start space-x-2">
                         <Info className="h-4 w-4 text-blue-500 mt-0.5" />
                         <div className="text-xs text-gray-600 space-y-1">
-                          <p>• <strong>Депозит:</strong> USDT TRC20 на TRON</p>
-                          <p>• <strong>USDT награды:</strong> TRC20 на TRON</p>
-                          <p>• <strong>Takara награды:</strong> SPL на Solana</p>
-                          <p>• <strong>Laika буст:</strong> 40% от депозита в Laika</p>
+                          <p>
+                            • <strong>Депозит:</strong> USDT TRC20 на TRON
+                          </p>
+                          <p>
+                            • <strong>USDT награды:</strong> TRC20 на TRON
+                          </p>
+                          <p>
+                            • <strong>Takara награды:</strong> SPL на Solana
+                          </p>
+                          <p>
+                            • <strong>Laika буст:</strong> 40% от депозита в Laika
+                          </p>
                         </div>
                       </div>
                     </div>

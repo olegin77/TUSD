@@ -16,11 +16,13 @@
   },
   "navigation": {
     "home": "Главная",
-    "pools": "Пулы",
+    "vaults": "Хранилища",
+    "pools": "Хранилища",
     "marketplace": "Маркетплейс",
     "wallet": "Кошелек",
     "dashboard": "Панель управления",
-    "admin": "Администратор"
+    "admin": "Администратор",
+    "calculator": "Калькулятор"
   },
   "wallet": {
     "connect": "Подключить кошелек",
@@ -31,8 +33,30 @@
     "balance": "Баланс",
     "address": "Адрес"
   },
+  "vaults": {
+    "title": "TAKARA Хранилища",
+    "subtitle": "Выберите хранилище для депозита USDT",
+    "starter": "Starter",
+    "advanced": "Advanced",
+    "whale": "Whale",
+    "duration": "Срок",
+    "months": "мес",
+    "minDeposit": "Минимальный депозит",
+    "baseApy": "Базовый APY",
+    "boostedApy": "Boosted APY",
+    "takaraApr": "Takara APR",
+    "boostCondition": "Условие буста",
+    "laikaBoost": "Laika токены на 40% от депозита (-15% от рынка)",
+    "takaraBoost": "Takara токены 1:1 @ $0.10",
+    "batchProgress": "Прогресс батча",
+    "collecting": "Сбор",
+    "filled": "Заполнен",
+    "completed": "Завершен",
+    "deposit": "Внести депозит",
+    "viewDetails": "Подробнее"
+  },
   "pools": {
-    "title": "Пулы стейкинга",
+    "title": "TAKARA Хранилища",
     "apy": "Годовая доходность",
     "lockPeriod": "Период блокировки",
     "minDeposit": "Минимальный депозит",
@@ -54,10 +78,24 @@
   "deposit": {
     "createDeposit": "Создать депозит",
     "amount": "Сумма",
-    "selectPool": "Выберите пул",
+    "selectVault": "Выберите хранилище",
+    "selectPool": "Выберите хранилище",
     "confirmDeposit": "Подтвердите депозит",
     "depositSuccess": "Депозит успешно создан",
-    "depositError": "Ошибка создания депозита"
+    "depositError": "Ошибка создания депозита",
+    "frequency": "Частота выплат",
+    "monthly": "Ежемесячно",
+    "quarterly": "Ежеквартально",
+    "yearly": "Ежегодно"
+  },
+  "takara": {
+    "title": "Takara Mining",
+    "miningPool": "Пул майнинга",
+    "distributed": "Распределено",
+    "remaining": "Осталось",
+    "internalPrice": "Внутренняя цена",
+    "claimRewards": "Получить награды",
+    "pendingRewards": "Ожидает вывода"
   },
   "errors": {
     "generic": "Произошла ошибка",

@@ -191,19 +191,19 @@ export class TakaraMiningService implements OnModuleInit {
       where: { id: depositId },
     });
 
-    const currentPending = Number(deposit?.takara_pending_reward || 0);
+    const currentPending = Number(deposit?.takara_pending || 0);
     const newPendingTotal = currentPending + actualAccrued;
 
     // Update deposit with new pending reward
     await this.prisma.deposit.update({
       where: { id: depositId },
       data: {
-        takara_pending_reward: newPendingTotal,
+        takara_pending: newPendingTotal,
       },
     });
 
-    // Update pool allocation tracking
-    await this.updatePoolMiningAllocation(deposit?.pool_id || 0, actualAccrued);
+    // Update vault allocation tracking
+    await this.updateVaultMiningAllocation(deposit?.vault_id || 0, actualAccrued);
 
     return {
       accruedAmount: actualAccrued,
@@ -233,7 +233,7 @@ export class TakaraMiningService implements OnModuleInit {
       throw new Error('Deposit not found');
     }
 
-    const pendingReward = Number(deposit.takara_pending_reward);
+    const pendingReward = Number(deposit.takara_pending);
     const amountToClaim = claimAmount ?? pendingReward;
 
     if (amountToClaim <= 0 || amountToClaim > pendingReward) {
@@ -257,7 +257,7 @@ export class TakaraMiningService implements OnModuleInit {
     await this.prisma.deposit.update({
       where: { id: depositId },
       data: {
-        takara_pending_reward: { decrement: amountToClaim },
+        takara_pending: { decrement: amountToClaim },
       },
     });
 
@@ -285,18 +285,18 @@ export class TakaraMiningService implements OnModuleInit {
   }
 
   /**
-   * Update pool mining allocation
+   * Update vault mining allocation
    */
-  private async updatePoolMiningAllocation(poolId: number, amount: number) {
+  private async updateVaultMiningAllocation(vaultId: number, amount: number) {
     try {
-      await this.prisma.pool.update({
-        where: { id: poolId },
+      await this.prisma.vault.update({
+        where: { id: vaultId },
         data: {
           mining_allocation: { increment: amount },
         },
       });
     } catch (error) {
-      this.logger.error(`Failed to update pool allocation: ${error.message}`);
+      this.logger.error(`Failed to update vault allocation: ${error.message}`);
     }
   }
 

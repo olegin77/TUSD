@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Connection, PublicKey } from '@solana/web3.js';
-const TronWeb = require('tronweb');
+// TronWeb 6.x uses default export
+const TronWebModule = require('tronweb');
+const TronWeb = TronWebModule.default || TronWebModule;
 import { PrismaService } from '../../../database/prisma.service';
 
 /**

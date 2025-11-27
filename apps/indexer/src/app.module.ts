@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { PrismaService } from './database/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { PoolsModule } from './modules/pools/pools.module';
+import { VaultsModule } from './modules/vaults/vaults.module';
 import { WexelsModule } from './modules/wexels/wexels.module';
 import { UsersModule } from './modules/users/users.module';
 import { OraclesModule } from './modules/oracles/oracles.module';
@@ -18,6 +19,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { AdminModule } from './modules/admin/admin.module';
 import { TronModule } from './modules/tron/tron.module';
 import { TakaraModule } from './modules/takara/takara.module';
+import { YieldModule } from './modules/yield/yield.module';
 import { SentryModule } from './common/sentry/sentry.module';
 import { MetricsModule } from './common/monitoring/metrics.module';
 import { CustomThrottlerGuard } from './common/guards/custom-throttler.guard';
@@ -44,6 +46,7 @@ import { validationSchema } from './common/config/validation.schema';
     MetricsModule,
     AuthModule,
     PoolsModule,
+    VaultsModule,
     WexelsModule,
     UsersModule,
     OraclesModule,
@@ -55,6 +58,7 @@ import { validationSchema } from './common/config/validation.schema';
     AdminModule,
     TronModule,
     TakaraModule,
+    YieldModule,
   ],
   controllers: [AppController],
   providers: [
