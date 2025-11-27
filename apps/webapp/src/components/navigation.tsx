@@ -42,7 +42,9 @@ export function Navigation() {
                 T
               </span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">TAKARA</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+              TAKARA
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

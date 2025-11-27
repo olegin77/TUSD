@@ -22,46 +22,49 @@ export class YieldCalculatorService {
   private readonly FREQUENCY_MULTIPLIERS: Record<PayoutFrequency, number> = {
     MONTHLY: 1.0,
     QUARTERLY: 1.15,
-    YEARLY: 1.30,
+    YEARLY: 1.3,
   };
 
   // Vault APY configurations per master.md v6
-  private readonly VAULT_APY_CONFIG: Record<string, {
-    baseApyBps: number;
-    boostApyBps: number;
-    maxApyBps: number;
-    takaraAprBps: number;
-    boostToken: string;
-    boostRatio: number;
-    boostDiscount?: number;
-    boostFixedPrice?: number;
-  }> = {
+  private readonly VAULT_APY_CONFIG: Record<
+    string,
+    {
+      baseApyBps: number;
+      boostApyBps: number;
+      maxApyBps: number;
+      takaraAprBps: number;
+      boostToken: string;
+      boostRatio: number;
+      boostDiscount?: number;
+      boostFixedPrice?: number;
+    }
+  > = {
     VAULT_1: {
-      baseApyBps: 700,   // 7.00%
-      boostApyBps: 140,  // 1.40%
-      maxApyBps: 840,    // 8.40%
+      baseApyBps: 700, // 7.00%
+      boostApyBps: 140, // 1.40%
+      maxApyBps: 840, // 8.40%
       takaraAprBps: 3000, // 30%
       boostToken: 'LAIKA',
-      boostRatio: 0.4,   // 40% of deposit
+      boostRatio: 0.4, // 40% of deposit
       boostDiscount: 0.15, // 15% discount on market price
     },
     VAULT_2: {
-      baseApyBps: 700,   // 7.00%
-      boostApyBps: 600,  // 6.00%
-      maxApyBps: 1300,   // 13.00%
+      baseApyBps: 700, // 7.00%
+      boostApyBps: 600, // 6.00%
+      maxApyBps: 1300, // 13.00%
       takaraAprBps: 3000, // 30%
       boostToken: 'TAKARA',
-      boostRatio: 1.0,   // 1:1 to deposit
-      boostFixedPrice: 0.10, // Fixed $0.10
+      boostRatio: 1.0, // 1:1 to deposit
+      boostFixedPrice: 0.1, // Fixed $0.10
     },
     VAULT_3: {
-      baseApyBps: 800,   // 8.00%
-      boostApyBps: 700,  // 7.00%
-      maxApyBps: 1500,   // 15.00%
+      baseApyBps: 800, // 8.00%
+      boostApyBps: 700, // 7.00%
+      maxApyBps: 1500, // 15.00%
       takaraAprBps: 4000, // 40%
       boostToken: 'TAKARA',
-      boostRatio: 1.0,   // 1:1 to deposit
-      boostFixedPrice: 0.10, // Fixed $0.10
+      boostRatio: 1.0, // 1:1 to deposit
+      boostFixedPrice: 0.1, // Fixed $0.10
     },
   };
 
@@ -99,9 +102,21 @@ export class YieldCalculatorService {
       boostApyPercent: boostApyBps / 100,
       totalApyPercent: totalApyBps / 100,
       // With frequency multipliers
-      apyMonthly: this.calculateEffectiveApy(baseApyBps, boostApyBps, PayoutFrequency.MONTHLY),
-      apyQuarterly: this.calculateEffectiveApy(baseApyBps, boostApyBps, PayoutFrequency.QUARTERLY),
-      apyYearly: this.calculateEffectiveApy(baseApyBps, boostApyBps, PayoutFrequency.YEARLY),
+      apyMonthly: this.calculateEffectiveApy(
+        baseApyBps,
+        boostApyBps,
+        PayoutFrequency.MONTHLY,
+      ),
+      apyQuarterly: this.calculateEffectiveApy(
+        baseApyBps,
+        boostApyBps,
+        PayoutFrequency.QUARTERLY,
+      ),
+      apyYearly: this.calculateEffectiveApy(
+        baseApyBps,
+        boostApyBps,
+        PayoutFrequency.YEARLY,
+      ),
       // Basis points for precision
       baseApyBps,
       boostApyBps,
@@ -128,7 +143,11 @@ export class YieldCalculatorService {
     frequency: PayoutFrequency,
     durationMonths: number,
   ) {
-    const effectiveApy = this.calculateEffectiveApy(baseApyBps, boostApyBps, frequency);
+    const effectiveApy = this.calculateEffectiveApy(
+      baseApyBps,
+      boostApyBps,
+      frequency,
+    );
     const yearlyYield = principalUsd * (effectiveApy / 100);
     const monthlyYield = yearlyYield / 12;
     const totalYield = yearlyYield * (durationMonths / 12);
@@ -165,7 +184,7 @@ export class YieldCalculatorService {
     principalUsd: number,
     takaraAprBps: number,
     durationMonths: number,
-    takaraPriceUsd: number = 0.10,
+    takaraPriceUsd: number = 0.1,
   ) {
     const takaraApr = takaraAprBps / 100; // Convert to percent
     const yearlyRewardUsd = principalUsd * (takaraApr / 100);
@@ -201,7 +220,8 @@ export class YieldCalculatorService {
       const effectivePrice = marketPriceUsd
         ? marketPriceUsd * (1 - config.boostDiscount!)
         : 0;
-      const tokensRequired = effectivePrice > 0 ? requiredValueUsd / effectivePrice : 0;
+      const tokensRequired =
+        effectivePrice > 0 ? requiredValueUsd / effectivePrice : 0;
 
       return {
         boostToken: 'LAIKA',
@@ -214,7 +234,7 @@ export class YieldCalculatorService {
       };
     } else {
       // Takara: 1:1 at fixed $0.10
-      const fixedPrice = config.boostFixedPrice || 0.10;
+      const fixedPrice = config.boostFixedPrice || 0.1;
       const tokensRequired = depositAmountUsd / fixedPrice;
 
       return {
@@ -242,7 +262,10 @@ export class YieldCalculatorService {
     takaraPriceUsd?: number;
   }) {
     const config = this.VAULT_APY_CONFIG[params.vaultType];
-    const apyVariants = this.calculateVaultApyVariants(params.vaultType, params.hasBoost);
+    const apyVariants = this.calculateVaultApyVariants(
+      params.vaultType,
+      params.hasBoost,
+    );
 
     const usdtYield = this.calculateUsdtYield(
       params.depositAmountUsd,

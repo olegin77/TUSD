@@ -203,7 +203,10 @@ export class TakaraMiningService implements OnModuleInit {
     });
 
     // Update vault allocation tracking
-    await this.updateVaultMiningAllocation(deposit?.vault_id || 0, actualAccrued);
+    await this.updateVaultMiningAllocation(
+      deposit?.vault_id || 0,
+      actualAccrued,
+    );
 
     return {
       accruedAmount: actualAccrued,

@@ -29,7 +29,8 @@ export function Stats() {
 
   // Calculate totals from vaults
   const totalVaults = vaults?.length || 3;
-  const totalLiquidity = vaults?.reduce((sum, v) => sum + (v.batch?.currentLiquidity || 0), 0) || 145000;
+  const totalLiquidity =
+    vaults?.reduce((sum, v) => sum + (v.batch?.currentLiquidity || 0), 0) || 145000;
 
   return (
     <section className="py-16 bg-muted/30">

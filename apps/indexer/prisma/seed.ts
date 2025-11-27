@@ -29,19 +29,19 @@ async function main() {
       boosted_usdt_apy: 8.4,
       takara_apr: 30,
       boost_token_symbol: 'LAIKA',
-      boost_ratio: 0.4,           // 40% of deposit in Laika
-      boost_discount: 0.15,       // 15% discount on market price
-      boost_fixed_price: null,    // Uses market price
+      boost_ratio: 0.4, // 40% of deposit in Laika
+      boost_discount: 0.15, // 15% discount on market price
+      boost_fixed_price: null, // Uses market price
       batch_number: 1,
       batch_status: BatchStatus.COLLECTING,
       current_liquidity: new Decimal(0),
       target_liquidity: new Decimal(100000),
       is_active: true,
       // APY in basis points (Master v6)
-      base_apy_bps: 700,          // 7.00% base
-      boost_apy_bps: 140,         // +1.40% boost
-      max_apy_bps: 840,           // 8.40% max
-      takara_apr_bps: 3000,       // 30% Takara mining APR
+      base_apy_bps: 700, // 7.00% base
+      boost_apy_bps: 140, // +1.40% boost
+      max_apy_bps: 840, // 8.40% max
+      takara_apr_bps: 3000, // 30% Takara mining APR
       // Legacy fields
       apy_base_bp: 700,
       lock_months: 12,
@@ -58,19 +58,19 @@ async function main() {
       boosted_usdt_apy: 13.0,
       takara_apr: 30,
       boost_token_symbol: 'TAKARA',
-      boost_ratio: 1.0,           // 1:1 to deposit
-      boost_discount: 0,          // No discount
-      boost_fixed_price: new Decimal(0.10), // Fixed $0.10
+      boost_ratio: 1.0, // 1:1 to deposit
+      boost_discount: 0, // No discount
+      boost_fixed_price: new Decimal(0.1), // Fixed $0.10
       batch_number: 1,
       batch_status: BatchStatus.COLLECTING,
       current_liquidity: new Decimal(0),
       target_liquidity: new Decimal(100000),
       is_active: true,
       // APY in basis points (Master v6)
-      base_apy_bps: 700,          // 7.00% base
-      boost_apy_bps: 600,         // +6.00% boost
-      max_apy_bps: 1300,          // 13.00% max
-      takara_apr_bps: 3000,       // 30% Takara mining APR
+      base_apy_bps: 700, // 7.00% base
+      boost_apy_bps: 600, // +6.00% boost
+      max_apy_bps: 1300, // 13.00% max
+      takara_apr_bps: 3000, // 30% Takara mining APR
       // Legacy fields
       apy_base_bp: 700,
       lock_months: 30,
@@ -87,19 +87,19 @@ async function main() {
       boosted_usdt_apy: 15.0,
       takara_apr: 40,
       boost_token_symbol: 'TAKARA',
-      boost_ratio: 1.0,           // 1:1 to deposit
-      boost_discount: 0,          // No discount
-      boost_fixed_price: new Decimal(0.10), // Fixed $0.10
+      boost_ratio: 1.0, // 1:1 to deposit
+      boost_discount: 0, // No discount
+      boost_fixed_price: new Decimal(0.1), // Fixed $0.10
       batch_number: 1,
       batch_status: BatchStatus.COLLECTING,
       current_liquidity: new Decimal(0),
       target_liquidity: new Decimal(100000),
       is_active: true,
       // APY in basis points (Master v6)
-      base_apy_bps: 800,          // 8.00% base
-      boost_apy_bps: 700,         // +7.00% boost
-      max_apy_bps: 1500,          // 15.00% max
-      takara_apr_bps: 4000,       // 40% Takara mining APR
+      base_apy_bps: 800, // 8.00% base
+      boost_apy_bps: 700, // +7.00% boost
+      max_apy_bps: 1500, // 15.00% max
+      takara_apr_bps: 4000, // 40% Takara mining APR
       // Legacy fields
       apy_base_bp: 800,
       lock_months: 36,
@@ -163,7 +163,9 @@ async function main() {
       update: { price_usd: tokenPrice.price_usd, source: tokenPrice.source },
       create: tokenPrice,
     });
-    console.log(`✅ Token price: ${tokenPrice.token_mint.substring(0, 10)}... = $${Number(tokenPrice.price_usd) / 1_000000}`);
+    console.log(
+      `✅ Token price: ${tokenPrice.token_mint.substring(0, 10)}... = $${Number(tokenPrice.price_usd) / 1_000000}`,
+    );
   }
 
   // Initialize Takara config
@@ -176,14 +178,16 @@ async function main() {
     update: {},
     create: {
       id: 1,
-      internal_price_usd: new Decimal(0.10),
+      internal_price_usd: new Decimal(0.1),
       total_supply: totalSupply,
       mining_pool_total: miningPool,
       mining_pool_remaining: miningPool,
       mining_pool_distributed: new Decimal(0),
     },
   });
-  console.log(`✅ Takara config initialized: ${totalSupply.toNumber().toLocaleString()} total, ${miningPool.toNumber().toLocaleString()} in mining pool`);
+  console.log(
+    `✅ Takara config initialized: ${totalSupply.toNumber().toLocaleString()} total, ${miningPool.toNumber().toLocaleString()} in mining pool`,
+  );
 
   // Create test user (for development)
   if (process.env.NODE_ENV === 'development') {
@@ -208,7 +212,9 @@ async function main() {
   console.log('📋 Summary:');
   console.log(`   - ${vaults.length} TAKARA vaults created`);
   console.log(`   - ${tokenPrices.length} token prices set`);
-  console.log(`   - Takara mining pool: ${miningPool.toNumber().toLocaleString()} tokens`);
+  console.log(
+    `   - Takara mining pool: ${miningPool.toNumber().toLocaleString()} tokens`,
+  );
 }
 
 main()

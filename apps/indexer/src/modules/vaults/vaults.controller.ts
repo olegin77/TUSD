@@ -145,10 +145,26 @@ export class VaultsController {
     summary: 'Calculate USDT yield',
     description: 'Calculate projected USDT yield for a deposit',
   })
-  @ApiQuery({ name: 'amount', type: Number, description: 'Deposit amount in USD' })
-  @ApiQuery({ name: 'baseApy', type: Number, description: 'Base APY percentage' })
-  @ApiQuery({ name: 'boostedApy', type: Number, description: 'Boosted APY percentage' })
-  @ApiQuery({ name: 'hasBoosted', type: Boolean, description: 'Is boost active' })
+  @ApiQuery({
+    name: 'amount',
+    type: Number,
+    description: 'Deposit amount in USD',
+  })
+  @ApiQuery({
+    name: 'baseApy',
+    type: Number,
+    description: 'Base APY percentage',
+  })
+  @ApiQuery({
+    name: 'boostedApy',
+    type: Number,
+    description: 'Boosted APY percentage',
+  })
+  @ApiQuery({
+    name: 'hasBoosted',
+    type: Boolean,
+    description: 'Is boost active',
+  })
   @ApiQuery({
     name: 'frequency',
     enum: ['MONTHLY', 'QUARTERLY', 'YEARLY'],
@@ -165,7 +181,7 @@ export class VaultsController {
       Number(amount),
       Number(baseApy),
       Number(boostedApy),
-      hasBoosted === true || hasBoosted === 'true' as any,
+      hasBoosted === true || hasBoosted === ('true' as any),
       frequency,
     );
   }
@@ -175,13 +191,24 @@ export class VaultsController {
     summary: 'Calculate Takara mining yield',
     description: 'Calculate projected Takara token yield for a deposit',
   })
-  @ApiQuery({ name: 'amount', type: Number, description: 'Deposit amount in USD' })
-  @ApiQuery({ name: 'takaraApr', type: Number, description: 'Takara APR percentage' })
+  @ApiQuery({
+    name: 'amount',
+    type: Number,
+    description: 'Deposit amount in USD',
+  })
+  @ApiQuery({
+    name: 'takaraApr',
+    type: Number,
+    description: 'Takara APR percentage',
+  })
   calculateTakaraYield(
     @Query('amount') amount: number,
     @Query('takaraApr') takaraApr: number,
   ) {
-    return this.vaultsService.calculateTakaraYield(Number(amount), Number(takaraApr));
+    return this.vaultsService.calculateTakaraYield(
+      Number(amount),
+      Number(takaraApr),
+    );
   }
 
   @Get('check/laika-boost')
@@ -305,7 +332,8 @@ export class VaultsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Seed default vaults',
-    description: 'Create default vaults according to TZ specification (admin only)',
+    description:
+      'Create default vaults according to TZ specification (admin only)',
   })
   @ApiResponse({
     status: 201,

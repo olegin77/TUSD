@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-} from '@nestjs/swagger';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { PoolsService } from './pools.service';
 
 /**
@@ -100,7 +90,8 @@ export class PoolsController {
   @Get('yields')
   @ApiOperation({
     summary: 'Get vault yield summary',
-    description: 'Retrieve yield information for all vaults including USDT APY and Takara APR',
+    description:
+      'Retrieve yield information for all vaults including USDT APY and Takara APR',
   })
   @ApiResponse({
     status: 200,
@@ -147,7 +138,7 @@ export class PoolsController {
           durationMonths: 30,
           boostToken: 'TAKARA',
           boostRatio: 1.0,
-          boostFixedPrice: 0.10,
+          boostFixedPrice: 0.1,
           usdtYield: {
             baseApy: 7.0,
             boostApy: 6.0,

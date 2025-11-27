@@ -1,5 +1,11 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { YieldCalculatorService } from './yield-calculator.service';
 import { PayoutFrequency } from '@prisma/client';
 
@@ -59,7 +65,8 @@ export class YieldController {
   @Get('vaults/:vaultType')
   @ApiOperation({
     summary: 'Get APY variants for a specific vault',
-    description: 'Calculate all APY variants (monthly/quarterly/yearly) for a vault',
+    description:
+      'Calculate all APY variants (monthly/quarterly/yearly) for a vault',
   })
   @ApiQuery({ name: 'hasBoost', required: false, type: Boolean })
   @ApiResponse({
@@ -77,21 +84,36 @@ export class YieldController {
   @Post('calculate')
   @ApiOperation({
     summary: 'Calculate complete deposit projection',
-    description: 'Calculate full yield projection including USDT rewards, Takara mining, and boost requirements',
+    description:
+      'Calculate full yield projection including USDT rewards, Takara mining, and boost requirements',
   })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         depositAmountUsd: { type: 'number', example: 1000 },
-        vaultType: { type: 'string', enum: ['VAULT_1', 'VAULT_2', 'VAULT_3'], example: 'VAULT_1' },
-        frequency: { type: 'string', enum: ['MONTHLY', 'QUARTERLY', 'YEARLY'], example: 'MONTHLY' },
+        vaultType: {
+          type: 'string',
+          enum: ['VAULT_1', 'VAULT_2', 'VAULT_3'],
+          example: 'VAULT_1',
+        },
+        frequency: {
+          type: 'string',
+          enum: ['MONTHLY', 'QUARTERLY', 'YEARLY'],
+          example: 'MONTHLY',
+        },
         durationMonths: { type: 'number', example: 12 },
         hasBoost: { type: 'boolean', example: true },
         boostTokenMarketPrice: { type: 'number', example: 0.12 },
         takaraPriceUsd: { type: 'number', example: 0.1 },
       },
-      required: ['depositAmountUsd', 'vaultType', 'frequency', 'durationMonths', 'hasBoost'],
+      required: [
+        'depositAmountUsd',
+        'vaultType',
+        'frequency',
+        'durationMonths',
+        'hasBoost',
+      ],
     },
   })
   @ApiResponse({
@@ -169,7 +191,11 @@ export class YieldController {
       type: 'object',
       properties: {
         depositAmountUsd: { type: 'number', example: 1000 },
-        vaultType: { type: 'string', enum: ['VAULT_1', 'VAULT_2', 'VAULT_3'], example: 'VAULT_1' },
+        vaultType: {
+          type: 'string',
+          enum: ['VAULT_1', 'VAULT_2', 'VAULT_3'],
+          example: 'VAULT_1',
+        },
         marketPriceUsd: { type: 'number', example: 0.12 },
       },
       required: ['depositAmountUsd', 'vaultType'],

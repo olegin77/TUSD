@@ -45,7 +45,7 @@ export interface PoolYield {
 export interface VaultYield {
   vaultId: number;
   name: string;
-  type: 'VAULT_1' | 'VAULT_2' | 'VAULT_3';
+  type: "VAULT_1" | "VAULT_2" | "VAULT_3";
   durationMonths: number;
   minEntryAmount: number;
   usdtYield: {
@@ -69,7 +69,7 @@ export interface VaultYield {
   };
   batch: {
     number: number;
-    status: 'COLLECTING' | 'FILLED' | 'COMPLETED';
+    status: "COLLECTING" | "FILLED" | "COMPLETED";
     currentLiquidity: number;
     targetLiquidity: number;
     progress: number;
@@ -134,7 +134,7 @@ export const takaraApi = {
 
   // Get pool yield summary (legacy)
   getPoolYields: async (): Promise<PoolYield[]> => {
-    const res = await apiClient.get<ApiResponse<PoolYield[]>>("/api/v1/takara/yield/pools");
+    const res = await apiClient.get<ApiResponse<PoolYield[]>>("/api/v1/vaults");
     return res.data;
   },
 

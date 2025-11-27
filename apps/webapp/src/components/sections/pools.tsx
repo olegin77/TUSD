@@ -12,37 +12,40 @@ import Link from "next/link";
 
 // Vault configuration per master.md v6 (FINAL VALUES!)
 // These are the CORRECT APY values - DO NOT CHANGE!
-const VAULT_CONFIG: Record<number, {
-  name: string;
-  boostToken: string;
-  baseApy: number;
-  boostApy: number;
-  maxApy: number;
-  takaraApr: number;
-}> = {
+const VAULT_CONFIG: Record<
+  number,
+  {
+    name: string;
+    boostToken: string;
+    baseApy: number;
+    boostApy: number;
+    maxApy: number;
+    takaraApr: number;
+  }
+> = {
   1: {
     name: "Starter",
     boostToken: "LAIKA",
-    baseApy: 7.0,      // 7% base
-    boostApy: 1.4,     // +1.4% with LAIKA boost
-    maxApy: 8.4,       // 8.4% max monthly
-    takaraApr: 30,     // 30% Takara mining
+    baseApy: 7.0, // 7% base
+    boostApy: 1.4, // +1.4% with LAIKA boost
+    maxApy: 8.4, // 8.4% max monthly
+    takaraApr: 30, // 30% Takara mining
   },
   2: {
     name: "Advanced",
     boostToken: "TAKARA",
-    baseApy: 7.0,      // 7% base
-    boostApy: 6.0,     // +6% with TAKARA boost
-    maxApy: 13.0,      // 13% max monthly
-    takaraApr: 30,     // 30% Takara mining
+    baseApy: 7.0, // 7% base
+    boostApy: 6.0, // +6% with TAKARA boost
+    maxApy: 13.0, // 13% max monthly
+    takaraApr: 30, // 30% Takara mining
   },
   3: {
     name: "Whale",
     boostToken: "TAKARA",
-    baseApy: 8.0,      // 8% base
-    boostApy: 7.0,     // +7% with TAKARA boost
-    maxApy: 15.0,      // 15% max monthly
-    takaraApr: 40,     // 40% Takara mining
+    baseApy: 8.0, // 8% base
+    boostApy: 7.0, // +7% with TAKARA boost
+    maxApy: 15.0, // 15% max monthly
+    takaraApr: 40, // 40% Takara mining
   },
 };
 
@@ -50,7 +53,7 @@ const VAULT_CONFIG: Record<number, {
 const FREQUENCY_MULTIPLIERS = {
   MONTHLY: 1.0,
   QUARTERLY: 1.15,
-  YEARLY: 1.30,
+  YEARLY: 1.3,
 };
 
 export function Vaults() {
@@ -95,35 +98,52 @@ export function Vaults() {
   }
 
   // Default vaults with correct APY values per master.md v6
-  const displayVaults = vaults?.length ? vaults : [
-    {
-      vaultId: 1,
-      durationMonths: 12,
-      minEntryAmount: 100,
-      boostToken: "LAIKA",
-      usdtYield: { baseApy: 7.0, boostApy: 1.4, maxApy: 8.4, maxApyYearly: 10.92 },
-      takaraYield: { apr: 30 },
-      batchInfo: { currentBatch: 1, status: "COLLECTING", currentLiquidity: 0, targetLiquidity: 100000 }
-    },
-    {
-      vaultId: 2,
-      durationMonths: 30,
-      minEntryAmount: 1500,
-      boostToken: "TAKARA",
-      usdtYield: { baseApy: 7.0, boostApy: 6.0, maxApy: 13.0, maxApyYearly: 16.9 },
-      takaraYield: { apr: 30 },
-      batchInfo: { currentBatch: 1, status: "COLLECTING", currentLiquidity: 0, targetLiquidity: 100000 }
-    },
-    {
-      vaultId: 3,
-      durationMonths: 36,
-      minEntryAmount: 5000,
-      boostToken: "TAKARA",
-      usdtYield: { baseApy: 8.0, boostApy: 7.0, maxApy: 15.0, maxApyYearly: 19.5 },
-      takaraYield: { apr: 40 },
-      batchInfo: { currentBatch: 1, status: "COLLECTING", currentLiquidity: 0, targetLiquidity: 100000 }
-    },
-  ];
+  const displayVaults = vaults?.length
+    ? vaults
+    : [
+        {
+          vaultId: 1,
+          durationMonths: 12,
+          minEntryAmount: 100,
+          boostToken: "LAIKA",
+          usdtYield: { baseApy: 7.0, boostApy: 1.4, maxApy: 8.4, maxApyYearly: 10.92 },
+          takaraYield: { apr: 30 },
+          batchInfo: {
+            currentBatch: 1,
+            status: "COLLECTING",
+            currentLiquidity: 0,
+            targetLiquidity: 100000,
+          },
+        },
+        {
+          vaultId: 2,
+          durationMonths: 30,
+          minEntryAmount: 1500,
+          boostToken: "TAKARA",
+          usdtYield: { baseApy: 7.0, boostApy: 6.0, maxApy: 13.0, maxApyYearly: 16.9 },
+          takaraYield: { apr: 30 },
+          batchInfo: {
+            currentBatch: 1,
+            status: "COLLECTING",
+            currentLiquidity: 0,
+            targetLiquidity: 100000,
+          },
+        },
+        {
+          vaultId: 3,
+          durationMonths: 36,
+          minEntryAmount: 5000,
+          boostToken: "TAKARA",
+          usdtYield: { baseApy: 8.0, boostApy: 7.0, maxApy: 15.0, maxApyYearly: 19.5 },
+          takaraYield: { apr: 40 },
+          batchInfo: {
+            currentBatch: 1,
+            status: "COLLECTING",
+            currentLiquidity: 0,
+            targetLiquidity: 100000,
+          },
+        },
+      ];
 
   return (
     <section className="py-20">
@@ -141,7 +161,7 @@ export function Vaults() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayVaults.map((vault) => {
             // Get vault ID (handle both API response formats)
-            const vaultId = ('vaultId' in vault ? vault.vaultId : vault.poolId) || 1;
+            const vaultId = ("vaultId" in vault ? vault.vaultId : vault.poolId) || 1;
             const config = VAULT_CONFIG[vaultId] || VAULT_CONFIG[1];
 
             // Get APY from API or use config defaults
@@ -149,8 +169,8 @@ export function Vaults() {
             const yieldData = vault.usdtYield as any;
             const baseApy = yieldData?.baseApy ?? config.baseApy;
             const boostApy = yieldData?.boostApy ?? yieldData?.maxLaikaBoost ?? config.boostApy;
-            const maxApy = yieldData?.maxApy ?? (baseApy + boostApy);
-            const maxApyYearly = yieldData?.maxApyYearly ?? (maxApy * FREQUENCY_MULTIPLIERS.YEARLY);
+            const maxApy = yieldData?.maxApy ?? baseApy + boostApy;
+            const maxApyYearly = yieldData?.maxApyYearly ?? maxApy * FREQUENCY_MULTIPLIERS.YEARLY;
             const takaraApr = vault.takaraYield?.apr ?? config.takaraApr;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const vaultAny = vault as any;
@@ -158,13 +178,20 @@ export function Vaults() {
             const boostToken = vaultAny.boostToken ?? config.boostToken;
 
             // Calculate batch progress
-            const batchInfo = vaultAny.batchInfo ?? { currentLiquidity: 0, targetLiquidity: 100000 };
-            const batchProgress = batchInfo.targetLiquidity > 0
-              ? (batchInfo.currentLiquidity / batchInfo.targetLiquidity) * 100
-              : 0;
+            const batchInfo = vaultAny.batchInfo ?? {
+              currentLiquidity: 0,
+              targetLiquidity: 100000,
+            };
+            const batchProgress =
+              batchInfo.targetLiquidity > 0
+                ? (batchInfo.currentLiquidity / batchInfo.targetLiquidity) * 100
+                : 0;
 
             return (
-              <Card key={vaultId} className="group hover:shadow-lg transition-all duration-300 border-amber-100">
+              <Card
+                key={vaultId}
+                className="group hover:shadow-lg transition-all duration-300 border-amber-100"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-xl">{config.name}</CardTitle>
@@ -213,7 +240,9 @@ export function Vaults() {
                       <Lock className="h-4 w-4 text-blue-500" />
                       <span className="text-sm text-muted-foreground">Мин. депозит</span>
                     </div>
-                    <span className="font-semibold">${vaultAny.minEntryAmount?.toLocaleString() ?? 100}</span>
+                    <span className="font-semibold">
+                      ${vaultAny.minEntryAmount?.toLocaleString() ?? 100}
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -221,14 +250,15 @@ export function Vaults() {
                       <Coins className="h-4 w-4 text-amber-500" />
                       <span className="text-sm text-muted-foreground">Takara APR</span>
                     </div>
-                    <span className="font-semibold text-amber-600">
-                      {takaraApr}%
-                    </span>
+                    <span className="font-semibold text-amber-600">{takaraApr}%</span>
                   </div>
 
                   <div className="pt-4 border-t">
                     <Link href="/pools">
-                      <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700" size="lg">
+                      <Button
+                        className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
+                        size="lg"
+                      >
                         Инвестировать
                       </Button>
                     </Link>

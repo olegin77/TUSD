@@ -30,39 +30,41 @@
 
 ### 🟢 Vault 1: "Starter" (Laika Boost) — БЕЗ ИЗМЕНЕНИЙ
 
-| Параметр | Значение |
-|----------|----------|
-| Срок | 12 месяцев |
-| Мин. вход | $100 USDT (TRC20) |
-| Start APY (без буста) | Рассчитать так, чтобы MAX = 8.40% |
-| Max APY (с бустом) | **8.40%** |
-| Boost Token | Laika (Solana SPL) |
-| Boost Условие | Холд Laika на 40% от депозита |
-| Оценка Laika | Рыночная цена (CoinGecko) **минус 15% дисконт** |
-| Takara Mining | 30% APR (начисление ежедневно, claim раз в неделю) |
+| Параметр              | Значение                                           |
+| --------------------- | -------------------------------------------------- |
+| Срок                  | 12 месяцев                                         |
+| Мин. вход             | $100 USDT (TRC20)                                  |
+| Start APY (без буста) | Рассчитать так, чтобы MAX = 8.40%                  |
+| Max APY (с бустом)    | **8.40%**                                          |
+| Boost Token           | Laika (Solana SPL)                                 |
+| Boost Условие         | Холд Laika на 40% от депозита                      |
+| Оценка Laika          | Рыночная цена (CoinGecko) **минус 15% дисконт**    |
+| Takara Mining         | 30% APR (начисление ежедневно, claim раз в неделю) |
 
 ---
 
 ### 🟡 Vault 2: "Advanced" (Takara Boost) — ИСПРАВИТЬ!
 
-| Параметр | Старое (неверное) | Новое (правильное) |
-|----------|-------------------|---------------------|
-| Срок | 30 месяцев | **30 месяцев** ✓ |
-| Мин. вход | $1,500 | **$1,500** ✓ |
-| **Start APY (без буста)** | ❌ 4% | ✅ **7%** |
-| **Takara Boost** | ❌ неверно | ✅ **+6%** |
-| **Max APY (с бустом)** | ❌ 8% | ✅ **13%** |
-| Boost Token | Takara (Solana SPL) | **Takara (Solana SPL)** ✓ |
-| Boost Условие | 1:1 к депозиту | **1:1 к депозиту** ✓ |
-| Оценка Takara | Фикс $0.10 | **Фикс $0.10** ✓ |
-| Takara Mining | 30% APR | **30% APR** ✓ |
+| Параметр                  | Старое (неверное)   | Новое (правильное)        |
+| ------------------------- | ------------------- | ------------------------- |
+| Срок                      | 30 месяцев          | **30 месяцев** ✓          |
+| Мин. вход                 | $1,500              | **$1,500** ✓              |
+| **Start APY (без буста)** | ❌ 4%               | ✅ **7%**                 |
+| **Takara Boost**          | ❌ неверно          | ✅ **+6%**                |
+| **Max APY (с бустом)**    | ❌ 8%               | ✅ **13%**                |
+| Boost Token               | Takara (Solana SPL) | **Takara (Solana SPL)** ✓ |
+| Boost Условие             | 1:1 к депозиту      | **1:1 к депозиту** ✓      |
+| Оценка Takara             | Фикс $0.10          | **Фикс $0.10** ✓          |
+| Takara Mining             | 30% APR             | **30% APR** ✓             |
 
 **Множители частоты выплат (применяются к APY):**
+
 - Monthly: x1.0
-- Quarterly: x1.15  
+- Quarterly: x1.15
 - Yearly: x1.30
 
 **Пример расчёта Max APY с Yearly:**
+
 - Base: 7% + Boost: 6% = 13%
 - С множителем Yearly: 13% × 1.30 = **16.9%**
 
@@ -70,24 +72,26 @@
 
 ### 🔴 Vault 3: "Whale" (Takara Boost) — ИСПРАВИТЬ!
 
-| Параметр | Старое (неверное) | Новое (правильное) |
-|----------|-------------------|---------------------|
-| Срок | 36 месяцев | **36 месяцев** ✓ |
-| Мин. вход | $5,000 | **$5,000** ✓ |
-| **Start APY (без буста)** | ❌ 6% | ✅ **8%** |
-| **Takara Boost** | ❌ неверно | ✅ **+7%** |
-| **Max APY (с бустом)** | ❌ 10% | ✅ **15%** |
-| Boost Token | Takara (Solana SPL) | **Takara (Solana SPL)** ✓ |
-| Boost Условие | 1:1 к депозиту | **1:1 к депозиту** ✓ |
-| Оценка Takara | Фикс $0.10 | **Фикс $0.10** ✓ |
-| Takara Mining | 40% APR | **40% APR** ✓ |
+| Параметр                  | Старое (неверное)   | Новое (правильное)        |
+| ------------------------- | ------------------- | ------------------------- |
+| Срок                      | 36 месяцев          | **36 месяцев** ✓          |
+| Мин. вход                 | $5,000              | **$5,000** ✓              |
+| **Start APY (без буста)** | ❌ 6%               | ✅ **8%**                 |
+| **Takara Boost**          | ❌ неверно          | ✅ **+7%**                |
+| **Max APY (с бустом)**    | ❌ 10%              | ✅ **15%**                |
+| Boost Token               | Takara (Solana SPL) | **Takara (Solana SPL)** ✓ |
+| Boost Условие             | 1:1 к депозиту      | **1:1 к депозиту** ✓      |
+| Оценка Takara             | Фикс $0.10          | **Фикс $0.10** ✓          |
+| Takara Mining             | 40% APR             | **40% APR** ✓             |
 
 **Множители частоты выплат:**
+
 - Monthly: x1.0
 - Quarterly: x1.15
 - Yearly: x1.30
 
 **Пример расчёта Max APY с Yearly:**
+
 - Base: 8% + Boost: 7% = 15%
 - С множителем Yearly: 15% × 1.30 = **19.5%**
 
@@ -218,7 +222,7 @@
 
 ### 3.1 Архитектура Flow
 
-```
+````
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    MULTI-CHAIN DEPOSIT FLOW                              │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -407,7 +411,7 @@ User Wallets Required:
 │  Status: ACTIVE                                                          │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
-```
+````
 
 ### 3.2 Состояния депозита (State Machine)
 
@@ -518,33 +522,33 @@ model Vault {
   id                  Int         @id @default(autoincrement())
   name                String      // "Starter", "Advanced", "Whale"
   type                VaultType   @unique
-  
+
   // Batch System
   currentBatchNumber  Int         @default(1)
   batchTargetAmount   Decimal     @default(100000) @db.Decimal(18, 2) // $100k
-  
+
   // Financial Parameters — CORRECTED VALUES!
   durationMonths      Int
   minEntryUsdt        Decimal     @db.Decimal(18, 2)
-  
+
   // APY (stored as basis points: 700 = 7.00%)
   baseApyBps          Int         // Vault1: calc, Vault2: 700, Vault3: 800
   boostApyBps         Int         // Vault1: calc, Vault2: 600, Vault3: 700
   maxApyBps           Int         // Vault1: 840, Vault2: 1300, Vault3: 1500
-  
+
   // Takara Mining APR (basis points)
   takaraMiningAprBps  Int         // Vault1: 3000, Vault2: 3000, Vault3: 4000
-  
+
   // Boost Configuration
   boostToken          BoostToken
   boostRatio          Decimal     @db.Decimal(5, 2) // 0.40 or 1.00
   boostPriceDiscount  Decimal     @db.Decimal(5, 2) // 0.15 or 0.00
   boostPriceFixed     Decimal?    @db.Decimal(18, 8) // null or 0.10
-  
+
   // Relations
   batches             VaultBatch[]
   deposits            Deposit[]
-  
+
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
 }
@@ -553,59 +557,59 @@ model VaultBatch {
   id                  Int         @id @default(autoincrement())
   vaultId             Int
   vault               Vault       @relation(fields: [vaultId], references: [id])
-  
+
   batchNumber         Int
   currentLiquidity    Decimal     @default(0) @db.Decimal(18, 2)
   targetLiquidity     Decimal     @db.Decimal(18, 2)
-  
+
   isActive            Boolean     @default(true)
   isFilled            Boolean     @default(false)
   filledAt            DateTime?
-  
+
   // Dates
   startDate           DateTime?   // When batch started accruing
   expectedEndDate     DateTime?   // startDate + durationMonths
-  
+
   deposits            Deposit[]
-  
+
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
-  
+
   @@unique([vaultId, batchNumber])
   @@index([vaultId, isActive])
 }
 
 model Deposit {
   id                  Int           @id @default(autoincrement())
-  
+
   // Vault & Batch Association
   vaultId             Int
   vault               Vault         @relation(fields: [vaultId], references: [id])
   batchId             Int?
   batch               VaultBatch?   @relation(fields: [batchId], references: [id])
-  
+
   // User Wallets
   userTronAddress     String        @db.VarChar(42)  // TRC20 address
   userSolanaAddress   String        @db.VarChar(44)  // Solana pubkey
   currentOwnerSolana  String        @db.VarChar(44)  // Can change if NFT transferred!
-  
+
   // Deposit Amount
   amountUsdt          Decimal       @db.Decimal(18, 6)
-  
+
   // Status
   status              DepositStatus @default(INITIAL)
-  
+
   // Transaction Hashes
   tronTxHash          String?       @db.VarChar(64)
   tronTxConfirmed     Boolean       @default(false)
   boostTxSignature    String?       @db.VarChar(88)  // Solana signature
   boostTxConfirmed    Boolean       @default(false)
   mintTxSignature     String?       @db.VarChar(88)
-  
+
   // Wexel NFT
   wexelMintAddress    String?       @db.VarChar(44)  // Solana pubkey of NFT mint
   wexelMetadataUri    String?       // Arweave/IPFS URI
-  
+
   // APY Configuration (frozen at deposit time)
   baseApyBps          Int
   boostApyBps         Int           @default(0)
@@ -613,41 +617,41 @@ model Deposit {
   frequencyMultiplier Decimal       @db.Decimal(4, 2) // 1.00, 1.15, or 1.30
   effectiveApyBps     Int           // totalApyBps * frequencyMultiplier
   payoutFrequency     PayoutFrequency
-  
+
   // Boost Details
   boostToken          BoostToken    @default(NONE)
   boostTokenMint      String?       @db.VarChar(44)
   boostTokenAmount    Decimal?      @db.Decimal(18, 9)
   boostTokenLocked    Boolean       @default(false)
   boostPriceAtDeposit Decimal?      @db.Decimal(18, 8) // For Laika: market price
-  
+
   // Takara Mining
   takaraMiningAprBps  Int
   takaraPendingAmount Decimal       @default(0) @db.Decimal(18, 9)
   takaraClaimedTotal  Decimal       @default(0) @db.Decimal(18, 9)
   lastTakaraClaimAt   DateTime?
-  
+
   // USDT Rewards
   usdtClaimedTotal    Decimal       @default(0) @db.Decimal(18, 6)
   lastUsdtClaimAt     DateTime?
-  
+
   // Timing
   lockStartAt         DateTime?
   lockEndAt           DateTime?
   isMatured           Boolean       @default(false)
   isRedeemed          Boolean       @default(false)
   redeemedAt          DateTime?
-  
+
   // Security
   claimNonce          Int           @default(0)
-  
+
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
-  
+
   // Relations
   claims              Claim[]
   transfers           WexelTransfer[]
-  
+
   @@index([userTronAddress])
   @@index([userSolanaAddress])
   @@index([currentOwnerSolana])
@@ -660,21 +664,21 @@ model Claim {
   id                  Int         @id @default(autoincrement())
   depositId           Int
   deposit             Deposit     @relation(fields: [depositId], references: [id])
-  
+
   claimType           String      // "USDT" or "TAKARA"
   amount              Decimal     @db.Decimal(18, 9)
-  
+
   // Security
   nonce               Int
   signatureMessage    String      @db.Text
   userSignature       String      @db.VarChar(128)
-  
+
   // Transaction
   txSignature         String?     @db.VarChar(88)
   txConfirmed         Boolean     @default(false)
-  
+
   claimedAt           DateTime    @default(now())
-  
+
   @@index([depositId])
   @@index([claimedAt])
 }
@@ -683,13 +687,13 @@ model WexelTransfer {
   id                  Int         @id @default(autoincrement())
   depositId           Int
   deposit             Deposit     @relation(fields: [depositId], references: [id])
-  
+
   fromWallet          String      @db.VarChar(44)
   toWallet            String      @db.VarChar(44)
   txSignature         String      @db.VarChar(88)
-  
+
   transferredAt       DateTime    @default(now())
-  
+
   @@index([depositId])
   @@index([txSignature])
 }
@@ -700,26 +704,26 @@ model WexelTransfer {
 
 model TakaraConfig {
   id                  Int         @id @default(1) // Singleton
-  
+
   // Token Addresses
   takaraMintSolana    String      @db.VarChar(44)
   laikaMintSolana     String      @db.VarChar(44)
   usdtContractTron    String      @db.VarChar(42)
-  
+
   // Treasury
   treasuryTronAddress String      @db.VarChar(42)
   treasurySolanaAddr  String      @db.VarChar(44)
-  
+
   // Takara Internal Price (for Vault 2 & 3 boost calculation)
   takaraInternalPrice Decimal     @default(0.10) @db.Decimal(18, 8)
-  
+
   // Program Addresses
   takaraProgramId     String      @db.VarChar(44)
   wexelCollectionAddr String      @db.VarChar(44)
-  
+
   // Claim Rules
   minClaimIntervalVault1Hours Int @default(168) // 7 days in hours
-  
+
   updatedAt           DateTime    @updatedAt
 }
 
@@ -733,7 +737,7 @@ model PriceFeed {
   priceUsd            Decimal     @db.Decimal(18, 8)
   source              String      // "coingecko"
   fetchedAt           DateTime    @default(now())
-  
+
   @@index([tokenSymbol, fetchedAt])
 }
 ```
@@ -743,7 +747,7 @@ model PriceFeed {
 ```typescript
 // prisma/seeds/vaults.ts
 
-import { PrismaClient, VaultType, BoostToken } from '@prisma/client';
+import { PrismaClient, VaultType, BoostToken } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -755,28 +759,28 @@ async function seedVaults() {
     where: { type: VaultType.VAULT_1 },
     update: {},
     create: {
-      name: 'Starter',
+      name: "Starter",
       type: VaultType.VAULT_1,
       durationMonths: 12,
       minEntryUsdt: 100,
-      
+
       // APY: Max 8.40%, calculate base accordingly
       // If boost gives ~1.4% extra, base = 7.0%
-      baseApyBps: 700,      // 7.00%
-      boostApyBps: 140,     // 1.40%
-      maxApyBps: 840,       // 8.40%
-      
+      baseApyBps: 700, // 7.00%
+      boostApyBps: 140, // 1.40%
+      maxApyBps: 840, // 8.40%
+
       takaraMiningAprBps: 3000, // 30%
-      
+
       boostToken: BoostToken.LAIKA,
-      boostRatio: 0.40,           // 40% of deposit
-      boostPriceDiscount: 0.15,   // 15% discount on market price
-      boostPriceFixed: null,      // Uses market price
-      
+      boostRatio: 0.4, // 40% of deposit
+      boostPriceDiscount: 0.15, // 15% discount on market price
+      boostPriceFixed: null, // Uses market price
+
       batchTargetAmount: 100000,
     },
   });
-  
+
   // ============================================================================
   // VAULT 2: Advanced (Takara Boost) — CORRECTED!
   // ============================================================================
@@ -784,32 +788,32 @@ async function seedVaults() {
     where: { type: VaultType.VAULT_2 },
     update: {
       // UPDATE existing record with correct values!
-      baseApyBps: 700,      // 7.00% — WAS WRONG!
-      boostApyBps: 600,     // 6.00% — WAS WRONG!
-      maxApyBps: 1300,      // 13.00% — WAS WRONG!
+      baseApyBps: 700, // 7.00% — WAS WRONG!
+      boostApyBps: 600, // 6.00% — WAS WRONG!
+      maxApyBps: 1300, // 13.00% — WAS WRONG!
     },
     create: {
-      name: 'Advanced',
+      name: "Advanced",
       type: VaultType.VAULT_2,
       durationMonths: 30,
       minEntryUsdt: 1500,
-      
+
       // CORRECTED APY VALUES!
-      baseApyBps: 700,      // 7.00% Start APY
-      boostApyBps: 600,     // +6.00% Takara Boost
-      maxApyBps: 1300,      // 13.00% Max APY
-      
+      baseApyBps: 700, // 7.00% Start APY
+      boostApyBps: 600, // +6.00% Takara Boost
+      maxApyBps: 1300, // 13.00% Max APY
+
       takaraMiningAprBps: 3000, // 30%
-      
+
       boostToken: BoostToken.TAKARA,
-      boostRatio: 1.00,           // 1:1 to deposit
-      boostPriceDiscount: 0.00,   // No discount
-      boostPriceFixed: 0.10,      // Fixed $0.10
-      
+      boostRatio: 1.0, // 1:1 to deposit
+      boostPriceDiscount: 0.0, // No discount
+      boostPriceFixed: 0.1, // Fixed $0.10
+
       batchTargetAmount: 100000,
     },
   });
-  
+
   // ============================================================================
   // VAULT 3: Whale (Takara Boost) — CORRECTED!
   // ============================================================================
@@ -817,33 +821,33 @@ async function seedVaults() {
     where: { type: VaultType.VAULT_3 },
     update: {
       // UPDATE existing record with correct values!
-      baseApyBps: 800,      // 8.00% — WAS WRONG!
-      boostApyBps: 700,     // 7.00% — WAS WRONG!
-      maxApyBps: 1500,      // 15.00% — WAS WRONG!
+      baseApyBps: 800, // 8.00% — WAS WRONG!
+      boostApyBps: 700, // 7.00% — WAS WRONG!
+      maxApyBps: 1500, // 15.00% — WAS WRONG!
     },
     create: {
-      name: 'Whale',
+      name: "Whale",
       type: VaultType.VAULT_3,
       durationMonths: 36,
       minEntryUsdt: 5000,
-      
+
       // CORRECTED APY VALUES!
-      baseApyBps: 800,      // 8.00% Start APY
-      boostApyBps: 700,     // +7.00% Takara Boost
-      maxApyBps: 1500,      // 15.00% Max APY
-      
+      baseApyBps: 800, // 8.00% Start APY
+      boostApyBps: 700, // +7.00% Takara Boost
+      maxApyBps: 1500, // 15.00% Max APY
+
       takaraMiningAprBps: 4000, // 40%
-      
+
       boostToken: BoostToken.TAKARA,
-      boostRatio: 1.00,           // 1:1 to deposit
-      boostPriceDiscount: 0.00,   // No discount
-      boostPriceFixed: 0.10,      // Fixed $0.10
-      
+      boostRatio: 1.0, // 1:1 to deposit
+      boostPriceDiscount: 0.0, // No discount
+      boostPriceFixed: 0.1, // Fixed $0.10
+
       batchTargetAmount: 100000,
     },
   });
-  
-  console.log('✅ Vaults seeded with CORRECTED APY values!');
+
+  console.log("✅ Vaults seeded with CORRECTED APY values!");
 }
 
 seedVaults()
@@ -932,13 +936,13 @@ src/
 ```typescript
 // src/modules/deposits/deposit-flow.service.ts
 
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
-import { TronService } from '@/modules/blockchain/tron/tron.service';
-import { SolanaService } from '@/modules/blockchain/solana/solana.service';
-import { WexelService } from '@/modules/wexel/wexel.service';
-import { YieldCalculatorService } from '@/modules/calculator/yield-calculator.service';
-import { DepositStatus, PayoutFrequency, BoostToken } from '@prisma/client';
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { PrismaService } from "@/prisma/prisma.service";
+import { TronService } from "@/modules/blockchain/tron/tron.service";
+import { SolanaService } from "@/modules/blockchain/solana/solana.service";
+import { WexelService } from "@/modules/wexel/wexel.service";
+import { YieldCalculatorService } from "@/modules/calculator/yield-calculator.service";
+import { DepositStatus, PayoutFrequency, BoostToken } from "@prisma/client";
 
 @Injectable()
 export class DepositFlowService {
@@ -947,7 +951,7 @@ export class DepositFlowService {
     private tronService: TronService,
     private solanaService: SolanaService,
     private wexelService: WexelService,
-    private yieldCalculator: YieldCalculatorService,
+    private yieldCalculator: YieldCalculatorService
   ) {}
 
   /**
@@ -967,9 +971,7 @@ export class DepositFlowService {
 
     // Validate minimum entry
     if (dto.amountUsdt < Number(vault.minEntryUsdt)) {
-      throw new BadRequestException(
-        `Minimum deposit for ${vault.name} is $${vault.minEntryUsdt}`,
-      );
+      throw new BadRequestException(`Minimum deposit for ${vault.name} is $${vault.minEntryUsdt}`);
     }
 
     // Calculate APY
@@ -992,7 +994,7 @@ export class DepositFlowService {
         currentOwnerSolana: dto.userSolanaAddress,
         amountUsdt: dto.amountUsdt,
         status: DepositStatus.INITIAL,
-        
+
         // APY config
         baseApyBps: vault.baseApyBps,
         boostApyBps: dto.enableBoost ? vault.boostApyBps : 0,
@@ -1000,13 +1002,11 @@ export class DepositFlowService {
         frequencyMultiplier: apyConfig.frequencyMultiplier,
         effectiveApyBps: apyConfig.effectiveApyBps,
         payoutFrequency: dto.payoutFrequency,
-        
+
         // Boost config
         boostToken: dto.enableBoost ? vault.boostToken : BoostToken.NONE,
-        boostTokenMint: dto.enableBoost 
-          ? await this.getBoostTokenMint(vault.boostToken) 
-          : null,
-        
+        boostTokenMint: dto.enableBoost ? await this.getBoostTokenMint(vault.boostToken) : null,
+
         // Takara mining
         takaraMiningAprBps: vault.takaraMiningAprBps,
       },
@@ -1014,28 +1014,27 @@ export class DepositFlowService {
 
     return {
       depositId: deposit.id,
-      nextStep: 'CONFIRM_TRON_TX',
+      nextStep: "CONFIRM_TRON_TX",
       treasuryAddress: await this.getTreasuryTronAddress(),
       amountUsdt: dto.amountUsdt,
       apyConfig,
-      boostRequired: dto.enableBoost ? await this.calculateBoostRequired(vault, dto.amountUsdt) : null,
+      boostRequired: dto.enableBoost
+        ? await this.calculateBoostRequired(vault, dto.amountUsdt)
+        : null,
     };
   }
 
   /**
    * STEP 1: Confirm USDT Tron transaction
    */
-  async confirmTronTransaction(dto: {
-    depositId: number;
-    tronTxHash: string;
-  }) {
+  async confirmTronTransaction(dto: { depositId: number; tronTxHash: string }) {
     const deposit = await this.prisma.deposit.findUniqueOrThrow({
       where: { id: dto.depositId },
       include: { vault: true },
     });
 
     if (deposit.status !== DepositStatus.INITIAL) {
-      throw new BadRequestException('Invalid deposit status for this step');
+      throw new BadRequestException("Invalid deposit status for this step");
     }
 
     // Verify transaction on Tron
@@ -1054,9 +1053,10 @@ export class DepositFlowService {
     }
 
     // Determine next status
-    const nextStatus = deposit.boostToken !== BoostToken.NONE
-      ? DepositStatus.PENDING_BOOST
-      : DepositStatus.PENDING_MINT;
+    const nextStatus =
+      deposit.boostToken !== BoostToken.NONE
+        ? DepositStatus.PENDING_BOOST
+        : DepositStatus.PENDING_MINT;
 
     await this.prisma.deposit.update({
       where: { id: dto.depositId },
@@ -1069,32 +1069,27 @@ export class DepositFlowService {
 
     return {
       success: true,
-      nextStep: nextStatus === DepositStatus.PENDING_BOOST 
-        ? 'LOCK_BOOST_TOKENS' 
-        : 'MINT_WEXEL',
+      nextStep: nextStatus === DepositStatus.PENDING_BOOST ? "LOCK_BOOST_TOKENS" : "MINT_WEXEL",
     };
   }
 
   /**
    * STEP 2: Confirm boost token lock (Solana)
    */
-  async confirmBoostLock(dto: {
-    depositId: number;
-    solanaTxSignature: string;
-  }) {
+  async confirmBoostLock(dto: { depositId: number; solanaTxSignature: string }) {
     const deposit = await this.prisma.deposit.findUniqueOrThrow({
       where: { id: dto.depositId },
       include: { vault: true },
     });
 
     if (deposit.status !== DepositStatus.PENDING_BOOST) {
-      throw new BadRequestException('Invalid deposit status for this step');
+      throw new BadRequestException("Invalid deposit status for this step");
     }
 
     // Calculate required boost amount
     const boostRequired = await this.calculateBoostRequired(
       deposit.vault,
-      Number(deposit.amountUsdt),
+      Number(deposit.amountUsdt)
     );
 
     // Verify transaction on Solana
@@ -1127,7 +1122,7 @@ export class DepositFlowService {
 
     return {
       success: true,
-      nextStep: 'MINT_WEXEL',
+      nextStep: "MINT_WEXEL",
     };
   }
 
@@ -1141,7 +1136,7 @@ export class DepositFlowService {
     });
 
     if (deposit.status !== DepositStatus.PENDING_MINT) {
-      throw new BadRequestException('Invalid deposit status for minting');
+      throw new BadRequestException("Invalid deposit status for minting");
     }
 
     // Generate backend signature for mint authorization
@@ -1169,7 +1164,7 @@ export class DepositFlowService {
     });
 
     if (deposit.status !== DepositStatus.PENDING_MINT) {
-      throw new BadRequestException('Invalid deposit status');
+      throw new BadRequestException("Invalid deposit status");
     }
 
     // Verify mint on Solana
@@ -1224,9 +1219,9 @@ export class DepositFlowService {
 ```typescript
 // src/modules/calculator/yield-calculator.service.ts
 
-import { Injectable } from '@nestjs/common';
-import { Vault, PayoutFrequency } from '@prisma/client';
-import Decimal from 'decimal.js';
+import { Injectable } from "@nestjs/common";
+import { Vault, PayoutFrequency } from "@prisma/client";
+import Decimal from "decimal.js";
 
 @Injectable()
 export class YieldCalculatorService {
@@ -1234,17 +1229,13 @@ export class YieldCalculatorService {
   private readonly FREQUENCY_MULTIPLIERS = {
     [PayoutFrequency.MONTHLY]: new Decimal(1.0),
     [PayoutFrequency.QUARTERLY]: new Decimal(1.15),
-    [PayoutFrequency.YEARLY]: new Decimal(1.30),
+    [PayoutFrequency.YEARLY]: new Decimal(1.3),
   };
 
   /**
    * Calculate APY configuration for deposit
    */
-  calculateApy(params: {
-    vault: Vault;
-    enableBoost: boolean;
-    payoutFrequency: PayoutFrequency;
-  }) {
+  calculateApy(params: { vault: Vault; enableBoost: boolean; payoutFrequency: PayoutFrequency }) {
     const { vault, enableBoost, payoutFrequency } = params;
 
     const baseApyBps = vault.baseApyBps;
@@ -1260,7 +1251,7 @@ export class YieldCalculatorService {
       totalApyBps,
       frequencyMultiplier: multiplier.toNumber(),
       effectiveApyBps: Math.round(effectiveApyBps),
-      
+
       // Human readable
       baseApyPercent: (baseApyBps / 100).toFixed(2),
       boostApyPercent: (boostApyBps / 100).toFixed(2),
@@ -1279,15 +1270,16 @@ export class YieldCalculatorService {
     lastClaimAt: Date | null;
     payoutFrequency: PayoutFrequency;
   }): Decimal {
-    const { depositAmountUsdt, effectiveApyBps, lockStartAt, lastClaimAt, payoutFrequency } = params;
-    
+    const { depositAmountUsdt, effectiveApyBps, lockStartAt, lastClaimAt, payoutFrequency } =
+      params;
+
     const now = new Date();
     const startDate = lastClaimAt || lockStartAt;
-    
+
     // Calculate days elapsed
     const msPerDay = 24 * 60 * 60 * 1000;
     const daysElapsed = Math.floor((now.getTime() - startDate.getTime()) / msPerDay);
-    
+
     if (daysElapsed <= 0) return new Decimal(0);
 
     // Daily rate from APY
@@ -1310,13 +1302,13 @@ export class YieldCalculatorService {
     lastClaimAt: Date | null;
   }): Decimal {
     const { depositAmountUsdt, takaraMiningAprBps, lockStartAt, lastClaimAt } = params;
-    
+
     const now = new Date();
     const startDate = lastClaimAt || lockStartAt;
-    
+
     const msPerDay = 24 * 60 * 60 * 1000;
     const daysElapsed = Math.floor((now.getTime() - startDate.getTime()) / msPerDay);
-    
+
     if (daysElapsed <= 0) return new Decimal(0);
 
     // Daily rate from APR
@@ -1326,7 +1318,7 @@ export class YieldCalculatorService {
     // Takara rewarded based on USDT deposit at internal price $0.10
     // rewards_takara = (deposit_usdt * dailyRate * days) / 0.10
     const usdtValue = new Decimal(depositAmountUsdt).mul(dailyRate).mul(daysElapsed);
-    const takaraRewards = usdtValue.div(0.10);
+    const takaraRewards = usdtValue.div(0.1);
 
     return takaraRewards;
   }
@@ -1338,17 +1330,17 @@ export class YieldCalculatorService {
 ```typescript
 // src/modules/wexel/wexel-verification.service.ts
 
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
-import { SolanaService } from '@/modules/blockchain/solana/solana.service';
-import * as nacl from 'tweetnacl';
-import * as bs58 from 'bs58';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { PrismaService } from "@/prisma/prisma.service";
+import { SolanaService } from "@/modules/blockchain/solana/solana.service";
+import * as nacl from "tweetnacl";
+import * as bs58 from "bs58";
 
 @Injectable()
 export class WexelVerificationService {
   constructor(
     private prisma: PrismaService,
-    private solanaService: SolanaService,
+    private solanaService: SolanaService
   ) {}
 
   /**
@@ -1364,24 +1356,24 @@ export class WexelVerificationService {
     // 1. Get token account for this NFT
     const tokenAccounts = await this.solanaService.getTokenAccountsByOwner(
       claimerWallet,
-      wexelMintAddress,
+      wexelMintAddress
     );
 
     if (tokenAccounts.length === 0) {
       return {
         valid: false,
-        error: 'Wallet does not own this Wexel NFT',
+        error: "Wallet does not own this Wexel NFT",
       };
     }
 
     // 2. Verify NFT is from TAKARA collection
     const nftMetadata = await this.solanaService.getNftMetadata(wexelMintAddress);
-    
+
     const config = await this.prisma.takaraConfig.findFirst();
     if (nftMetadata.collection !== config?.wexelCollectionAddr) {
       return {
         valid: false,
-        error: 'NFT is not from TAKARA collection',
+        error: "NFT is not from TAKARA collection",
       };
     }
 
@@ -1389,7 +1381,7 @@ export class WexelVerificationService {
     if (!nftMetadata.creators?.[0]?.verified) {
       return {
         valid: false,
-        error: 'NFT creator not verified - possible forgery',
+        error: "NFT creator not verified - possible forgery",
       };
     }
 
@@ -1413,13 +1405,13 @@ export class WexelVerificationService {
     const now = Date.now();
     const maxAge = 5 * 60 * 1000; // 5 minutes
     if (now - timestamp > maxAge) {
-      return { valid: false, error: 'Signature expired' };
+      return { valid: false, error: "Signature expired" };
     }
 
     // 2. Reconstruct expected message
     const expectedMessage = `claim:${depositId}:${nonce}:${timestamp}`;
     if (message !== expectedMessage) {
-      return { valid: false, error: 'Invalid message format' };
+      return { valid: false, error: "Invalid message format" };
     }
 
     // 3. Verify nonce (must be greater than last used)
@@ -1428,11 +1420,11 @@ export class WexelVerificationService {
     });
 
     if (!deposit) {
-      return { valid: false, error: 'Deposit not found' };
+      return { valid: false, error: "Deposit not found" };
     }
 
     if (nonce <= deposit.claimNonce) {
-      return { valid: false, error: 'Nonce already used - replay attack detected' };
+      return { valid: false, error: "Nonce already used - replay attack detected" };
     }
 
     // 4. Verify signature
@@ -1441,17 +1433,13 @@ export class WexelVerificationService {
       const signatureBytes = bs58.decode(signature);
       const publicKeyBytes = bs58.decode(claimerWallet);
 
-      const isValid = nacl.sign.detached.verify(
-        messageBytes,
-        signatureBytes,
-        publicKeyBytes,
-      );
+      const isValid = nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
 
       if (!isValid) {
-        return { valid: false, error: 'Invalid signature' };
+        return { valid: false, error: "Invalid signature" };
       }
     } catch (err) {
-      return { valid: false, error: 'Signature verification failed' };
+      return { valid: false, error: "Signature verification failed" };
     }
 
     // 5. Verify ownership
@@ -1478,30 +1466,30 @@ export class WexelVerificationService {
 ```tsx
 // components/deposit/DepositWizard.tsx
 
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
-import { useTronWallet } from '@/hooks/useTronWallet';
-import { WalletConnectionStep } from './steps/WalletConnectionStep';
-import { VaultSelectionStep } from './steps/VaultSelectionStep';
-import { TronDepositStep } from './steps/TronDepositStep';
-import { BoostLockStep } from './steps/BoostLockStep';
-import { WexelMintStep } from './steps/WexelMintStep';
-import { SuccessStep } from './steps/SuccessStep';
+import { useState } from "react";
+import { useWallet as useSolanaWallet } from "@solana/wallet-adapter-react";
+import { useTronWallet } from "@/hooks/useTronWallet";
+import { WalletConnectionStep } from "./steps/WalletConnectionStep";
+import { VaultSelectionStep } from "./steps/VaultSelectionStep";
+import { TronDepositStep } from "./steps/TronDepositStep";
+import { BoostLockStep } from "./steps/BoostLockStep";
+import { WexelMintStep } from "./steps/WexelMintStep";
+import { SuccessStep } from "./steps/SuccessStep";
 
-type WizardStep = 
-  | 'WALLET_CONNECTION'
-  | 'VAULT_SELECTION'
-  | 'TRON_DEPOSIT'
-  | 'BOOST_LOCK'
-  | 'WEXEL_MINT'
-  | 'SUCCESS';
+type WizardStep =
+  | "WALLET_CONNECTION"
+  | "VAULT_SELECTION"
+  | "TRON_DEPOSIT"
+  | "BOOST_LOCK"
+  | "WEXEL_MINT"
+  | "SUCCESS";
 
 interface DepositState {
   vaultId: number | null;
   amountUsdt: number;
-  payoutFrequency: 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+  payoutFrequency: "MONTHLY" | "QUARTERLY" | "YEARLY";
   enableBoost: boolean;
   depositId: number | null;
   tronTxHash: string | null;
@@ -1510,11 +1498,11 @@ interface DepositState {
 }
 
 export function DepositWizard() {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('WALLET_CONNECTION');
+  const [currentStep, setCurrentStep] = useState<WizardStep>("WALLET_CONNECTION");
   const [depositState, setDepositState] = useState<DepositState>({
     vaultId: null,
     amountUsdt: 0,
-    payoutFrequency: 'MONTHLY',
+    payoutFrequency: "MONTHLY",
     enableBoost: false,
     depositId: null,
     tronTxHash: null,
@@ -1527,81 +1515,81 @@ export function DepositWizard() {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'WALLET_CONNECTION':
+      case "WALLET_CONNECTION":
         return (
           <WalletConnectionStep
             solanaConnected={solanaWallet.connected}
             tronConnected={tronWallet.connected}
-            onContinue={() => setCurrentStep('VAULT_SELECTION')}
+            onContinue={() => setCurrentStep("VAULT_SELECTION")}
           />
         );
 
-      case 'VAULT_SELECTION':
+      case "VAULT_SELECTION":
         return (
           <VaultSelectionStep
             onSelect={(vaultId, amountUsdt, payoutFrequency, enableBoost) => {
-              setDepositState(prev => ({
+              setDepositState((prev) => ({
                 ...prev,
                 vaultId,
                 amountUsdt,
                 payoutFrequency,
                 enableBoost,
               }));
-              setCurrentStep('TRON_DEPOSIT');
+              setCurrentStep("TRON_DEPOSIT");
             }}
-            onBack={() => setCurrentStep('WALLET_CONNECTION')}
+            onBack={() => setCurrentStep("WALLET_CONNECTION")}
           />
         );
 
-      case 'TRON_DEPOSIT':
+      case "TRON_DEPOSIT":
         return (
           <TronDepositStep
             amountUsdt={depositState.amountUsdt}
             tronWallet={tronWallet}
             onSuccess={(depositId, txHash) => {
-              setDepositState(prev => ({
+              setDepositState((prev) => ({
                 ...prev,
                 depositId,
                 tronTxHash: txHash,
               }));
-              setCurrentStep(depositState.enableBoost ? 'BOOST_LOCK' : 'WEXEL_MINT');
+              setCurrentStep(depositState.enableBoost ? "BOOST_LOCK" : "WEXEL_MINT");
             }}
-            onBack={() => setCurrentStep('VAULT_SELECTION')}
+            onBack={() => setCurrentStep("VAULT_SELECTION")}
           />
         );
 
-      case 'BOOST_LOCK':
+      case "BOOST_LOCK":
         return (
           <BoostLockStep
             depositId={depositState.depositId!}
             solanaWallet={solanaWallet}
             onSuccess={(txSignature) => {
-              setDepositState(prev => ({
+              setDepositState((prev) => ({
                 ...prev,
                 boostTxSignature: txSignature,
               }));
-              setCurrentStep('WEXEL_MINT');
+              setCurrentStep("WEXEL_MINT");
             }}
-            onBack={() => setCurrentStep('TRON_DEPOSIT')}
+            onBack={() => setCurrentStep("TRON_DEPOSIT")}
           />
         );
 
-      case 'WEXEL_MINT':
+      case "WEXEL_MINT":
         return (
           <WexelMintStep
             depositId={depositState.depositId!}
             solanaWallet={solanaWallet}
             onSuccess={(wexelMintAddress) => {
-              setDepositState(prev => ({
+              setDepositState((prev) => ({
                 ...prev,
                 wexelMintAddress,
               }));
-              setCurrentStep('SUCCESS');
+              setCurrentStep("SUCCESS");
             }}
           />
         );
 
-      case 'SUCCESS':
+      case "SUCCESS":
         return (
           <SuccessStep
             wexelMintAddress={depositState.wexelMintAddress!}
@@ -1615,16 +1603,11 @@ export function DepositWizard() {
     <div className="max-w-2xl mx-auto">
       {/* Progress Bar */}
       <div className="mb-8">
-        <StepProgress 
-          currentStep={currentStep}
-          hasBoost={depositState.enableBoost}
-        />
+        <StepProgress currentStep={currentStep} hasBoost={depositState.enableBoost} />
       </div>
 
       {/* Step Content */}
-      <div className="bg-gray-900 rounded-2xl p-8">
-        {renderStep()}
-      </div>
+      <div className="bg-gray-900 rounded-2xl p-8">{renderStep()}</div>
     </div>
   );
 }
@@ -1639,13 +1622,13 @@ interface VaultCardProps {
   vault: {
     id: number;
     name: string;
-    type: 'VAULT_1' | 'VAULT_2' | 'VAULT_3';
+    type: "VAULT_1" | "VAULT_2" | "VAULT_3";
     durationMonths: number;
     minEntryUsdt: number;
-    baseApyBps: number;      // CORRECTED VALUES!
-    boostApyBps: number;     // CORRECTED VALUES!
-    maxApyBps: number;       // CORRECTED VALUES!
-    boostToken: 'LAIKA' | 'TAKARA' | 'NONE';
+    baseApyBps: number; // CORRECTED VALUES!
+    boostApyBps: number; // CORRECTED VALUES!
+    maxApyBps: number; // CORRECTED VALUES!
+    boostToken: "LAIKA" | "TAKARA" | "NONE";
     boostRatio: number;
     boostPriceDiscount: number;
     boostPriceFixed: number | null;
@@ -1658,7 +1641,7 @@ export function VaultCard({ vault }: VaultCardProps) {
   const maxApyPercent = (vault.maxApyBps / 100).toFixed(2);
 
   // Calculate max APY with Yearly multiplier
-  const maxApyWithYearly = ((vault.maxApyBps * 1.30) / 100).toFixed(2);
+  const maxApyWithYearly = ((vault.maxApyBps * 1.3) / 100).toFixed(2);
 
   return (
     <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
@@ -1680,11 +1663,9 @@ export function VaultCard({ vault }: VaultCardProps) {
         </div>
 
         {/* Boost APY */}
-        {vault.boostToken !== 'NONE' && (
+        {vault.boostToken !== "NONE" && (
           <div className="flex justify-between">
-            <span className="text-gray-400">
-              {vault.boostToken} Boost
-            </span>
+            <span className="text-gray-400">{vault.boostToken} Boost</span>
             <span className="text-green-400 font-semibold">+{boostApyPercent}%</span>
           </div>
         )}
@@ -1703,16 +1684,17 @@ export function VaultCard({ vault }: VaultCardProps) {
       </div>
 
       {/* Boost Condition */}
-      {vault.boostToken !== 'NONE' && (
+      {vault.boostToken !== "NONE" && (
         <div className="bg-gray-700/50 rounded-lg p-4 mb-6">
           <p className="text-sm text-gray-300">
             <span className="font-semibold text-white">Boost Condition: </span>
-            {vault.boostToken === 'LAIKA' ? (
+            {vault.boostToken === "LAIKA" ? (
               <>
-                Hold <span className="text-purple-400">Laika</span> = {(vault.boostRatio * 100)}% of deposit
+                Hold <span className="text-purple-400">Laika</span> = {vault.boostRatio * 100}% of
+                deposit
                 <br />
                 <span className="text-gray-500">
-                  (Market price with {(vault.boostPriceDiscount * 100)}% discount)
+                  (Market price with {vault.boostPriceDiscount * 100}% discount)
                 </span>
               </>
             ) : (
@@ -1731,13 +1713,13 @@ export function VaultCard({ vault }: VaultCardProps) {
       {/* Min Entry */}
       <div className="flex justify-between items-center mb-6">
         <span className="text-gray-400">Minimum Entry</span>
-        <span className="text-white font-semibold">${vault.minEntryUsdt.toLocaleString()} USDT</span>
+        <span className="text-white font-semibold">
+          ${vault.minEntryUsdt.toLocaleString()} USDT
+        </span>
       </div>
 
       {/* CTA Button */}
-      <button
-        className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold text-white hover:from-blue-500 hover:to-purple-500 transition-all"
-      >
+      <button className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold text-white hover:from-blue-500 hover:to-purple-500 transition-all">
         Deposit Now
       </button>
     </div>
@@ -1853,16 +1835,16 @@ use anchor_lang::prelude::*;
 pub struct WexelState {
     /// Bump seed for PDA derivation
     pub bump: u8,
-    
+
     /// Associated NFT mint address
     pub wexel_mint: Pubkey,
-    
+
     /// Original depositor (for tracking, not ownership!)
     pub original_depositor: Pubkey,
-    
+
     /// Backend deposit ID (for cross-reference)
     pub deposit_id: u64,
-    
+
     /// Deposit details (immutable)
     pub vault_type: u8,             // 1, 2, or 3
     pub deposit_amount_usdt: u64,   // In USDT smallest units (6 decimals)
@@ -1871,22 +1853,22 @@ pub struct WexelState {
     pub total_apy_bps: u16,
     pub lock_period_months: u8,
     pub payout_frequency: u8,       // 1=monthly, 3=quarterly, 12=yearly
-    
+
     /// Boost details
     pub boost_token_mint: Pubkey,
     pub boost_token_amount: u64,
     pub boost_locked: bool,
-    
+
     /// Timestamps
     pub created_at: i64,
     pub lock_start_at: i64,
     pub lock_end_at: i64,
-    
+
     /// Claim tracking
     pub total_takara_claimed: u64,
     pub last_takara_claim_at: i64,
     pub claim_nonce: u64,
-    
+
     /// Status
     pub is_redeemed: bool,
     pub redeemed_at: i64,
@@ -1952,16 +1934,16 @@ pub struct WexelMintData {
 pub struct MintWexel<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    
+
     #[account(
         seeds = [b"config"],
         bump = config.bump,
     )]
     pub config: Account<'info, ProgramConfig>,
-    
+
     /// CHECK: Backend signer - verified against config
     pub backend_signer: AccountInfo<'info>,
-    
+
     /// New NFT mint (created in this instruction)
     #[account(
         init,
@@ -1971,7 +1953,7 @@ pub struct MintWexel<'info> {
         mint::freeze_authority = wexel_mint_authority,
     )]
     pub wexel_mint: Account<'info, Mint>,
-    
+
     /// PDA that owns the mint
     /// CHECK: Seeds verified
     #[account(
@@ -1979,7 +1961,7 @@ pub struct MintWexel<'info> {
         bump,
     )]
     pub wexel_mint_authority: AccountInfo<'info>,
-    
+
     /// User's token account for the NFT
     #[account(
         init,
@@ -1988,7 +1970,7 @@ pub struct MintWexel<'info> {
         associated_token::authority = user,
     )]
     pub user_wexel_account: Account<'info, TokenAccount>,
-    
+
     /// Wexel state PDA
     #[account(
         init,
@@ -1998,27 +1980,27 @@ pub struct MintWexel<'info> {
         bump,
     )]
     pub wexel_state: Account<'info, WexelState>,
-    
+
     /// CHECK: Metaplex metadata account
     #[account(mut)]
     pub metadata_account: AccountInfo<'info>,
-    
+
     /// CHECK: Collection NFT for verification
     pub collection_mint: AccountInfo<'info>,
-    
+
     /// CHECK: Collection metadata
     #[account(mut)]
     pub collection_metadata: AccountInfo<'info>,
-    
+
     /// CHECK: Collection master edition
     pub collection_master_edition: AccountInfo<'info>,
-    
+
     /// Programs
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
-    
+
     /// CHECK: Metaplex Token Metadata program
     pub metadata_program: AccountInfo<'info>,
 }
@@ -2029,7 +2011,7 @@ pub fn handler(
     backend_signature: [u8; 64],
 ) -> Result<()> {
     let config = &ctx.accounts.config;
-    
+
     // =========================================================================
     // SECURITY CHECK 1: Verify backend signer
     // =========================================================================
@@ -2037,7 +2019,7 @@ pub fn handler(
         ctx.accounts.backend_signer.key() == config.backend_pubkey,
         TakaraError::InvalidBackendSigner
     );
-    
+
     // =========================================================================
     // SECURITY CHECK 2: Verify backend signature over mint_data
     // =========================================================================
@@ -2047,10 +2029,10 @@ pub fn handler(
     let pubkey = ed25519_dalek::PublicKey::from_bytes(
         &config.backend_pubkey.to_bytes()
     ).map_err(|_| TakaraError::InvalidBackendSigner)?;
-    
+
     pubkey.verify_strict(&mint_data_bytes, &signature)
         .map_err(|_| TakaraError::InvalidSignature)?;
-    
+
     // =========================================================================
     // SECURITY CHECK 3: Verify collection
     // =========================================================================
@@ -2058,14 +2040,14 @@ pub fn handler(
         ctx.accounts.collection_mint.key() == config.wexel_collection,
         TakaraError::InvalidCollection
     );
-    
+
     // =========================================================================
     // Mint NFT to user
     // =========================================================================
     let mint_authority_bump = ctx.bumps.wexel_mint_authority;
     let mint_authority_seeds = &[b"mint_authority".as_ref(), &[mint_authority_bump]];
     let signer_seeds = &[&mint_authority_seeds[..]];
-    
+
     // Mint 1 token to user
     anchor_spl::token::mint_to(
         CpiContext::new_with_signer(
@@ -2079,18 +2061,18 @@ pub fn handler(
         ),
         1,
     )?;
-    
+
     // =========================================================================
     // Create metadata (using Metaplex)
     // =========================================================================
     // ... Metaplex CPI calls for creating metadata and verifying collection
-    
+
     // =========================================================================
     // Initialize Wexel State PDA
     // =========================================================================
     let wexel_state = &mut ctx.accounts.wexel_state;
     let clock = Clock::get()?;
-    
+
     wexel_state.bump = ctx.bumps.wexel_state;
     wexel_state.wexel_mint = ctx.accounts.wexel_mint.key();
     wexel_state.original_depositor = ctx.accounts.user.key();
@@ -2107,18 +2089,18 @@ pub fn handler(
     wexel_state.boost_locked = mint_data.boost_token_amount > 0;
     wexel_state.created_at = clock.unix_timestamp;
     wexel_state.lock_start_at = clock.unix_timestamp;
-    
+
     // Calculate lock end timestamp
     let seconds_per_month: i64 = 30 * 24 * 60 * 60;
-    wexel_state.lock_end_at = clock.unix_timestamp + 
+    wexel_state.lock_end_at = clock.unix_timestamp +
         (mint_data.lock_period_months as i64 * seconds_per_month);
-    
+
     wexel_state.total_takara_claimed = 0;
     wexel_state.last_takara_claim_at = 0;
     wexel_state.claim_nonce = 0;
     wexel_state.is_redeemed = false;
     wexel_state.redeemed_at = 0;
-    
+
     // =========================================================================
     // Emit event
     // =========================================================================
@@ -2131,7 +2113,7 @@ pub fn handler(
         total_apy_bps: wexel_state.total_apy_bps,
         lock_end_at: wexel_state.lock_end_at,
     });
-    
+
     Ok(())
 }
 ```
@@ -2153,16 +2135,16 @@ use crate::events::TakaraClaimed;
 pub struct ClaimTakara<'info> {
     #[account(mut)]
     pub claimer: Signer<'info>,
-    
+
     #[account(
         seeds = [b"config"],
         bump = config.bump,
     )]
     pub config: Account<'info, ProgramConfig>,
-    
+
     /// Wexel NFT mint
     pub wexel_mint: Account<'info, Mint>,
-    
+
     /// Claimer's token account holding the Wexel NFT
     /// THIS IS THE CRITICAL OWNERSHIP CHECK!
     #[account(
@@ -2171,7 +2153,7 @@ pub struct ClaimTakara<'info> {
         constraint = claimer_wexel_account.amount == 1 @ TakaraError::NotWexelOwner,
     )]
     pub claimer_wexel_account: Account<'info, TokenAccount>,
-    
+
     /// Wexel state PDA
     #[account(
         mut,
@@ -2180,14 +2162,14 @@ pub struct ClaimTakara<'info> {
         constraint = !wexel_state.is_redeemed @ TakaraError::AlreadyRedeemed,
     )]
     pub wexel_state: Account<'info, WexelState>,
-    
+
     /// Takara token mint
     #[account(
         mut,
         constraint = takara_mint.key() == config.takara_mint @ TakaraError::InvalidMint,
     )]
     pub takara_mint: Account<'info, Mint>,
-    
+
     /// Program's Takara mint authority (PDA)
     /// CHECK: Seeds verified
     #[account(
@@ -2195,7 +2177,7 @@ pub struct ClaimTakara<'info> {
         bump,
     )]
     pub takara_authority: AccountInfo<'info>,
-    
+
     /// Claimer's Takara token account
     #[account(
         init_if_needed,
@@ -2204,10 +2186,10 @@ pub struct ClaimTakara<'info> {
         associated_token::authority = claimer,
     )]
     pub claimer_takara_account: Account<'info, TokenAccount>,
-    
+
     /// CHECK: Backend signer for claim authorization
     pub backend_signer: AccountInfo<'info>,
-    
+
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
@@ -2223,14 +2205,14 @@ pub fn handler(
     let config = &ctx.accounts.config;
     let wexel_state = &mut ctx.accounts.wexel_state;
     let clock = Clock::get()?;
-    
+
     // =========================================================================
     // SECURITY CHECK 1: Verify claimer owns the Wexel NFT
     // This is enforced by account constraints above:
     // - claimer_wexel_account.owner == claimer.key()
     // - claimer_wexel_account.amount == 1
     // =========================================================================
-    
+
     // =========================================================================
     // SECURITY CHECK 2: Verify nonce (anti-replay)
     // =========================================================================
@@ -2238,7 +2220,7 @@ pub fn handler(
         nonce > wexel_state.claim_nonce,
         TakaraError::NonceAlreadyUsed
     );
-    
+
     // =========================================================================
     // SECURITY CHECK 3: Verify timestamp freshness (5 minutes)
     // =========================================================================
@@ -2247,7 +2229,7 @@ pub fn handler(
         clock.unix_timestamp - timestamp <= max_age,
         TakaraError::SignatureExpired
     );
-    
+
     // =========================================================================
     // SECURITY CHECK 4: Verify backend signature
     // =========================================================================
@@ -2255,7 +2237,7 @@ pub fn handler(
         ctx.accounts.backend_signer.key() == config.backend_pubkey,
         TakaraError::InvalidBackendSigner
     );
-    
+
     // Construct message that backend signed
     let message = format!(
         "claim_takara:{}:{}:{}:{}",
@@ -2264,16 +2246,16 @@ pub fn handler(
         nonce,
         timestamp
     );
-    
+
     let signature = ed25519_dalek::Signature::from_bytes(&backend_signature)
         .map_err(|_| TakaraError::InvalidSignature)?;
     let pubkey = ed25519_dalek::PublicKey::from_bytes(
         &config.backend_pubkey.to_bytes()
     ).map_err(|_| TakaraError::InvalidBackendSigner)?;
-    
+
     pubkey.verify_strict(message.as_bytes(), &signature)
         .map_err(|_| TakaraError::InvalidSignature)?;
-    
+
     // =========================================================================
     // SECURITY CHECK 5: For Vault 1, verify claim interval (7 days)
     // =========================================================================
@@ -2286,14 +2268,14 @@ pub fn handler(
             );
         }
     }
-    
+
     // =========================================================================
     // Mint Takara tokens to claimer
     // =========================================================================
     let authority_bump = ctx.bumps.takara_authority;
     let authority_seeds = &[b"takara_authority".as_ref(), &[authority_bump]];
     let signer_seeds = &[&authority_seeds[..]];
-    
+
     token::mint_to(
         CpiContext::new_with_signer(
             ctx.accounts.token_program.to_account_info(),
@@ -2306,7 +2288,7 @@ pub fn handler(
         ),
         amount,
     )?;
-    
+
     // =========================================================================
     // Update state
     // =========================================================================
@@ -2315,7 +2297,7 @@ pub fn handler(
         .checked_add(amount)
         .ok_or(TakaraError::MathOverflow)?;
     wexel_state.last_takara_claim_at = clock.unix_timestamp;
-    
+
     // =========================================================================
     // Emit event
     // =========================================================================
@@ -2326,7 +2308,7 @@ pub fn handler(
         total_claimed: wexel_state.total_takara_claimed,
         nonce,
     });
-    
+
     Ok(())
 }
 ```
@@ -2424,4 +2406,3 @@ pub fn handler(
 ---
 
 **END OF MASTER PROMPT v6**
-

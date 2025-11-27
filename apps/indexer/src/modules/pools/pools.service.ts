@@ -25,7 +25,9 @@ export class PoolsService {
       current_liquidity: Number(vault.current_liquidity ?? 0),
       target_liquidity: Number(vault.target_liquidity ?? 0),
       mining_allocation: Number(vault.mining_allocation ?? 0),
-      boost_fixed_price: vault.boost_fixed_price ? Number(vault.boost_fixed_price) : null,
+      boost_fixed_price: vault.boost_fixed_price
+        ? Number(vault.boost_fixed_price)
+        : null,
       // APY in basis points (Master v6)
       base_apy_bps: vault.base_apy_bps ?? 0,
       boost_apy_bps: vault.boost_apy_bps ?? 0,
@@ -72,15 +74,18 @@ export class PoolsService {
 
     return vaults.map((vault) => {
       // Use basis points for precision
-      const baseApyBps = vault.base_apy_bps || Math.round(vault.base_usdt_apy * 100);
-      const boostApyBps = vault.boost_apy_bps || Math.round((vault.boosted_usdt_apy - vault.base_usdt_apy) * 100);
-      const maxApyBps = vault.max_apy_bps || (baseApyBps + boostApyBps);
+      const baseApyBps =
+        vault.base_apy_bps || Math.round(vault.base_usdt_apy * 100);
+      const boostApyBps =
+        vault.boost_apy_bps ||
+        Math.round((vault.boosted_usdt_apy - vault.base_usdt_apy) * 100);
+      const maxApyBps = vault.max_apy_bps || baseApyBps + boostApyBps;
 
       // Calculate frequency multiplied APYs (Master v6 spec)
       const maxApyPercent = maxApyBps / 100;
-      const maxApyMonthly = maxApyPercent;           // x1.0
-      const maxApyQuarterly = maxApyPercent * 1.15;  // x1.15
-      const maxApyYearly = maxApyPercent * 1.30;     // x1.30
+      const maxApyMonthly = maxApyPercent; // x1.0
+      const maxApyQuarterly = maxApyPercent * 1.15; // x1.15
+      const maxApyYearly = maxApyPercent * 1.3; // x1.30
 
       return {
         vaultId: vault.id,
@@ -91,7 +96,9 @@ export class PoolsService {
         boostToken: vault.boost_token_symbol,
         boostRatio: vault.boost_ratio,
         boostDiscount: vault.boost_discount,
-        boostFixedPrice: vault.boost_fixed_price ? Number(vault.boost_fixed_price) : null,
+        boostFixedPrice: vault.boost_fixed_price
+          ? Number(vault.boost_fixed_price)
+          : null,
         usdtYield: {
           baseApy: vault.base_usdt_apy,
           boostApy: vault.boosted_usdt_apy - vault.base_usdt_apy,
@@ -127,12 +134,16 @@ export class PoolsService {
    * @param frequency Payout frequency
    * @returns Effective APY in percent
    */
-  calculateEffectiveApy(baseApyBps: number, boostApyBps: number, frequency: 'MONTHLY' | 'QUARTERLY' | 'YEARLY'): number {
+  calculateEffectiveApy(
+    baseApyBps: number,
+    boostApyBps: number,
+    frequency: 'MONTHLY' | 'QUARTERLY' | 'YEARLY',
+  ): number {
     const totalBps = baseApyBps + boostApyBps;
     const multipliers = {
       MONTHLY: 1.0,
       QUARTERLY: 1.15,
-      YEARLY: 1.30,
+      YEARLY: 1.3,
     };
     return (totalBps / 100) * multipliers[frequency];
   }

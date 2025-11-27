@@ -150,8 +150,7 @@ export const vaultsApi = {
   update: (id: number, data: Partial<Vault>): Promise<Vault> =>
     api.patch(`/api/v1/vaults/${id}`, data).then((res) => res.data),
 
-  seed: (): Promise<{ message: string }> =>
-    api.post("/api/v1/vaults/seed").then((res) => res.data),
+  seed: (): Promise<{ message: string }> => api.post("/api/v1/vaults/seed").then((res) => res.data),
 
   calculateUsdtYield: (params: {
     amount: number;
@@ -159,34 +158,23 @@ export const vaultsApi = {
     boostedApy: number;
     hasBoosted: boolean;
     frequency: "MONTHLY" | "QUARTERLY" | "YEARLY";
-  }) =>
-    api
-      .get("/api/v1/vaults/calculate/usdt", { params })
-      .then((res) => res.data),
+  }) => api.get("/api/v1/vaults/calculate/usdt", { params }).then((res) => res.data),
 
   calculateTakaraYield: (params: { amount: number; takaraApr: number }) =>
-    api
-      .get("/api/v1/vaults/calculate/takara", { params })
-      .then((res) => res.data),
+    api.get("/api/v1/vaults/calculate/takara", { params }).then((res) => res.data),
 
   checkLaikaBoost: (params: {
     depositAmount: number;
     laikaBalance: number;
     laikaPrice: number;
     discountRate?: number;
-  }) =>
-    api
-      .get("/api/v1/vaults/check/laika-boost", { params })
-      .then((res) => res.data),
+  }) => api.get("/api/v1/vaults/check/laika-boost", { params }).then((res) => res.data),
 
   checkTakaraBoost: (params: {
     depositAmount: number;
     takaraBalance: number;
     fixedPrice?: number;
-  }) =>
-    api
-      .get("/api/v1/vaults/check/takara-boost", { params })
-      .then((res) => res.data),
+  }) => api.get("/api/v1/vaults/check/takara-boost", { params }).then((res) => res.data),
 };
 
 // Wexels API

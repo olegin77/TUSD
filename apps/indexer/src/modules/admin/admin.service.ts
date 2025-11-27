@@ -50,8 +50,7 @@ export class AdminService {
       const vaults = await this.prisma.vault.findMany();
       const avgAPY =
         vaults.length > 0
-          ? vaults.reduce((sum, v) => sum + v.base_usdt_apy, 0) /
-            vaults.length
+          ? vaults.reduce((sum, v) => sum + v.base_usdt_apy, 0) / vaults.length
           : 0;
 
       return {

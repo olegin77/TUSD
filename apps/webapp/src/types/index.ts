@@ -26,9 +26,9 @@ export interface Pool {
 }
 
 // TAKARA Vault types (TZ v4)
-export type VaultType = 'VAULT_1' | 'VAULT_2' | 'VAULT_3';
-export type BatchStatus = 'COLLECTING' | 'FILLED' | 'COMPLETED';
-export type PayoutFrequency = 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+export type VaultType = "VAULT_1" | "VAULT_2" | "VAULT_3";
+export type BatchStatus = "COLLECTING" | "FILLED" | "COMPLETED";
+export type PayoutFrequency = "MONTHLY" | "QUARTERLY" | "YEARLY";
 
 export interface Vault {
   id: number;
@@ -255,7 +255,7 @@ export interface PaginatedResponse<T = any> {
 }
 
 export interface Stats {
-  totalPools: number;  // Legacy
+  totalPools: number; // Legacy
   totalVaults: number;
   totalLiquidity: string;
   totalWexels: string;

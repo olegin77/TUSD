@@ -119,18 +119,25 @@ export default function HomePage() {
               Хранилища
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Кросс-чейн инвестиционная платформа: депозиты в USDT (TRC20 на TRON),
-              награды в USDT + токены Takara (SPL на Solana). До 13% APY + 40% Takara APR.
+              Кросс-чейн инвестиционная платформа: депозиты в USDT (TRC20 на TRON), награды в USDT +
+              токены Takara (SPL на Solana). До 13% APY + 40% Takara APR.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/vaults">
-                <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
+                >
                   <Vault className="h-5 w-5 mr-2" />
                   Открыть хранилища
                 </Button>
               </Link>
               <Link href="/calculator">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto border-amber-300 text-amber-700 hover:bg-amber-50">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto border-amber-300 text-amber-700 hover:bg-amber-50"
+                >
                   <TrendingUp className="h-5 w-5 mr-2" />
                   Калькулятор доходности
                 </Button>
@@ -231,8 +238,7 @@ export default function HomePage() {
                     <p className="text-4xl font-bold text-green-600 mb-1">до {vault.maxApy}%</p>
                     <p className="text-sm text-gray-500">MAX APY (×1.3)</p>
                     <Badge className="mt-2 bg-amber-100 text-amber-800 border-amber-300">
-                      <Coins className="h-3 w-3 mr-1" />
-                      +{vault.takaraApr}% Takara APR
+                      <Coins className="h-3 w-3 mr-1" />+{vault.takaraApr}% Takara APR
                     </Badge>
                   </div>
 
@@ -275,9 +281,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Как это работает?</h2>
-            <p className="text-xl text-gray-600">
-              Простой процесс кросс-чейн инвестирования
-            </p>
+            <p className="text-xl text-gray-600">Простой процесс кросс-чейн инвестирования</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -296,9 +300,7 @@ export default function HomePage() {
                 <span className="text-2xl font-bold text-amber-600">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Депозит USDT (TRON)</h3>
-              <p className="text-gray-600">
-                Внесите USDT TRC20 и получите NFT-вексель
-              </p>
+              <p className="text-gray-600">Внесите USDT TRC20 и получите NFT-вексель</p>
             </div>
 
             <div className="text-center">
@@ -316,9 +318,7 @@ export default function HomePage() {
                 <span className="text-2xl font-bold text-amber-600">4</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Получайте награды</h3>
-              <p className="text-gray-600">
-                USDT на TRON + Takara токены на Solana
-              </p>
+              <p className="text-gray-600">USDT на TRON + Takara токены на Solana</p>
             </div>
           </div>
         </div>
@@ -359,7 +359,9 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">TAKARA</h3>
+              <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                TAKARA
+              </h3>
               <p className="text-gray-400">
                 Кросс-чейн инвестиционная платформа: USDT на TRON + Takara на Solana.
               </p>

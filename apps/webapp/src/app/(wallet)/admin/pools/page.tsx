@@ -202,7 +202,11 @@ export default function AdminVaultsPage() {
                   {vault.type}
                 </Badge>
               </div>
-              <Badge className={vault.is_active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
+              <Badge
+                className={
+                  vault.is_active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                }
+              >
                 {vault.is_active ? "Активен" : "Неактивен"}
               </Badge>
             </div>
@@ -213,7 +217,10 @@ export default function AdminVaultsPage() {
                 <span>Batch {vault.batch_number}</span>
                 <span className="text-gray-500">{vault.batch_status}</span>
               </div>
-              <Progress value={(vault.current_liquidity / vault.target_liquidity) * 100} className="h-2" />
+              <Progress
+                value={(vault.current_liquidity / vault.target_liquidity) * 100}
+                className="h-2"
+              />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>${vault.current_liquidity.toLocaleString()}</span>
                 <span>${vault.target_liquidity.toLocaleString()}</span>

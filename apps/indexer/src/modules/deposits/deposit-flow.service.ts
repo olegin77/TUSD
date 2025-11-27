@@ -1,7 +1,12 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { YieldCalculatorService } from '../yield/yield-calculator.service';
-import { DepositStatus, BoostToken, PayoutFrequency, VaultType } from '@prisma/client';
+import {
+  DepositStatus,
+  BoostToken,
+  PayoutFrequency,
+  VaultType,
+} from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 /**
@@ -51,7 +56,9 @@ export class DepositFlowService {
     payoutFrequency: PayoutFrequency;
     wantBoost: boolean;
   }) {
-    this.logger.log(`Initiating deposit for vault ${params.vaultId}, amount: $${params.amountUsd}`);
+    this.logger.log(
+      `Initiating deposit for vault ${params.vaultId}, amount: $${params.amountUsd}`,
+    );
 
     // Fetch vault configuration
     const vault = await this.prisma.vault.findUnique({
@@ -77,21 +84,25 @@ export class DepositFlowService {
     const vaultConfig = this.yieldCalculator.getVaultConfig(vaultType);
 
     const baseApyBps = vault.base_apy_bps || vaultConfig.baseApyBps;
-    const boostApyBps = params.wantBoost ? (vault.boost_apy_bps || vaultConfig.boostApyBps) : 0;
+    const boostApyBps = params.wantBoost
+      ? vault.boost_apy_bps || vaultConfig.boostApyBps
+      : 0;
     const totalApyBps = baseApyBps + boostApyBps;
 
     // Calculate frequency multiplier
     const frequencyMultipliers: Record<PayoutFrequency, number> = {
       MONTHLY: 1.0,
       QUARTERLY: 1.15,
-      YEARLY: 1.30,
+      YEARLY: 1.3,
     };
     const multiplier = frequencyMultipliers[params.payoutFrequency];
     const effectiveApyBps = Math.round(totalApyBps * multiplier);
 
     // Determine boost token type
     const boostToken = params.wantBoost
-      ? (vault.boost_token_symbol === 'LAIKA' ? BoostToken.LAIKA : BoostToken.TAKARA)
+      ? vault.boost_token_symbol === 'LAIKA'
+        ? BoostToken.LAIKA
+        : BoostToken.TAKARA
       : BoostToken.NONE;
 
     // Create deposit record
@@ -133,7 +144,9 @@ export class DepositFlowService {
       },
     });
 
-    this.logger.log(`Deposit created: ${deposit.id}, status: ${deposit.deposit_status}`);
+    this.logger.log(
+      `Deposit created: ${deposit.id}, status: ${deposit.deposit_status}`,
+    );
 
     // Return deposit info with instructions for next step
     return {
@@ -160,13 +173,15 @@ export class DepositFlowService {
         amountUsd: params.amountUsd,
         timeout: this.STATE_TIMEOUTS.INITIAL_TO_PENDING_BOOST,
       },
-      boost: params.wantBoost ? {
-        token: boostToken,
-        requirement: this.yieldCalculator.calculateBoostRequirement(
-          params.amountUsd,
-          vaultType,
-        ),
-      } : null,
+      boost: params.wantBoost
+        ? {
+            token: boostToken,
+            requirement: this.yieldCalculator.calculateBoostRequirement(
+              params.amountUsd,
+              vaultType,
+            ),
+          }
+        : null,
     };
   }
 
@@ -196,9 +211,10 @@ export class DepositFlowService {
     // TODO: Verify USDT transaction on TRON
     // const verified = await this.tronService.verifyTransaction(params.tronTxHash);
 
-    const nextStatus = deposit.boost_token === BoostToken.NONE
-      ? DepositStatus.PENDING_MINT
-      : DepositStatus.PENDING_BOOST;
+    const nextStatus =
+      deposit.boost_token === BoostToken.NONE
+        ? DepositStatus.PENDING_MINT
+        : DepositStatus.PENDING_BOOST;
 
     const updated = await this.prisma.deposit.update({
       where: { id: params.depositId },
@@ -206,30 +222,36 @@ export class DepositFlowService {
         tron_tx_hash: params.tronTxHash,
         tron_tx_confirmed: true,
         deposit_status: nextStatus,
-        status: nextStatus === DepositStatus.PENDING_MINT ? 'confirmed' : 'pending_boost',
+        status:
+          nextStatus === DepositStatus.PENDING_MINT
+            ? 'confirmed'
+            : 'pending_boost',
         updated_at: new Date(),
       },
       include: { vault: true },
     });
 
-    this.logger.log(`USDT confirmed for ${params.depositId}, new status: ${nextStatus}`);
+    this.logger.log(
+      `USDT confirmed for ${params.depositId}, new status: ${nextStatus}`,
+    );
 
     return {
       depositId: updated.id.toString(),
       status: updated.deposit_status,
       tronTxHash: params.tronTxHash,
-      nextStep: nextStatus === DepositStatus.PENDING_BOOST
-        ? {
-            action: 'LOCK_BOOST_TOKEN',
-            chain: 'SOLANA',
-            boostToken: updated.boost_token,
-            timeout: this.STATE_TIMEOUTS.PENDING_BOOST_TO_PENDING_MINT,
-          }
-        : {
-            action: 'MINT_WEXEL_NFT',
-            chain: 'SOLANA',
-            timeout: this.STATE_TIMEOUTS.PENDING_MINT_TO_ACTIVE,
-          },
+      nextStep:
+        nextStatus === DepositStatus.PENDING_BOOST
+          ? {
+              action: 'LOCK_BOOST_TOKEN',
+              chain: 'SOLANA',
+              boostToken: updated.boost_token,
+              timeout: this.STATE_TIMEOUTS.PENDING_BOOST_TO_PENDING_MINT,
+            }
+          : {
+              action: 'MINT_WEXEL_NFT',
+              chain: 'SOLANA',
+              timeout: this.STATE_TIMEOUTS.PENDING_MINT_TO_ACTIVE,
+            },
     };
   }
 
@@ -348,7 +370,9 @@ export class DepositFlowService {
       },
     });
 
-    this.logger.log(`Wexel minted for ${params.depositId}, deposit is now ACTIVE`);
+    this.logger.log(
+      `Wexel minted for ${params.depositId}, deposit is now ACTIVE`,
+    );
 
     return {
       depositId: updated.id.toString(),
@@ -396,7 +420,7 @@ export class DepositFlowService {
       orderBy: { created_at: 'desc' },
     });
 
-    return deposits.map(d => this.formatDepositResponse(d));
+    return deposits.map((d) => this.formatDepositResponse(d));
   }
 
   /**
@@ -411,7 +435,9 @@ export class DepositFlowService {
       where: {
         deposit_status: DepositStatus.INITIAL,
         created_at: {
-          lt: new Date(now.getTime() - this.STATE_TIMEOUTS.INITIAL_TO_PENDING_BOOST),
+          lt: new Date(
+            now.getTime() - this.STATE_TIMEOUTS.INITIAL_TO_PENDING_BOOST,
+          ),
         },
       },
       data: {
@@ -462,9 +488,13 @@ export class DepositFlowService {
       boost: {
         token: deposit.boost_token,
         tokenMint: deposit.boost_token_mint,
-        amount: deposit.boost_token_amount ? Number(deposit.boost_token_amount) : null,
+        amount: deposit.boost_token_amount
+          ? Number(deposit.boost_token_amount)
+          : null,
         locked: deposit.boost_token_locked,
-        priceAtDeposit: deposit.boost_price_at_deposit ? Number(deposit.boost_price_at_deposit) : null,
+        priceAtDeposit: deposit.boost_price_at_deposit
+          ? Number(deposit.boost_price_at_deposit)
+          : null,
       },
       wexel: {
         mintAddress: deposit.wexel_mint_address,

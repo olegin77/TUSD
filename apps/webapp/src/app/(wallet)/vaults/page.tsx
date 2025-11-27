@@ -84,25 +84,26 @@ export default function VaultsPage() {
   }, []);
 
   // Build vaults from API data or fallback to TZ defaults
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vaults =
     vaultYields.length > 0
-      ? vaultYields.map((vy) => ({
-          id: vy.poolId,
-          name: VAULT_LABELS[`VAULT_${vy.poolId}`] || `Vault ${vy.poolId}`,
-          type: `VAULT_${vy.poolId}`,
-          baseApy: vy.usdtYield.baseApy,
-          boostedApy: vy.usdtYield.maxLaikaBoost + vy.usdtYield.baseApy,
-          takaraApr: vy.takaraYield.apr,
-          durationMonths: vy.lockMonths,
-          minDeposit: vy.minEntryAmount,
-          description: getVaultDescription(vy.poolId),
-          boostToken: vy.poolId === 1 ? "LAIKA" : "TAKARA",
-          boostRatio: vy.poolId === 1 ? 0.4 : 1.0,
-          boostDiscount: vy.poolId === 1 ? 0.15 : 0,
-          // Mock batch data
-          batchNumber: 1,
-          currentLiquidity: 45000,
-          targetLiquidity: 100000,
+      ? vaultYields.map((vy: any) => ({
+          id: vy.id || vy.poolId,
+          name: VAULT_LABELS[`VAULT_${vy.id || vy.poolId}`] || `Vault ${vy.id || vy.poolId}`,
+          type: `VAULT_${vy.id || vy.poolId}`,
+          baseApy: vy.base_usdt_apy || vy.usdtYield?.baseApy || 7,
+          boostedApy: vy.boosted_usdt_apy || (vy.usdtYield?.maxLaikaBoost ? vy.usdtYield.maxLaikaBoost + vy.usdtYield.baseApy : 8.4),
+          takaraApr: vy.takara_apr || vy.takaraYield?.apr || 30,
+          durationMonths: vy.duration_months || vy.lockMonths || 12,
+          minDeposit: vy.min_entry_amount || vy.minEntryAmount || 100,
+          description: getVaultDescription(vy.id || vy.poolId),
+          boostToken: vy.boost_token_symbol || (vy.id === 1 || vy.poolId === 1 ? "LAIKA" : "TAKARA"),
+          boostRatio: vy.boost_ratio || (vy.id === 1 || vy.poolId === 1 ? 0.4 : 1.0),
+          boostDiscount: vy.boost_discount || (vy.id === 1 || vy.poolId === 1 ? 0.15 : 0),
+          // Batch data from API or defaults
+          batchNumber: vy.batch_number || 1,
+          currentLiquidity: vy.current_liquidity || 0,
+          targetLiquidity: vy.target_liquidity || 100000,
         }))
       : [
           // TZ specification defaults
@@ -266,9 +267,7 @@ export default function VaultsPage() {
               <div className="flex items-start gap-3">
                 <Info className="h-5 w-5 text-amber-600 mt-0.5" />
                 <div className="text-sm">
-                  <p className="font-medium text-amber-900 mb-1">
-                    Как работают TAKARA Хранилища:
-                  </p>
+                  <p className="font-medium text-amber-900 mb-1">Как работают TAKARA Хранилища:</p>
                   <ul className="text-amber-800 space-y-1">
                     <li>
                       <strong>Депозит:</strong> USDT TRC20 на блокчейне TRON
@@ -398,8 +397,8 @@ export default function VaultsPage() {
                         <p className="text-xs text-purple-700">
                           {vault.boostToken === "LAIKA" ? (
                             <>
-                              Хранить Laika на сумму <strong>40%</strong> от депозита (рыночная
-                              цена с дисконтом <strong>-15%</strong>)
+                              Хранить Laika на сумму <strong>40%</strong> от депозита (рыночная цена
+                              с дисконтом <strong>-15%</strong>)
                             </>
                           ) : (
                             <>
@@ -606,7 +605,9 @@ export default function VaultsPage() {
                         </div>
                       </div>
                       {selectedVaultData.type === "VAULT_1" && (
-                        <p className="text-xs text-amber-700 mt-2">* Claim доступен 1 раз в неделю</p>
+                        <p className="text-xs text-amber-700 mt-2">
+                          * Claim доступен 1 раз в неделю
+                        </p>
                       )}
                     </div>
 

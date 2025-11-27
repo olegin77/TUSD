@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateVaultDto, VaultType } from './dto/create-vault.dto';
 import { UpdateVaultDto } from './dto/update-vault.dto';
@@ -92,14 +96,18 @@ export class VaultsService {
 
     const updateData: any = {};
 
-    if (updateVaultDto.name !== undefined) updateData.name = updateVaultDto.name;
-    if (updateVaultDto.type !== undefined) updateData.type = updateVaultDto.type;
+    if (updateVaultDto.name !== undefined)
+      updateData.name = updateVaultDto.name;
+    if (updateVaultDto.type !== undefined)
+      updateData.type = updateVaultDto.type;
     if (updateVaultDto.duration_months !== undefined) {
       updateData.duration_months = updateVaultDto.duration_months;
       updateData.lock_months = updateVaultDto.duration_months;
     }
     if (updateVaultDto.min_entry_amount !== undefined) {
-      updateData.min_entry_amount = new Decimal(updateVaultDto.min_entry_amount);
+      updateData.min_entry_amount = new Decimal(
+        updateVaultDto.min_entry_amount,
+      );
     }
     if (updateVaultDto.base_usdt_apy !== undefined) {
       updateData.base_usdt_apy = updateVaultDto.base_usdt_apy;
@@ -120,10 +128,14 @@ export class VaultsService {
       updateData.boost_discount = updateVaultDto.boost_discount;
     }
     if (updateVaultDto.boost_fixed_price !== undefined) {
-      updateData.boost_fixed_price = new Decimal(updateVaultDto.boost_fixed_price);
+      updateData.boost_fixed_price = new Decimal(
+        updateVaultDto.boost_fixed_price,
+      );
     }
     if (updateVaultDto.target_liquidity !== undefined) {
-      updateData.target_liquidity = new Decimal(updateVaultDto.target_liquidity);
+      updateData.target_liquidity = new Decimal(
+        updateVaultDto.target_liquidity,
+      );
     }
     if (updateVaultDto.is_active !== undefined) {
       updateData.is_active = updateVaultDto.is_active;
