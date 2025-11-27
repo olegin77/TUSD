@@ -84,26 +84,25 @@ export default function VaultsPage() {
   }, []);
 
   // Build vaults from API data or fallback to TZ defaults
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vaults =
     vaultYields.length > 0
       ? vaultYields.map((vy: any) => ({
           id: vy.id || vy.poolId,
           name: VAULT_LABELS[`VAULT_${vy.id || vy.poolId}`] || `Vault ${vy.id || vy.poolId}`,
           type: `VAULT_${vy.id || vy.poolId}`,
-          baseApy: vy.base_usdt_apy || vy.usdtYield?.baseApy || 7,
-          boostedApy: vy.boosted_usdt_apy || (vy.usdtYield?.maxLaikaBoost ? vy.usdtYield.maxLaikaBoost + vy.usdtYield.baseApy : 8.4),
-          takaraApr: vy.takara_apr || vy.takaraYield?.apr || 30,
-          durationMonths: vy.duration_months || vy.lockMonths || 12,
-          minDeposit: vy.min_entry_amount || vy.minEntryAmount || 100,
+          baseApy: vy.base_usdt_apy || vy.usdtYield?.baseApy,
+          boostedApy: vy.boosted_usdt_apy ? (vy.boosted_usdt_apy - (vy.base_usdt_apy || 7)) : vy.usdtYield?.maxLaikaBoost + vy.base_usdt_apy || vy.usdtYield?.baseApy,
+          takaraApr: vy.takara_apr || vy.takaraYield?.apr,
+          durationMonths: vy.duration_months || vy.lockMonths,
+          minDeposit: vy.min_entry_amount || vy.minEntryAmount,
           description: getVaultDescription(vy.id || vy.poolId),
-          boostToken: vy.boost_token_symbol || (vy.id === 1 || vy.poolId === 1 ? "LAIKA" : "TAKARA"),
-          boostRatio: vy.boost_ratio || (vy.id === 1 || vy.poolId === 1 ? 0.4 : 1.0),
-          boostDiscount: vy.boost_discount || (vy.id === 1 || vy.poolId === 1 ? 0.15 : 0),
-          // Batch data from API or defaults
-          batchNumber: vy.batch_number || 1,
-          currentLiquidity: vy.current_liquidity || 0,
-          targetLiquidity: vy.target_liquidity || 100000,
+          boostToken: vy.id || vy.poolId === 1 ? "LAIKA" : "TAKARA",
+          boostRatio: vy.id || vy.poolId === 1 ? 0.4 : 1.0,
+          boostDiscount: vy.id || vy.poolId === 1 ? 0.15 : 0,
+          // Mock batch data
+          batchNumber: 1,
+          currentLiquidity: 45000,
+          targetLiquidity: 100000,
         }))
       : [
           // TZ specification defaults
@@ -111,7 +110,7 @@ export default function VaultsPage() {
             id: 1,
             name: "Starter",
             type: "VAULT_1",
-            baseApy: 4,
+            baseApy: 7,
             boostedApy: 8.4,
             takaraApr: 30,
             durationMonths: 12,
@@ -128,8 +127,8 @@ export default function VaultsPage() {
             id: 2,
             name: "Advanced",
             type: "VAULT_2",
-            baseApy: 4,
-            boostedApy: 8,
+            baseApy: 7,
+            boostedApy: 13,
             takaraApr: 30,
             durationMonths: 30,
             minDeposit: 1500,
@@ -145,8 +144,8 @@ export default function VaultsPage() {
             id: 3,
             name: "Whale",
             type: "VAULT_3",
-            baseApy: 6,
-            boostedApy: 10,
+            baseApy: 8,
+            boostedApy: 15,
             takaraApr: 40,
             durationMonths: 36,
             minDeposit: 5000,
