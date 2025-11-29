@@ -28,7 +28,9 @@ import {
   Vault,
 } from "lucide-react";
 import { takaraApi, PoolYield } from "@/lib/api/takara";
-import Link from "next/link";
+import { WalletConnectModal } from "@/components/wallet/WalletConnectModal";
+import { YieldCalculator } from "@/components/calculator/YieldCalculator";
+// Note: Link removed - using modals now
 
 // Payout frequency multipliers from TZ
 const FREQUENCY_MULTIPLIERS = {
@@ -61,6 +63,8 @@ export default function VaultsPage() {
   const [laikaPrice, setLaikaPrice] = useState(0.05);
   const [vaultYields, setVaultYields] = useState<PoolYield[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   // Fetch vault yields and Laika price from API
   useEffect(() => {
@@ -334,7 +338,7 @@ export default function VaultsPage() {
                             className="text-lg font-bold bg-green-50 border-green-300 text-green-700"
                           >
                             <TrendingUp className="h-4 w-4 mr-1" />
-                            до {vault.boostedApy}% APY
+                            до {(vault.boostedApy * 1.3).toFixed(1)}% APY
                           </Badge>
                           <Badge
                             variant="outline"
@@ -620,21 +624,24 @@ export default function VaultsPage() {
                       >
                         Создать депозит в {selectedVaultData.name}
                       </Button>
-                      <Button variant="outline" className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => setIsWalletModalOpen(true)}
+                      >
                         Подключить TRON кошелек
                       </Button>
                     </div>
 
-                    {/* Link to Calculator */}
-                    <Link href="/calculator">
-                      <Button
-                        variant="outline"
-                        className="w-full mt-4 border-amber-300 text-amber-700 hover:bg-amber-50"
-                      >
-                        <Calculator className="h-4 w-4 mr-2" />
-                        Детальный калькулятор Takara
-                      </Button>
-                    </Link>
+                    {/* Calculator Button */}
+                    <Button
+                      variant="outline"
+                      className="w-full mt-4 border-amber-300 text-amber-700 hover:bg-amber-50"
+                      onClick={() => setIsCalculatorOpen(true)}
+                    >
+                      <Calculator className="h-4 w-4 mr-2" />
+                      Детальный калькулятор Takara
+                    </Button>
                   </CardContent>
                 </Card>
               ) : (
@@ -649,6 +656,38 @@ export default function VaultsPage() {
           </div>
         </div>
       </div>
+
+      {/* Wallet Connect Modal */}
+      <WalletConnectModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        onConnect={(address, walletType) => {
+          console.log("Connected:", address, walletType);
+          setIsWalletModalOpen(false);
+        }}
+      />
+
+      {/* Yield Calculator Modal */}
+      {selectedVaultData && (
+        <YieldCalculator
+          vault={{
+            id: selectedVaultData.id,
+            name: selectedVaultData.name,
+            type: selectedVaultData.type,
+            durationMonths: selectedVaultData.durationMonths,
+            minDeposit: selectedVaultData.minDeposit,
+            baseApy: selectedVaultData.baseApy,
+            boostedApy: selectedVaultData.boostedApy,
+            takaraApr: selectedVaultData.takaraApr,
+            boostToken: selectedVaultData.boostToken as "LAIKA" | "TAKARA",
+            boostRatio: selectedVaultData.boostRatio,
+            boostDiscount: selectedVaultData.boostDiscount,
+            boostPriceFixed: selectedVaultData.boostToken === "TAKARA" ? 0.1 : undefined,
+          }}
+          isOpen={isCalculatorOpen}
+          onClose={() => setIsCalculatorOpen(false)}
+        />
+      )}
     </PageTransition>
   );
 }
